@@ -40,7 +40,7 @@ jags_model <- function(data){
                             prior.d, prior.tau, "\n}")
   }
 
-  jagsfile <- tempfile(pattern = "metama_",fileext = ".txt")
+  jagsfile <- tempfile(pattern = "metaBMA_",fileext = ".txt")
   cat(jags_complete, file = jagsfile)
 
   return(list(model = jags_complete,

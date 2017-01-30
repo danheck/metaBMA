@@ -9,7 +9,7 @@
 #'                   d = "0",  ### random-efects H0 ###
 #'                   tau = "halfcauchy",tau.par = .5,
 #'                   sample=300, n.chains = 2,
-#'                   imethod = "integrate")
+#'                   marginal = "integrate")
 #' mr
 #' @export
 meta_random <- function(y,

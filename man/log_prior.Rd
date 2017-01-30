@@ -8,6 +8,8 @@ log_prior(prior, log = TRUE)
 }
 \arguments{
 \item{prior}{a named list with the two arguments \code{name} (character) and \code{par} (numeric vector)}
+
+\item{log}{whether to return log density}
 }
 \value{
 a log-density function with a single argument for the values to be evaluated (used for integration internally)

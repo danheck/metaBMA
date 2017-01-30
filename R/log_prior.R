@@ -3,7 +3,7 @@
 #' Supported prior distributions for mean effect size \eqn{d} and heterogeneity of effect sizes \eqn{\tau}
 #'
 #' @param prior a named list with the two arguments \code{name} (character) and \code{par} (numeric vector)
-#'
+#' @param log whether to return log density
 #' @details
 #' \itemize{
 #' \item \code{"norm"}: Normal distribution with \code{par = c(mean, sd)} (see \code{\link[stats]{dnorm}})

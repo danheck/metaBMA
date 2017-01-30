@@ -1,5 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 README.md
-*.dll
-*.o
+^.*\.dll$
+^.*\.o$

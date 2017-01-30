@@ -2,14 +2,30 @@
 % Please edit documentation in R/plot_posterior.R
 \name{plot_posterior}
 \alias{plot_posterior}
+\alias{plot_posterior.meta_bma}
+\alias{plot_posterior.meta_fixed}
+\alias{plot_posterior.meta_random}
 \title{Plot Posterior Distribution}
 \usage{
 plot_posterior(meta, from, to, parameter = "d", ...)
+
+plot_posterior.meta_fixed(meta, from = 0, to = 1, parameter = "d", ...)
+
+plot_posterior.meta_random(meta, from = 0, to = 1, parameter = "d", ...)
+
+plot_posterior.meta_bma(meta, from = c(0, 1), to = c(0, 1),
+  parameter = "d", ...)
 }
 \arguments{
 \item{meta}{fitted meta-analysis model}
 
-\item{...}{arguments passed to \code{\link[base]{plot}}}
+\item{from}{lower bound for x-axis}
+
+\item{to}{upper bound for x-axis}
+
+\item{parameter}{only for random-effects model: whether to plot \code{"d"} or \code{"tau"}}
+
+\item{...}{arguments passed to \code{\link[graphics]{plot}}}
 }
 \description{
 Plot Posterior Distribution

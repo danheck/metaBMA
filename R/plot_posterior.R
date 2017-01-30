@@ -2,7 +2,10 @@
 #' Plot Posterior Distribution
 #'
 #' @param meta fitted meta-analysis model
-#' @param ... arguments passed to \code{\link[base]{plot}}
+#' @param from lower bound for x-axis
+#' @param to upper bound for x-axis
+#' @param parameter only for random-effects model: whether to plot \code{"d"} or \code{"tau"}
+#' @param ... arguments passed to \code{\link[graphics]{plot}}
 #' @export
 plot_posterior <- function (meta,
                             from,
@@ -13,7 +16,7 @@ plot_posterior <- function (meta,
              parameter = parameter, ...)
 }
 
-# ' @rdname plot_posterior
+#' @rdname plot_posterior
 #' @export
 plot_posterior.meta_fixed <- function(meta,
                                       from = 0,
@@ -29,6 +32,7 @@ plot_posterior.meta_fixed <- function(meta,
                from = from, to = to, ...)
 }
 
+#' @rdname plot_posterior
 #' @export
 plot_posterior.meta_random <- function(meta,
                                        from = 0,
@@ -37,23 +41,23 @@ plot_posterior.meta_random <- function(meta,
                                        ...){
 
   if(parameter == "d" && meta$data$prior.d$name != "0"){
-    prior <- log_prior(meta$data$prior.d, log = FALSE)
-    post <- function(d) post_random_d(d = d, data = meta$data)/exp(meta$logmarginal)#/meta$const["d"]
-    bounds <- bounds_prior(meta$data$prior.d)
+    prior.d <- log_prior(meta$data$prior.d, log = FALSE)
+    post.d <- function(d) post_random_d(d = d, data = meta$data)/exp(meta$logmarginal)#/meta$const["d"]
     xlab = "Random-Effects Mean"
+    plot_density(prior.d, post.d, xlab = xlab, from = from, to = to, ...)
 
   }else{
-    prior <- log_prior(meta$data$prior.tau, log = FALSE)
-    post <- function(tau)
+    prior.tau <- log_prior(meta$data$prior.tau, log = FALSE)
+    post.tau <- function(tau)
       post_random_tau(tau = tau, data = meta$data)/exp(meta$logmarginal)#/meta$const["tau"]
-    bounds <- bounds_prior(meta$data$prior.d)
     xlab <- "Heterogeneity of Effects"
+    plot_density(prior.tau, post.tau, xlab = xlab, from = from, to = to, ...)
   }
 
-  plot_density(prior, post, xlab = xlab, from = from, to = to, ...)
+
 }
 
-# ' @rdname plot_posterior
+#' @rdname plot_posterior
 #' @export
 plot_posterior.meta_bma <- function(meta,
                                     from = c(0, 1),
