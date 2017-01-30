@@ -1,0 +1,14 @@
+bibentry("Manual",
+		title="metaBMA: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis",
+		author="Daniel W. Heck & Quentin F. Gronau",
+		year="2017",
+		note="(Version 0.1.0)",
+		url="https://github.com/danheck/metaBMA",
+
+		textVersion =
+		paste("Heck, D. W. & Gronau, Q. F. (2017). ",
+				"metaBMA: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis. ",
+				"https://github.com/danheck/metaBMA",
+				sep=""),
+
+		mheader = "To cite metaBMA in publications use:")
