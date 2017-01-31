@@ -4,28 +4,33 @@
 \alias{meta_random}
 \title{Bayesian Random-Effects Meta-Analysis}
 \usage{
-meta_random(y, V, d = "norm", d.par = c(0, 0.3), tau = "halfcauchy",
-  tau.par = 0.5, marginal = "integrate", ...)
+meta_random(y, V, labels, d = "norm", d.par = c(0, 0.3),
+  tau = "halfcauchy", tau.par = 0.5, marginal = "integrate",
+  estimate = "integrate", ...)
 }
 \arguments{
 \item{y}{mean in each study}
 
 \item{V}{variance in each study}
 
-\item{d}{type of prior for mean effect \eqn{d} (see \code{\link{log_prior}})}
+\item{labels}{optional: character values with study labels}
+
+\item{d}{type of prior for mean effect \eqn{d} (see \code{\link{prior}})}
 
 \item{d.par}{prior parameters for \eqn{d}}
 
-\item{tau}{type of prior for study-variance \eqn{\tau} in random-effects meta-analysis (i.e., the variance of d across studies; see \code{\link{log_prior}})}
+\item{tau}{type of prior for study-variance \eqn{\tau} in random-effects meta-analysis (i.e., the variance of d across studies; see \code{\link{prior}})}
 
 \item{tau.par}{prior parameters for \eqn{\tau}}
 
 \item{marginal}{how to integrate marginal likelihood (\code{"bridge"} or \code{"integrate"})}
 
+\item{estimate}{whether to use JAGS or analytical solutions to estimate parameters}
+
 \item{...}{arguments passed to \link[runjags]{run.jags} (e.g., MCMC parameters such as \code{sample}, \code{burnin}, \code{n.chains}, \code{thin} or \code{method="parallel"})}
 }
 \description{
-Bayesian Random-Effects Meta-Analysis
+Runs a Bayesian meta-analysis assuming that the effect \eqn{d} varies across studies with variance \eqn{\tau} (i.e., a random-effects analysis).
 }
 \examples{
 data(towels)
@@ -37,4 +42,3 @@ mr <- meta_random(towels$logOR, towels$variance,
                   marginal = "integrate")
 mr
 }
-

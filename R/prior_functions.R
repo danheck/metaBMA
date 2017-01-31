@@ -51,8 +51,3 @@ describe_prior <- function(prior){
   paste0("'", prior$name, "' with ", labels)
 }
 
-
-# prior_dens <- function(prior, log = FALSE){
-#   dens <- log_prior(pior)
-#   function(x) dens(x, )
-# }

@@ -11,7 +11,8 @@
 #' @importFrom Brobdingnag as.brob
 #' @importFrom coda spectrum0.ar HPDinterval as.mcmc varnames mcmc
 #' @importFrom LaplacesDemon dhalfcauchy dhalft dst
-#' @importFrom graphics plot legend lines
+#' @import graphics
+#' @importFrom grDevices adjustcolor
 #' @references
 #' Heck, D. W. & Gronau, Q. F. (2017). metaBMA: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis.
 #'

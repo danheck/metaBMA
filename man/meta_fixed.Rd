@@ -4,32 +4,34 @@
 \alias{meta_fixed}
 \title{Bayesian Fixed-Effects Meta-Analysis}
 \usage{
-meta_fixed(y, V, d = "halfnorm", d.par = c(mean = 0, sd = 0.3),
-  marginal = "integrate", ...)
+meta_fixed(y, V, labels, d = "halfnorm", d.par = c(mean = 0, sd = 0.3),
+  marginal = "integrate", estimate = "integrate", ...)
 }
 \arguments{
 \item{y}{mean in each study}
 
 \item{V}{variance in each study}
 
-\item{d}{type of prior for mean effect \eqn{d} (see \code{\link{log_prior}})}
+\item{labels}{optional: character values with study labels}
+
+\item{d}{type of prior for mean effect \eqn{d} (see \code{\link{prior}})}
 
 \item{d.par}{prior parameters for \eqn{d}}
 
 \item{marginal}{how to integrate marginal likelihood (\code{"bridge"} or \code{"integrate"})}
 
+\item{estimate}{whether to use JAGS or analytical solutions to estimate parameters}
+
 \item{...}{arguments passed to \link[runjags]{run.jags} (e.g., MCMC parameters such as \code{sample}, \code{burnin}, \code{n.chains}, \code{thin} or \code{method="parallel"})}
 }
 \description{
-Bayesian Fixed-Effects Meta-Analysis
+Runs a Bayesian meta-analysis assuming that the mean effect \eqn{d} in each study is identical (i.e., a fixed-effects analysis).
 }
 \examples{
 data(towels)
 ### Bayesian Fixed-Effects Meta-Analysis (H1: d>0 Cauchy)
 mf <- meta_fixed(towels$logOR, towels$variance,
                  d = "halfnorm", d.par = c(0, .3),
-                 sample=300, n.chains = 2,
-                 marginal = "integrate")
+                 sample=300, n.chains = 2)
 mf
 }
-

@@ -1,8 +1,10 @@
 
 
 resampling <- function(meta,
-                       resample = 5000){
-  meta$samples <- sample(meta$samples, resample, TRUE)
+                       resample = 5000,
+                       replace = FALSE){
+  if(!is.null(meta$samples))
+    meta$samples <- sample(meta$samples, resample, replace)
   return(meta)
 }
 

@@ -28,4 +28,3 @@ logm3 <-sum(dt(x, df=1, log = TRUE))
 # BF: Correct (M1) vs. misspecified (M2, M3)
 bma(c(logm1, logm2, logm3), include = 1)
 }
-

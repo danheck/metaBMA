@@ -4,9 +4,9 @@
 \alias{meta_bma}
 \title{Model Averaging for Meta-Analysis}
 \usage{
-meta_bma(y, V, d = "norm", d.par = c(0, 0.3), tau = "halfcauchy",
-  tau.par = 0.5, prior = c(1, 1, 1, 1), marginal = "bridge",
-  estimate = "jags", targetLength = 80000, resample = 5000,
+meta_bma(y, V, labels, d = "norm", d.par = c(0, 0.3), tau = "halfcauchy",
+  tau.par = 0.5, prior = c(1, 1, 1, 1), marginal = "integrate",
+  estimate = "integrate", sample = 20000, resample = 5000,
   progress = TRUE, ...)
 }
 \arguments{
@@ -14,11 +14,13 @@ meta_bma(y, V, d = "norm", d.par = c(0, 0.3), tau = "halfcauchy",
 
 \item{V}{variance in each study}
 
-\item{d}{type of prior for mean effect \eqn{d} (see \code{\link{log_prior}})}
+\item{labels}{optional: character values with study labels}
+
+\item{d}{type of prior for mean effect \eqn{d} (see \code{\link{prior}})}
 
 \item{d.par}{prior parameters for \eqn{d}}
 
-\item{tau}{type of prior for study-variance \eqn{\tau} in random-effects meta-analysis (i.e., the variance of d across studies; see \code{\link{log_prior}})}
+\item{tau}{type of prior for study-variance \eqn{\tau} in random-effects meta-analysis (i.e., the variance of d across studies; see \code{\link{prior}})}
 
 \item{tau.par}{prior parameters for \eqn{\tau}}
 
@@ -28,7 +30,7 @@ meta_bma(y, V, d = "norm", d.par = c(0, 0.3), tau = "halfcauchy",
 
 \item{estimate}{whether to use JAGS or analytical solutions to estimate parameters}
 
-\item{targetLength}{xxx}
+\item{sample}{number of samples in JAGS + brdige sampling after burn-in and thinning (see \code{\link[runjags]{run.jags}})}
 
 \item{resample}{how many samples should be resampled and stored from JAGS (e.g., for plotting; with replacement).}
 
@@ -37,6 +39,11 @@ meta_bma(y, V, d = "norm", d.par = c(0, 0.3), tau = "halfcauchy",
 \item{...}{arguments passed to \link[runjags]{run.jags} (e.g., MCMC parameters such as \code{sample}, \code{burnin}, \code{n.chains}, \code{thin} or \code{method="parallel"})}
 }
 \description{
+Fits random- and fixed-effects meta-anayses and performs Bayesian model averaging for H1 (d != 0) vs. H0 (d = 0).
+}
+\details{
 Bayesian model averaging for four meta-analysis models: Fixed- vs. random-effects and H0 (\eqn{d=0}) vs. H1 (e.g., \eqn{d>0}).
 }
-
+\seealso{
+\link{meta_default}, \link{meta_fixed}, \link{meta_random}
+}

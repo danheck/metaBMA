@@ -25,4 +25,3 @@ Normal distribution truncated to the interval [a,b]
 \examples{
 curve(dtruncnorm(x,-.5,3.5, 1,1), -2,4, n = 501)
 }
-

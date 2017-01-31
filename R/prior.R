@@ -19,19 +19,17 @@
 #' @return a log-density function with a single argument for the values to be evaluated (used for integration internally)
 #' @examples
 #' ### Half-Normal Distribution
-#' p1 <- log_prior(list(name = "halfnorm",
-#'                 par = c(0, .3)))
+#' p1 <- prior(list(name = "halfnorm",
+#'                  par = c(0, .3)))
 #' p1(c(-1,1,3))
-#' curve(exp(p1(x)),
-#'       from = -.5, to = 1.5, n = 501)
+#' plot(p1)
 #'
 #' ### Half-Cauchy Distribution
-#' p2 <- log_prior(list(name = "halfcauchy",
-#'                 par = .3))
-#' curve(exp(p2(x)),
-#'       add=TRUE, from=0, col=2, n = 501)
+#' p2 <- prior(list(name = "halfcauchy",
+#'                  par = .3))
+#' plot(p2, 0, 3)
 #' @export
-log_prior <- function(prior, log = TRUE){
+prior <- function(prior, log = FALSE){
 
   name <- prior$name
   par <- prior$par
@@ -44,28 +42,32 @@ log_prior <- function(prior, log = TRUE){
     stop("Number of parameters does not match prior distribution.")
   }
 
-  switch(name,
-         "norm" =
-           function(x) dnorm(x, par[1], par[2], log = log),
-         "halfnorm" =  # mean, sd
-           function(x) dtruncnorm(x, 0, Inf, par[1], par[2], log = log),
-         "truncnorm" =  # min, max, mean, sd
-           function(x) dtruncnorm(x, par[1], par[2], par[3], par[4], log = log),
-         "scaledt" =  # mean, sigma, nu
-           function(x) dst(x, par[1],  par[2], par[3], log = log),
-         "halft" =  #  sigma, nu
-           function(x) dhalft(x, par[1], par[2], log = log),
-         "cauchy" = # scale
-           function(x) dcauchy(x, 0, par[1], log = log),
-         "halfcauchy" =  #  scale
-           function(x) dhalfcauchy(x, par[1], log = log),
-         "beta" = # alpha, beta
-           function(x) dbeta(x, par[1], par[2], log = log),
-         "shiftedbeta" = # min, max, alpha, beta
-           function(x) dbeta((x-par[1])/par[2], par[3], par[4], log = log),
-         "0" =
-           function(x) ifelse(x == 0, 1, 0),
-         stop("Distribution not supported.")
+  dprior <- switch(name,
+                   "norm" =
+                     function(x) dnorm(x, par[1], par[2], log = log),
+                   "halfnorm" =  # mean, sd
+                     function(x) dtruncnorm(x, 0, Inf, par[1], par[2], log = log),
+                   "truncnorm" =  # min, max, mean, sd
+                     function(x) dtruncnorm(x, par[1], par[2], par[3], par[4], log = log),
+                   "scaledt" =  # mean, sigma, nu
+                     function(x) dst(x, par[1],  par[2], par[3], log = log),
+                   "halft" =  #  sigma, nu
+                     function(x)
+                       ifelse(x < 0, 0, dhalft(x, par[1], par[2], log = log)),
+                   "cauchy" = # scale
+                     function(x) dcauchy(x, 0, par[1], log = log),
+                   "halfcauchy" =  #  scale
+                     function(x)
+                       ifelse(x < 0, 0, dhalfcauchy(x, par[1], log = log)),
+                   "beta" = # alpha, beta
+                     function(x) dbeta(x, par[1], par[2], log = log),
+                   "shiftedbeta" = # min, max, alpha, beta
+                     function(x) dbeta((x-par[1])/par[2], par[3], par[4], log = log),
+                   "0" =
+                     function(x) ifelse(x == 0, 1, 0),
+                   stop("Distribution not supported.")
   )
+  class(dprior) <- c("prior", "function")
+  return(dprior)
 }
 

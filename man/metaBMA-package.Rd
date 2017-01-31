@@ -8,10 +8,16 @@
 \description{
 metaBMA: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis
 }
-\author{
-Daniel W. Heck & Quentin F. Gronau
-}
 \references{
 Heck, D. W. & Gronau, Q. F. (2017). metaBMA: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/danheck/metaBMA}
+}
 
+}
+\author{
+Daniel W. Heck & Quentin F. Gronau
+}

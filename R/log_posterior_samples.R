@@ -13,7 +13,7 @@ log_posterior <- function(s.row ,
            },
            "random" = {
              tau <- s.row[[ "tau" ]]
-             log_prior_tau <- log_prior(data$prior.tau)
+             log_prior_tau <- prior(data$prior.tau, log = TRUE)
 
              lp <-  loglik_random(data, s.row) + log_prior_tau(tau)
            })
@@ -21,14 +21,14 @@ log_posterior <- function(s.row ,
     switch(data$model,
            "fixed" = {
              d.fixed <- s.row[[ "d.fixed" ]]
-             log_prior_d <- log_prior(data$prior.d)
+             log_prior_d <- prior(data$prior.d, log = TRUE)
              lp <- loglik_fixed(data, s.row) + log_prior_d(d.fixed)
            },
            "random" = {
              d.random <- s.row[[ "d.random" ]]
              tau <- s.row[[ "tau" ]]
-             log_prior_tau <- log_prior(data$prior.tau)
-             log_prior_d <- log_prior(data$prior.d)
+             log_prior_tau <- prior(data$prior.tau, log = TRUE)
+             log_prior_d <- prior(data$prior.d, log = TRUE)
 
              lp <-  loglik_random(data, s.row) +
                log_prior_tau(tau) + log_prior_d(d.random)
