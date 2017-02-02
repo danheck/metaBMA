@@ -4,19 +4,19 @@
 \alias{plot_posterior}
 \title{Plot Posterior Distribution}
 \usage{
-plot_posterior(meta, parameter = "d", summary = c("Mean", "HPD"),
-  from = 0, to = 1, ...)
+plot_posterior(meta, parameter = "d", from = 0, to = 1,
+  summary = c("Mean", "HPD"), ...)
 }
 \arguments{
 \item{meta}{fitted meta-analysis model}
 
 \item{parameter}{only for random-effects model: whether to plot \code{"d"} or \code{"tau"}}
 
-\item{summary}{character vector with two values: either \code{"Mean"} or \code{"Median"}; and either highest-probability-density interval (\code{"HPD"}) or the quantile interval (\code{"quantile"})}
+\item{from}{lower limit of the x-axis}
 
-\item{from}{lower bound for x-axis}
+\item{to}{upper limit of the x-axis}
 
-\item{to}{upper bound for x-axis}
+\item{summary}{character vector with two values: first, either \code{"Mean"} or \code{"Median"}; and second, either highest-probability-density interval (\code{"HPD"}) or the quantile interval (\code{"quantile"}; function resets margin to default after plotting)}
 
 \item{...}{arguments passed to \code{\link[graphics]{plot}}}
 }

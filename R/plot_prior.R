@@ -12,7 +12,8 @@ plot.prior <- function(x,
   yticks <- pretty(c(0, dpr))
   xticks <- pretty(c(from, to))
   Parameter <- 0
-  plot(Parameter, -100, ylab = "Density", yaxs="i",
+  Density <- -100
+  plot(Parameter, Density, yaxs="i",main = describe_prior(x),
        ylim =  range(yticks), xlim = range(xticks), xaxs="i",
        las = 1, bty = "n",  ...)
   polygon(c(xx, rev(xx)), c(dpr, rep(0, 401)),

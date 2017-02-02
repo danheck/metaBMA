@@ -1,31 +1,39 @@
 
 
 ### fixed-effects
-post_fixed <- function(d = 0,
-                       data,
-                       log = FALSE){
+post_fixed <- function (d = 0,
+                        data,
+                        log = FALSE){
 
-  if(data$prior.d$name == "0"){
+  if (attr(data$prior.d, "family") == "0"){
     prior <- 0
     d <- rep(0, length(d))
-  }else{
-    log_prior_d <- prior(data$prior.d, log = TRUE)
-    prior <- log_prior_d(d)
+  } else {
+    prior <- data$prior.d(d, log = TRUE)
   }
 
-  loglik <-  sapply(d, function(dd)
-    sum(dnorm(data$y, mean = dd, sd = sqrt(data$V), log = TRUE)))
+  loglik <-  sapply(d, function (dd)
+    sum(dnorm(data$y, mean = dd, sd = data$SE, log = TRUE)))
 
   post <- prior + loglik
-  if(!log) post <- exp(post)
-  return(post)
+  if (!log)
+    post <- exp(post)
+  return (post)
 }
 
-post_fixed_norm <- function(d,
-                            data){
+loglik_fixed_H0 <- function(data) {
+  sum(dnorm(data$y, mean = 0, sd = data$SE, log = TRUE))
+}
+
+post_fixed_norm <- function (d,
+                             data,
+                             log = FALSE){
   bounds <- bounds_prior(data$prior.d)
   const <- integrate(post_fixed, data=data)$value
-  post_fixed(d)/const
+  post <- post_fixed(d)/const
+  if(log)
+    post <- log(post)
+  return(post)
 }
 
 

@@ -4,13 +4,13 @@
 \alias{meta_fixed}
 \title{Bayesian Fixed-Effects Meta-Analysis}
 \usage{
-meta_fixed(y, V, labels, d = "halfnorm", d.par = c(mean = 0, sd = 0.3),
-  marginal = "integrate", estimate = "integrate", ...)
+meta_fixed(y, SE, labels = NULL, d = "halfnorm", d.par = c(mean = 0, sd =
+  0.3), sample = 0, ...)
 }
 \arguments{
 \item{y}{mean in each study}
 
-\item{V}{variance in each study}
+\item{SE}{standard error in each study}
 
 \item{labels}{optional: character values with study labels}
 
@@ -18,9 +18,7 @@ meta_fixed(y, V, labels, d = "halfnorm", d.par = c(mean = 0, sd = 0.3),
 
 \item{d.par}{prior parameters for \eqn{d}}
 
-\item{marginal}{how to integrate marginal likelihood (\code{"bridge"} or \code{"integrate"})}
-
-\item{estimate}{whether to use JAGS or analytical solutions to estimate parameters}
+\item{sample}{number of samples in JAGS after burn-in and thinning (see \code{\link[runjags]{run.jags}}). Samples are used to get posterior  estimates for each study effect (which will show shrinkage). Only works for priors defined in \code{\link{prior}}.}
 
 \item{...}{arguments passed to \link[runjags]{run.jags} (e.g., MCMC parameters such as \code{sample}, \code{burnin}, \code{n.chains}, \code{thin} or \code{method="parallel"})}
 }
@@ -30,8 +28,9 @@ Runs a Bayesian meta-analysis assuming that the mean effect \eqn{d} in each stud
 \examples{
 data(towels)
 ### Bayesian Fixed-Effects Meta-Analysis (H1: d>0 Cauchy)
-mf <- meta_fixed(towels$logOR, towels$variance,
-                 d = "halfnorm", d.par = c(0, .3),
-                 sample=300, n.chains = 2)
+mf <- meta_fixed(towels$logOR, towels$SE, towels$study,
+                 d = "halfnorm", d.par = c(0, .3))
 mf
+plot_posterior(mf)
+plot_forest(mf)
 }

@@ -1,10 +1,15 @@
 
 
 stats_density <- function (density,
-                           lb,
-                           ub,
+                           lb = NULL,
+                           ub = NULL,
                            ci = .95){
-  if (is.null(lb))
+
+  if(class(density) %in% c("prior", "posterior")){
+    lb <- attr(density, "lower")
+    ub <- attr(density, "upper")
+  }
+  if (lb == ub)
     return(NULL)
 
   # mean
@@ -17,13 +22,13 @@ stats_density <- function (density,
   SD <- sqrt(variance)
 
   ################ quantiles: c(.025, .5, .975)
-  tmp <- function(q, p){
+  tmp <- function (q, p){
     p - integrate(density, lb, q)$value
   }
   interval <- c(max(lb + 1e-30, mean - 5*SD),
                 min(mean + 5*SD, ub - 1e-30))
   qq <- sapply(c(.025, .5, .975),
-               function(pp) uniroot(tmp, interval, p = pp)$root)
+               function (pp) uniroot(tmp, interval, p = pp)$root)
 
   ################ compute HPD
   xx <- seq(max(lb, qq[1]-SD),
@@ -32,7 +37,7 @@ stats_density <- function (density,
   px <- cumsum(dx)
   qdens <- splinefun(px, xx)
 
-  length.interval <- function(start){
+  length.interval <- function (start){
     qdens(start+ci)-qdens(start)
   }
   oo <- optim((1-ci)/2, length.interval, method = "L-BFGS-B",

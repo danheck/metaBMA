@@ -3,8 +3,8 @@
 #' Wrapper with default prior for Bayesian meta-analysis based on a literature review.
 #'
 #' @inheritParams meta_bma
-#' @param field either\code{"psychology"} or \code{"medicine"}
-#' @param effect the type of effect size: either means (\code{"ttest"}), log-odds ratios (\code{"logOR"}) or (Fisher's z-transformed) correlations (\code{"corr"})
+#' @param field either\code{"psychology"} or \code{"medicine"} (uses partial matching, so \code{"p"} and "\code{"m"} are sufficient)
+#' @param effect the type of effect size: either means (\code{"ttest"}), log-odds ratios (\code{"logOR"}) or (Fisher's z-transformed) correlations (\code{"corr"}) (also uses partial matching)
 #' @param ... further arguments passed to \code{\link{meta_bma}}
 #'
 #' @details
@@ -12,36 +12,50 @@
 #'
 #' For \code{field = "psychology"}, the following defaults are used:
 #' \itemize{
-#' \item \code{effect = "ttest"}: Half-normal with SD=0.3 on mean effect and half-Cauchy with scale=.5 on variance of effects.
-#' \item \code{effect = "logOR"}: Half-normal with SD=0.3 on mean effect and half-Cauchy with scale=.5 on variance of effects.
-#' \item \code{effect = "corr"}: Half-normal with SD=0.3 on mean effect and half-Cauchy with scale=.5 on variance of effects.
+#' \item \code{effect = "ttest"}: Half-normal with SD=0.3 on mean effect and half-Cauchy with scale=.5 on standard deviation of effects.
+#' \item \code{effect = "logOR"}: Half-normal with SD=0.3 on mean effect and half-Cauchy with scale=.5 on standard deviation of effects.
+#' \item \code{effect = "corr"}: Half-normal with SD=0.3 on mean effect and half-Cauchy with scale=.5 on standard deviation of effects.
 #' }
 #'
 #' For \code{field = "medicine"}, the following defaults are used:
 #' \itemize{
-#' \item \code{effect = "ttest"}: Half-normal with SD=0.3 on mean effect and half-Cauchy with scale=.5 on variance of effects.
-#' \item \code{effect = "logOR"}: Half-normal with SD=0.3 on mean effect and half-Cauchy with scale=.5 on variance of effects.
-#' \item \code{effect = "corr"}: Half-normal with SD=0.3 on mean effect and half-Cauchy with scale=.5 on variance of effects.
+#' \item \code{effect = "ttest"}: Half-normal with SD=0.3 on mean effect and half-Cauchy with scale=.5 on standard deviation of effects.
+#' \item \code{effect = "logOR"}: Half-normal with SD=0.3 on mean effect and half-Cauchy with scale=.5 on standard deviation of effects.
+#' \item \code{effect = "corr"}: Half-normal with SD=0.3 on mean effect and half-Cauchy with scale=.5 on standard deviation of effects.
 #' }
 #'
+#' @examples
+#' \dontrun{
+#' d1 <- meta_default(towels$logOR, towels$SE, towels$study,
+#'                    field = "psych", effect = "logOR")
+#' d1
+#' plot_posterior(d1)
+#' plot_forest(d1)
+#' }
 #' @seealso \link{meta_bma}
 #' @export
 meta_default <- function(y,
-                         V,
+                         SE,
+                         labels = NULL,
                          field = "psychology",
                          effect = "ttest",
                          ...){
   def <- get_default(field, effect)
 
-  meta_bma(y = y, V = V,
-           d = def$d$name, d.par = def$d$par,
-           tau = def$tau$name, tau.par = def$tau$par,
+  res <- meta_bma(y = y, SE = SE, labels = labels,
+           d = def$d, d.par = def$d.par,
+           tau = def$tau, tau.par = def$tau.par,
            ...)
+  res$default <- c(field = field, effect = effect)
+  return(res)
 }
 
 
 get_default <- function(field,
                         effect){
+  field <- match.arg(field, c("psychology", "medicine"))
+  effect <- match.arg(effect, c("ttest", "logOR", "corr"))
+
   switch(field,
          #################################### PSYCHOLOGY
          "psychology" = {
@@ -92,15 +106,16 @@ get_default <- function(field,
          },
          stop("'field' not supported."))
 
-  def <- list(d = list(name = d, par = d.par),
-              tau = list(name = tau, par = tau.par))
+  def <- list(d = d, d.par = d.par,
+              tau = tau, tau.par = tau.par)
+  # class(def) <- "default"
   return(def)
 }
 
 
 #' Plot Default Priors
 #'
-#' Plots default priors for the mean effect \eqn{d} and the variance of effects \eqn{tau}.
+#' Plots default priors for the mean effect \eqn{d} and the standard deviation of effects \eqn{tau}.
 #' @inheritParams meta_default
 #' @param ... further arguments passed to \code{\link[graphics]{plot}} (e.g., \code{from}, \code{to})
 #' @examples
@@ -113,7 +128,7 @@ plot_default <- function(field,
   mfrow <- par()$mfrow
   par(mfrow = c(1,2))
   def <- get_default(field, effect)
-  plot(prior(def$d), xlab = "Mean effect (d)", ...)
-  plot(prior(def$tau), xlab = "Variance (tau)", ...)
+  plot(prior(def$d, def$d.par), xlab = "Mean effect (d)", ...)
+  plot(prior(def$tau, def$tau.par), xlab = "Standard deviation (tau)", ...)
   par(mfrow = mfrow)
 }

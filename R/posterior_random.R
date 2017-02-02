@@ -6,12 +6,10 @@ post_random <- function(tau,
                         log = FALSE){
 
   ### priors
-  log_prior_tau <- prior(data$prior.tau, log = TRUE)
-  prior <-  log_prior_tau(tau)
+  prior <- data$prior.tau(tau, log = TRUE)
 
-  if(data$prior.d$name != "0"){
-    log_prior_d <- prior(data$prior.d, log = TRUE)
-    prior <- prior + log_prior_d(d)
+  if (attr(data$prior.d, "family") != "0"){
+    prior <- prior + data$prior.d(d, log = TRUE)
   }else{
     d <- 0
   }
@@ -19,11 +17,11 @@ post_random <- function(tau,
   ### loglikelihood
   pars <- cbind(d, tau)
   ll <- function(x) sum(dnorm(data$y, mean = x[1],
-                              sd = sqrt(data$V + x[2]^2), log = TRUE))
+                              sd = sqrt(data$SE^2 + x[2]^2), log = TRUE))
   loglik <- apply(pars, 1, ll)
 
   post <- prior + loglik
-  if(!log) post <- exp(post)
+  if (!log) post <- exp(post)
   return(post)
 }
 
@@ -46,7 +44,7 @@ post_random_tau <- function(tau,
                             data,
                             log = FALSE){
 
-  if(data$prior.d$name != "0"){
+  if (attr(data$prior.d, "family") != "0"){
     bounds <- bounds_prior(data$prior.d)
     func <- function(tau) integrate( function(x)
       post_random(tau = tau, d = x, data = data),
@@ -57,7 +55,7 @@ post_random_tau <- function(tau,
   }
 
   post <- sapply(tau, func)
-  if(log) post <- log(post)
+  if (log) post <- log(post)
   return(post)
 }
 
@@ -73,10 +71,10 @@ post_random_theta <- function(theta,
   f.d.tau <- function(d, theta, tau)
     sapply(d, function(dd)
       dnorm(theta,
-            mean = (tau*dd + 1/data$V[idx] * data$y[idx])/(tau + 1/data$V[idx]),
-            sd = 1/sqrt(tau + 1/data$V[idx])) *
-        prior(data$prior.d)(dd) *
-        prior(data$prior.tau)(tau))
+            mean = (1/tau^2*dd + 1/data$SE[idx]^2 * data$y[idx])/(1/tau^2 + 1/data$SE[idx]^2),
+            sd = 1/sqrt(1/tau^2 + 1/data$SE[idx]^2)) *
+        data$prior.d(dd) *
+        data$prior.tau(1/tau^2))
 
   f.tau <- function(tau, theta)
     sapply(tau, function(tt)
@@ -96,8 +94,8 @@ post_random_theta <- function(theta,
   #       #   dnorm(theta,
   #       #         mean = d,
   #       #         sd = 1/sqrt(tt)) *
-  #       prior(data$prior.d)(d) *
-  #       prior(data$prior.tau)(tt))
+  #       data$prior.d(d) *
+  #       data$prior.tau(tt))
   #
   # f.d <- function(d, theta)
   #   sapply(d, function(dd)
@@ -108,7 +106,7 @@ post_random_theta <- function(theta,
   #   integrate(f.d, bd[1], bd[2], theta = tt,
   #             rel.tol = .Machine$double.eps^0.25)$value)
 
-  if(!log) post <- exp(post)
+  if (!log) post <- exp(post)
   return(post)
 }
 

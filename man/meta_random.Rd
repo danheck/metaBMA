@@ -4,14 +4,13 @@
 \alias{meta_random}
 \title{Bayesian Random-Effects Meta-Analysis}
 \usage{
-meta_random(y, V, labels, d = "norm", d.par = c(0, 0.3),
-  tau = "halfcauchy", tau.par = 0.5, marginal = "integrate",
-  estimate = "integrate", ...)
+meta_random(y, SE, labels, d = "norm", d.par = c(0, 0.3),
+  tau = "halfcauchy", tau.par = 0.5, sample = 10000, ...)
 }
 \arguments{
 \item{y}{mean in each study}
 
-\item{V}{variance in each study}
+\item{SE}{standard error in each study}
 
 \item{labels}{optional: character values with study labels}
 
@@ -19,26 +18,26 @@ meta_random(y, V, labels, d = "norm", d.par = c(0, 0.3),
 
 \item{d.par}{prior parameters for \eqn{d}}
 
-\item{tau}{type of prior for study-variance \eqn{\tau} in random-effects meta-analysis (i.e., the variance of d across studies; see \code{\link{prior}})}
+\item{tau}{type of prior for standard deviation of study effects \eqn{\tau} in random-effects meta-analysis (i.e., the SD of d across studies; see \code{\link{prior}})}
 
 \item{tau.par}{prior parameters for \eqn{\tau}}
 
-\item{marginal}{how to integrate marginal likelihood (\code{"bridge"} or \code{"integrate"})}
-
-\item{estimate}{whether to use JAGS or analytical solutions to estimate parameters}
+\item{sample}{number of samples in JAGS after burn-in and thinning (see \code{\link[runjags]{run.jags}}). Samples are used to get posterior  estimates for each study effect (which will show shrinkage). Only works for priors defined in \code{\link{prior}}.}
 
 \item{...}{arguments passed to \link[runjags]{run.jags} (e.g., MCMC parameters such as \code{sample}, \code{burnin}, \code{n.chains}, \code{thin} or \code{method="parallel"})}
 }
 \description{
-Runs a Bayesian meta-analysis assuming that the effect \eqn{d} varies across studies with variance \eqn{\tau} (i.e., a random-effects analysis).
+Runs a Bayesian meta-analysis assuming that the effect \eqn{d} varies across studies with standard deviation \eqn{\tau} (i.e., a random-effects analysis).
 }
 \examples{
+\dontrun{
 data(towels)
-### Bayesian Random-Effects Meta-Analysis (H0: No effect, d=0)
-mr <- meta_random(towels$logOR, towels$variance,
-                  d = "0",  ### random-efects H0 ###
-                  tau = "halfcauchy",tau.par = .5,
-                  sample=300, n.chains = 2,
-                  marginal = "integrate")
+### Bayesian Random-Effects Meta-Analysis
+mr <- meta_random(towels$logOR, towels$SE, towels$study,
+                  d = "norm", d.par = c(0,.3),
+                  tau = "halfcauchy", tau.par = .5)
 mr
+plot_posterior(mr)
+plot_forest(mr)
+}
 }

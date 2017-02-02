@@ -1,25 +1,29 @@
 Package: metaBMA
 Type: Package
+Date: 2017-02-02
 Title: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis
-Version: 0.1.0
-Author: Heck, D. W. & Gronau, Q. F.
+Version: 0.3.0
+Authors@R: c(person("Daniel W.","Heck",email="heck@uni-mannheim.de",role=c("aut","cre")),
+             person("Quentin F.", "Gronau", email="quentingronau@web.de", role = c("ctb")))
+Author: Daniel W. Heck [aut, cre],
+        Quentin F. Gronau [ctb]
 Maintainer: Daniel W. Heck <heck@uni-mannheim.de>
 Description: Bayesian model averaging for random and fixed effects meta-analysis.
 Encoding: UTF-8
 LazyData: true
+Depends:
+    R (>= 3.0.0)
 Imports:
     mvtnorm,
     Matrix,
     Brobdingnag,
-    stringr,
     coda,
     runjags,
-    Rcpp (>= 0.12.9),
     LaplacesDemon
 Suggests:
     testthat
 SystemRequirements: JAGS (http://mcmc-jags.sourceforge.net)
 URL: https://github.com/danheck/metaBMA
-LinkingTo: Rcpp
-License: GPL-2
+License: GPL-3
 RoxygenNote: 6.0.0
+

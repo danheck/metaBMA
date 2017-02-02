@@ -4,40 +4,51 @@
 \alias{prior}
 \title{Prior Distributions}
 \usage{
-prior(prior, log = FALSE)
+prior(family, param, label = "d", lower = -Inf, upper = Inf)
 }
 \arguments{
-\item{prior}{a named list with the two arguments \code{name} (character) and \code{par} (numeric vector)}
+\item{family}{a character value defining the distribution family}
 
-\item{log}{whether to return log density}
+\item{param}{numeric parameters for the distribution}
+
+\item{label}{parameter label}
+
+\item{lower}{only for \code{family = "custom"}: lower bound for prior density}
+
+\item{upper}{only for \code{family = "custom"}: upper bound for prior density}
 }
 \value{
-a log-density function with a single argument for the values to be evaluated (used for integration internally)
+an object of the class \code{prior}: a density function with the arguments \code{x} (parameter values) and \code{log} (whether to return density or log-density)
 }
 \description{
-Supported prior distributions for mean effect size \eqn{d} and heterogeneity of effect sizes \eqn{\tau}
+Returns prior density function, e.g., for mean effect size \eqn{d} and heterogeneity of effect sizes \eqn{\tau}
 }
 \details{
 \itemize{
-\item \code{"norm"}: Normal distribution with \code{par = c(mean, sd)} (see \code{\link[stats]{dnorm}})
-\item \code{"halfnorm"}: Half-normal distribution (positive) with \code{par = c(mean, sd)} (see \code{\link[LaplacesDemon]{dhalfnorm}})
-\item \code{"truncnorm"}: Truncated normal distribution with \code{par = c(min, max, mean, sd)}  (see \code{\link{dtruncnorm}})
-\item \code{"scaledt"}: Scaled Student-t with \code{par = c(mean, sigma, nu)} (see \code{\link[LaplacesDemon]{dst}})
-\item \code{"halft"}: Half-normal Student-t with \code{par = c(scale, df)} (see \code{\link[LaplacesDemon]{dhalft}})
-\item \code{"cauchy"}: Cauchy distribution with \code{par = scale} (see \code{\link[stats]{dcauchy}})
-\item \code{"halfcauchy"}: Half-Cauchy distribution (positive) with \code{par = scale}  (see \code{\link[LaplacesDemon]{dhalfcauchy}})
-\item \code{"beta"}: Beta distribution with \code{par = c(alpha, beta)} (see \code{\link[stats]{dbeta}})
+\item \code{"norm"}: Normal distribution with \code{param = c(mean, sd)} (see \code{\link[stats]{dnorm}})
+\item \code{"halfnorm"}: Half-normal distribution (positive) with \code{param = c(mean, sd)} (see \code{\link[LaplacesDemon]{dhalfnorm}})
+\item \code{"truncnorm"}: Truncated normal distribution with \code{param = c(min, max, mean, sd)}  (see \code{\link{dtruncnorm}})
+\item \code{"scaledt"}: Scaled Student-t with \code{param = c(mean, sigma, nu)} (see \code{\link[LaplacesDemon]{dst}})
+\item \code{"halft"}: Half-normal Student-t with \code{param = c(scale, df)} (see \code{\link[LaplacesDemon]{dhalft}})
+\item \code{"cauchy"}: Cauchy distribution with \code{param = scale} (see \code{\link[stats]{dcauchy}})
+\item \code{"halfcauchy"}: Half-Cauchy distribution (positive) with \code{param = scale}  (see \code{\link[LaplacesDemon]{dhalfcauchy}})
+\item \code{"triangular"}: Triangular distribution with \code{param = c(min, peak, max)} (see \code{\link{dtriangular}})
+\item \code{"beta"}: Beta distribution with \code{param = c(alpha, beta)} (see \code{\link[stats]{dbeta}})
+\item \code{"custom"}: User-specified prior density function defined by \code{param} (see examples; the density must be nonnegative and vectorized, but is normalized internally). Integration is performed from (-Inf, Inf), which requires that the function returns zeros (and not NAs) for values not in the support of the distribution.
 }
 }
 \examples{
 ### Half-Normal Distribution
-p1 <- prior(list(name = "halfnorm",
-                 par = c(0, .3)))
+p1 <- prior("halfnorm", c(mean=0, sd=.3), "d")
+p1
 p1(c(-1,1,3))
-plot(p1)
+plot(p1, -.1, 1)
 
 ### Half-Cauchy Distribution
-p2 <- prior(list(name = "halfcauchy",
-                 par = .3))
-plot(p2, 0, 3)
+p2 <- prior("halfcauchy", c(scale=.3))
+plot(p2, -.5, 3)
+
+### Custom Prior Distribution
+p3 <- prior("custom", function(x) x^2, "d", 0, 1)
+plot(p3, -.1, 1.2)
 }

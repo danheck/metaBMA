@@ -7,14 +7,14 @@
 plot_default(field, effect, ...)
 }
 \arguments{
-\item{field}{either\code{"psychology"} or \code{"medicine"}}
+\item{field}{either\code{"psychology"} or \code{"medicine"} (uses partial matching, so \code{"p"} and "\code{"m"} are sufficient)}
 
-\item{effect}{the type of effect size: either means (\code{"ttest"}), log-odds ratios (\code{"logOR"}) or (Fisher's z-transformed) correlations (\code{"corr"})}
+\item{effect}{the type of effect size: either means (\code{"ttest"}), log-odds ratios (\code{"logOR"}) or (Fisher's z-transformed) correlations (\code{"corr"}) (also uses partial matching)}
 
 \item{...}{further arguments passed to \code{\link[graphics]{plot}} (e.g., \code{from}, \code{to})}
 }
 \description{
-Plots default priors for the mean effect \eqn{d} and the variance of effects \eqn{tau}.
+Plots default priors for the mean effect \eqn{d} and the standard deviation of effects \eqn{tau}.
 }
 \examples{
 plot_default("psychology", "ttest", 0, 2)
