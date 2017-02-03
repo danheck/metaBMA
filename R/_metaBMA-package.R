@@ -6,23 +6,23 @@
 #'
 #' Moreover, \code{\link{meta_fixed}} and \code{\link{meta_random}} fit a single meta-analysis models. The model-specific posteriors for \eqn{d} can be averaged by \code{\link{bma}} and inclusion Bayes factors be computed by \code{\link{inclusion}}. Finally, the function \code{\link{prior}} facilitates the construction and visual inspection of prior distributions.
 #'
+#' For more details, see the vignette: \code{vignette("metaBMA")}
+#'
 #' @author Daniel W. Heck & Quentin F. Gronau
 #' @docType package
-# ' @useDynLib metaBMA
-#'
 #' @importFrom logspline logspline dlogspline
 #' @importFrom runjags run.jags runjags.options combine.mcmc
-#' @importFrom Matrix nearPD
 #' @importFrom mvtnorm rmvnorm dmvnorm
 #' @import stats
-#' @importFrom Brobdingnag as.brob
 #' @importFrom coda spectrum0.ar HPDinterval as.mcmc varnames mcmc
 #' @importFrom LaplacesDemon dhalfcauchy dhalft dst rst rhalft rhalfcauchy
 #' @import graphics
 #' @importFrom grDevices adjustcolor colors
+# ' @importFrom Matrix nearPD
+# ' @useDynLib metaBMA
+# ' @importFrom Brobdingnag as.brob
 #' @references
 #' Heck, D. W. & Gronau, Q. F. (2017). metaBMA: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis.
-#'
 #'
 "_PACKAGE"
 
