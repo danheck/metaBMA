@@ -38,8 +38,8 @@ plot_forest.meta_fixed <- function(meta,
                                    mar = c(4.5, 12, 4, .3),
                                    ...){
   plot_forest.default(meta, from = from, to = to, summary = summary,
-                      shrinked = shrinked,
-                      main = "Fixed-Effects Meta-Analysis", ...)
+                      shrinked = "", main = "Fixed-Effects Meta-Analysis",
+                      ...)
   axis(2, -1, "Total", las = 1, tick = FALSE)
   par(mar = c(5.1,4.1, 4.1, 2.1))
 }
@@ -72,8 +72,6 @@ plot_forest.meta_bma <- function(meta,
                       shrinked = shrinked,
                       main = "Meta-Analysis with Model-Averaging", ...)
   labels <- rownames(meta$estimates)
-  # if (! "Averaged" %in% rownames(meta$estimates))
-  #   labels <- c("Averaged", "Fixed effects", "Random effects")
   axis(2, - seq_along(labels), labels, las = 1, tick = TRUE)
   par(mar = c(5.1,4.1, 4.1, 2.1))
 }
@@ -95,10 +93,16 @@ plot_forest.default <- function(meta,
   if ("Averaged" %in% rownames(meta$estimates))
     sel <- 1:nrow(meta$estimates)
   n.ests <- length(sel)
-  lower <- meta$data$y - qnorm( (ci+1)/2) * meta$data$SE  ################## REPLACE BY POSTERIOR ESTIMATE!!!
+  lower <- meta$data$y - qnorm( (ci+1)/2) * meta$data$SE
   upper <- meta$data$y + qnorm( (ci+1)/2) * meta$data$SE
 
-  ss <- meta$meta[[shrinked]]$samples
+  ss <- NULL
+  if (class(meta) == "meta_bma"){
+    ss <- meta$meta[[shrinked]]$samples
+  } else if (class(meta) == "meta_random" && shrinked != ""){
+    ss <- meta$samples
+  }
+
   if (!is.null(ss)){
     summ <- summary(ss)
     sel.d <- paste0("d[",seq_len(n.studies),"]")

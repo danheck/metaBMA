@@ -2,7 +2,7 @@ Package: metaBMA
 Type: Package
 Date: 2017-02-02
 Title: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis
-Version: 0.3.0
+Version: 0.3.1
 Authors@R: c(person("Daniel W.","Heck",email="heck@uni-mannheim.de",role=c("aut","cre")),
              person("Quentin F.", "Gronau", email="quentingronau@web.de", role = c("ctb")))
 Author: Daniel W. Heck [aut, cre],
@@ -15,6 +15,7 @@ Depends:
     R (>= 3.0.0)
 Imports:
     mvtnorm,
+    logspline,
     Matrix,
     Brobdingnag,
     coda,

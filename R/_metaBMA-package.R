@@ -10,6 +10,7 @@
 #' @docType package
 # ' @useDynLib metaBMA
 #'
+#' @importFrom logspline logspline dlogspline
 #' @importFrom runjags run.jags runjags.options combine.mcmc
 #' @importFrom Matrix nearPD
 #' @importFrom mvtnorm rmvnorm dmvnorm

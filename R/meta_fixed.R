@@ -25,27 +25,33 @@ meta_fixed <- function(y,
   data_list <- data_list("fixed", y = y, SE = SE, labels = labels,
                          d = d, d.par = d.par)
 
-  jags_samples <- get_samples(data_list, sample = sample, ...)
+  integral <- integrate_wrapper(data = data_list)
 
-  # bounds <- bounds_prior(data_list$prior.d, label = "d.fixed")
-  integral <- integrate_wrapper(samples = jags_samples$samples,
-                                data = data_list)
-
-  res <- list("samples" = jags_samples$samples,
-              "integral" = integral,
-              "data" = data_list,
+  meta <- list("data" = data_list,
               "prior.d" = data_list$prior.d,
               "posterior.d" = NA,
               "logmarginal"  = integral$logml,
               "logmarginal.H0" = loglik_fixed_H0(data_list),
-              "BF" = c("d_10" = exp(integral$logml - loglik_fixed_H0(data_list))),
+              "BF" = c("d_10" = exp(integral$logml -
+                                      loglik_fixed_H0(data_list))),
               "estimates" = NA,
-              "jagsmodel" = jags_samples$jagsmodel
-  )
-  class(res) <- "meta_fixed"
+              "integral" = integral)
+  class(meta) <- "meta_fixed"
 
-  res$posterior.d <- posterior(res, "d")
-  res$estimates <- rbind(d = stats_density(res$posterior.d))
-  res$data <- res$data[c("y", "SE", "labels")]
-  return(res)
+  meta$posterior.d <- posterior(meta, "d")
+  meta$estimates <- rbind("d" = stats_density(meta$posterior.d))
+
+  if(sample > 0 || any(is.na(meta$estimates))){
+    if (sample == 0) sample <- 5000
+    jags_samples <- get_samples(data = data_list,
+                                sample = sample, ...)
+    meta$samples <- jags_samples$samples
+    meta$jagsmodel <- jags_samples$jagsfile
+    meta$estimates <- rbind("d" = stats_samples(jags_samples$samples,
+                                               parameter = "d.fixed"))
+  }
+  meta$posterior.d <- check_posterior(meta$posterior.d, meta, "d.fixed")
+
+  meta$data <- meta$data[c("y", "SE", "labels")]
+  return(meta)
 }

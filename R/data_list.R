@@ -10,8 +10,8 @@ data_list <- function (model,
   if (missing(labels) || is.null(labels))
     labels <- paste("Study", 1:length(eval(y)))
 
-  if(any(SE <= 0))
-    stop ("Non-positive study standard deviation SE!")
+  if(any(SE < 0))
+    stop ("Negative study standard deviation SE!")
 
   if (length(y) != length(SE) || length(y) != length(labels))
     stop ("Length of input arguments y, SE, and labels does not match.")

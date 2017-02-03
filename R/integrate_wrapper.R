@@ -1,7 +1,4 @@
-integrate_wrapper <- function (samples,
-                               data
-                               # method = "bridge"
-){
+integrate_wrapper <- function (data){
 
   ####### fixed H1
   if (data$model == "fixed" && attr(data$prior.d, "family") != "0"){

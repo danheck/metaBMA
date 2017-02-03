@@ -29,35 +29,44 @@ meta_random <- function (y,
   data_list <- data_list("random", y = y, SE = SE, labels = labels,
                          d = d, d.par = d.par, tau = tau, tau.par = tau.par)
 
-  jags_samples <- get_samples(data_list, sample = sample, ...)
+  integral <- integrate_wrapper(data = data_list)
 
-
-  bbd = bounds_prior(data_list$prior.d, "d.random")
-  bbt = bounds_prior(data_list$prior.tau, "tau")
-  integral <- integrate_wrapper(samples = jags_samples$samples,
-                                data = data_list)
-
-  res <- list("samples" = jags_samples$samples,
-              "integral" = integral,
-              "data" =  data_list,  # still includes priors for posterior()
+  meta <- list("data" = data_list,
               "prior.d" = data_list$prior.d,
               "prior.tau" = data_list$prior.tau,
               "posterior.d" = NA,
-              "posterior.tau" = NA,
+              "posterior.d" = NA,
               "logmarginal"  = integral$logml,
+              "BF" = NA,
               "estimates" = NA,
-              "BF" = NA)
-  class(res) <- "meta_random"
+              "integral" = integral)
+  class(meta) <- "meta_random"
 
-  res$posterior.d <- posterior(res, "d")
-  res$posterior.tau <- posterior(res, "tau")
-  res$estimates <- rbind(d = stats_density(res$posterior.d),
-                         tau = stats_density(res$posterior.tau))
+  meta$posterior.d <- posterior(meta, "d")
+  meta$posterior.tau <- posterior(meta, "tau")
+  meta$estimates <- rbind(d = stats_density(meta$posterior.d),
+                         tau = stats_density(meta$posterior.tau))
 
-  res$BF <- c(d_10 = res$prior.d(0) / res$posterior.d(0),
-              tau_10 = res$prior.tau(0) / res$posterior.tau(0))
+  if (sample > 0 || any(is.na(meta$estimates))){
+    if (sample == 0) sample <- 5000
+    jags_samples <- get_samples(data = data_list, sample = sample, ...)
+    if (any(is.na(meta$estimates["tau",])))
+      meta$estimates["tau",] <-
+      stats_samples(jags_samples$samples, "tau")
+    if (any(is.na(meta$estimates["d",])))
+      meta$estimates["d",] <-
+      meta$estimates <- stats_samples(jags_samples$samples, "d.random")
+    meta$samples <- jags_samples$samples
+    meta$jagsmodel <- jags_samples$jagsfile
+  }
 
-  res$data <- res$data[c("y", "SE", "labels")]
-  return (res)
+  meta$posterior.d <- check_posterior(meta$posterior.d, meta, "d.random")
+  meta$posterior.tau <- check_posterior(meta$posterior.tau, meta, "tau")
+
+  meta$BF <- c(d_10 = meta$prior.d(0) / meta$posterior.d(0),
+              tau_10 = meta$prior.tau(0) / meta$posterior.tau(0))
+
+  meta$data <- meta$data[c("y", "SE", "labels")]
+  return (meta)
 }
 
