@@ -9,10 +9,12 @@
 #' @param log logical; if TRUE, probabilities p are given as log(p)
 #'
 #' @examples
-#' curve(dtriangular(x, min = .2, peak = .6, max = 1.3),
-#'       from = 0, to = 2, n = 301)
-#'
 #' plot(prior("triangular", c(.2, .6, 1.3)), 0, 2)
+#'
+#' samples <- rtriangular(1e5, .2, .5, 1)
+#' hist(samples, 200, FALSE)
+#' curve(dtriangular(x, .2, .5, 1), col = 2,
+#'       add = TRUE, lwd = 2)
 #' @export
 dtriangular <- function(x,
                         min,
@@ -42,3 +44,16 @@ dtriangular <- function(x,
   return (dx)
 }
 
+#' @param n number of samples
+#' @rdname dtriangular
+#' @export
+rtriangular <- function(n,
+                        min,
+                        peak,
+                        max){
+  u <- runif(n)
+  Fc <- (peak - min) / (max - min)
+  ifelse(u < Fc,
+         min + sqrt(u * (max-min) * (peak - min)),
+         max - sqrt((1 - u) * (max - min) * (max - peak)))
+}

@@ -2,9 +2,12 @@
 % Please edit documentation in R/dtruncnorm.R
 \name{dtruncnorm}
 \alias{dtruncnorm}
+\alias{rtruncnorm}
 \title{Truncated Normal Distribution}
 \usage{
 dtruncnorm(x, a = -Inf, b = Inf, mean = 0, sd = 1, log = FALSE)
+
+rtruncnorm(n, a = -Inf, b = Inf, mean = 0, sd = 1)
 }
 \arguments{
 \item{x}{vector of quantiles}
@@ -18,10 +21,15 @@ dtruncnorm(x, a = -Inf, b = Inf, mean = 0, sd = 1, log = FALSE)
 \item{sd}{vector of standard deviations}
 
 \item{log}{if TRUE, probabilities are given as log(p)}
+
+\item{n}{number of samples}
 }
 \description{
 Normal distribution truncated to the interval [a,b]
 }
 \examples{
-curve(dtruncnorm(x,-.5,3.5, 1,1), -2,4, n = 501)
+samples <- rtruncnorm(1e5, -.5, 3, 1, 1)
+hist(samples, 200, freq = FALSE)
+curve(dtruncnorm(x, -.5, 3, 1, 1), -2,4,
+      col = 2, lwd = 2, add = TRUE, n = 301)
 }

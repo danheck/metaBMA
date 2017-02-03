@@ -9,7 +9,10 @@
 #' @param sd vector of standard deviations
 #' @param log if TRUE, probabilities are given as log(p)
 #' @examples
-#' curve(dtruncnorm(x,-.5,3.5, 1,1), -2,4, n = 501)
+#' samples <- rtruncnorm(1e5, -.5, 3, 1, 1)
+#' hist(samples, 200, freq = FALSE)
+#' curve(dtruncnorm(x, -.5, 3, 1, 1), -2,4,
+#'       col = 2, lwd = 2, add = TRUE, n = 301)
 #' @export
 dtruncnorm <- function(x,
                        a = -Inf,
@@ -38,8 +41,18 @@ dtruncnorm <- function(x,
   }
   return(dx)
 }
-# x <- rnorm(1000)
-# all.equal(truncnorm::dtruncnorm(c(x), a= 0, b=Inf, mean = 0, sd = .3),
-# dtruncnorm(c(x), a= 0, b=Inf, mean = 0, sd = .3))
 
 
+#' @param n number of samples
+#' @rdname dtruncnorm
+#' @export
+rtruncnorm <- function(n,
+                       a = -Inf,
+                       b = Inf,
+                       mean = 0,
+                       sd = 1){
+  p.low <- pnorm(a, mean, sd)
+  p.up <- pnorm(b, mean, sd)
+  u <- runif(n, p.low, p.up)
+  qnorm(u, mean, sd)
+}

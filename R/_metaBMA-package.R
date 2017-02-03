@@ -17,7 +17,7 @@
 #' @import stats
 #' @importFrom Brobdingnag as.brob
 #' @importFrom coda spectrum0.ar HPDinterval as.mcmc varnames mcmc
-#' @importFrom LaplacesDemon dhalfcauchy dhalft dst
+#' @importFrom LaplacesDemon dhalfcauchy dhalft dst rst rhalft rhalfcauchy
 #' @import graphics
 #' @importFrom grDevices adjustcolor colors
 #' @references
