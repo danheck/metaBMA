@@ -3,7 +3,9 @@
 stats_samples <- function (samples,
                            parameter = "d"){
 
-  if (is.null(samples)) return (NULL)
+  included <- parameter %in% varnames(samples)
+  if (is.null(samples) || !included)
+    return (NULL)
 
   summ <- coda_summary_mat(samples, parameter)
   hpd <- HPDinterval(samples[,parameter])
@@ -17,9 +19,10 @@ stats_samples <- function (samples,
     "HPD95upper" = hpd[,2])
 }
 
+
 coda_summary_mat <- function (samples, parameter = "d"){
 
-  summ <- summary(samples)
+  summ <- summary(samples[, parameter])
   if(is.null(dim(summ))){
     summ$statistics <- matrix(summ$statistics, nrow = 1,
                               dimnames = list(parameter,

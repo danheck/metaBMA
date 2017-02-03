@@ -24,7 +24,10 @@ meta_random <- function (y,
                          tau = "halfcauchy",
                          tau.par = .5,
                          sample = 10000,
+                         summarize = "integrate",
                          ...){
+  if (summarize == "jags" && sample <= 0)
+    stop("if summarize = 'jags', it is necessary to use sample > 0.")
 
   data_list <- data_list("random", y = y, SE = SE, labels = labels,
                          d = d, d.par = d.par, tau = tau, tau.par = tau.par)
@@ -32,30 +35,28 @@ meta_random <- function (y,
   integral <- integrate_wrapper(data = data_list)
 
   meta <- list("data" = data_list,
-              "prior.d" = data_list$prior.d,
-              "prior.tau" = data_list$prior.tau,
-              "posterior.d" = NA,
-              "posterior.d" = NA,
-              "logmarginal"  = integral$logml,
-              "BF" = NA,
-              "estimates" = NA,
-              "integral" = integral)
+               "prior.d" = data_list$prior.d,
+               "prior.tau" = data_list$prior.tau,
+               "posterior.d" = NULL,
+               "posterior.d" = NULL,
+               "logmarginal"  = integral$logml,
+               "BF" = NULL,
+               "estimates" = NULL,
+               "integral" = integral)
   class(meta) <- "meta_random"
 
   meta$posterior.d <- posterior(meta, "d")
   meta$posterior.tau <- posterior(meta, "tau")
-  meta$estimates <- rbind(d = stats_density(meta$posterior.d),
-                         tau = stats_density(meta$posterior.tau))
 
-  if (sample > 0 || any(is.na(meta$estimates))){
-    if (sample == 0) sample <- 5000
+  if (summarize == "integrate")
+    meta$estimates <- rbind(d = stats_density(meta$posterior.d),
+                            tau = stats_density(meta$posterior.tau))
+
+  if (sample > 0){
     jags_samples <- get_samples(data = data_list, sample = sample, ...)
-    if (any(is.na(meta$estimates["tau",])))
-      meta$estimates["tau",] <-
-      stats_samples(jags_samples$samples, "tau")
-    if (any(is.na(meta$estimates["d",])))
-      meta$estimates["d",] <-
-      meta$estimates <- stats_samples(jags_samples$samples, "d.random")
+    if (summarize == "jags")
+      meta$estimates <- rbind("d" = stats_samples(jags_samples$samples, "d.random"),
+                              "tau" = stats_samples(jags_samples$samples, "tau"))
     meta$samples <- jags_samples$samples
     meta$jagsmodel <- jags_samples$jagsfile
   }
@@ -64,7 +65,7 @@ meta_random <- function (y,
   meta$posterior.tau <- check_posterior(meta$posterior.tau, meta, "tau")
 
   meta$BF <- c(d_10 = meta$prior.d(0) / meta$posterior.d(0),
-              tau_10 = meta$prior.tau(0) / meta$posterior.tau(0))
+               tau_10 = meta$prior.tau(0) / meta$posterior.tau(0))
 
   meta$data <- meta$data[c("y", "SE", "labels")]
   return (meta)

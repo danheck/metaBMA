@@ -4,7 +4,7 @@
 \alias{bma}
 \title{Bayesian Model Averaging}
 \usage{
-bma(meta, prior = 1, parameter = "d")
+bma(meta, prior = 1, parameter = "d", summarize = "integrate")
 }
 \arguments{
 \item{meta}{list of meta-analysis models (fitted via \code{\link{meta_random}} or \code{\link{meta_fixed}})}
@@ -12,6 +12,8 @@ bma(meta, prior = 1, parameter = "d")
 \item{prior}{prior probabilities over models (possibly unnormalized). For instance, if the first model is as likely as models 2, 3 and 4 together: \code{prior = c(3,1,1,1)}. The default is a discrete uniform distribution over models.}
 
 \item{parameter}{eiher the mean effect \code{"d"} or the heterogeneity across studies \code{"tau"}}
+
+\item{summarize}{whether and to compute parameter summaries (mean, median, SD, 95\% quantile interval, HPD interval). If \code{summarize = "integrate"}, numerical integration is used  (which is precise but can require some seconds of computing time), \code{summarize = "jags"} summarizes the JAGS samples, and \code{summarize = "none"} suppresses parameter summaries.}
 }
 \description{
 Model averaging of meta-analysis models according to their posterior model probability.

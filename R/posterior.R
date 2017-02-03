@@ -1,7 +1,8 @@
 
 # construct posterior density function
 posterior <- function (meta,
-                       parameter = "d"){
+                       parameter = "d",
+                       rel.tol = .Machine$double.eps^0.35){
 
   if (class(meta) == "meta_bma"){
     w <- meta$posterior.models

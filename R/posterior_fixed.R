@@ -3,7 +3,8 @@
 ### fixed-effects
 post_fixed <- function (d = 0,
                         data,
-                        log = FALSE){
+                        log = FALSE,
+                        rel.tol = .Machine$double.eps^0.35){
 
   if (attr(data$prior.d, "family") == "0"){
     prior <- 0
@@ -27,9 +28,10 @@ loglik_fixed_H0 <- function(data) {
 
 post_fixed_norm <- function (d,
                              data,
-                             log = FALSE){
+                             log = FALSE,
+                             rel.tol = .Machine$double.eps^0.35){
   bounds <- bounds_prior(data$prior.d)
-  const <- integrate(post_fixed, data=data)$value
+  const <- integrate(post_fixed, data=data, rel.tol = rel.tol)$value
   post <- post_fixed(d)/const
   if(log)
     post <- log(post)

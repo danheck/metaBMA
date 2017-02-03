@@ -27,6 +27,7 @@ get_samples <- function (data,
                         data = data[c("y","SE")],
                         monitor = parameters,
                         summarise = FALSE,
+                        sample = sample,
                         ...)
   )
 

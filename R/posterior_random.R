@@ -3,7 +3,8 @@
 post_random <- function(tau,
                         d = 0,
                         data,
-                        log = FALSE){
+                        log = FALSE,
+                        rel.tol = .Machine$double.eps^0.35){
 
   ### priors
   prior <- data$prior.tau(tau, log = TRUE)
@@ -29,12 +30,14 @@ post_random <- function(tau,
 
 post_random_d <- function(d,
                           data,
-                          log = FALSE){
+                          log = FALSE,
+                          rel.tol = .Machine$double.eps^0.35){
+
   bounds <- bounds_prior(data$prior.tau)
   func <- function(d)
     integrate(post_random, d = d, data = data,
               bounds[1], bounds[2],
-              rel.tol = .Machine$double.eps^0.3)$value
+              rel.tol = rel.tol)$value
 
   sapply(d, func)
 }
@@ -42,14 +45,15 @@ post_random_d <- function(d,
 
 post_random_tau <- function(tau,
                             data,
-                            log = FALSE){
+                            log = FALSE,
+                            rel.tol = .Machine$double.eps^0.35){
 
   if (attr(data$prior.d, "family") != "0"){
     bounds <- bounds_prior(data$prior.d)
     func <- function(tau) integrate( function(x)
       post_random(tau = tau, d = x, data = data),
       lower = bounds[1],  upper = bounds[2],
-      rel.tol = .Machine$double.eps^0.3)$value
+      rel.tol = rel.tol)$value
   }else{
     func <- function(tau) post_random(tau = tau, d = 0, data = data)
   }
@@ -63,7 +67,8 @@ post_random_tau <- function(tau,
 post_random_theta <- function(theta,
                               idx,
                               data,
-                              log = FALSE){
+                              log = FALSE,
+                              rel.tol = .Machine$double.eps^0.35){
 
   bd <- bounds_prior(data$prior.d)
   bt <- bounds_prior(data$prior.tau)
@@ -78,10 +83,11 @@ post_random_theta <- function(theta,
 
   f.tau <- function(tau, theta)
     sapply(tau, function(tt)
-      integrate(f.d.tau, bd[1], bd[2], theta = theta, tau = tt)$value)
+      integrate(f.d.tau, bd[1], bd[2], theta = theta, tau = tt,
+                rel.tol = rel.tol)$value)
   post <- sapply(theta, function(tt)
     integrate(f.tau, bt[1], bt[2], theta = tt,
-              rel.tol = .Machine$double.eps^0.25)$value)
+              rel.tol = rel.tol)$value)
 
   # f.tau.d <- function(tau, theta, d)
   #   sapply(tau, function(tt)
