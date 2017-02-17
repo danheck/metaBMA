@@ -64,8 +64,8 @@ prior <- function (family,
     if (!is.function(param))
       stop ("'param' must be a (density) function. See ?metaBMA::prior")
 
-    dx <- param(seq(lower, upper, length.out = 21))
-    if (length(dx) != 21 || any(is.na(dx) | dx < 0))
+    dx <- param(seq(max(lower, -100), min(upper, 100), length.out = 11))
+    if (length(dx) != 11 || any(is.na(dx) | dx < 0))
       stop ("'param' must be a vectorized, nonnegative density function. See ?metaBMA::prior")
 
     tryCatch(const <- integrate(param, lower, upper,
