@@ -71,8 +71,9 @@ meta_bma <- function (y,
   meta_bma$BF <- list("d_10_fixed" = c(m.fixed.H1$BF["d_10"]),
                  "d_10_random" = c(m.random.H1$BF["d_10"]),
                  "d_10_averaged" = meta_bma$inclusion$incl.BF,
-                 "tau_10_random" = c(m.random.H1$BF["tau_10"]),
-                 "H1_fixed_vs_random" = exp(m.fixed.H1$logmarginal -
-                                            m.random.H1$logmarginal))
+                 "tau_10_random" = c(m.random.H1$BF["tau_10"])
+                 # "H1_fixed_vs_random" = exp(m.fixed.H1$logmarginal -
+                 #                            m.random.H1$logmarginal)
+                 )
   return (meta_bma)
 }

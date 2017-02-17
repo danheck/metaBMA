@@ -64,6 +64,12 @@ prior <- function (family,
     if (!is.function(param))
       stop ("'param' must be a (density) function. See ?metaBMA::prior")
 
+    if(missing(lower) || missing(upper) ||
+       !is.numeric(lower) || !is.numeric(upper) ||
+       is.na(lower) || is.na(upper) ||
+       length(lower) != 1 || length(upper) != 1 ||
+       lower > upper)
+      stop("'lower' and 'upper' must be specified (e.g., lower = 0, upper = Inf)")
     dx <- param(seq(max(lower, -100), min(upper, 100), length.out = 11))
     if (length(dx) != 11 || any(is.na(dx) | dx < 0))
       stop ("'param' must be a vectorized, nonnegative density function. See ?metaBMA::prior")
