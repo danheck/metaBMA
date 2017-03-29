@@ -15,7 +15,7 @@
 #' @importFrom mvtnorm rmvnorm dmvnorm
 #' @import stats
 #' @importFrom coda spectrum0.ar HPDinterval as.mcmc varnames mcmc
-#' @importFrom LaplacesDemon dhalfcauchy dhalft dst rst rhalft rhalfcauchy
+#' @importFrom LaplacesDemon dhalfcauchy dst rst rhalft rhalfcauchy
 #' @import graphics
 #' @importFrom grDevices adjustcolor colors
 # ' @importFrom Matrix nearPD

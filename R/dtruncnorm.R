@@ -56,3 +56,21 @@ rtruncnorm <- function(n,
   u <- runif(n, p.low, p.up)
   qnorm(u, mean, sd)
 }
+
+
+dhalft <- function (x, scale = 25, nu = 1, log = FALSE) {
+  x <- as.vector(x)
+  scale <- as.vector(scale)
+  nu <- as.vector(nu)
+  if (any(scale <= 0))
+    stop("The scale parameter must be positive.")
+  NN <- max(length(x), length(scale), length(nu))
+  x <- rep(x, len = NN)
+  scale <- rep(scale, len = NN)
+  nu <- rep(nu, len = NN)
+  dens <- log(2) -log(scale) + lgamma((nu + 1)/2) - lgamma(nu/2) -
+    .5*log(pi*nu) - (nu + 1)/2 * log(1 + (1/nu) * (x/scale) * (x/scale))
+  if (log == FALSE)
+    dens <- exp(dens)
+  return(dens)
+}
