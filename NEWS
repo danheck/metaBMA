@@ -2,6 +2,7 @@ metaBMA 0.3.6
 ===========
 
 * Data sets 'power_pose' and 'power_pose_unfamiliar' added
+* Data set 'facial_feedback' added
 
 
 metaBMA 0.3.0
