@@ -41,9 +41,10 @@ inclusion <- function (logml,
   posterior <- exp(logml)*prior / denom
 
   post.incl <- sum(posterior[include])
+  prior.incl <- sum(prior[include])
 
   # model-averaged Bayes factor in favor of effect
-  BF.incl <- post.incl/(1 - post.incl)
+  BF.incl <- post.incl/(1 - post.incl)/(prior.incl/(1 - prior.incl))
 
   res <- list("prior" = prior,
               "posterior" = posterior,
