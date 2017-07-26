@@ -30,7 +30,7 @@ meta_random(y, SE, labels, d = "norm", d.par = c(0, 0.3),
 \item{...}{arguments passed to \link[runjags]{run.jags} (e.g., MCMC parameters such as \code{sample}, \code{burnin}, \code{n.chains}, \code{thin} or \code{method="parallel"})}
 }
 \description{
-Runs a Bayesian meta-analysis assuming that the effect \eqn{d} varies across studies with standard deviation \eqn{\tau} (i.e., a random-effects analysis).
+Runs a Bayesian meta-analysis assuming that the effect size \eqn{d} varies across studies with standard deviation \eqn{\tau} (i.e., a random-effects analysis).
 }
 \examples{
 \dontrun{

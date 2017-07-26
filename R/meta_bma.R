@@ -19,6 +19,7 @@
 #'
 #' @examples
 #' \dontrun{
+#' data(towels)
 #' mb <- meta_bma(towels$logOR, towels$SE, towels$study,
 #'                d = "norm", d.par = c(0,.3),
 #'                tau = "halfcauchy", tau.par = .5)

@@ -1,6 +1,6 @@
 #' Bayesian Random-Effects Meta-Analysis
 #'
-#' Runs a Bayesian meta-analysis assuming that the effect \eqn{d} varies across studies with standard deviation \eqn{\tau} (i.e., a random-effects analysis).
+#' Runs a Bayesian meta-analysis assuming that the effect size \eqn{d} varies across studies with standard deviation \eqn{\tau} (i.e., a random-effects analysis).
 #'
 #' @inheritParams meta_bma
 #'

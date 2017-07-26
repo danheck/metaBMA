@@ -19,6 +19,7 @@ bma(meta, prior = 1, parameter = "d", summarize = "integrate")
 Model averaging of meta-analysis models according to their posterior model probability.
 }
 \examples{
+data(towels)
 fix1 <- meta_fixed(towels$logOR, towels$SE, towels$study,
                    d = "halfnorm", d.par = c(mean=0, sd=.2))
 fix2 <- meta_fixed(towels$logOR, towels$SE, towels$study,
@@ -31,5 +32,5 @@ averaged <- bma(list(Halfnormal = fix1, Uniform = fix2,
                      Triangular = fix3))
 averaged
 plot_posterior(averaged)
-plot_forest(averaged)
+plot_forest(averaged, mar = c(4.5,20,4,.3))
 }

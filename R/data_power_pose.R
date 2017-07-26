@@ -22,8 +22,7 @@
 #' }
 #' @references
 #' Carney, D. R., Cuddy, A. J. C., & Yap, A. J. (2010). Power posing: Brief nonverbal displays affect neuroendocrine levels and risk tolerance. Psychological Science, 21, 1363–1368.
-#'
-#' Gronau, van Erp, Heck, Cesario, Jonas, & Wagenmakers (in preparation). A Bayesian model-averaged meta-analysis of the power pose effect with informed and default priors: The case of felt power.
+#' @template ref_gronau2017
 #'
 #' @format Data frame with 6 rows and 13 variables
 #' @examples

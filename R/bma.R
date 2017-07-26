@@ -8,6 +8,7 @@
 #' @param parameter eiher the mean effect \code{"d"} or the heterogeneity across studies \code{"tau"}
 #'
 #' @examples
+#' data(towels)
 #' fix1 <- meta_fixed(towels$logOR, towels$SE, towels$study,
 #'                    d = "halfnorm", d.par = c(mean=0, sd=.2))
 #' fix2 <- meta_fixed(towels$logOR, towels$SE, towels$study,
@@ -20,7 +21,7 @@
 #'                      Triangular = fix3))
 #' averaged
 #' plot_posterior(averaged)
-#' plot_forest(averaged)
+#' plot_forest(averaged, mar = c(4.5,20,4,.3))
 #' @export
 bma <- function (meta,
                  prior = 1,

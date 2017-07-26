@@ -7,9 +7,12 @@
 plot_default(field, effect, ...)
 }
 \arguments{
-\item{field}{either\code{"psychology"} or \code{"medicine"} (uses partial matching, so \code{"p"} and "\code{"m"} are sufficient)}
+\item{field}{either\code{"psychology"} or \code{"medicine"}
+(uses partial matching, so \code{"p"} and "\code{"m"} are sufficient)}
 
-\item{effect}{the type of effect size: either means (\code{"ttest"}), log-odds ratios (\code{"logOR"}) or (Fisher's z-transformed) correlations (\code{"corr"}) (also uses partial matching)}
+\item{effect}{the type of effect size: either means (\code{"ttest"}),
+log-odds ratios (\code{"logOR"}) or
+(Fisher's z-transformed) correlations (\code{"corr"}) (also uses partial matching)}
 
 \item{...}{further arguments passed to \code{\link[graphics]{plot}} (e.g., \code{from}, \code{to})}
 }
@@ -19,4 +22,7 @@ Plots default priors for the mean effect \eqn{d} and the standard deviation of e
 \examples{
 plot_default("psychology", "ttest", 0, 2)
 plot_default("medicine", "logOR", 0, 2)
+}
+\seealso{
+\code{\link{meta_default}} for details on standard priors.
 }

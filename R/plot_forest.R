@@ -1,5 +1,3 @@
-
-
 #' Forest Plot for Meta-Analysis
 #'
 #' Plots estimated effect sizes for all studies.
@@ -16,7 +14,7 @@
 #' @examples
 #' data(towels)
 #' mf <- meta_fixed(towels$logOR, towels$SE, towels$study)
-#' plot_forest(mf, mar = c(4.5, 20, 4, .2), xlab = "Log Odds Ratio")
+#' plot_forest(mf, mar = c(4.5,20,4,.2), xlab="Log Odds Ratio")
 #' @export
 plot_forest <- function(meta,
                         from = 0,

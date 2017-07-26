@@ -21,4 +21,4 @@ install_github("danheck/metaBMA", build_vignettes = TRUE)
 
 If you use metaBMA, please cite the software as follows:
 
-Heck, D. W. & Gronau, Q. F. (2017). metaBMA: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis. (https://github.com/danheck/metaBMA)
+Heck, D. W., Gronau, Q. F., & Wagenmakers, E.-J. (2017). metaBMA: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis. (https://github.com/danheck/metaBMA)

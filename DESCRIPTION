@@ -1,14 +1,23 @@
 Package: metaBMA
 Type: Package
-Date: 2017-03-29
+Date: 2017-07-26
 Title: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis
-Version: 0.3.6
+Version: 0.3.7
 Authors@R: c(person("Daniel W.","Heck",email="heck@uni-mannheim.de",role=c("aut","cre")),
-             person("Quentin F.", "Gronau", email="quentingronau@web.de", role = c("ctb")))
-Author: Daniel W. Heck [aut, cre],
-        Quentin F. Gronau [ctb]
+             person("Quentin F.", "Gronau", email="quentingronau@web.de", role = c("ctb")),
+             person("Eric-Jan", "Wagenmakers", email="ej.wagenmakers@gmail.com", role = c("ctb")))
 Maintainer: Daniel W. Heck <heck@uni-mannheim.de>
-Description: Bayesian model averaging for random and fixed effects meta-analysis. Funding for this research was provided by the Berkeley Initiative for Transparency in the Social Sciences, a program of the Center for Effective Global Action (CEGA), with support from the Laura and John Arnold Foundation.
+Description: Computes the posterior model probabilities for four meta-analysis models 
+    (null model vs. alternative model assuming either fixed- or random-effects, respectively).
+    These posterior probabilities are used to estimate the overall mean effect size 
+    as the weighted average of the mean effect size estimates of the random- and 
+    fixed-effect model as proposed by Gronau, Van Erp, Heck, Cesario, Jonas, & 
+    Wagenmakers (2017, <doi:10.1080/23743603.2017.1326760>). The user can define 
+    a wide range of noninformative or informative priors for the mean effect size 
+    and the heterogeneity coefficient. Funding for this research was provided by 
+    the Berkeley Initiative for Transparency in the Social Sciences, a program of 
+    the Center for Effective Global Action (CEGA), with support from the Laura and 
+    John Arnold Foundation.
 Encoding: UTF-8
 LazyData: true
 Depends:
