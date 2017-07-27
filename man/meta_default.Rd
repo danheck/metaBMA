@@ -25,6 +25,7 @@ log-odds ratios (\code{"logOR"}) or
 }
 \description{
 Wrapper with default prior for Bayesian meta-analysis based on a literature review.
+Currently, the same default is used in all cases.
 }
 \details{
 Default prior distributions can be plotted using \code{\link{plot_default}}.
@@ -53,11 +54,14 @@ For \code{field = "medicine"}, the following defaults are used:
 \dontrun{
 data(towels)
 d1 <- meta_default(towels$logOR, towels$SE, towels$study,
-                   field = "psych", effect = "logOR")
+                   field = "psych", effect = "logOR",
+                   sample = 5000)
 d1
-plot_posterior(d1)
 plot_forest(d1)
 }
+}
+\references{
+Gronau, Q. F., Erp, S. V., Heck, D. W., Cesario, J., Jonas, K. J., & Wagenmakers, E.-J. (2017). A Bayesian model-averaged meta-analysis of the power pose effect with informed and default priors: the case of felt power. Comprehensive Results in Social Psychology, 2(1), 123-138. \url{https://doi.org/10.1080/23743603.2017.1326760}
 }
 \seealso{
 \code{\link{meta_bma}}, \code{\link{plot_default}}

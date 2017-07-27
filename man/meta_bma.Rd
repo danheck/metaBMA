@@ -41,7 +41,7 @@ Bayesian model averaging for four meta-analysis models: Fixed- vs. random-effect
 \dontrun{
 data(towels)
 mb <- meta_bma(towels$logOR, towels$SE, towels$study,
-               d = "norm", d.par = c(0,.3),
+               d = "norm", d.par = c(0,.3), sample = 10000,
                tau = "halfcauchy", tau.par = .5)
 mb
 plot_posterior(mb, "d")

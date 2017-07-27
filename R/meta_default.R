@@ -1,6 +1,7 @@
 #' Defaults for Model Averaging in Meta-Analysis
 #'
 #' Wrapper with default prior for Bayesian meta-analysis based on a literature review.
+#' Currently, the same default is used in all cases.
 #'
 #' @inheritParams meta_bma
 #' @param field either\code{"psychology"} or \code{"medicine"}
@@ -37,12 +38,13 @@
 #' \dontrun{
 #' data(towels)
 #' d1 <- meta_default(towels$logOR, towels$SE, towels$study,
-#'                    field = "psych", effect = "logOR")
+#'                    field = "psych", effect = "logOR",
+#'                    sample = 5000)
 #' d1
-#' plot_posterior(d1)
 #' plot_forest(d1)
 #' }
 #' @seealso \code{\link{meta_bma}}, \code{\link{plot_default}}
+#' @template ref_gronau2017
 #' @export
 meta_default <- function(y,
                          SE,

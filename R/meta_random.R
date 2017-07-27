@@ -9,7 +9,7 @@
 #' data(towels)
 #' ### Bayesian Random-Effects Meta-Analysis
 #' mr <- meta_random(towels$logOR, towels$SE, towels$study,
-#'                   d = "norm", d.par = c(0,.3),
+#'                   d = "norm", d.par = c(0,.3), sample = 5000,
 #'                   tau = "halfcauchy", tau.par = .5)
 #' mr
 #' plot_posterior(mr)
