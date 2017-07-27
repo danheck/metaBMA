@@ -3,11 +3,12 @@ bibentry("Manual",
 		author="Heck, D. W., Gronau, Q. F., & Wagenmakers, E.-J.",
 		year="2017",
 		url="https://github.com/danheck/metaBMA",
+		doi="10.5281/zenodo.835494"
 
 		textVersion =
 		paste("Heck, D. W., Gronau, Q. F., & Wagenmakers, E.-J. (2017). ",
-				"metaBMA: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis. ",
-				"https://github.com/danheck/metaBMA",
+				"metaBMA: Bayesian model averaging for random and fixed effects meta-analysis.",
+				"Retrieved from https://github.com/danheck/metaBMA. doi:10.5281/zenodo.835494",
 				sep=""),
 
 		mheader = "To cite metaBMA in publications use:")
