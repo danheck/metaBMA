@@ -1,4 +1,5 @@
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/metaBMA)](http://cran.r-project.org/package=metaBMA)
+[![Build Status](https://travis-ci.org/danheck/metaBMA.svg?branch=master)](https://travis-ci.org/danheck/metaBMA)
 [![Licence](https://img.shields.io/badge/licence-GPL--2-green.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
 [![DOI](https://zenodo.org/badge/80750374.svg)](https://zenodo.org/badge/latestdoi/80750374)
 <!--
