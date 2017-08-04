@@ -149,13 +149,13 @@ draw_dens <- function (xx,
   if (lty == 5 && all(dx >= 0)){
     polygon(c(xx, rev(xx)), c(dx, rep(0, 501)),
             border = NA, col=adjustcolor(col, alpha.f  = .2))
-  } else if (lty == 1){
+  } else if (lty == 1 & !is.null(stats)){
     sel <- xx > stats[2] & xx < stats[3]
     polygon(c(xx[sel], rev(xx[sel])), c(dx[sel], rep(0, 501)[sel]),
             border = NA, col=adjustcolor(col, alpha.f  = .2))
     sel <- which(abs(xx-stats[1])==min(abs(xx-stats[1])))
     segments(x0 = stats[1], x1 = stats[1], y0 = 0, y1 = dx[sel],
-             col = col, lwd = 2)
+                 col = col, lwd = 2)
   }
   if(all(dx >= 0))
     lines(xx, dx, col = col, lty = lty, lwd = 2)

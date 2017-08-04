@@ -38,15 +38,17 @@ Fits random- and fixed-effects meta-anayses and performs Bayesian model averagin
 Bayesian model averaging for four meta-analysis models: Fixed- vs. random-effects and H0 (\eqn{d=0}) vs. H1 (e.g., \eqn{d>0}).
 }
 \examples{
-\dontrun{
 data(towels)
 mb <- meta_bma(towels$logOR, towels$SE, towels$study,
-               d = "norm", d.par = c(0,.3), sample = 10000,
-               tau = "halfcauchy", tau.par = .5)
+               d = "norm", d.par = c(0,.3),
+               tau = "halfcauchy", tau.par = .5,
+               sample = 0, summarize = "none")
+               # (no summary: only for CRAN checks)
 mb
 plot_posterior(mb, "d")
-plot_forest(mb)
 }
+\references{
+Gronau, Q. F., Erp, S. V., Heck, D. W., Cesario, J., Jonas, K. J., & Wagenmakers, E.-J. (2017). A Bayesian model-averaged meta-analysis of the power pose effect with informed and default priors: the case of felt power. Comprehensive Results in Social Psychology, 2(1), 123-138. \url{https://doi.org/10.1080/23743603.2017.1326760}
 }
 \seealso{
 \link{meta_default}, \link{meta_fixed}, \link{meta_random}

@@ -1,0 +1,7 @@
+language: r
+r:
+  - oldrel
+  - release
+  - devel
+repos:
+  CRAN: https://cloud.r-project.org

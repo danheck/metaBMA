@@ -18,9 +18,12 @@ Results can be visualized with the functions \code{\link{plot_posterior}}, which
 For more details, see the vignette: \code{vignette("metaBMA")}
 }
 \references{
-Heck, D. W., Gronau, Q. F., & Wagenmakers, E.-J. (2017). metaBMA: Bayesian model averaging for random and fixed effects meta-analysis. Retrieved from https://github.com/danheck/metaBMA. doi:10.5281/zenodo.835494
-
 Gronau, Q. F., Erp, S. V., Heck, D. W., Cesario, J., Jonas, K. J., & Wagenmakers, E.-J. (2017). A Bayesian model-averaged meta-analysis of the power pose effect with informed and default priors: the case of felt power. Comprehensive Results in Social Psychology, 2(1), 123-138. \url{https://doi.org/10.1080/23743603.2017.1326760}
+
+Heck, D. W., Gronau, Q. F., & Wagenmakers, E.-J. (2017).
+    metaBMA: Bayesian model averaging for random and fixed effects meta-analysis.
+    R package version 0.3.9.
+    \url{https://github.com/danheck/metaBMA}. doi:10.5281/zenodo.835494
 }
 \seealso{
 Useful links:

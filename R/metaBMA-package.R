@@ -23,9 +23,8 @@
 # ' @importFrom Matrix nearPD
 # ' @useDynLib metaBMA
 # ' @importFrom Brobdingnag as.brob
-#' @references
-#' Heck, D. W., Gronau, Q. F., & Wagenmakers, E.-J. (2017). metaBMA: Bayesian model averaging for random and fixed effects meta-analysis. Retrieved from https://github.com/danheck/metaBMA. doi:10.5281/zenodo.835494
 #' @template ref_gronau2017
+#' @template ref_heck2017
 "_PACKAGE"
 
 

@@ -33,14 +33,13 @@ meta_random(y, SE, labels, d = "norm", d.par = c(0, 0.3),
 Runs a Bayesian meta-analysis assuming that the effect size \eqn{d} varies across studies with standard deviation \eqn{\tau} (i.e., a random-effects analysis).
 }
 \examples{
-\dontrun{
 data(towels)
 ### Bayesian Random-Effects Meta-Analysis
 mr <- meta_random(towels$logOR, towels$SE, towels$study,
-                  d = "norm", d.par = c(0,.3), sample = 5000,
-                  tau = "halfcauchy", tau.par = .5)
+                  d = "norm", d.par = c(0,.3),
+                  tau = "halfcauchy", tau.par = .5,
+                  sample = 0, summarize = "none")
+                  # (no summary: only for CRAN checks)
 mr
 plot_posterior(mr)
-plot_forest(mr)
-}
 }

@@ -1,3 +1,12 @@
+print.est <- function(estimates = NULL){
+  if (is.null(estimates)){
+    cat("\n  (no summary statistics for parameters computed)\n")
+  }else{
+    cat("\n# Posterior summary statistics:\n")
+    print(estimates)
+  }
+}
+
 # ' Print Results of Bayesian Meta-Analysis
 # '
 # ' @param x a fitted meta-analysis object
@@ -8,7 +17,7 @@ print.meta_fixed <- function (x,...){
       "\n   Prior on d:   ", describe_prior(x$prior.d) ,
       "\n   Bayes factor (d ~ prior vs. d = 0) =", x$BF,
       "\n\n")
-  print(x$estimates)
+  print.est(x$estimates)
 }
 
 
@@ -20,7 +29,7 @@ print.meta_random <- function (x,...){
       "\n   Bayes factor (d ~ prior vs. d = 0)      =", x$BF["d_10"],
       "\n   Bayes factor (tau ~ prior vs. tau = 0)  =", x$BF["tau_10"],
       "\n\n")
-  print(x$estimates)
+  print.est(x$estimates)
 }
 
 
@@ -51,6 +60,5 @@ print.meta_bma <- function (x,...){
                     row.names = names(x$logmarginal))
   print(tab)
 
-  cat("\n# Posterior of mean effect d:\n")
-  print(x$estimates)
+  print.est(x$estimates)
 }

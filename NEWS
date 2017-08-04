@@ -1,3 +1,11 @@
+metaBMA 0.3.9
+===========
+
+* Updated citation for CRAN
+* Added examples for meta_bma() and meta_random()
+* Minor bug fixes
+
+
 metaBMA 0.3.8
 ===========
 

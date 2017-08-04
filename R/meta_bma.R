@@ -18,16 +18,16 @@
 #' @param ... arguments passed to \link[runjags]{run.jags} (e.g., MCMC parameters such as \code{sample}, \code{burnin}, \code{n.chains}, \code{thin} or \code{method="parallel"})
 #'
 #' @examples
-#' \dontrun{
 #' data(towels)
 #' mb <- meta_bma(towels$logOR, towels$SE, towels$study,
-#'                d = "norm", d.par = c(0,.3), sample = 10000,
-#'                tau = "halfcauchy", tau.par = .5)
+#'                d = "norm", d.par = c(0,.3),
+#'                tau = "halfcauchy", tau.par = .5,
+#'                sample = 0, summarize = "none")
+#'                # (no summary: only for CRAN checks)
 #' mb
 #' plot_posterior(mb, "d")
-#' plot_forest(mb)
-#' }
 #' @seealso \link{meta_default}, \link{meta_fixed}, \link{meta_random}
+#' @template ref_gronau2017
 #' @export
 meta_bma <- function (y,
                       SE,
