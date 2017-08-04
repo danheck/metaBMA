@@ -1,13 +1,11 @@
 language: r
 r:
   - devel
-sudo: false
-cache: packages
-
+repos:
+  CRAN: https://cloud.r-project.org
 before_install:
-  - sudo apt-get install jags
+  - sudo add-apt-repository ppa:marutter/rrutter -y
   - sudo apt-get update
-
-r_packages:
-  - runjags
+  - sudo apt-get install r-cran-rjags
+r_binary_packages:
   - rjags
