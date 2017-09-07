@@ -24,6 +24,7 @@ meta_random <- function (y,
                          tau.par = .5,
                          sample = 10000,
                          summarize = "integrate",
+                         rel.tol = .Machine$double.eps^.5,
                          ...){
   if (summarize == "jags" && sample <= 0)
     stop("if summarize = 'jags', it is necessary to use sample > 0.")
@@ -31,25 +32,24 @@ meta_random <- function (y,
   data_list <- data_list("random", y = y, SE = SE, labels = labels,
                          d = d, d.par = d.par, tau = tau, tau.par = tau.par)
 
-  integral <- integrate_wrapper(data = data_list)
+  logml <- integrate_wrapper(data = data_list, rel.tol = rel.tol)
 
   meta <- list("data" = data_list,
                "prior.d" = data_list$prior.d,
                "prior.tau" = data_list$prior.tau,
                "posterior.d" = NULL,
                "posterior.d" = NULL,
-               "logmarginal"  = integral$logml,
+               "logmarginal"  = logml,
                "BF" = NULL,
-               "estimates" = NULL,
-               "integral" = integral)
+               "estimates" = NULL)
   class(meta) <- "meta_random"
 
-  meta$posterior.d <- posterior(meta, "d")
-  meta$posterior.tau <- posterior(meta, "tau")
+  meta$posterior.d <- posterior(meta, "d", rel.tol = rel.tol)
+  meta$posterior.tau <- posterior(meta, "tau", rel.tol = rel.tol)
 
   if (summarize == "integrate")
-    meta$estimates <- rbind(d = stats_density(meta$posterior.d),
-                            tau = stats_density(meta$posterior.tau))
+    meta$estimates <- rbind(d = stats_density(meta$posterior.d, rel.tol = rel.tol),
+                            tau = stats_density(meta$posterior.tau, rel.tol = rel.tol))
 
   if (sample > 0){
     jags_samples <- get_samples(data = data_list, sample = sample, ...)

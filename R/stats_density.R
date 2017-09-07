@@ -3,7 +3,8 @@
 stats_density <- function (density,
                            lb = NULL,
                            ub = NULL,
-                           ci = .95){
+                           ci = .95,
+                           rel.tol = .Machine$double.eps^0.8){
 
   if(class(density) %in% c("prior", "posterior")){
     lb <- attr(density, "lower")
@@ -14,32 +15,30 @@ stats_density <- function (density,
 
   mean <- NA
   try (mean <- integrate(function(x) x*density(x),
-                         lb, ub)$value, silent = TRUE)
+                         lb, ub, rel.tol = rel.tol)$value, silent = TRUE)
 
   SD <- NA
   try ({
     variance <- integrate(function(x) (x-mean)^2*density(x),
-                          lb, ub)$value
+                          lb, ub, rel.tol = rel.tol)$value
     SD <- sqrt(variance)}, silent = TRUE)
 
   ################ quantiles: c(.025, .5, .975)
   qq <- rep(NA, 3)
   try ({
     tmp <- function (q, p){
-      p - integrate(density, lb, q)$value
+      p - integrate(density, lb, q, rel.tol = rel.tol)$value
     }
     interval <- c(max(lb + 1e-30, mean - 5*SD),
                   min(mean + 5*SD, ub - 1e-30))
     qq <- sapply(c(.025, .5, .975),
-                 function (pp) uniroot(tmp, interval,
-                                       p = pp)$root)},
+                 function (pp) uniroot(tmp, interval, p = pp)$root)},
     silent = TRUE)
 
   ################ compute HPD
   hpd <- c("HPD95lower" = NA, "HPD95upper" = NA)
   try ({
-    xx <- seq(max(lb, qq[1]-SD),
-              min(ub, qq[3]+SD), length.out = 501)
+    xx <- seq(max(lb, qq[1]-SD), min(ub, qq[3]+SD), length.out = 501)
     dx <- sapply(xx, density)*diff(xx[1:2])
     px <- cumsum(dx)
     qdens <- splinefun(px, xx)

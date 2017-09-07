@@ -26,18 +26,19 @@
 bma <- function (meta,
                  prior = 1,
                  parameter = "d",
-                 summarize = "integrate"){
+                 summarize = "integrate",
+                 rel.tol = .Machine$double.eps^0.5){
 
   classes <- sapply(meta, class) %in% c("meta_fixed", "meta_random")
   if (!is.list(meta) || !all(classes))
     stop ("'meta' must be a list of meta-analysis models \n",
           "       (fitted with meta_fixed and meta_random).")
+  if (is.null(names(meta)))
+    names(meta) <- paste0("meta", seq_along(meta))
 
   sel.prior <- paste0("prior.", parameter)
   sel.post <- paste0("posterior.", parameter)
-  logml <- sapply(meta, function (meta) meta$logmarginal)
-  if (!is.null(names(meta)))
-    names(logml) <- names(meta)
+  logml <- sapply(meta, "[[", "logmarginal")
   incl <- inclusion(logml, prior = prior)
 
   res_bma <- list("meta" = meta,
@@ -50,13 +51,13 @@ bma <- function (meta,
   class(res_bma) <- "meta_bma"
 
   # BMA: weighted posterior of effects
-  res_bma$posterior.d <- posterior(res_bma)
+  res_bma$posterior.d <- posterior(res_bma, rel.tol = rel.tol)
   if (summarize %in% c("integrate", "jags")){
     ests <- t(sapply(meta, function(x) x$estimates[parameter,]))
-    res_bma$estimates <- rbind("Averaged" = stats_density(res_bma$posterior.d),
+    res_bma$estimates <- rbind("Averaged" = stats_density(res_bma$posterior.d, rel.tol =rel.tol),
                                ests)
-    if (!is.null(names(meta)))
-      rownames(res_bma$estimates)[1+1:length(meta)] <- names(meta)
+  } else {
+    meta
   }
 
   res_bma$BF <- outer(exp(res_bma$logmarginal),

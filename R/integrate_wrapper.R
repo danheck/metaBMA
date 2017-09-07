@@ -1,28 +1,40 @@
 integrate_wrapper <- function (data,
-                               rel.tol = .Machine$double.eps^0.35){
+                               rel.tol = .Machine$double.eps^0.5){
 
-  integral <- NULL
+  scale <- 1
+  integral <- NA
 
   ####### fixed H1
   if (data$model == "fixed" && attr(data$prior.d, "family") != "0"){
-    try (integral <- integrate(post_fixed, data = data,
+    try(scale <- integrate(post_fixed, data = data,
+                           attr(data$prior.d, "lower"),
+                           attr(data$prior.d, "upper"),
+                           rel.tol = rel.tol)$value)
+    try (integral <- integrate(function(x) post_fixed(x, data = data)/scale,
                                attr(data$prior.d, "lower"),
                                attr(data$prior.d, "upper"),
-                               rel.tol = rel.tol))
+                               rel.tol = rel.tol)$value)
 
     ####### random H0
   } else if (data$model == "random" && attr(data$prior.d, "family") == "0"){
-    try (integral <- integrate(post_random, d = 0, data = data,
+    try(scale <- integrate(post_random, d = 0, data = data,
+                           attr(data$prior.tau, "lower"),
+                           attr(data$prior.tau, "upper"),
+                           rel.tol = rel.tol)$value)
+    try (integral <- integrate(function(x) post_random(x, d = 0, data = data)/scale,
                                attr(data$prior.tau, "lower"),
                                attr(data$prior.tau, "upper"),
-                               rel.tol = rel.tol))
+                               rel.tol = rel.tol)$value)
   } else {
     ####### random H1
-
-    try (integral <- integrate(post_random_d, data=data,
+    try (scale <- integrate(post_random_d, data=data,
+                            attr(data$prior.d, "lower"),
+                            attr(data$prior.d, "upper"),
+                            rel.tol = rel.tol)$value)
+    try (integral <- integrate(function(x) post_random_d(x, data=data)/scale,
                                attr(data$prior.d, "lower"),
                                attr(data$prior.d, "upper"),
-                               rel.tol = rel.tol))
+                               rel.tol = rel.tol)$value)
     # try (i2 <- integrate(post_random_tau, data=data,
     #                      attr(data$prior.tau, "lower"),
     #                      attr(data$prior.tau, "upper"),
@@ -40,9 +52,12 @@ integrate_wrapper <- function (data,
     #   integral <- i2
     # }
   }
-  if (is.null(integral))
+  if (is.na(integral))
     warning ("Integral for marginal likelihood could not be computed with ?integrate")
 
-  try (integral$logml <- log(integral$value))
-  return (integral)
+  # try (integral$value <- integral$value*scale)
+  # try (integral$abs.error <- NULL)
+  # try (class(integral) <- NULL)
+  # try (integral$logml <- log(integral$value))
+  log(integral * scale)
 }

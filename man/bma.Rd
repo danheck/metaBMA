@@ -4,7 +4,8 @@
 \alias{bma}
 \title{Bayesian Model Averaging}
 \usage{
-bma(meta, prior = 1, parameter = "d", summarize = "integrate")
+bma(meta, prior = 1, parameter = "d", summarize = "integrate",
+  rel.tol = .Machine$double.eps^0.5)
 }
 \arguments{
 \item{meta}{list of meta-analysis models (fitted via \code{\link{meta_random}} or \code{\link{meta_fixed}})}
@@ -13,7 +14,14 @@ bma(meta, prior = 1, parameter = "d", summarize = "integrate")
 
 \item{parameter}{eiher the mean effect \code{"d"} or the heterogeneity across studies \code{"tau"}}
 
-\item{summarize}{whether and to compute parameter summaries (mean, median, SD, 95\% quantile interval, HPD interval). If \code{summarize = "integrate"}, numerical integration is used  (which is precise but can require some seconds of computing time), \code{summarize = "jags"} summarizes the JAGS samples, and \code{summarize = "none"} suppresses parameter summaries.}
+\item{summarize}{whether and to compute parameter summaries (mean, median, SD,
+95\% quantile interval, HPD interval). If \code{summarize = "integrate"},
+numerical integration is used  (which is precise but can require some seconds
+of computing time), \code{summarize = "jags"} summarizes the JAGS samples,
+and \code{summarize = "none"} suppresses parameter summaries.}
+
+\item{rel.tol}{relative tolerance used for numerical integration using \code{\link[stats]{integrate}}.
+Use \code{rel.tol=.Machine$double.eps} for maximal precision.}
 }
 \description{
 Model averaging of meta-analysis models according to their posterior model probability.

@@ -1,10 +1,7 @@
 
 ### random-effects: marginal posterior of both
-post_random <- function(tau,
-                        d = 0,
-                        data,
-                        log = FALSE,
-                        rel.tol = .Machine$double.eps^0.35){
+post_random <- function(tau, d = 0, data, log = FALSE,
+                        rel.tol = .Machine$double.eps^0.5){
 
   ### priors
   prior <- data$prior.tau(tau, log = TRUE)
@@ -28,39 +25,39 @@ post_random <- function(tau,
 
 ################################## integration over 1 parameter ######
 
-post_random_d <- function(d,
-                          data,
-                          log = FALSE,
-                          rel.tol = .Machine$double.eps^0.35){
+post_random_d <- function(d, data, log = FALSE,
+                          rel.tol = .Machine$double.eps^0.5){
 
   bounds <- bounds_prior(data$prior.tau)
+  # scale <- integrate(post_random, d = d[1], data = data, bounds[1], bounds[2],
+  #                    rel.tol = rel.tol)$value
   func <- function(d)
-    integrate(post_random, d = d, data = data,
-              bounds[1], bounds[2],
-              rel.tol = rel.tol)$value
+    integrate(function(x) post_random(x, d = d, data = data),
+              bounds[1], bounds[2], rel.tol = rel.tol)$value
 
-  sapply(d, func)
+  sapply(d, func) #* scale
 }
 
 
-post_random_tau <- function(tau,
-                            data,
-                            log = FALSE,
-                            rel.tol = .Machine$double.eps^0.35){
+post_random_tau <- function(tau, data, log = FALSE,
+                            rel.tol = .Machine$double.eps^0.5){
 
   if (attr(data$prior.d, "family") != "0"){
     bounds <- bounds_prior(data$prior.d)
-    func <- function(tau) integrate( function(x)
-      post_random(tau = tau, d = x, data = data),
-      lower = bounds[1],  upper = bounds[2],
-      rel.tol = rel.tol)$value
-  }else{
+    # scale <- integrate( function(x) post_random(tau = tau[1], d = x, data = data),
+    #                     lower = bounds[1],  upper = bounds[2],
+    #                     rel.tol = rel.tol)$value
+    func <- function (tau)
+      integrate( function(x) post_random(tau = tau, d = x, data = data),
+                 lower = bounds[1],  upper = bounds[2],
+                 rel.tol = rel.tol)$value
+  } else {
     func <- function(tau) post_random(tau = tau, d = 0, data = data)
   }
 
-  post <- sapply(tau, func)
+  post <- sapply(tau, func) #* scale
   if (log) post <- log(post)
-  return(post)
+  post
 }
 
 

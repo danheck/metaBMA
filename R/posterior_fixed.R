@@ -19,7 +19,7 @@ post_fixed <- function (d = 0,
   post <- prior + loglik
   if (!log)
     post <- exp(post)
-  return (post)
+  post
 }
 
 loglik_fixed_H0 <- function(data) {
@@ -35,7 +35,7 @@ post_fixed_norm <- function (d,
   post <- post_fixed(d)/const
   if(log)
     post <- log(post)
-  return(post)
+  post
 }
 
 

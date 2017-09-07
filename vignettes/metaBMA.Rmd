@@ -99,6 +99,6 @@ md
 Often, it is of interest to judge how much additional evidence future studies can contribute to the present knowledge. Conditional on the outcome of the model averaging for meta-analysis, the function `predictive()` samples new data sets from the posterior and performes a model selection for each replication. Thereby, a distribution of predicted Bayes factors is obtain that represents the expected evidence one expects when running a new study:
 
 ```{r, fig.height=4.5, fig.width=6}
-mp <- predictive(mb, SE = .2, resample = 50)
+mp <- predictive(mb, SE = .2, resample = 100)
 plot(mp)
 ```

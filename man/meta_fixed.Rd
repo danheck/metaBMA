@@ -5,7 +5,8 @@
 \title{Bayesian Fixed-Effects Meta-Analysis}
 \usage{
 meta_fixed(y, SE, labels = NULL, d = "halfnorm", d.par = c(mean = 0, sd =
-  0.3), sample = 0, summarize = "integrate", ...)
+  0.3), sample = 0, summarize = "integrate",
+  rel.tol = .Machine$double.eps^0.5, ...)
 }
 \arguments{
 \item{y}{mean in each study}
@@ -18,14 +19,26 @@ meta_fixed(y, SE, labels = NULL, d = "halfnorm", d.par = c(mean = 0, sd =
 
 \item{d.par}{prior parameters for \eqn{d}}
 
-\item{sample}{number of samples in JAGS after burn-in and thinning (see \code{\link[runjags]{run.jags}}). Samples are used to get posterior  estimates for each study effect (which will show shrinkage). Only works for priors defined in \code{\link{prior}}.}
+\item{sample}{number of samples in JAGS after burn-in and thinning (see
+\code{\link[runjags]{run.jags}}). Samples are used to get posterior
+estimates for each study effect (which will show shrinkage).
+Only works for priors defined in \code{\link{prior}}.}
 
-\item{summarize}{whether and to compute parameter summaries (mean, median, SD, 95\% quantile interval, HPD interval). If \code{summarize = "integrate"}, numerical integration is used  (which is precise but can require some seconds of computing time), \code{summarize = "jags"} summarizes the JAGS samples, and \code{summarize = "none"} suppresses parameter summaries.}
+\item{summarize}{whether and to compute parameter summaries (mean, median, SD,
+95\% quantile interval, HPD interval). If \code{summarize = "integrate"},
+numerical integration is used  (which is precise but can require some seconds
+of computing time), \code{summarize = "jags"} summarizes the JAGS samples,
+and \code{summarize = "none"} suppresses parameter summaries.}
 
-\item{...}{arguments passed to \link[runjags]{run.jags} (e.g., MCMC parameters such as \code{sample}, \code{burnin}, \code{n.chains}, \code{thin} or \code{method="parallel"})}
+\item{rel.tol}{relative tolerance used for numerical integration using \code{\link[stats]{integrate}}.
+Use \code{rel.tol=.Machine$double.eps} for maximal precision.}
+
+\item{...}{arguments passed to \link[runjags]{run.jags} (e.g., MCMC parameters
+such as \code{sample}, \code{burnin}, \code{n.chains}, \code{thin} or \code{method="parallel"})}
 }
 \description{
-Runs a Bayesian meta-analysis assuming that the mean effect \eqn{d} in each study is identical (i.e., a fixed-effects analysis).
+Runs a Bayesian meta-analysis assuming that the mean effect \eqn{d} in each
+study is identical (i.e., a fixed-effects analysis).
 }
 \examples{
 data(towels)

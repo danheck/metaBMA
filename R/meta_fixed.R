@@ -1,6 +1,7 @@
 #' Bayesian Fixed-Effects Meta-Analysis
 #'
-#' Runs a Bayesian meta-analysis assuming that the mean effect \eqn{d} in each study is identical (i.e., a fixed-effects analysis).
+#' Runs a Bayesian meta-analysis assuming that the mean effect \eqn{d} in each
+#' study is identical (i.e., a fixed-effects analysis).
 #'
 #' @inheritParams meta_bma
 #' @inheritParams meta_random
@@ -21,6 +22,7 @@ meta_fixed <- function(y,
                        d.par = c(mean=0, sd=0.3),
                        sample = 0,
                        summarize = "integrate",
+                       rel.tol = .Machine$double.eps^.5,
                        ...){
   if (summarize == "jags" && sample <= 0)
     stop("if summarize = 'jags', it is necessary to use sample > 0.")
@@ -28,22 +30,20 @@ meta_fixed <- function(y,
   data_list <- data_list("fixed", y = y, SE = SE, labels = labels,
                          d = d, d.par = d.par)
 
-  integral <- integrate_wrapper(data = data_list)
+  logml <- integrate_wrapper(data = data_list, rel.tol = rel.tol)
 
   meta <- list("data" = data_list,
                "prior.d" = data_list$prior.d,
                "posterior.d" = NA,
-               "logmarginal"  = integral$logml,
+               "logmarginal"  = logml,
                "logmarginal.H0" = loglik_fixed_H0(data_list),
-               "BF" = c("d_10" = exp(integral$logml -
-                                       loglik_fixed_H0(data_list))),
-               "estimates" = NULL,
-               "integral" = integral)
+               "BF" = c("d_10" = exp(logml - loglik_fixed_H0(data_list))),
+               "estimates" = NULL)
   class(meta) <- "meta_fixed"
 
-  meta$posterior.d <- posterior(meta, "d")
+  meta$posterior.d <- posterior(meta, "d", rel.tol = rel.tol)
   if (summarize == "integrate")
-    meta$estimates <- rbind("d" = stats_density(meta$posterior.d))
+    meta$estimates <- rbind("d" = stats_density(meta$posterior.d, rel.tol = rel.tol))
 
   if (sample > 0){
     jags_samples <- get_samples(data = data_list, sample = sample, ...)
