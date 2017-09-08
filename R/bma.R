@@ -10,12 +10,15 @@
 #' @examples
 #' data(towels)
 #' fix1 <- meta_fixed(towels$logOR, towels$SE, towels$study,
-#'                    d = "halfnorm", d.par = c(mean=0, sd=.2))
+#'                    d = "halfnorm", d.par = c(mean=0, sd=.2),
+#'                    sample = 0, summarize = "integrate")
 #' fix2 <- meta_fixed(towels$logOR, towels$SE, towels$study,
-#'                    d = "beta", d.par = c(alpha=1, beta=1))
+#'                    d = "beta", d.par = c(alpha=1, beta=1),
+#'                    sample = 0, summarize = "integrate")
 #' fix3 <- meta_fixed(towels$logOR, towels$SE, towels$study,
 #'                    d = "triangular",
-#'                    d.par = c(min=0, peak=.3, max=1))
+#'                    d.par = c(min=0, peak=.3, max=1),
+#'                    sample = 0, summarize = "integrate")
 #'
 #' averaged <- bma(list(Halfnormal = fix1, Uniform = fix2,
 #'                      Triangular = fix3))

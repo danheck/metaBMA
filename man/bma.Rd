@@ -17,7 +17,7 @@ bma(meta, prior = 1, parameter = "d", summarize = "integrate",
 \item{summarize}{whether and to compute parameter summaries (mean, median, SD,
 95\% quantile interval, HPD interval). If \code{summarize = "integrate"},
 numerical integration is used  (which is precise but can require some seconds
-of computing time), \code{summarize = "jags"} summarizes the JAGS samples,
+of computing time and be unstable), \code{summarize = "jags"} summarizes the JAGS samples,
 and \code{summarize = "none"} suppresses parameter summaries.}
 
 \item{rel.tol}{relative tolerance used for numerical integration using \code{\link[stats]{integrate}}.
@@ -29,12 +29,15 @@ Model averaging of meta-analysis models according to their posterior model proba
 \examples{
 data(towels)
 fix1 <- meta_fixed(towels$logOR, towels$SE, towels$study,
-                   d = "halfnorm", d.par = c(mean=0, sd=.2))
+                   d = "halfnorm", d.par = c(mean=0, sd=.2),
+                   sample = 0, summarize = "integrate")
 fix2 <- meta_fixed(towels$logOR, towels$SE, towels$study,
-                   d = "beta", d.par = c(alpha=1, beta=1))
+                   d = "beta", d.par = c(alpha=1, beta=1),
+                   sample = 0, summarize = "integrate")
 fix3 <- meta_fixed(towels$logOR, towels$SE, towels$study,
                    d = "triangular",
-                   d.par = c(min=0, peak=.3, max=1))
+                   d.par = c(min=0, peak=.3, max=1),
+                   sample = 0, summarize = "integrate")
 
 averaged <- bma(list(Halfnormal = fix1, Uniform = fix2,
                      Triangular = fix3))

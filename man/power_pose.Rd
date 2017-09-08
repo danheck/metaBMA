@@ -38,7 +38,7 @@ head(power_pose)
 
 # Simple fixed-effects meta-analysis
 mfix <- meta_fixed(power_pose$effectSize, power_pose$SE,
-                   power_pose$study)
+                   power_pose$study, sample = 0)
 mfix
 plot_posterior(mfix)
 }

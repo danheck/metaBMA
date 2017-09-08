@@ -27,7 +27,7 @@ Plots estimated effect sizes for all studies.
 }
 \examples{
 data(towels)
-mf <- meta_fixed(towels$logOR, towels$SE, towels$study)
+mf <- meta_fixed(towels$logOR, towels$SE, towels$study, sample = 0)
 plot_forest(mf, mar = c(4.5,20,4,.2), xlab="Log Odds Ratio")
 }
 \seealso{

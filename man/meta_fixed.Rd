@@ -5,7 +5,7 @@
 \title{Bayesian Fixed-Effects Meta-Analysis}
 \usage{
 meta_fixed(y, SE, labels = NULL, d = "halfnorm", d.par = c(mean = 0, sd =
-  0.3), sample = 0, summarize = "integrate",
+  0.3), sample = 5000, summarize = "integrate",
   rel.tol = .Machine$double.eps^0.5, ...)
 }
 \arguments{
@@ -27,7 +27,7 @@ Only works for priors defined in \code{\link{prior}}.}
 \item{summarize}{whether and to compute parameter summaries (mean, median, SD,
 95\% quantile interval, HPD interval). If \code{summarize = "integrate"},
 numerical integration is used  (which is precise but can require some seconds
-of computing time), \code{summarize = "jags"} summarizes the JAGS samples,
+of computing time and be unstable), \code{summarize = "jags"} summarizes the JAGS samples,
 and \code{summarize = "none"} suppresses parameter summaries.}
 
 \item{rel.tol}{relative tolerance used for numerical integration using \code{\link[stats]{integrate}}.
@@ -44,7 +44,8 @@ study is identical (i.e., a fixed-effects analysis).
 data(towels)
 ### Bayesian Fixed-Effects Meta-Analysis (H1: d>0 Cauchy)
 mf <- meta_fixed(towels$logOR, towels$SE, towels$study,
-                 d = "halfnorm", d.par = c(0, .3))
+                 d = "halfnorm", d.par = c(0, .3), sample = 0,
+                 summarize = "integrate")
 mf
 plot_posterior(mf)
 plot_forest(mf)

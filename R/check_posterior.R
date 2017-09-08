@@ -1,3 +1,4 @@
+
 check_posterior <- function (dpost, meta, parameter = "d"){
 
   mini <- max(0, attr(dpost, "lower"))
@@ -8,6 +9,14 @@ check_posterior <- function (dpost, meta, parameter = "d"){
     try(dp_const <- integrate(dpost, attr(dpost, "lower"), attr(dpost, "upper"))$value, silent = TRUE)
   else
     dp_const <- 1
+  # if (is.na(dp_const) || abs(dp_const - 1) > .0005)
+  #   try({
+  #     m <- meta$estimates[names(attr(dpost, "lower")),"Mean"]
+  #     sd <- meta$estimates[names(attr(dpost, "lower")),"SD"]
+  #     lb <- max(attr(dpost, "lower"), m - 50*sd)
+  #     ub <- max(attr(dpost, "lower"), m + 50*sd)
+  #     dp_const <- integrate(dpost, lb, ub)$value
+  #   }, silent = TRUE)
 
   if (any(is.na(dpost(xx))) || is.na(dp_const) || abs(dp_const - 1) > .0005){
     warning ("Posterior distribution could not be approximated numerically\n",
@@ -26,10 +35,9 @@ check_posterior <- function (dpost, meta, parameter = "d"){
       class(dlog) <- "posterior"
       attr(dlog, "model") <- attr(dpost, "model")
       return (dlog)
+    } else {
+      stop ("JAGS samples missing: Argument 'sample' must be larger than zero!")
     }
-    # else {
-    #   stop ("JAGS samples missing: Set argument 'sample' larger than zero.")
-    # }
   }
   dpost
 }

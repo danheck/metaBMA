@@ -5,8 +5,8 @@
 \title{Bayesian Random-Effects Meta-Analysis}
 \usage{
 meta_random(y, SE, labels, d = "norm", d.par = c(0, 0.3),
-  tau = "halfcauchy", tau.par = 0.5, sample = 10000,
-  summarize = "integrate", rel.tol = .Machine$double.eps^0.5, ...)
+  tau = "halfcauchy", tau.par = 0.5, sample = 10000, summarize = "jags",
+  rel.tol = .Machine$double.eps^0.5, ...)
 }
 \arguments{
 \item{y}{mean in each study}
@@ -32,7 +32,7 @@ Only works for priors defined in \code{\link{prior}}.}
 \item{summarize}{whether and to compute parameter summaries (mean, median, SD,
 95\% quantile interval, HPD interval). If \code{summarize = "integrate"},
 numerical integration is used  (which is precise but can require some seconds
-of computing time), \code{summarize = "jags"} summarizes the JAGS samples,
+of computing time and be unstable), \code{summarize = "jags"} summarizes the JAGS samples,
 and \code{summarize = "none"} suppresses parameter summaries.}
 
 \item{rel.tol}{relative tolerance used for numerical integration using \code{\link[stats]{integrate}}.

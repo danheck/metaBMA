@@ -23,7 +23,7 @@ meta_random <- function (y,
                          tau = "halfcauchy",
                          tau.par = .5,
                          sample = 10000,
-                         summarize = "integrate",
+                         summarize = "jags",
                          rel.tol = .Machine$double.eps^.5,
                          ...){
   if (summarize == "jags" && sample <= 0)
@@ -44,13 +44,6 @@ meta_random <- function (y,
                "estimates" = NULL)
   class(meta) <- "meta_random"
 
-  meta$posterior.d <- posterior(meta, "d", rel.tol = rel.tol)
-  meta$posterior.tau <- posterior(meta, "tau", rel.tol = rel.tol)
-
-  if (summarize == "integrate")
-    meta$estimates <- rbind(d = stats_density(meta$posterior.d, rel.tol = rel.tol),
-                            tau = stats_density(meta$posterior.tau, rel.tol = rel.tol))
-
   if (sample > 0){
     jags_samples <- get_samples(data = data_list, sample = sample, ...)
     if (summarize == "jags")
@@ -60,8 +53,14 @@ meta_random <- function (y,
     meta$jagsmodel <- jags_samples$jagsfile
   }
 
+  meta$posterior.d <- posterior(meta, "d", rel.tol = rel.tol)
+  meta$posterior.tau <- posterior(meta, "tau", rel.tol = rel.tol)
   meta$posterior.d <- check_posterior(meta$posterior.d, meta, "d.random")
   meta$posterior.tau <- check_posterior(meta$posterior.tau, meta, "tau")
+  if (summarize == "integrate")
+    meta$estimates <- rbind(d = stats_density(meta$posterior.d, rel.tol = rel.tol),
+                            tau = stats_density(meta$posterior.tau, rel.tol = rel.tol))
+
 
   meta$BF <- c(d_10 = meta$prior.d(0) / meta$posterior.d(0),
                tau_10 = meta$prior.tau(0) / meta$posterior.tau(0))

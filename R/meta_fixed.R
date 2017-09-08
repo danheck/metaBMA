@@ -10,7 +10,8 @@
 #' data(towels)
 #' ### Bayesian Fixed-Effects Meta-Analysis (H1: d>0 Cauchy)
 #' mf <- meta_fixed(towels$logOR, towels$SE, towels$study,
-#'                  d = "halfnorm", d.par = c(0, .3))
+#'                  d = "halfnorm", d.par = c(0, .3), sample = 0,
+#'                  summarize = "integrate")
 #' mf
 #' plot_posterior(mf)
 #' plot_forest(mf)
@@ -20,7 +21,7 @@ meta_fixed <- function(y,
                        labels = NULL,
                        d = "halfnorm",
                        d.par = c(mean=0, sd=0.3),
-                       sample = 0,
+                       sample = 5000,
                        summarize = "integrate",
                        rel.tol = .Machine$double.eps^.5,
                        ...){
@@ -41,9 +42,6 @@ meta_fixed <- function(y,
                "estimates" = NULL)
   class(meta) <- "meta_fixed"
 
-  meta$posterior.d <- posterior(meta, "d", rel.tol = rel.tol)
-  if (summarize == "integrate")
-    meta$estimates <- rbind("d" = stats_density(meta$posterior.d, rel.tol = rel.tol))
 
   if (sample > 0){
     jags_samples <- get_samples(data = data_list, sample = sample, ...)
@@ -53,7 +51,11 @@ meta_fixed <- function(y,
     meta$jagsmodel <- jags_samples$jagsfile
   }
 
+  meta$posterior.d <- posterior(meta, "d", rel.tol = rel.tol)
   meta$posterior.d <- check_posterior(meta$posterior.d, meta, "d.fixed")
+  if (summarize == "integrate")
+    meta$estimates <- rbind("d" = stats_density(meta$posterior.d, rel.tol = rel.tol))
+
   meta$data <- meta$data[c("y", "SE", "labels")]
   return(meta)
 }

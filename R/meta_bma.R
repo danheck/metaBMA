@@ -26,7 +26,7 @@
 #' @param summarize whether and to compute parameter summaries (mean, median, SD,
 #'     95\% quantile interval, HPD interval). If \code{summarize = "integrate"},
 #'     numerical integration is used  (which is precise but can require some seconds
-#'     of computing time), \code{summarize = "jags"} summarizes the JAGS samples,
+#'     of computing time and be unstable), \code{summarize = "jags"} summarizes the JAGS samples,
 #'     and \code{summarize = "none"} suppresses parameter summaries.
 #' @param rel.tol relative tolerance used for numerical integration using \code{\link[stats]{integrate}}.
 #'     Use \code{rel.tol=.Machine$double.eps} for maximal precision.
