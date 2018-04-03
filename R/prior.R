@@ -9,15 +9,15 @@
 #' @param upper only for \code{family = "custom"}: upper bound for prior density
 #' @details
 #' \itemize{
-#' \item \code{"norm"}: Normal distribution with \code{param = c(mean, sd)} (see \code{\link[stats]{dnorm}})
+#' \item \code{"norm"}: Normal distribution with \code{param = c(mean, sd)} (see \code{\link[stats]{Normal}})
 #' \item \code{"halfnorm"}: Half-normal distribution (positive) with \code{param = c(mean, sd)} (see \code{\link[LaplacesDemon]{dhalfnorm}})
 #' \item \code{"truncnorm"}: Truncated normal distribution with \code{param = c(min, max, mean, sd)}  (see \code{\link{dtruncnorm}})
-#' \item \code{"scaledt"}: Scaled Student-t with \code{param = c(mean, sigma, nu)} (see \code{\link[LaplacesDemon]{dst}})
-#' \item \code{"halft"}: Half-normal Student-t with \code{param = c(scale, df)} (see \code{\link[LaplacesDemon]{dhalft}})
-#' \item \code{"cauchy"}: Cauchy distribution with \code{param = scale} (see \code{\link[stats]{dcauchy}})
-#' \item \code{"halfcauchy"}: Half-Cauchy distribution (positive) with \code{param = scale}  (see \code{\link[LaplacesDemon]{dhalfcauchy}})
+#' \item \code{"scaledt"}: Scaled Student-t with \code{param = c(mean, sigma, nu)} (see \code{\link[LaplacesDemon]{dist.Student.t}})
+#' \item \code{"halft"}: Half-normal Student-t with \code{param = c(scale, df)} (see \code{\link[LaplacesDemon]{dist.Halft}})
+#' \item \code{"cauchy"}: Cauchy distribution with \code{param = scale} (see \code{\link[stats]{Cauchy}})
+#' \item \code{"halfcauchy"}: Half-Cauchy distribution (positive) with \code{param = scale}  (see \code{\link[LaplacesDemon]{dist.HalfCauchy}})
 #' \item \code{"triangular"}: Triangular distribution with \code{param = c(min, peak, max)} (see \code{\link{dtriangular}})
-#' \item \code{"beta"}: Beta distribution with \code{param = c(alpha, beta)} (see \code{\link[stats]{dbeta}})
+#' \item \code{"beta"}: Beta distribution with \code{param = c(alpha, beta)} (see \code{\link[stats]{Beta}})
 #' \item \code{"custom"}: User-specified prior density function defined by \code{param} (see examples; the density must be nonnegative and vectorized, but is normalized internally). Integration is performed from (-Inf, Inf), which requires that the function returns zeros (and not NAs) for values not in the support of the distribution.
 #' }
 #'
