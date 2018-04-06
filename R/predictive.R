@@ -30,34 +30,41 @@ predictive <- function (meta, SE, resample = 100){
   nsamples <- nrow(meta$meta[["Random Effects"]]$samples)
   nn <- round(resample * meta$posterior.models)
   replace <- ifelse(resample <= nsamples, FALSE, TRUE)
+  param.fH1 <- param.rH0 <- param.rH1 <- c()
 
   #-------------- Fixed H0
   param.fH0 <- rep(0, nn["fixed.H0"])
 
   #-------------- Fixed H1
-  ss.fixedH1 <- meta$meta[["Fixed Effects"]]$samples
-  if (is.null(ss.fixedH1)){
-    m.fixed.H1 <- meta_fixed(y, SE = SEs, d = d, d.par = d.par,
-                             sample = 100 * nn["fixed.H1"],  summarize = "none")
-    ss.fixedH1 <- m.fixed.H1$samples
+  if (nn["fixed.H1"] > 0){
+    ss.fixedH1 <- meta$meta[["Fixed Effects"]]$samples
+    if (is.null(ss.fixedH1)){
+      m.fixed.H1 <- meta_fixed(y, SE = SEs, d = d, d.par = d.par,
+                               sample = 100 * nn["fixed.H1"],  summarize = "none")
+      ss.fixedH1 <- m.fixed.H1$samples
+    }
+    param.fH1 <- sample(ss.fixedH1, nn["fixed.H1"], replace)
   }
-  param.fH1 <- sample(ss.fixedH1, nn["fixed.H1"], replace)
 
   #-------------- Random H0
-  m.random.H0 <- meta_random(y, SEs, d = "0",  tau = tau, tau.par = tau.par,
-                             sample = 100 * nn["random.H0"], summarize = "jags")
-  param.rH0 <- sample(m.random.H0$samples[,"tau"], nn["random.H0"], replace)
+  if (nn["random.H0"] > 0){
+    m.random.H0 <- meta_random(y, SEs, d = "0",  tau = tau, tau.par = tau.par,
+                               sample = 100 * nn["random.H0"], summarize = "jags")
+    param.rH0 <- sample(m.random.H0$samples[,"tau"], nn["random.H0"], replace)
+  }
 
   #-------------- Random H1
-  ss.randomH1 <- meta$meta[["Random Effects"]]$samples
-  if (is.null(ss.randomH1)){
-    m.random.H1 <- meta_random(y = y, SE = SEs, d = d, d.par = d.par, tau = tau,
-                               tau.par = tau.par, sample = 100 * nn["random.H0"],
-                               summarize = "jags")
-    ss.randomH1 <- m.random.H1$samples
+  if (nn["random.H1"] > 0){
+    ss.randomH1 <- meta$meta[["Random Effects"]]$samples
+    if (is.null(ss.randomH1)){
+      m.random.H1 <- meta_random(y = y, SE = SEs, d = d, d.par = d.par, tau = tau,
+                                 tau.par = tau.par, sample = 100 * nn["random.H0"],
+                                 summarize = "jags")
+      ss.randomH1 <- m.random.H1$samples
+    }
+    idx <- sample(nrow(ss.randomH1), nn["random.H1"], replace)
+    param.rH1 <-  ss.randomH1[idx, c("d.random", "tau")]
   }
-  idx <- sample(nrow(ss.randomH1), nn["random.H1"], replace)
-  param.rH1 <-  ss.randomH1[idx, c("d.random", "tau")]
 
   #--------------  sample data sets
   d.pred <- c(rstudy(nn["fixed.H0"], "fixed", param.fH0, SE),

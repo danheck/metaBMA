@@ -1,8 +1,13 @@
 #' Plot Predicted Bayes Factors
 #'
-#' @param x an objct of the class \code{"prediction"} which contains observed and predicted Bayes factors
-#' @param which a character value defining which Bayes factor to plot (one of "d_10_fixed", "d_10_random", "d_10_averaged", "tau_10_random", "H1_fixed_vs_random")
-#' @param scale either plots Bayes factors (\code{"BF"}), inverse Bayes factors (\code{"1/BF"}), log Bayes factors (\code{"log"}), or the log-inverse Bayes factor (\code{"1/log"})
+#' @param x an objct of the class \code{"prediction"} which contains observed
+#'     and predicted Bayes factors
+#' @param which a character value defining which Bayes factor to plot
+#'     (one of "d_10_fixed", "d_10_random", "d_10_averaged", "tau_10_random",
+#'     "H1_fixed_vs_random")
+#' @param scale either plots Bayes factors (\code{"BF"}), inverse Bayes factors
+#'     (\code{"1/BF"}), log Bayes factors (\code{"log"}), or the log-inverse
+#'     Bayes factor (\code{"1/log"})
 #' @param ... arguments passed to \code{\link[graphics]{plot}}
 #' @export
 plot.meta_pred <- function(x,

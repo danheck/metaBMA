@@ -1,9 +1,6 @@
 
 
-stats_density <- function (density,
-                           lb = NULL,
-                           ub = NULL,
-                           ci = .95,
+stats_density <- function (density, lb = NULL, ub = NULL, ci = .95,
                            rel.tol = .Machine$double.eps^0.8){
 
   if(class(density) %in% c("prior", "posterior")){
