@@ -50,7 +50,7 @@ meta_fixed <- function(y, SE, labels = NULL,
   meta$posterior.d <- check_posterior(meta$posterior.d, meta, "d.fixed")
   if (summarize == "integrate" || is.null(meta$estimates))
     meta$estimates <- rbind("d" = stats_density(meta$posterior.d, rel.tol = rel.tol))
-  if (anyNA(meta$estimates) && samples > 0){
+  if (anyNA(meta$estimates) && sample > 0){
     warning("Summary statistics computed with 'integrate' contain missings.\n",
             "  Summary statistics of the JAGS samples are reported instead.")
     meta$estimates <- rbind("d" = stats_samples(jags_samples$samples, "d.fixed"))
