@@ -51,17 +51,11 @@
 #' @seealso \link{meta_default}, \link{meta_fixed}, \link{meta_random}
 #' @template ref_gronau2017
 #' @export
-meta_bma <- function (y,
-                      SE,
-                      labels = NULL,
-                      d = "norm",
-                      d.par = c(0, .3),
-                      tau = "halfcauchy",
-                      tau.par=.5,
-                      prior = c(1,1,1,1),
-                      sample = 10000,
-                      summarize = "integrate",
-                      rel.tol = .Machine$double.eps^.5,
+meta_bma <- function (y, SE, labels = NULL,
+                      d = "norm", d.par = c(0, .3),
+                      tau = "halfcauchy", tau.par=.5,
+                      prior = c(1,1,1,1), sample = 10000,
+                      summarize = "integrate", rel.tol = .Machine$double.eps^.5,
                       ...){
 
   data_list <- data_list(model = "bma", y = y, SE = SE,
@@ -98,5 +92,5 @@ meta_bma <- function (y,
                       # "H1_fixed_vs_random" = exp(m.fixed.H1$logmarginal -
                       #                            m.random.H1$logmarginal)
   )
-  return (meta_bma)
+  meta_bma
 }

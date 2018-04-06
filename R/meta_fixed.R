@@ -24,10 +24,6 @@ meta_fixed <- function(y, SE, labels = NULL,
   if (summarize == "jags" && sample <= 0)
     stop("if summarize = 'jags', it is necessary to use sample > 0.")
 
-  if (class(d) == "prior"){
-    d.par <- attr(d, "param")
-    d <- attr(d, "family")
-  }
   data_list <- data_list("fixed", y = y, SE = SE, labels = labels,
                          d = d, d.par = d.par)
 
@@ -52,11 +48,13 @@ meta_fixed <- function(y, SE, labels = NULL,
 
   meta$posterior.d <- posterior(meta, "d", rel.tol = rel.tol)
   meta$posterior.d <- check_posterior(meta$posterior.d, meta, "d.fixed")
-  if (summarize == "integrate")
+  if (summarize == "integrate" || is.null(meta$estimates))
     meta$estimates <- rbind("d" = stats_density(meta$posterior.d, rel.tol = rel.tol))
-
-  # if (!is.null(meta$estimates) && anyNA(meta$estimates))
-  #   meta$estimates <- rbind("d" = stats_density(meta$posterior.d, rel.tol = rel.tol))
+  if (anyNA(meta$estimates) && samples > 0){
+    warning("Summary statistics computed with 'integrate' contain missings.\n",
+            "  Summary statistics of the JAGS samples are reported instead.")
+    meta$estimates <- rbind("d" = stats_samples(jags_samples$samples, "d.fixed"))
+  }
 
   meta$data <- meta$data[c("y", "SE", "labels")]
   meta

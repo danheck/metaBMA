@@ -32,6 +32,8 @@ bma <- function (meta,
                  summarize = "integrate",
                  rel.tol = .Machine$double.eps^0.5){
 
+  summarize <- match.arg(summarize, c("jags", "integrate", "none"))
+
   classes <- sapply(meta, class) %in% c("meta_fixed", "meta_random")
   if (!is.list(meta) || !all(classes))
     stop ("'meta' must be a list of meta-analysis models \n",
