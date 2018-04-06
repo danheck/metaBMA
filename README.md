@@ -21,9 +21,11 @@ Moreover, `meta_fixed` and `meta_random` fit a single meta-analysis models. The 
 
 ```r
 ### Dependencies:
-# install.packages("devtools", "mvtnorm", "runjags", "LaplacesDemon", "logspline")
-library(devtools)
-install_github("danheck/metaBMA", build_vignettes = TRUE)
+# install.packages("mvtnorm", "runjags", "LaplacesDemon", "logspline")
+
+if (!require("devtools"))
+  install.packages("devtools")
+devtools::install_github("danheck/metaBMA", build_vignettes = TRUE)
 ```
 
 ## Citation

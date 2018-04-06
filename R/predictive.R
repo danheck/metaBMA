@@ -1,15 +1,17 @@
 #' Predicted Bayes Factor for a New Study
 #'
-#' How much can be learned by an additional study? To judge this, this function samples the distribution of predicted Bayes factors for a new study given the current evidence.
+#' How much can be learned by an additional study? To judge this, this function
+#' samples the distribution of predicted Bayes factors for a new study given the
+#' current evidence.
 #'
-#' @param meta model-averaged meta-analysis (fitted with \code{\link{meta_bma}} or \code{\link{meta_default}})
-#' @param SE expected standard error of future study. For instance, SE = 1/sqrt(N) for standardized effect sizes and N = sample size)
+#' @param meta model-averaged meta-analysis
+#'     (fitted with \code{\link{meta_bma}} or \code{\link{meta_default}}).
+#' @param SE expected standard error of future study.
+#'     For instance, SE = 1/sqrt(N) for standardized effect sizes and N = sample size)
 # ' @param n number of future studies (currently, only \code{n = 1} supported)
 #' @param resample number of simulated Bayes factors
 #' @export
-predictive <- function(meta,
-                       SE,
-                       resample = 100){
+predictive <- function (meta, SE, resample = 100){
 
   if (class(meta) != "meta_bma")
     stop ("Prediction only supported for models fitted via ?meta_bma or ?meta_default")
@@ -36,22 +38,22 @@ predictive <- function(meta,
   ss.fixedH1 <- meta$meta[["Fixed Effects"]]$samples
   if (is.null(ss.fixedH1)){
     m.fixed.H1 <- meta_fixed(y, SE = SEs, d = d, d.par = d.par,
-                             sample = 2 * nn["fixed.H1"],  summarize = "none")
+                             sample = 100 * nn["fixed.H1"],  summarize = "none")
     ss.fixedH1 <- m.fixed.H1$samples
   }
   param.fH1 <- sample(ss.fixedH1, nn["fixed.H1"], replace)
 
   #-------------- Random H0
   m.random.H0 <- meta_random(y, SEs, d = "0",  tau = tau, tau.par = tau.par,
-                             sample = 2 * nn["random.H0"], summarize = "none")
+                             sample = 100 * nn["random.H0"], summarize = "jags")
   param.rH0 <- sample(m.random.H0$samples[,"tau"], nn["random.H0"], replace)
 
   #-------------- Random H1
   ss.randomH1 <- meta$meta[["Random Effects"]]$samples
   if (is.null(ss.randomH1)){
     m.random.H1 <- meta_random(y = y, SE = SEs, d = d, d.par = d.par, tau = tau,
-                               tau.par = tau.par, sample = 2 * nn["random.H0"],
-                               summarize = "none")
+                               tau.par = tau.par, sample = 100 * nn["random.H0"],
+                               summarize = "jags")
     ss.randomH1 <- m.random.H1$samples
   }
   idx <- sample(nrow(ss.randomH1), nn["random.H1"], replace)
@@ -88,5 +90,5 @@ predictive <- function(meta,
   meta_pred <- list("BF.observed" = BF.observed,
                     "BF.predicted" = BF.predicted)
   class(meta_pred) <- "meta_pred"
-  return (meta_pred)
+  meta_pred
 }

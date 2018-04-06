@@ -10,7 +10,7 @@
 #' @details
 #' \itemize{
 #' \item \code{"norm"}: Normal distribution with \code{param = c(mean, sd)} (see \code{\link[stats]{Normal}})
-#' \item \code{"halfnorm"}: Half-normal distribution (positive) with \code{param = c(mean, sd)} (see \code{\link[LaplacesDemon]{dhalfnorm}})
+#' \item \code{"halfnorm"}: Half-normal distribution (positive) with \code{param = c(mean, sd)} (see \code{\link[LaplacesDemon]{dist.HalfNorm}})
 #' \item \code{"truncnorm"}: Truncated normal distribution with \code{param = c(min, max, mean, sd)}  (see \code{\link{dtruncnorm}})
 #' \item \code{"scaledt"}: Scaled Student-t with \code{param = c(mean, sigma, nu)} (see \code{\link[LaplacesDemon]{dist.Student.t}})
 #' \item \code{"halft"}: Half-normal Student-t with \code{param = c(scale, df)} (see \code{\link[LaplacesDemon]{dist.Halft}})
@@ -128,6 +128,6 @@ prior <- function (family,
   attr(dprior, "label") <- label
   attr(dprior, "lower") <- bounds[1]
   attr(dprior, "upper") <- bounds[2]
-  return (dprior)
+  dprior
 }
 

@@ -15,19 +15,25 @@
 #' mr
 #' plot_posterior(mr)
 #' @export
-meta_random <- function (y,
-                         SE,
-                         labels,
-                         d = "norm",
-                         d.par = c(0, .3),
-                         tau = "halfcauchy",
-                         tau.par = .5,
-                         sample = 10000,
-                         summarize = "jags",
+meta_random <- function (y, SE, labels,
+                         d = "norm", d.par = c(0, .3),
+                         tau = "halfcauchy", tau.par = .5,
+                         sample = 10000, summarize = "jags",
                          rel.tol = .Machine$double.eps^.5,
                          ...){
+  summarize <- match.arg(summarize, c("jags", "integrate", "none"))
   if (summarize == "jags" && sample <= 0)
     stop("if summarize = 'jags', it is necessary to use sample > 0.")
+  if (summarize == "none")
+    sample <- 0
+  if (class(d) == "prior"){
+    d.par <- attr(d, "param")
+    d <- attr(d, "family")
+  }
+  if (class(tau) == "prior"){
+    tau.par <- attr(tau, "param")
+    tau <- attr(tau, "family")
+  }
 
   data_list <- data_list("random", y = y, SE = SE, labels = labels,
                          d = d, d.par = d.par, tau = tau, tau.par = tau.par)

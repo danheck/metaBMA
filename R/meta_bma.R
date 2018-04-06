@@ -13,11 +13,17 @@
 #' @param y mean in each study
 #' @param SE standard error in each study
 #' @param labels optional: character values with study labels
-#' @param d type of prior for mean effect \eqn{d} (see \code{\link{prior}})
-#' @param d.par prior parameters for \eqn{d}
-#' @param tau type of prior for standard deviation of study effects \eqn{\tau}
-#'     in random-effects meta-analysis (i.e., the SD of d across studies; see \code{\link{prior}})
-#' @param tau.par prior parameters for \eqn{\tau}
+#' @param d a character value specifying the prior family for the mean effect
+#'     size \eqn{d} (see \code{\link{prior}}). Alternatively, \code{d} can be a
+#'     \code{prior}-function as returned by \code{\link{prior}} (in which case \code{d.par}
+#'     is ignored).
+#' @param d.par prior parameters for \eqn{d}.
+#' @param tau a character specifying the prior family for the standard deviation \eqn{\tau}
+#'     of the study effects in a random-effects meta-analysis (i.e., the SD of d
+#'     across studies; see \code{\link{prior}}). Alternatively, \code{tau} can be a
+#'     \code{prior}-function as returned by \code{\link{prior}} (in which case \code{tau.par}
+#'     is ignored).
+#' @param tau.par prior parameters for \eqn{\tau}.
 # ' @param marginal how to integrate marginal likelihood (\code{"bridge"} or \code{"integrate"})
 #' @param sample number of samples in JAGS after burn-in and thinning (see
 #'     \code{\link[runjags]{run.jags}}). Samples are used to get posterior

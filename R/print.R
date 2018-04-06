@@ -37,18 +37,17 @@ print.meta_random <- function (x,...){
 print.meta_bma <- function (x,...){
 
   cat("### Bayesian Model Averaging of Meta-Analysis ###\n")
-  if (!is.null(x$meta$fixed.H1) &&
-      !is.null(x$meta$random.H0) &&
-      !is.null(x$meta$random.H1) ){
+  if (!is.null(x$meta$`Fixed Effects`) &&
+      !is.null(x$meta$`Random Effects`) ){
     cat("\n   Fixed H0:  d = 0",
-        "\n   Fixed H1:  d ~",describe_prior(x$meta$fixed.H1$prior.d),
+        "\n   Fixed H1:  d ~",describe_prior(x$meta$`Fixed Effects`$prior.d),
         "\n   Random H0: d = 0,  ",
-        "\n              tau ~ ", describe_prior(x$meta$random.H0$prior.tau),
-        "\n   Random H1: d ~",describe_prior(x$meta$random.H1$prior.d),
-        "\n              tau ~",describe_prior(x$meta$random.H1$prior.tau),"\n")
+        "\n              tau ~ ", describe_prior(x$meta$`Random Effects`$prior.tau),
+        "\n   Random H1: d ~",describe_prior(x$meta$`Random Effects`$prior.d),
+        "\n              tau ~",describe_prior(x$meta$`Random Effects`$prior.tau),"\n")
   } else {
     cat("  Mean effect d:\n")
-    tmp <- sapply(x$prior.d, print)
+    print(x$prior.d)
   }
   cat("\n# Bayes factors:\n")
   print(as.data.frame(x$BF, row.names("")))

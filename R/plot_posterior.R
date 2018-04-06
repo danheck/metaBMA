@@ -72,11 +72,10 @@ plot_posterior.meta_bma <- function (meta,
     stop ("Plot for average effect only available for parameter='d'.\n",
           "  Run plot_posterior(fitted_meta_bma$meta$random.H1) to see heterogeneity.")
 
-  if (!is.null(meta$meta[["Fixed Effects"]])){
+  dprior <- function(x) rep(-1, length(x))
+  if (!is.null(meta$meta[["Fixed Effects"]]))
     dprior <- meta$meta[["Fixed Effects"]]$prior.d
-  }else{
-    dprior <- function(x) rep(-1, length(x))
-  }
+
   others <- sapply(meta$meta, function (x) x$posterior.d)
   dpost.ave <- meta$posterior.d
   plot_density(dprior, dpost.ave, stats = meta$estimates["Averaged",],

@@ -6,7 +6,9 @@ check_posterior <- function (dpost, meta, parameter = "d"){
   xx <- seq(mini, maxi, length.out = 101)
   dp_const <- NA
   if (attr(dpost, "lower") < attr(dpost, "upper"))
-    try(dp_const <- integrate(dpost, attr(dpost, "lower"), attr(dpost, "upper"))$value, silent = TRUE)
+    try(dp_const <- integrate(dpost,
+                              attr(dpost, "lower"),
+                              attr(dpost, "upper"))$value, silent = TRUE)
   else
     dp_const <- 1
   # if (is.na(dp_const) || abs(dp_const - 1) > .0005)
