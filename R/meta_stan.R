@@ -15,11 +15,24 @@
 #'     If a vector is provided, the scale values are assined in the same order as
 #'     defined in the formula \code{y}.
 #' @param show whether to print Stan output.
-#' @param ... further arguments passed to \code{\link[rstan]{sampling}}.
+#' @param ... further arguments that are passed to \code{rstan::sampling}
+#'     (see \code{\link[rstan]{stanmodel-method-sampling}}), for instance:
+#'     \code{iter=5000}, \code{warmup=500}, \code{chains=4},
+#'     \code{control=list(adapt_delta=.95)}
+#'
+#' @return a fitted stan model (see \code{\link[rstan]{stanfit-class}})
 #'
 #' @import rstan
 #' @importFrom utils capture.output
 #'
+#' @examples
+#' data(towels)
+#'
+#' # random-effects:
+#' meta_stan(logOR, SE, study, towels, model = "r")
+#'
+#' # fixed-effects with formula interface:
+#' meta_stan(logOR ~ 1, SE, study, towels, model = "f")
 #' @export
 meta_stan <- function (y, SE, labels, data, model = c("random", "fixed"),
                        d = c(1, 0, .3, -Inf, Inf),

@@ -2,7 +2,7 @@ library("rstan")
 data(towels)
 set.seed(12345)
 
-test_that("extreme priors/misspecified models still provide correct results", {
+test_that("extreme priors/misspecified models provide correct results with integrate/JAGS/stan", {
   mf_jags <- meta_fixed(logOR, SE, study, towels, sample = 3000,
                         d.par = c(mean = 0.2, sd = .01), summarize = "jags")
   expect_silent(mf_int <- meta_fixed(logOR, SE, study, towels,

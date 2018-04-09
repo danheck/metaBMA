@@ -39,9 +39,24 @@ defined in the formula \code{y}.}
 
 \item{show}{whether to print Stan output.}
 
-\item{...}{further arguments passed to \code{\link[rstan]{sampling}}.}
+\item{...}{further arguments that are passed to \code{rstan::sampling}
+(see \code{\link[rstan]{stanmodel-method-sampling}}), for instance:
+\code{iter=5000}, \code{warmup=500}, \code{chains=4},
+\code{control=list(adapt_delta=.95)}}
+}
+\value{
+a fitted stan model (see \code{\link[rstan]{stanfit-class}})
 }
 \description{
 Uses Stan to draw posterior samples of a fixed-effects or random-effects meta-analysis
 with or without moderator variables.
+}
+\examples{
+data(towels)
+
+# random-effects:
+meta_stan(logOR, SE, study, towels, model = "r")
+
+# fixed-effects with formula interface:
+meta_stan(logOR ~ 1, SE, study, towels, model = "f")
 }

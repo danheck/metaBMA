@@ -21,14 +21,17 @@
 #' @docType package
 #' @useDynLib metaBMA, .registration = TRUE
 #'
+#' @import stats
 #' @import methods
+#' @import rstan
+#' @import rstantools
+#' @import bridgesampling
+#' @import graphics
 #' @importFrom logspline logspline dlogspline
 #' @importFrom runjags run.jags runjags.options combine.mcmc
 #' @importFrom mvtnorm rmvnorm dmvnorm
-#' @import stats
 #' @importFrom coda spectrum0.ar HPDinterval as.mcmc varnames mcmc
 #' @importFrom LaplacesDemon dhalfcauchy dst rst rhalft rhalfcauchy
-#' @import graphics
 #' @importFrom grDevices adjustcolor colors
 #'
 #' @template ref_gronau2017
