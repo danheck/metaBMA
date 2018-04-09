@@ -18,14 +18,13 @@
 #' @param ... further arguments passed to \code{\link[rstan]{sampling}}.
 #'
 #' @import rstan
+#' @importFrom utils capture.output
 #'
 #' @export
 meta_stan <- function (y, SE, labels, data, model = c("random", "fixed"),
                        d = c(1, 0, .3, -Inf, Inf),
                        tau = c(1, 0, .5, 0, Inf),
-                       scale = .5,
-                       show = FALSE,
-                       ...){
+                       scale = .5, show = FALSE, ...){
   dl <- data_list_eval(model, y, SE, labels, data, as.list(match.call()))
 
   check_prior(d)

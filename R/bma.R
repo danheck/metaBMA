@@ -26,10 +26,7 @@
 #' plot_posterior(averaged)
 #' plot_forest(averaged, mar = c(4.5,20,4,.3))
 #' @export
-bma <- function (meta,
-                 prior = 1,
-                 parameter = "d",
-                 summarize = "integrate",
+bma <- function (meta, prior = 1, parameter = "d", summarize = "integrate",
                  rel.tol = .Machine$double.eps^0.5){
 
   summarize <- match.arg(summarize, c("jags", "integrate", "none"))

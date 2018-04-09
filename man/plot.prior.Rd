@@ -4,7 +4,7 @@
 \alias{plot.prior}
 \title{Plot Prior Distribution}
 \usage{
-plot.prior(x, from, to, ...)
+\method{plot}{prior}(x, from, to, ...)
 }
 \arguments{
 \item{x}{prior probability density function defined via \code{\link{prior}}.}
@@ -12,6 +12,8 @@ plot.prior(x, from, to, ...)
 \item{from}{lower boundary}
 
 \item{to}{upper boundary}
+
+\item{...}{further arguments passed to \code{\link[graphics]{plot}}}
 }
 \description{
 Plot the probability density function of a prior distribution.

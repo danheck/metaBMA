@@ -74,8 +74,9 @@ data(towels)
 mb <- meta_bma(logOR, SE, study, towels,
                d = "norm", d.par = c(0,.3),
                tau = "halfcauchy", tau.par = .5,
-               sample = 0, summarize = "none")
-               # (no summary: ensure fast checking on CRAN)
+               sample = 0, summarize = "none",
+               rel.tol = .Machine$double.eps^.2)
+               # (no summary to get short CRAN checks)
 mb
 plot_posterior(mb, "d")
 }

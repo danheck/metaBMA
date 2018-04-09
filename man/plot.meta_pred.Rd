@@ -4,7 +4,7 @@
 \alias{plot.meta_pred}
 \title{Plot Predicted Bayes Factors}
 \usage{
-plot.meta_pred(x, which = "d_10_averaged", scale = "BF", ...)
+\method{plot}{meta_pred}(x, which = "d_10_averaged", scale = "BF", ...)
 }
 \arguments{
 \item{x}{an objct of the class \code{"prediction"} which contains observed

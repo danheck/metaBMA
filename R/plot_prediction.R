@@ -9,6 +9,7 @@
 #'     (\code{"1/BF"}), log Bayes factors (\code{"log"}), or the log-inverse
 #'     Bayes factor (\code{"1/log"})
 #' @param ... arguments passed to \code{\link[graphics]{plot}}
+#' @method plot meta_pred
 #' @export
 plot.meta_pred <- function(x,
                            which = "d_10_averaged",

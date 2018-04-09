@@ -14,10 +14,10 @@ Description: Computes the posterior model probabilities for four meta-analysis m
     fixed-effect model as proposed by Gronau, Van Erp, Heck, Cesario, Jonas, & 
     Wagenmakers (2017, <doi:10.1080/23743603.2017.1326760>). The user can define 
     a wide range of noninformative or informative priors for the mean effect size 
-    and the heterogeneity coefficient. Moreover, meta-analysis wit continuous and discrete
-    moderators can be fitted tested using regression models with Jeffreys-Zellner-Siow (JZS) 
-    priors implemented in Stan. This allows model averaging for random- and 
-    fixed-effects meta-analysis with and without moderators are fitted with Stan,
+    and the heterogeneity coefficient. Moreover, using precompiled Stan models, 
+    meta-analysis with continuous and discrete moderators with Jeffreys-Zellner-Siow (JZS) 
+    priors can be fitted and tested. This allows Bayesian model averaging across random- and 
+    fixed-effects meta-analysis with and without moderators.
 Encoding: UTF-8
 LazyData: true
 Depends:
