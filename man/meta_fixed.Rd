@@ -4,16 +4,24 @@
 \alias{meta_fixed}
 \title{Bayesian Fixed-Effects Meta-Analysis}
 \usage{
-meta_fixed(y, SE, labels = NULL, d = "halfnorm", d.par = c(mean = 0, sd =
+meta_fixed(y, SE, labels, data, d = "halfnorm", d.par = c(mean = 0, sd =
   0.3), sample = 5000, summarize = "integrate",
   rel.tol = .Machine$double.eps^0.5, ...)
 }
 \arguments{
-\item{y}{mean in each study}
+\item{y}{effect size per study. Can be provided as (1) a numeric vector,
+(2) the quoted or unquoted name of the variable in \code{data}, or
+(3) a \code{\link[stats]{formula}} to include discrete or continuous moderator
+variables (only for \code{meta_stan}).}
 
-\item{SE}{standard error in each study}
+\item{SE}{standard error of effect size for each study. Can be a numeric vector
+or the quoted or unquoted name of the variable in \code{data}}
 
-\item{labels}{optional: character values with study labels}
+\item{labels}{optional: character values with study labels. Can be a character vector
+or the quoted or unquoted name of the variable in \code{data}}
+
+\item{data}{data frame containing the variables for effect size \code{y},
+standard error \code{SE}, \code{labels}, and moderators per study.}
 
 \item{d}{a character value specifying the prior family for the mean effect
 size \eqn{d} (see \code{\link{prior}}). Alternatively, \code{d} can be a
@@ -46,7 +54,7 @@ study is identical (i.e., a fixed-effects analysis).
 \examples{
 data(towels)
 ### Bayesian Fixed-Effects Meta-Analysis (H1: d>0 Cauchy)
-mf <- meta_fixed(towels$logOR, towels$SE, towels$study,
+mf <- meta_fixed(logOR, SE, study, data = towels,
                  d = "halfnorm", d.par = c(0, .3), sample = 0,
                  summarize = "integrate")
 mf

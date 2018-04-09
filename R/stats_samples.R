@@ -1,7 +1,6 @@
 
-
-stats_samples <- function (samples,
-                           parameter = "d"){
+#' @importFrom coda varnames
+stats_samples <- function (samples, parameter = "d"){
 
   included <- parameter %in% varnames(samples)
   if (is.null(samples) || !included)

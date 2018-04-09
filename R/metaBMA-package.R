@@ -8,10 +8,20 @@
 #'
 #' Results can be visualized with the functions \code{\link{plot_posterior}}, which compares the prior and posterior density for a fitted meta-analysis, and \code{\link{plot_forest}}, which plots study and overall effect sizes.
 #'
-#' For more details, see the vignette: \code{vignette("metaBMA")}
+#' For more details how to use the package, see the vignette: \code{vignette("metaBMA")}.
+#'
+#' @section Funding:
+#'
+#' Funding for this research was provided by the Berkeley Initiative for Transparency
+#' in the Social Sciences, a program of the Center for Effective Global Action (CEGA),
+#' Laura and John Arnold Foundation, and by the German Research Foundation
+#' (grant GRK-2277: Statistical Modeling in Psychology).
 #'
 #' @author Heck, D. W., Gronau, Q. F., & Wagenmakers, E.-J.
 #' @docType package
+#' @useDynLib metaBMA, .registration = TRUE
+#'
+#' @import methods
 #' @importFrom logspline logspline dlogspline
 #' @importFrom runjags run.jags runjags.options combine.mcmc
 #' @importFrom mvtnorm rmvnorm dmvnorm
@@ -20,9 +30,7 @@
 #' @importFrom LaplacesDemon dhalfcauchy dst rst rhalft rhalfcauchy
 #' @import graphics
 #' @importFrom grDevices adjustcolor colors
-# ' @importFrom Matrix nearPD
-# ' @useDynLib metaBMA
-# ' @importFrom Brobdingnag as.brob
+#'
 #' @template ref_gronau2017
 #' @template ref_heck2017
 "_PACKAGE"

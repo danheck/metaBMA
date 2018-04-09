@@ -15,14 +15,23 @@ Moreover, \code{\link{meta_fixed}} and \code{\link{meta_random}} fit a single me
 
 Results can be visualized with the functions \code{\link{plot_posterior}}, which compares the prior and posterior density for a fitted meta-analysis, and \code{\link{plot_forest}}, which plots study and overall effect sizes.
 
-For more details, see the vignette: \code{vignette("metaBMA")}
+For more details how to use the package, see the vignette: \code{vignette("metaBMA")}.
 }
+\section{Funding}{
+
+
+Funding for this research was provided by the Berkeley Initiative for Transparency
+in the Social Sciences, a program of the Center for Effective Global Action (CEGA),
+Laura and John Arnold Foundation, and by the German Research Foundation
+(grant GRK-2277: Statistical Modeling in Psychology).
+}
+
 \references{
 Gronau, Q. F., Erp, S. V., Heck, D. W., Cesario, J., Jonas, K. J., & Wagenmakers, E.-J. (2017). A Bayesian model-averaged meta-analysis of the power pose effect with informed and default priors: the case of felt power. Comprehensive Results in Social Psychology, 2(1), 123-138. \url{https://doi.org/10.1080/23743603.2017.1326760}
 
-Heck, D. W., Gronau, Q. F., & Wagenmakers, E.-J. (2017).
+Heck, D. W., Gronau, Q. F., & Wagenmakers, E.-J. (2018).
     metaBMA: Bayesian model averaging for random and fixed effects meta-analysis.
-    R package version 0.3.9.
+    R package version 0.5.0.
     \url{https://github.com/danheck/metaBMA}. doi:10.5281/zenodo.835494
 }
 \seealso{

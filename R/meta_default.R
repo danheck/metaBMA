@@ -37,7 +37,7 @@
 #' @examples
 #' \dontrun{
 #' data(towels)
-#' d1 <- meta_default(towels$logOR, towels$SE, towels$study,
+#' d1 <- meta_default(logOR, SE, study, towels,
 #'                    field = "psych", effect = "logOR",
 #'                    sample = 5000)
 #' d1
@@ -46,20 +46,17 @@
 #' @seealso \code{\link{meta_bma}}, \code{\link{plot_default}}
 #' @template ref_gronau2017
 #' @export
-meta_default <- function(y,
-                         SE,
-                         labels = NULL,
-                         field = "psychology",
-                         effect = "ttest",
-                         ...){
+meta_default <- function(y, SE, labels, data,
+                         field = "psychology", effect = "ttest", ...){
   def <- get_default(field, effect)
 
-  res <- meta_bma(y = y, SE = SE, labels = labels,
-           d = def$d, d.par = def$d.par,
-           tau = def$tau, tau.par = def$tau.par,
-           ...)
+  dl <- data_list_eval("random", y = y, SE = SE, labels = labels, data = data,
+                       args = as.list(match.call()))
+  res <- meta_bma(y = y, SE = SE, labels = labels, data = dl,
+                  d = def$d, d.par = def$d.par, tau = def$tau, tau.par = def$tau.par,
+                  ...)
   res$default <- c(field = field, effect = effect)
-  return(res)
+  res
 }
 
 
@@ -118,10 +115,7 @@ get_default <- function(field,
          },
          stop("'field' not supported."))
 
-  def <- list(d = d, d.par = d.par,
-              tau = tau, tau.par = tau.par)
-  # class(def) <- "default"
-  return(def)
+  list(d = d, d.par = d.par, tau = tau, tau.par = tau.par)
 }
 
 
@@ -135,9 +129,7 @@ get_default <- function(field,
 #' plot_default("medicine", "logOR", 0, 2)
 #' @seealso \code{\link{meta_default}} for details on standard priors.
 #' @export
-plot_default <- function(field,
-                         effect,
-                         ...){
+plot_default <- function(field, effect, ...){
   mfrow <- par()$mfrow
   par(mfrow = c(1,2))
   def <- get_default(field, effect)

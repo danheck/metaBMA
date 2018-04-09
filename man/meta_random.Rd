@@ -4,16 +4,24 @@
 \alias{meta_random}
 \title{Bayesian Random-Effects Meta-Analysis}
 \usage{
-meta_random(y, SE, labels, d = "norm", d.par = c(0, 0.3),
+meta_random(y, SE, labels, data, d = "norm", d.par = c(0, 0.3),
   tau = "halfcauchy", tau.par = 0.5, sample = 10000, summarize = "jags",
   rel.tol = .Machine$double.eps^0.5, ...)
 }
 \arguments{
-\item{y}{mean in each study}
+\item{y}{effect size per study. Can be provided as (1) a numeric vector,
+(2) the quoted or unquoted name of the variable in \code{data}, or
+(3) a \code{\link[stats]{formula}} to include discrete or continuous moderator
+variables (only for \code{meta_stan}).}
 
-\item{SE}{standard error in each study}
+\item{SE}{standard error of effect size for each study. Can be a numeric vector
+or the quoted or unquoted name of the variable in \code{data}}
 
-\item{labels}{optional: character values with study labels}
+\item{labels}{optional: character values with study labels. Can be a character vector
+or the quoted or unquoted name of the variable in \code{data}}
+
+\item{data}{data frame containing the variables for effect size \code{y},
+standard error \code{SE}, \code{labels}, and moderators per study.}
 
 \item{d}{a character value specifying the prior family for the mean effect
 size \eqn{d} (see \code{\link{prior}}). Alternatively, \code{d} can be a
@@ -53,7 +61,7 @@ Runs a Bayesian meta-analysis assuming that the effect size \eqn{d} varies acros
 \examples{
 data(towels)
 ### Bayesian Random-Effects Meta-Analysis
-mr <- meta_random(towels$logOR, towels$SE, towels$study,
+mr <- meta_random(logOR, SE, study, data = towels,
                   d = "norm", d.par = c(0,.3),
                   tau = "halfcauchy", tau.par = .5,
                   sample = 0, summarize = "none")

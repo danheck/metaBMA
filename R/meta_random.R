@@ -7,7 +7,7 @@
 #' @examples
 #' data(towels)
 #' ### Bayesian Random-Effects Meta-Analysis
-#' mr <- meta_random(towels$logOR, towels$SE, towels$study,
+#' mr <- meta_random(logOR, SE, study, data = towels,
 #'                   d = "norm", d.par = c(0,.3),
 #'                   tau = "halfcauchy", tau.par = .5,
 #'                   sample = 0, summarize = "none")
@@ -15,7 +15,7 @@
 #' mr
 #' plot_posterior(mr)
 #' @export
-meta_random <- function (y, SE, labels,
+meta_random <- function (y, SE, labels, data,
                          d = "norm", d.par = c(0, .3),
                          tau = "halfcauchy", tau.par = .5,
                          sample = 10000, summarize = "jags",
@@ -27,8 +27,9 @@ meta_random <- function (y, SE, labels,
   if (summarize == "none")
     sample <- 0
 
-  data_list <- data_list("random", y = y, SE = SE, labels = labels,
-                         d = d, d.par = d.par, tau = tau, tau.par = tau.par)
+  data_list <- data_list("random", y = y, SE = SE, labels = labels, data = data,
+                         d = d, d.par = d.par, tau = tau, tau.par = tau.par,
+                         args = as.list(match.call()))
 
   logml <- integrate_wrapper(data = data_list, rel.tol = rel.tol)
 

@@ -1,6 +1,13 @@
 metaBMA 0.3.9
 ===========
 
+* Possibility to fit random and fixed effects meta-analysis with moderators in stan: meta_stan()
+* Major refactoring: possible to provide data frame with variables via argument 'data'
+
+
+metaBMA 0.3.9
+===========
+
 * Updated citation for CRAN
 * Added examples for meta_bma() and meta_random()
 * Minor bug fixes

@@ -13,7 +13,7 @@
 #' @seealso \link{meta_default}, \link{meta_bma}, \link{meta_fixed}, \link{meta_random}
 #' @examples
 #' data(towels)
-#' mf <- meta_fixed(towels$logOR, towels$SE, towels$study, sample = 0)
+#' mf <- meta_fixed(logOR, SE, study, towels, sample = 0)
 #' plot_forest(mf, mar = c(4.5,20,4,.2), xlab="Log Odds Ratio")
 #' @export
 plot_forest <- function(meta,

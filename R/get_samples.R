@@ -1,17 +1,16 @@
 
 # data: list
 # ...: => run.jags
-get_samples <- function (data,
-                         sample = 0,
-                         ...){
+get_samples <- function (data, sample = 0, ...){
 
   family.d <- attr(data$prior.d, "family")
 
-  if (missing(sample) || sample <= 0 ||  # no JAGS sampling
-      family.d == "custom" ||            # custom priors not supported
-      attr(data$prior.tau, "family") == "custom")
+  if (missing(sample) || sample <= 0)  # no JAGS sampling
     return(NULL)
-
+  if (family.d == "custom" || attr(data$prior.tau, "family") == "custom"){
+    warning("custom prior functions not supported with JAGS sampling.")
+    return(NULL)
+  }
   parameters <- switch(data$model,
                        "fixed" = "d.fixed",
                        "random" = c("d", "tau"))

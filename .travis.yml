@@ -1,11 +1,48 @@
 language: r
-r:
-  - devel
-repos:
-  CRAN: https://cloud.r-project.org
+sudo: false
+r: devel
+cache: packages
+
+latex: true
+r_build_args: '--no-build-vignettes'
+r_check_args: '--ignore-vignettes --no-examples'
+
+r_github_packages:
+  - jimhester/covr
+
+env:
+  matrix:
+    - CXX_OLEVEL=2 CXX=clang++
+
 before_install:
   - sudo add-apt-repository ppa:marutter/rrutter -y
   - sudo apt-get update
   - sudo apt-get install r-cran-rjags
+  - mkdir -p ~/.R/
+  - echo "CXX = `R CMD config CXX`" >> ~/.R/Makevars
+  - echo "CXXFLAGS = `R CMD config CXXFLAGS` -pedantic -g0" >> ~/.R/Makevars
+  - export CLANG_EXTRA_ARG=""
+  - if [[ $CXX = "clang++" ]] ;  then export CLANG_EXTRA_ARG=" -Qunused-arguments -fcolor-diagnostics " ; fi
+  - sed -i.bak "s/ g++/ ${CXX}${CLANG_EXTRA_ARG}/" ~/.R/Makevars
+  - sed -i.bak "s/O[0-3]/O$CXX_OLEVEL/" ~/.R/Makevars
+
+script:
+  - |
+    travis_wait 42 R CMD build .
+    travis_wait 59 R CMD check stanpackage*tar.gz
+
+after_script:
+  - tar -ztvf stanpackage_*.tar.gz
+  - echo ${NOT_CRAN}
+
+after_success:
+  - travis_wait 40 tar -C .. -xf $PKG_TARBALL
+
+after_failure:
+  - cat stanpackage.Rcheck/00*
+
+repos:
+  CRAN: https://cloud.r-project.org
+
 r_binary_packages:
   - rjags

@@ -1,5 +1,17 @@
-
-
+#' Plot Prior Distribution
+#'
+#' Plot the probability density function of a prior distribution.
+#'
+#' @param x prior probability density function defined via \code{\link{prior}}.
+#' @param from lower boundary
+#' @param to upper boundary
+#' @examples
+#' p1 <- prior("halfcauchy", c(scale = .5))
+#' plot(p1, 0, 2)
+#'
+#' # define custom prior pdf up to a constant:
+#' p2 <- prior("custom", function(x) x^.5, "poly", 0,.5)
+#' plot(p2)
 #' @export
 plot.prior <- function(x, from, to, ...){
   prior <- x

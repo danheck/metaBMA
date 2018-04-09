@@ -9,23 +9,24 @@
 #' @examples
 #' data(towels)
 #' ### Bayesian Fixed-Effects Meta-Analysis (H1: d>0 Cauchy)
-#' mf <- meta_fixed(towels$logOR, towels$SE, towels$study,
+#' mf <- meta_fixed(logOR, SE, study, data = towels,
 #'                  d = "halfnorm", d.par = c(0, .3), sample = 0,
 #'                  summarize = "integrate")
 #' mf
 #' plot_posterior(mf)
 #' plot_forest(mf)
 #' @export
-meta_fixed <- function(y, SE, labels = NULL,
+meta_fixed <- function(y, SE, labels, data,
                        d = "halfnorm", d.par = c(mean=0, sd=0.3),
+                       # d = prior("halfnorm", c(mean=0, sd=0.3)
                        sample = 5000, summarize = "integrate",
                        rel.tol = .Machine$double.eps^.5, ...){
   summarize <- match.arg(summarize, c("jags", "integrate", "none"))
   if (summarize == "jags" && sample <= 0)
     stop("if summarize = 'jags', it is necessary to use sample > 0.")
 
-  data_list <- data_list("fixed", y = y, SE = SE, labels = labels,
-                         d = d, d.par = d.par)
+  data_list <- data_list("fixed", y = y, SE = SE, labels = labels, data = data,
+                         d = d, d.par = d.par, args = as.list(match.call()))
 
   logml <- integrate_wrapper(data = data_list, rel.tol = rel.tol)
 

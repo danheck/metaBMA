@@ -4,17 +4,25 @@
 \alias{meta_bma}
 \title{Model Averaging for Meta-Analysis}
 \usage{
-meta_bma(y, SE, labels = NULL, d = "norm", d.par = c(0, 0.3),
+meta_bma(y, SE, labels, data, d = "norm", d.par = c(0, 0.3),
   tau = "halfcauchy", tau.par = 0.5, prior = c(1, 1, 1, 1),
   sample = 10000, summarize = "integrate",
   rel.tol = .Machine$double.eps^0.5, ...)
 }
 \arguments{
-\item{y}{mean in each study}
+\item{y}{effect size per study. Can be provided as (1) a numeric vector,
+(2) the quoted or unquoted name of the variable in \code{data}, or
+(3) a \code{\link[stats]{formula}} to include discrete or continuous moderator
+variables (only for \code{meta_stan}).}
 
-\item{SE}{standard error in each study}
+\item{SE}{standard error of effect size for each study. Can be a numeric vector
+or the quoted or unquoted name of the variable in \code{data}}
 
-\item{labels}{optional: character values with study labels}
+\item{labels}{optional: character values with study labels. Can be a character vector
+or the quoted or unquoted name of the variable in \code{data}}
+
+\item{data}{data frame containing the variables for effect size \code{y},
+standard error \code{SE}, \code{labels}, and moderators per study.}
 
 \item{d}{a character value specifying the prior family for the mean effect
 size \eqn{d} (see \code{\link{prior}}). Alternatively, \code{d} can be a
@@ -34,7 +42,7 @@ is ignored).}
 \item{prior}{prior probabilities over models (possibly unnormalized) in the
 order \code{c(fixed.H0, fixed.H1, random.H0, random.H1)}. For instance,
 if we expect fixed effects to be two times as likely as random effects
-and H0 and H1 to be equally likely: \code{prior = c(2,2,1,1)}}
+and H0 and H1 to be equally likely: \code{prior = c(2,2,1,1)}.}
 
 \item{sample}{number of samples in JAGS after burn-in and thinning (see
 \code{\link[runjags]{run.jags}}). Samples are used to get posterior
@@ -63,11 +71,11 @@ and H0 (\eqn{d=0}) vs. H1 (e.g., \eqn{d>0}).
 }
 \examples{
 data(towels)
-mb <- meta_bma(towels$logOR, towels$SE, towels$study,
+mb <- meta_bma(logOR, SE, study, towels,
                d = "norm", d.par = c(0,.3),
                tau = "halfcauchy", tau.par = .5,
                sample = 0, summarize = "none")
-               # (no summary: only for CRAN checks)
+               # (no summary: ensure fast checking on CRAN)
 mb
 plot_posterior(mb, "d")
 }
