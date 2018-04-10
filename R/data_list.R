@@ -5,14 +5,23 @@ data_list <- function (model, y, SE, labels = NULL, data,
 
   dl <- data_list_eval(model, y, SE, labels, data, args)
 
-  dl$prior.d = prior(d, d.par, "d")
-  if (dl$model != "fixed"){
-    dl$prior.tau = prior(tau, tau.par, "tau")
+  if (class(d) == "prior"){
+    dl$prior.d <- d
   } else {
-    dl$prior.tau = prior("0", NA, "tau")
+    dl$prior.d <- prior(d, d.par, "d")
+  }
+
+  if (dl$model != "fixed"){
+    if (class(tau) == "prior"){
+      dl$prior.tau <- tau
+    } else {
+      dl$prior.tau <- prior(tau, tau.par, "tau")
+    }
+  } else {
+    dl$prior.tau <- prior("0", NA, "tau")
   }
   if (dl$model == "bma")
-    dl$prior.models = prior/sum(prior)
+    dl$prior.models <- prior/sum(prior)
 
   dl
 }

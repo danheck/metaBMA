@@ -32,6 +32,5 @@ get_samples <- function (data, sample = 0, ...){
 
   out <- combine.mcmc(samples)
 
-  return (list("samples" = out,
-               "jagsmodel" = jj$model))
+  list("samples" = out, "jagsmodel" = jj$model)
 }

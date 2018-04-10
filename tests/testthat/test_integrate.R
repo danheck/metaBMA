@@ -1,8 +1,19 @@
 
 test_that("extreme priors/misspecified models provide correct results with integrate/JAGS/stan", {
   data(towels)
+  eval(towels)
   set.seed(12345)
   library("rstan")
+
+  # check different ways of defining priors
+  expect_silent(meta_fixed(logOR, SE, study, towels, d = "cauchy",
+                           d.par = .1, sample = 0))
+  expect_silent(meta_random(logOR, SE, study, towels, summarize = "int",
+                            d = "cauchy", d.par = .1,
+                            tau = "halfnorm", tau.par=c(0,.3), sample = 0))
+  expect_silent(meta_fixed(logOR, SE, study, towels, d = prior("cauchy", .1), sample = 0))
+  expect_silent(meta_fixed(logOR, SE, study, towels, d = prior("cauchy", .1),
+                           summarize = "j", sample = 1000))
 
   mf_jags <- meta_fixed(logOR, SE, study, towels, sample = 10000,
                         d.par = c(mean = 0.2, sd = .01), summarize = "jags")
