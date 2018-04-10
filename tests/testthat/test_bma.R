@@ -1,9 +1,10 @@
-library("rstan")
-data(towels)
-set.seed(12345)
+
 
 test_that("that averaging works", {
+  data(towels)
+  set.seed(12345)
   eval(data(towels))
+
   expect_silent(mf_jags <- meta_bma(logOR, SE, study, towels, sample = 5000,
                                     summarize = "jags"))
   expect_silent(mf_int <- meta_bma(logOR, SE, study, towels, sample = 0,

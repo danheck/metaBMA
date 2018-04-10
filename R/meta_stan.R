@@ -67,6 +67,8 @@ add_jzs <- function (data_list, scale){
   ######################### TODO : JZS BLOCKS / DISCRETE-CONTINUOUS
 
   # find out which moderators are continuous / discrete / disallow interactions
+  factors <- !sapply(data_list$model.frame, is.numeric)
+
   formula <- attr(data_list$model.frame, "terms")
   X <- model.matrix(formula, data_list$model.frame)
   # X must be centered (for continuous covariates. for discrete?)

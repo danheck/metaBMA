@@ -1,10 +1,8 @@
-library("metaBMA")
-library("testthat")
 
-set.seed(123452)
-d <- data.frame(yyy = rnorm(10), se = runif(10), xx = rnorm(10), study = 1:10)
 
 test_that("data objects are correctly evaluated", {
+  set.seed(123452)
+  d <- data.frame(yyy = rnorm(10), se = runif(10), xx = rnorm(10), study = 1:10)
 
   # vectors:
   expect_silent(fit <- meta_fixed(d$yyy, d$se, d$study, sample = 0))

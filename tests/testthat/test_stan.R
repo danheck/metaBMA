@@ -1,11 +1,8 @@
-library("metaBMA")
-library("rstan")
-library("testthat")
-
-set.seed(123452)
-d <- data.frame(yyy = rnorm(10), se = runif(10), xx = rnorm(10), study = 1:10)
 
 test_that("priors for stan models are properly checked", {
+
+  set.seed(123452)
+  d <- data.frame(yyy = rnorm(10), se = runif(10), xx = rnorm(10), study = 1:10)
 
   expect_error(meta_stan(yyy, se, data = d,
                          tau = c(1e5, 0, 100, -1, Inf)))

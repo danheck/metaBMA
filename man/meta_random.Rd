@@ -64,7 +64,8 @@ data(towels)
 mr <- meta_random(logOR, SE, study, data = towels,
                   d = "norm", d.par = c(0,.3),
                   tau = "halfcauchy", tau.par = .5,
-                  sample = 0, summarize = "none")
+                  sample = 0, summarize = "none",
+                  rel.tol = .Machine$double.eps^.2)
                   # (no summary: only for CRAN checks)
 mr
 plot_posterior(mr)
