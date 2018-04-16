@@ -5,7 +5,7 @@
 \title{Bayesian Model Averaging}
 \usage{
 bma(meta, prior = 1, parameter = "d", summarize = "integrate",
-  rel.tol = .Machine$double.eps^0.5)
+  ci = 0.95, rel.tol = .Machine$double.eps^0.5)
 }
 \arguments{
 \item{meta}{list of meta-analysis models (fitted via \code{\link{meta_random}} or \code{\link{meta_fixed}})}
@@ -14,14 +14,15 @@ bma(meta, prior = 1, parameter = "d", summarize = "integrate",
 
 \item{parameter}{eiher the mean effect \code{"d"} or the heterogeneity across studies \code{"tau"}}
 
-\item{summarize}{whether and to compute parameter summaries (mean, median, SD,
-95\% quantile interval, HPD interval). If \code{summarize = "integrate"},
-numerical integration is used  (which is precise but can require some seconds
-of computing time and be unstable), \code{summarize = "jags"} summarizes the JAGS samples,
-and \code{summarize = "none"} suppresses parameter summaries.}
+\item{summarize}{how to estimate parameter summaries (mean, median, SD, etc.):
+Either by numerical integration (\code{summarize = "integrate"}) or based
+on MCMC/Stan samples (\code{summarize = "stan"}).}
 
-\item{rel.tol}{relative tolerance used for numerical integration using \code{\link[stats]{integrate}}.
-Use \code{rel.tol=.Machine$double.eps} for maximal precision.}
+\item{ci}{probability for the credibility/highest-density intervals.}
+
+\item{rel.tol}{relative tolerance used for numerical integration using
+\code{\link[stats]{integrate}}. Use \code{rel.tol=.Machine$double.eps}
+for maximal precision (however, this might be slow).}
 }
 \description{
 Model averaging of meta-analysis models according to their posterior model probability.
@@ -29,18 +30,14 @@ Model averaging of meta-analysis models according to their posterior model proba
 \examples{
 data(towels)
 fix1 <- meta_fixed(logOR, SE, study, towels,
-                   d = "halfnorm", d.par = c(mean=0, sd=.2),
-                   sample = 0, summarize = "integrate")
+                   d = prior("norm", c(mean=0, sd=.2), lower=0))
 fix2 <- meta_fixed(logOR, SE, study, towels,
-                   d = "beta", d.par = c(alpha=1, beta=1),
-                   sample = 0, summarize = "integrate")
+                   d = prior("beta", c(shape1=1, shape2=1), upper = 2))
 fix3 <- meta_fixed(logOR, SE, study, towels,
-                   d = "triangular",
-                   d.par = c(min=0, peak=.3, max=1),
-                   sample = 0, summarize = "integrate")
+                   d = prior("custom", function(x) x^2, 0, 1))
 
 averaged <- bma(list(Halfnormal = fix1, Uniform = fix2,
-                     Triangular = fix3))
+                     Quadratic = fix3))
 averaged
 plot_posterior(averaged)
 plot_forest(averaged, mar = c(4.5,20,4,.3))

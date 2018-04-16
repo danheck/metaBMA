@@ -8,11 +8,11 @@
 #' @param ... further arguments passed to \code{\link[graphics]{plot}}
 #'
 #' @examples
-#' p1 <- prior("halfcauchy", c(scale = .5))
+#' p1 <- prior("t", c(mu=0, sigma=.5, nu=1), 0, 3)
 #' plot(p1, 0, 2)
 #'
 #' # define custom prior pdf up to a constant:
-#' p2 <- prior("custom", function(x) x^.5, "poly", 0,.5)
+#' p2 <- prior("custom", function(x) x^.5, 0, .5)
 #' plot(p2)
 #' @method plot prior
 #' @export
@@ -21,7 +21,6 @@ plot.prior <- function(x, from, to, ...){
 
   if (missing (from)) from <- -Inf
   if (missing (to)) to <- Inf
-
   from <- max(from, attr(prior, "lower"))
   to <- min(to, attr(prior, "upper"))
   if (from == -Inf) from <- -1

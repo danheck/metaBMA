@@ -18,7 +18,7 @@ Fixed-effects meta-analyses assume that the effect size $d$ is identical in all 
 
 ## Defining and Plotting Priors
 
-To fit a meta-analysis model, prior distributins on the total effect $d$ and the heterogeneity $\tau$ are required. The package `metaBMA` leaves the user the freedom to choose from several predefined distributions or even define an owen prior density function. The function `prior` facilitates the construction and visual inspection of prior distributions to check whether they meet the prior knowledge about the field of interest.
+To fit a meta-analysis model, prior distributins on the average effect $d$ and the heterogeneity $\tau$ are required. The package `metaBMA` leaves the user the freedom to choose from several predefined distributions or even define an owen prior density function. The function `prior` facilitates the construction and visual inspection of prior distributions to check whether they meet the prior knowledge about the field of interest.
 
 ```{r, fig.height=3.5, fig.width=5}
 # load package
@@ -27,13 +27,13 @@ library("metaBMA")
 data(towels)
 
 # Half-normal (truncated to > 0)
-p1 <- prior("halfnorm", c(mean=0, sd=.3))
+p1 <- prior("norm", c(mean=0, sd=.3), lower = 0)
 p1
 p1(1:3)
 plot(p1)
 
 # custom prior
-p1 <- prior("custom",  function(x) x^3-2*x+3, "d", 0, 1)
+p1 <- prior("custom",  function(x) x^3-2*x+3, lower = 0, upper = 1)
 plot(p1, -.5, 1.5)
 
 # field- and effect-specific default priors
@@ -50,7 +50,7 @@ The fixed-effects meta-analysis assumes that the effect size is identical across
 ```{r, fig.height=3.5, fig.width=5}
 # Fixed-effects
 mf <- meta_fixed(logOR, SE, study, towels,
-                 d = "halfnorm",d.par = c(0, .3))
+                 d = prior("norm", c(mean=0, sd=.3), lower=0))
 mf
 
 # plot posterior distribution
@@ -62,12 +62,12 @@ In contrast, the random-effects meta-analysis assumes that the effect size varie
 ```{r, fig.height=3.5, fig.width=5}
 # Random-effects
 mr <- meta_random(logOR, SE, study, towels,
-                  tau = "halfcauchy", tau.par = .5,
-                  d = "halfnorm", d.par = c(0,.3))
+                  d = prior("norm", c(mean=0, sd=.3), lower=0),
+                  tau = prior("t", c(mu=0, sigma=.3, nu=1), lower=0))
 mr
 
 # plot posterior distribution
-plot_posterior(mr, main = "Total effect size")
+plot_posterior(mr, main = "Average effect size d")
 plot_posterior(mr, "tau", main = "Heterogeneity tau")
 ```
 
@@ -78,8 +78,8 @@ The most general functions in `metaBMA` are `meta_bma()` and `meta_default()`, w
 
 ```{r, fig.height=4.5, fig.width=6}
 mb <- meta_bma(logOR, SE, study, towels,
-               d = "halfnorm", d.par = c(0, .3),
-               tau = "halfcauchy", tau.par = .5)
+               d = prior("norm", c(mean=0, sd=.3), lower=0),
+               tau = prior("t", c(mu=0, sigma=.3, nu=1), lower=0))
 mb
 plot_posterior(mb, "d", -.1, 1.4)
 plot_forest(mb)
@@ -96,9 +96,9 @@ md
 
 ## Predicted Bayes Factor for New Study
 
-Often, it is of interest to judge how much additional evidence future studies can contribute to the present knowledge. Conditional on the outcome of the model averaging for meta-analysis, the function `predictive()` samples new data sets from the posterior and performes a model selection for each replication. Thereby, a distribution of predicted Bayes factors is obtain that represents the expected evidence one expects when running a new study:
+Often, it is of interest to judge how much additional evidence future studies can contribute to the present knowledge. Conditional on the outcome of the model averaging for meta-analysis, the function `predicted_bf()` samples new data sets from the posterior and performes a model selection for each replication. Thereby, a distribution of predicted Bayes factors is obtain that represents the expected evidence one expects when running a new study:
 
 ```{r, fig.height=4.5, fig.width=6}
-mp <- predictive(mb, SE = .2, resample = 50)
-plot(mp)
+# mp <- predicted_bf(mb, se = .2, sample = 30)
+# plot(mp)
 ```

@@ -20,7 +20,7 @@
 
 #include <stan/model/model_header.hpp>
 
-namespace model_random_JZS_namespace {
+namespace model_random_jzs_namespace {
 
 using std::istream;
 using std::string;
@@ -39,69 +39,69 @@ static int current_statement_begin__;
 
 stan::io::program_reader prog_reader__() {
     stan::io::program_reader reader;
-    reader.add_event(0, 0, "start", "model_random_JZS");
+    reader.add_event(0, 0, "start", "model_random_jzs");
     reader.add_event(0, 0, "include", "/auxiliary/license.stan");
     reader.add_event(0, 0, "start", "/auxiliary/license.stan");
     reader.add_event(14, 14, "end", "/auxiliary/license.stan");
-    reader.add_event(14, 1, "restart", "model_random_JZS");
+    reader.add_event(14, 1, "restart", "model_random_jzs");
     reader.add_event(16, 3, "include", "/auxiliary/data.stan");
     reader.add_event(16, 0, "start", "/auxiliary/data.stan");
     reader.add_event(19, 3, "end", "/auxiliary/data.stan");
-    reader.add_event(19, 4, "restart", "model_random_JZS");
-    reader.add_event(19, 4, "include", "/JZS/data.stan");
-    reader.add_event(19, 0, "start", "/JZS/data.stan");
-    reader.add_event(26, 7, "end", "/JZS/data.stan");
-    reader.add_event(26, 5, "restart", "model_random_JZS");
+    reader.add_event(19, 4, "restart", "model_random_jzs");
+    reader.add_event(19, 4, "include", "/jzs/data.stan");
+    reader.add_event(19, 0, "start", "/jzs/data.stan");
+    reader.add_event(26, 7, "end", "/jzs/data.stan");
+    reader.add_event(26, 5, "restart", "model_random_jzs");
     reader.add_event(26, 5, "include", "/prior/d_data.stan");
     reader.add_event(26, 0, "start", "/prior/d_data.stan");
-    reader.add_event(28, 2, "end", "/prior/d_data.stan");
-    reader.add_event(28, 6, "restart", "model_random_JZS");
-    reader.add_event(28, 6, "include", "/prior/tau_data.stan");
-    reader.add_event(28, 0, "start", "/prior/tau_data.stan");
-    reader.add_event(30, 2, "end", "/prior/tau_data.stan");
-    reader.add_event(30, 7, "restart", "model_random_JZS");
-    reader.add_event(33, 10, "include", "/prior/d_trunc.stan");
-    reader.add_event(33, 0, "start", "/prior/d_trunc.stan");
-    reader.add_event(35, 2, "end", "/prior/d_trunc.stan");
-    reader.add_event(35, 11, "restart", "model_random_JZS");
-    reader.add_event(35, 11, "include", "/prior/tau_trunc.stan");
-    reader.add_event(35, 0, "start", "/prior/tau_trunc.stan");
-    reader.add_event(37, 2, "end", "/prior/tau_trunc.stan");
-    reader.add_event(37, 12, "restart", "model_random_JZS");
+    reader.add_event(29, 3, "end", "/prior/d_data.stan");
+    reader.add_event(29, 6, "restart", "model_random_jzs");
+    reader.add_event(29, 6, "include", "/prior/tau_data.stan");
+    reader.add_event(29, 0, "start", "/prior/tau_data.stan");
+    reader.add_event(32, 3, "end", "/prior/tau_data.stan");
+    reader.add_event(32, 7, "restart", "model_random_jzs");
     reader.add_event(37, 12, "include", "/auxiliary/se_squared.stan");
     reader.add_event(37, 0, "start", "/auxiliary/se_squared.stan");
     reader.add_event(40, 3, "end", "/auxiliary/se_squared.stan");
-    reader.add_event(40, 13, "restart", "model_random_JZS");
-    reader.add_event(43, 16, "include", "/prior/d_param.stan");
-    reader.add_event(43, 0, "start", "/prior/d_param.stan");
-    reader.add_event(44, 1, "end", "/prior/d_param.stan");
-    reader.add_event(44, 17, "restart", "model_random_JZS");
-    reader.add_event(44, 17, "include", "/prior/tau_param.stan");
-    reader.add_event(44, 0, "start", "/prior/tau_param.stan");
-    reader.add_event(45, 1, "end", "/prior/tau_param.stan");
-    reader.add_event(45, 18, "restart", "model_random_JZS");
-    reader.add_event(45, 18, "include", "/JZS/param.stan");
-    reader.add_event(45, 0, "start", "/JZS/param.stan");
-    reader.add_event(47, 2, "end", "/JZS/param.stan");
-    reader.add_event(47, 19, "restart", "model_random_JZS");
-    reader.add_event(50, 22, "include", "/prior/d_target.stan");
-    reader.add_event(50, 0, "start", "/prior/d_target.stan");
-    reader.add_event(51, 1, "end", "/prior/d_target.stan");
-    reader.add_event(51, 23, "restart", "model_random_JZS");
-    reader.add_event(51, 23, "include", "/prior/tau_target.stan");
-    reader.add_event(51, 0, "start", "/prior/tau_target.stan");
-    reader.add_event(52, 1, "end", "/prior/tau_target.stan");
-    reader.add_event(52, 24, "restart", "model_random_JZS");
-    reader.add_event(52, 24, "include", "/JZS/target.stan");
-    reader.add_event(52, 0, "start", "/JZS/target.stan");
-    reader.add_event(58, 6, "end", "/JZS/target.stan");
-    reader.add_event(58, 25, "restart", "model_random_JZS");
-    reader.add_event(60, 27, "end", "model_random_JZS");
+    reader.add_event(40, 13, "restart", "model_random_jzs");
+    reader.add_event(40, 13, "include", "/prior/d_trunc.stan");
+    reader.add_event(40, 0, "start", "/prior/d_trunc.stan");
+    reader.add_event(52, 12, "end", "/prior/d_trunc.stan");
+    reader.add_event(52, 14, "restart", "model_random_jzs");
+    reader.add_event(52, 14, "include", "/prior/tau_trunc.stan");
+    reader.add_event(52, 0, "start", "/prior/tau_trunc.stan");
+    reader.add_event(64, 12, "end", "/prior/tau_trunc.stan");
+    reader.add_event(64, 15, "restart", "model_random_jzs");
+    reader.add_event(67, 18, "include", "/prior/d_param.stan");
+    reader.add_event(67, 0, "start", "/prior/d_param.stan");
+    reader.add_event(68, 1, "end", "/prior/d_param.stan");
+    reader.add_event(68, 19, "restart", "model_random_jzs");
+    reader.add_event(68, 19, "include", "/prior/tau_param.stan");
+    reader.add_event(68, 0, "start", "/prior/tau_param.stan");
+    reader.add_event(69, 1, "end", "/prior/tau_param.stan");
+    reader.add_event(69, 20, "restart", "model_random_jzs");
+    reader.add_event(69, 20, "include", "/jzs/param.stan");
+    reader.add_event(69, 0, "start", "/jzs/param.stan");
+    reader.add_event(71, 2, "end", "/jzs/param.stan");
+    reader.add_event(71, 21, "restart", "model_random_jzs");
+    reader.add_event(74, 24, "include", "/prior/d_target.stan");
+    reader.add_event(74, 0, "start", "/prior/d_target.stan");
+    reader.add_event(84, 10, "end", "/prior/d_target.stan");
+    reader.add_event(84, 25, "restart", "model_random_jzs");
+    reader.add_event(84, 25, "include", "/prior/tau_target.stan");
+    reader.add_event(84, 0, "start", "/prior/tau_target.stan");
+    reader.add_event(94, 10, "end", "/prior/tau_target.stan");
+    reader.add_event(94, 26, "restart", "model_random_jzs");
+    reader.add_event(94, 26, "include", "/jzs/target.stan");
+    reader.add_event(94, 0, "start", "/jzs/target.stan");
+    reader.add_event(100, 6, "end", "/jzs/target.stan");
+    reader.add_event(100, 27, "restart", "model_random_jzs");
+    reader.add_event(102, 29, "end", "model_random_jzs");
     return reader;
 }
 
 #include <meta_header.hpp>
- class model_random_JZS : public prob_grad {
+ class model_random_jzs : public prob_grad {
 private:
     int N;
     vector_d y;
@@ -109,24 +109,26 @@ private:
     int B;
     vector<int> P;
     vector<vector<int> > b_idx;
-    vector_d s;
+    vector_d rscale;
     matrix_d X;
     vector<matrix_d> L;
-    vector_d p_d;
-    int df_d;
-    vector_d p_tau;
-    int df_tau;
-    double const_d;
-    double const_tau;
+    int d_family;
+    vector_d d_param;
+    vector_d d_bnd;
+    int tau_family;
+    vector_d tau_param;
+    vector_d tau_bnd;
+    double d_const;
+    double tau_const;
     vector_d se2;
 public:
-    model_random_JZS(stan::io::var_context& context__,
+    model_random_jzs(stan::io::var_context& context__,
         std::ostream* pstream__ = 0)
         : prob_grad(0) {
         ctor_body(context__, 0, pstream__);
     }
 
-    model_random_JZS(stan::io::var_context& context__,
+    model_random_jzs(stan::io::var_context& context__,
         unsigned int random_seed__,
         std::ostream* pstream__ = 0)
         : prob_grad(0) {
@@ -142,7 +144,7 @@ public:
 
         current_statement_begin__ = -1;
 
-        static const char* function__ = "model_random_JZS_namespace::model_random_JZS";
+        static const char* function__ = "model_random_jzs_namespace::model_random_jzs";
         (void) function__;  // dummy to suppress unused var warning
         size_t pos__;
         (void) pos__;  // dummy to suppress unused var warning
@@ -215,15 +217,15 @@ public:
                 }
             }
             current_statement_begin__ = 24;
-            validate_non_negative_index("s", "B", B);
-            context__.validate_dims("data initialization", "s", "vector_d", context__.to_vec(B));
-            validate_non_negative_index("s", "B", B);
-            s = vector_d(static_cast<Eigen::VectorXd::Index>(B));
-            vals_r__ = context__.vals_r("s");
+            validate_non_negative_index("rscale", "B", B);
+            context__.validate_dims("data initialization", "rscale", "vector_d", context__.to_vec(B));
+            validate_non_negative_index("rscale", "B", B);
+            rscale = vector_d(static_cast<Eigen::VectorXd::Index>(B));
+            vals_r__ = context__.vals_r("rscale");
             pos__ = 0;
-            size_t s_i_vec_lim__ = B;
-            for (size_t i_vec__ = 0; i_vec__ < s_i_vec_lim__; ++i_vec__) {
-                s[i_vec__] = vals_r__[pos__++];
+            size_t rscale_i_vec_lim__ = B;
+            for (size_t i_vec__ = 0; i_vec__ < rscale_i_vec_lim__; ++i_vec__) {
+                rscale[i_vec__] = vals_r__[pos__++];
             }
             current_statement_begin__ = 25;
             validate_non_negative_index("X", "N", N);
@@ -263,39 +265,61 @@ public:
                 }
             }
             current_statement_begin__ = 27;
-            validate_non_negative_index("p_d", "4", 4);
-            context__.validate_dims("data initialization", "p_d", "vector_d", context__.to_vec(4));
-            validate_non_negative_index("p_d", "4", 4);
-            p_d = vector_d(static_cast<Eigen::VectorXd::Index>(4));
-            vals_r__ = context__.vals_r("p_d");
+            context__.validate_dims("data initialization", "d_family", "int", context__.to_vec());
+            d_family = int(0);
+            vals_i__ = context__.vals_i("d_family");
             pos__ = 0;
-            size_t p_d_i_vec_lim__ = 4;
-            for (size_t i_vec__ = 0; i_vec__ < p_d_i_vec_lim__; ++i_vec__) {
-                p_d[i_vec__] = vals_r__[pos__++];
-            }
+            d_family = vals_i__[pos__++];
             current_statement_begin__ = 28;
-            context__.validate_dims("data initialization", "df_d", "int", context__.to_vec());
-            df_d = int(0);
-            vals_i__ = context__.vals_i("df_d");
+            validate_non_negative_index("d_param", "3", 3);
+            context__.validate_dims("data initialization", "d_param", "vector_d", context__.to_vec(3));
+            validate_non_negative_index("d_param", "3", 3);
+            d_param = vector_d(static_cast<Eigen::VectorXd::Index>(3));
+            vals_r__ = context__.vals_r("d_param");
             pos__ = 0;
-            df_d = vals_i__[pos__++];
+            size_t d_param_i_vec_lim__ = 3;
+            for (size_t i_vec__ = 0; i_vec__ < d_param_i_vec_lim__; ++i_vec__) {
+                d_param[i_vec__] = vals_r__[pos__++];
+            }
             current_statement_begin__ = 29;
-            validate_non_negative_index("p_tau", "4", 4);
-            context__.validate_dims("data initialization", "p_tau", "vector_d", context__.to_vec(4));
-            validate_non_negative_index("p_tau", "4", 4);
-            p_tau = vector_d(static_cast<Eigen::VectorXd::Index>(4));
-            vals_r__ = context__.vals_r("p_tau");
+            validate_non_negative_index("d_bnd", "2", 2);
+            context__.validate_dims("data initialization", "d_bnd", "vector_d", context__.to_vec(2));
+            validate_non_negative_index("d_bnd", "2", 2);
+            d_bnd = vector_d(static_cast<Eigen::VectorXd::Index>(2));
+            vals_r__ = context__.vals_r("d_bnd");
             pos__ = 0;
-            size_t p_tau_i_vec_lim__ = 4;
-            for (size_t i_vec__ = 0; i_vec__ < p_tau_i_vec_lim__; ++i_vec__) {
-                p_tau[i_vec__] = vals_r__[pos__++];
+            size_t d_bnd_i_vec_lim__ = 2;
+            for (size_t i_vec__ = 0; i_vec__ < d_bnd_i_vec_lim__; ++i_vec__) {
+                d_bnd[i_vec__] = vals_r__[pos__++];
             }
             current_statement_begin__ = 30;
-            context__.validate_dims("data initialization", "df_tau", "int", context__.to_vec());
-            df_tau = int(0);
-            vals_i__ = context__.vals_i("df_tau");
+            context__.validate_dims("data initialization", "tau_family", "int", context__.to_vec());
+            tau_family = int(0);
+            vals_i__ = context__.vals_i("tau_family");
             pos__ = 0;
-            df_tau = vals_i__[pos__++];
+            tau_family = vals_i__[pos__++];
+            current_statement_begin__ = 31;
+            validate_non_negative_index("tau_param", "3", 3);
+            context__.validate_dims("data initialization", "tau_param", "vector_d", context__.to_vec(3));
+            validate_non_negative_index("tau_param", "3", 3);
+            tau_param = vector_d(static_cast<Eigen::VectorXd::Index>(3));
+            vals_r__ = context__.vals_r("tau_param");
+            pos__ = 0;
+            size_t tau_param_i_vec_lim__ = 3;
+            for (size_t i_vec__ = 0; i_vec__ < tau_param_i_vec_lim__; ++i_vec__) {
+                tau_param[i_vec__] = vals_r__[pos__++];
+            }
+            current_statement_begin__ = 32;
+            validate_non_negative_index("tau_bnd", "2", 2);
+            context__.validate_dims("data initialization", "tau_bnd", "vector_d", context__.to_vec(2));
+            validate_non_negative_index("tau_bnd", "2", 2);
+            tau_bnd = vector_d(static_cast<Eigen::VectorXd::Index>(2));
+            vals_r__ = context__.vals_r("tau_bnd");
+            pos__ = 0;
+            size_t tau_bnd_i_vec_lim__ = 2;
+            for (size_t i_vec__ = 0; i_vec__ < tau_bnd_i_vec_lim__; ++i_vec__) {
+                tau_bnd[i_vec__] = vals_r__[pos__++];
+            }
 
             // validate, data variables
             current_statement_begin__ = 17;
@@ -317,22 +341,28 @@ public:
                 }
             }
             current_statement_begin__ = 24;
-            check_greater_or_equal(function__,"s",s,0);
+            check_greater_or_equal(function__,"rscale",rscale,0);
             current_statement_begin__ = 25;
             current_statement_begin__ = 26;
             current_statement_begin__ = 27;
+            check_greater_or_equal(function__,"d_family",d_family,1);
             current_statement_begin__ = 28;
             current_statement_begin__ = 29;
+            stan::math::check_ordered(function__,"d_bnd",d_bnd);
             current_statement_begin__ = 30;
+            check_greater_or_equal(function__,"tau_family",tau_family,1);
+            current_statement_begin__ = 31;
+            current_statement_begin__ = 32;
+            stan::math::check_ordered(function__,"tau_bnd",tau_bnd);
             // initialize data variables
-            current_statement_begin__ = 34;
-            const_d = double(0);
-            stan::math::fill(const_d,DUMMY_VAR__);
-            stan::math::assign(const_d,-(log_diff_exp(student_t_cdf_log(get_base1(p_d,4,"p_d",1),df_d,get_base1(p_d,1,"p_d",1),get_base1(p_d,2,"p_d",1)),student_t_cdf_log(get_base1(p_d,3,"p_d",1),df_d,get_base1(p_d,1,"p_d",1),get_base1(p_d,2,"p_d",1)))));
             current_statement_begin__ = 36;
-            const_tau = double(0);
-            stan::math::fill(const_tau,DUMMY_VAR__);
-            stan::math::assign(const_tau,-(log_diff_exp(student_t_cdf_log(get_base1(p_tau,4,"p_tau",1),df_tau,get_base1(p_tau,1,"p_tau",1),get_base1(p_tau,2,"p_tau",1)),student_t_cdf_log(get_base1(p_tau,3,"p_tau",1),df_tau,get_base1(p_tau,1,"p_tau",1),get_base1(p_tau,2,"p_tau",1)))));
+            d_const = double(0);
+            stan::math::fill(d_const,DUMMY_VAR__);
+            stan::math::assign(d_const,0);
+            current_statement_begin__ = 37;
+            tau_const = double(0);
+            stan::math::fill(tau_const,DUMMY_VAR__);
+            stan::math::assign(tau_const,0);
             current_statement_begin__ = 38;
             validate_non_negative_index("se2", "N", N);
             se2 = vector_d(static_cast<Eigen::VectorXd::Index>(N));
@@ -343,23 +373,59 @@ public:
                 current_statement_begin__ = 40;
                 stan::math::assign(get_base1_lhs(se2,i,"se2",1), pow(get_base1(se,i,"se",1),2));
             }
+            current_statement_begin__ = 41;
+            if (as_bool(logical_eq(d_family,1))) {
+
+                current_statement_begin__ = 42;
+                stan::math::assign(d_const, -(log_diff_exp(normal_cdf_log(get_base1(d_bnd,2,"d_bnd",1),get_base1(d_param,1,"d_param",1),get_base1(d_param,2,"d_param",1)),normal_cdf_log(get_base1(d_bnd,1,"d_bnd",1),get_base1(d_param,1,"d_param",1),get_base1(d_param,2,"d_param",1)))));
+            } else if (as_bool(logical_eq(d_family,2))) {
+
+                current_statement_begin__ = 45;
+                stan::math::assign(d_const, -(log_diff_exp(student_t_cdf_log(get_base1(d_bnd,2,"d_bnd",1),get_base1(d_param,3,"d_param",1),get_base1(d_param,1,"d_param",1),get_base1(d_param,2,"d_param",1)),student_t_cdf_log(get_base1(d_bnd,1,"d_bnd",1),get_base1(d_param,3,"d_param",1),get_base1(d_param,1,"d_param",1),get_base1(d_param,2,"d_param",1)))));
+            } else if (as_bool(logical_eq(d_family,3))) {
+
+                current_statement_begin__ = 48;
+                stan::math::assign(d_const, -(log((get_base1(d_bnd,2,"d_bnd",1) - get_base1(d_bnd,1,"d_bnd",1)))));
+            } else if (as_bool(logical_eq(d_family,4))) {
+
+                current_statement_begin__ = 50;
+                stan::math::assign(d_const, -(log_diff_exp(inv_gamma_cdf_log(get_base1(d_bnd,2,"d_bnd",1),get_base1(d_param,1,"d_param",1),get_base1(d_param,2,"d_param",1)),inv_gamma_cdf_log(get_base1(d_bnd,1,"d_bnd",1),get_base1(d_param,1,"d_param",1),get_base1(d_param,2,"d_param",1)))));
+            }
+            current_statement_begin__ = 53;
+            if (as_bool(logical_eq(tau_family,1))) {
+
+                current_statement_begin__ = 54;
+                stan::math::assign(tau_const, -(log_diff_exp(normal_cdf_log(get_base1(tau_bnd,2,"tau_bnd",1),get_base1(tau_param,1,"tau_param",1),get_base1(tau_param,2,"tau_param",1)),normal_cdf_log(get_base1(tau_bnd,1,"tau_bnd",1),get_base1(tau_param,1,"tau_param",1),get_base1(tau_param,2,"tau_param",1)))));
+            } else if (as_bool(logical_eq(tau_family,2))) {
+
+                current_statement_begin__ = 57;
+                stan::math::assign(tau_const, -(log_diff_exp(student_t_cdf_log(get_base1(tau_bnd,2,"tau_bnd",1),get_base1(tau_param,3,"tau_param",1),get_base1(tau_param,1,"tau_param",1),get_base1(tau_param,2,"tau_param",1)),student_t_cdf_log(get_base1(tau_bnd,1,"tau_bnd",1),get_base1(tau_param,3,"tau_param",1),get_base1(tau_param,1,"tau_param",1),get_base1(tau_param,2,"tau_param",1)))));
+            } else if (as_bool(logical_eq(tau_family,3))) {
+
+                current_statement_begin__ = 60;
+                stan::math::assign(tau_const, -(log((get_base1(tau_bnd,2,"tau_bnd",1) - get_base1(tau_bnd,1,"tau_bnd",1)))));
+            } else if (as_bool(logical_eq(tau_family,4))) {
+
+                current_statement_begin__ = 62;
+                stan::math::assign(tau_const, -(log_diff_exp(inv_gamma_cdf_log(get_base1(tau_bnd,2,"tau_bnd",1),get_base1(tau_param,1,"tau_param",1),get_base1(tau_param,2,"tau_param",1)),inv_gamma_cdf_log(get_base1(tau_bnd,1,"tau_bnd",1),get_base1(tau_param,1,"tau_param",1),get_base1(tau_param,2,"tau_param",1)))));
+            }
 
             // validate transformed data
-            current_statement_begin__ = 34;
             current_statement_begin__ = 36;
+            current_statement_begin__ = 37;
             current_statement_begin__ = 38;
 
             // validate, set parameter ranges
             num_params_r__ = 0U;
             param_ranges_i__.clear();
-            current_statement_begin__ = 44;
+            current_statement_begin__ = 68;
             ++num_params_r__;
-            current_statement_begin__ = 45;
+            current_statement_begin__ = 69;
             ++num_params_r__;
-            current_statement_begin__ = 46;
+            current_statement_begin__ = 70;
             validate_non_negative_index("alpha", "sum(P)", sum(P));
             num_params_r__ += sum(P);
-            current_statement_begin__ = 47;
+            current_statement_begin__ = 71;
             validate_non_negative_index("g", "B", B);
             num_params_r__ += B;
         } catch (const std::exception& e) {
@@ -369,7 +435,7 @@ public:
         }
     }
 
-    ~model_random_JZS() { }
+    ~model_random_jzs() { }
 
 
     void transform_inits(const stan::io::var_context& context__,
@@ -390,7 +456,7 @@ public:
         double d(0);
         d = vals_r__[pos__++];
         try {
-            writer__.scalar_lub_unconstrain(get_base1(p_d,3,"p_d",1),get_base1(p_d,4,"p_d",1),d);
+            writer__.scalar_lub_unconstrain(get_base1(d_bnd,1,"d_bnd",1),get_base1(d_bnd,2,"d_bnd",1),d);
         } catch (const std::exception& e) { 
             throw std::runtime_error(std::string("Error transforming variable d: ") + e.what());
         }
@@ -403,7 +469,7 @@ public:
         double tau(0);
         tau = vals_r__[pos__++];
         try {
-            writer__.scalar_lub_unconstrain(get_base1(p_tau,3,"p_tau",1),get_base1(p_tau,4,"p_tau",1),tau);
+            writer__.scalar_lub_unconstrain(get_base1(tau_bnd,1,"tau_bnd",1),get_base1(tau_bnd,2,"tau_bnd",1),tau);
         } catch (const std::exception& e) { 
             throw std::runtime_error(std::string("Error transforming variable tau: ") + e.what());
         }
@@ -472,16 +538,16 @@ public:
             T__ d;
             (void) d;  // dummy to suppress unused var warning
             if (jacobian__)
-                d = in__.scalar_lub_constrain(get_base1(p_d,3,"p_d",1),get_base1(p_d,4,"p_d",1),lp__);
+                d = in__.scalar_lub_constrain(get_base1(d_bnd,1,"d_bnd",1),get_base1(d_bnd,2,"d_bnd",1),lp__);
             else
-                d = in__.scalar_lub_constrain(get_base1(p_d,3,"p_d",1),get_base1(p_d,4,"p_d",1));
+                d = in__.scalar_lub_constrain(get_base1(d_bnd,1,"d_bnd",1),get_base1(d_bnd,2,"d_bnd",1));
 
             T__ tau;
             (void) tau;  // dummy to suppress unused var warning
             if (jacobian__)
-                tau = in__.scalar_lub_constrain(get_base1(p_tau,3,"p_tau",1),get_base1(p_tau,4,"p_tau",1),lp__);
+                tau = in__.scalar_lub_constrain(get_base1(tau_bnd,1,"tau_bnd",1),get_base1(tau_bnd,2,"tau_bnd",1),lp__);
             else
-                tau = in__.scalar_lub_constrain(get_base1(p_tau,3,"p_tau",1),get_base1(p_tau,4,"p_tau",1));
+                tau = in__.scalar_lub_constrain(get_base1(tau_bnd,1,"tau_bnd",1),get_base1(tau_bnd,2,"tau_bnd",1));
 
             Eigen::Matrix<T__,Eigen::Dynamic,1>  alpha;
             (void) alpha;  // dummy to suppress unused var warning
@@ -509,19 +575,55 @@ public:
 
             // model body
 
-            current_statement_begin__ = 51;
-            lp_accum__.add((const_d + student_t_log(d,df_d,get_base1(p_d,1,"p_d",1),get_base1(p_d,2,"p_d",1))));
-            current_statement_begin__ = 52;
-            lp_accum__.add((const_tau + student_t_log(tau,df_tau,get_base1(p_tau,1,"p_tau",1),get_base1(p_tau,2,"p_tau",1))));
-            current_statement_begin__ = 53;
+            current_statement_begin__ = 75;
+            lp_accum__.add(d_const);
+            current_statement_begin__ = 76;
+            if (as_bool(logical_eq(d_family,1))) {
+
+                current_statement_begin__ = 77;
+                lp_accum__.add(normal_log(d,get_base1(d_param,1,"d_param",1),get_base1(d_param,2,"d_param",1)));
+            } else if (as_bool(logical_eq(d_family,2))) {
+
+                current_statement_begin__ = 79;
+                lp_accum__.add(student_t_log(d,get_base1(d_param,3,"d_param",1),get_base1(d_param,1,"d_param",1),get_base1(d_param,2,"d_param",1)));
+            } else if (as_bool(logical_eq(d_family,3))) {
+
+                current_statement_begin__ = 81;
+                lp_accum__.add(beta_log(((d - get_base1(d_bnd,1,"d_bnd",1)) / (get_base1(d_bnd,2,"d_bnd",1) - get_base1(d_bnd,1,"d_bnd",1))),get_base1(d_param,1,"d_param",1),get_base1(d_param,2,"d_param",1)));
+            } else if (as_bool(logical_eq(d_family,4))) {
+
+                current_statement_begin__ = 83;
+                lp_accum__.add(inv_gamma_log(d,get_base1(d_param,1,"d_param",1),get_base1(d_param,2,"d_param",1)));
+            }
+            current_statement_begin__ = 85;
+            lp_accum__.add(tau_const);
+            current_statement_begin__ = 86;
+            if (as_bool(logical_eq(tau_family,1))) {
+
+                current_statement_begin__ = 87;
+                lp_accum__.add(normal_log(tau,get_base1(tau_param,1,"tau_param",1),get_base1(tau_param,2,"tau_param",1)));
+            } else if (as_bool(logical_eq(tau_family,2))) {
+
+                current_statement_begin__ = 89;
+                lp_accum__.add(student_t_log(tau,get_base1(tau_param,3,"tau_param",1),get_base1(tau_param,1,"tau_param",1),get_base1(tau_param,2,"tau_param",1)));
+            } else if (as_bool(logical_eq(tau_family,3))) {
+
+                current_statement_begin__ = 91;
+                lp_accum__.add(beta_log(((tau - get_base1(tau_bnd,1,"tau_bnd",1)) / (get_base1(tau_bnd,2,"tau_bnd",1) - get_base1(tau_bnd,1,"tau_bnd",1))),get_base1(tau_param,1,"tau_param",1),get_base1(tau_param,2,"tau_param",1)));
+            } else if (as_bool(logical_eq(tau_family,4))) {
+
+                current_statement_begin__ = 93;
+                lp_accum__.add(inv_gamma_log(tau,get_base1(tau_param,1,"tau_param",1),get_base1(tau_param,2,"tau_param",1)));
+            }
+            current_statement_begin__ = 95;
             for (int b = 1; b <= B; ++b) {
 
-                current_statement_begin__ = 54;
-                lp_accum__.add(inv_gamma_log(get_base1(g,b,"g",1),0.5,(pow(get_base1(s,b,"s",1),2) / 2.0)));
-                current_statement_begin__ = 55;
+                current_statement_begin__ = 96;
+                lp_accum__.add(inv_gamma_log(get_base1(g,b,"g",1),0.5,(pow(get_base1(rscale,b,"rscale",1),2) / 2.0)));
+                current_statement_begin__ = 97;
                 lp_accum__.add(multi_normal_cholesky_log(stan::model::rvalue(alpha, stan::model::cons_list(stan::model::index_min_max(get_base1(get_base1(b_idx,b,"b_idx",1),1,"b_idx",2), get_base1(get_base1(b_idx,b,"b_idx",1),2,"b_idx",2)), stan::model::nil_index_list()), "alpha"),rep_vector(0,get_base1(P,b,"P",1)),multiply(sqrt(get_base1(g,b,"g",1)),stan::model::rvalue(L, stan::model::cons_list(stan::model::index_uni(b), stan::model::cons_list(stan::model::index_min_max(1, get_base1(P,b,"P",1)), stan::model::cons_list(stan::model::index_min_max(1, get_base1(P,b,"P",1)), stan::model::nil_index_list()))), "L"))));
             }
-            current_statement_begin__ = 59;
+            current_statement_begin__ = 101;
             lp_accum__.add(normal_log(y,add(d,multiply(X,alpha)),sqrt(add(se2,pow(tau,2)))));
 
         } catch (const std::exception& e) {
@@ -581,11 +683,11 @@ public:
                      std::ostream* pstream__ = 0) const {
         vars__.resize(0);
         stan::io::reader<double> in__(params_r__,params_i__);
-        static const char* function__ = "model_random_JZS_namespace::write_array";
+        static const char* function__ = "model_random_jzs_namespace::write_array";
         (void) function__;  // dummy to suppress unused var warning
         // read-transform, write parameters
-        double d = in__.scalar_lub_constrain(get_base1(p_d,3,"p_d",1),get_base1(p_d,4,"p_d",1));
-        double tau = in__.scalar_lub_constrain(get_base1(p_tau,3,"p_tau",1),get_base1(p_tau,4,"p_tau",1));
+        double d = in__.scalar_lub_constrain(get_base1(d_bnd,1,"d_bnd",1),get_base1(d_bnd,2,"d_bnd",1));
+        double tau = in__.scalar_lub_constrain(get_base1(tau_bnd,1,"tau_bnd",1),get_base1(tau_bnd,2,"tau_bnd",1));
         vector_d alpha = in__.vector_constrain(sum(P));
         vector_d g = in__.vector_lb_constrain(0,B);
         vars__.push_back(d);
@@ -648,7 +750,7 @@ public:
     }
 
     static std::string model_name() {
-        return "model_random_JZS";
+        return "model_random_jzs";
     }
 
 
@@ -709,7 +811,7 @@ public:
 
 }
 
-typedef model_random_JZS_namespace::model_random_JZS stan_model;
+typedef model_random_jzs_namespace::model_random_jzs stan_model;
 
 
 #endif

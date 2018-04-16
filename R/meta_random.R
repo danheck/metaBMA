@@ -1,6 +1,7 @@
 #' Bayesian Random-Effects Meta-Analysis
 #'
-#' Runs a Bayesian meta-analysis assuming that the effect size \eqn{d} varies across studies with standard deviation \eqn{\tau} (i.e., a random-effects analysis).
+#' Bayesian meta-analysis assuming that the effect size \eqn{d} varies
+#' across studies with standard deviation \eqn{\tau} (i.e., a random-effects model).
 #'
 #' @inheritParams meta_bma
 #'
@@ -8,70 +9,50 @@
 #' data(towels)
 #' ### Bayesian Random-Effects Meta-Analysis
 #' mr <- meta_random(logOR, SE, study, data = towels,
-#'                   d = "norm", d.par = c(0,.3),
-#'                   tau = "halfcauchy", tau.par = .5,
-#'                   sample = 0, summarize = "none",
+#'                   d = prior("norm", c(mean=0, sd=.3)),
+#'                   tau = prior("t", c(mu=0, sigma=.5, nu=1), lower=0),
 #'                   rel.tol = .Machine$double.eps^.2)
 #'                   # (no summary: only for CRAN checks)
 #' mr
 #' plot_posterior(mr)
 #' @export
-meta_random <- function (y, SE, labels, data,
-                         d = "norm", d.par = c(0, .3),
-                         tau = "halfcauchy", tau.par = .5,
-                         sample = 10000, summarize = "jags",
-                         rel.tol = .Machine$double.eps^.5,
-                         ...){
-  summarize <- match.arg(summarize, c("jags", "integrate", "none"))
-  if (summarize == "jags" && sample <= 0)
-    stop("if summarize = 'jags', it is necessary to use sample > 0.")
-  if (summarize == "none")
-    sample <- 0
+meta_random <- function (y, se, labels, data,
+                         d = prior("norm", c(mean=0, sd=.3), lower=0),
+                         tau  = prior("t", c(mu=0, sigma=.5, nu=1), lower=0),
+                         rscale_contin = 1/2, rscale_discrete = sqrt(2)/2,
+                         centering = TRUE,
+                         logml = "integrate", summarize = "stan", ci = .95,
+                         rel.tol = .Machine$double.eps^.3, ...){
 
-  data_list <- data_list("random", y = y, SE = SE, labels = labels, data = data,
-                         d = d, d.par = d.par, tau = tau, tau.par = tau.par,
+  logml <- match.arg(logml, c("integrate", "stan"))
+  data_list <- data_list("random", y = y, se = se, labels = labels, data = data,
                          args = as.list(match.call()))
 
-  logml <- integrate_wrapper(data = data_list, rel.tol = rel.tol)
-
-  meta <- list("data" = data_list,
-               "prior.d" = data_list$prior.d,
-               "prior.tau" = data_list$prior.tau,
-               "posterior.d" = NULL,
-               "posterior.d" = NULL,
-               "logmarginal"  = logml,
-               "BF" = NULL,
-               "estimates" = NULL)
+  d <- check_prior(d)
+  tau <- check_prior(tau, 0)
+  meta <- list("model" = data_list$model,
+               "data" = data_list, "prior_d" = d, "prior_tau" = tau,
+               "jzs" = list(rscale_contin = rscale_contin,
+                            rscale_discrete = rscale_discrete,
+                            centering = centering),
+               "posterior_d" = NULL, "posterior_tau" = NULL,
+               "logml"  = NA, "BF" = NULL, "estimates" = NULL)
   class(meta) <- "meta_random"
 
-  if (sample > 0){
-    jags_samples <- get_samples(data = data_list, sample = sample, ...)
-    if (summarize == "jags")
-      meta$estimates <- rbind("d" = stats_samples(jags_samples$samples, "d.random"),
-                              "tau" = stats_samples(jags_samples$samples, "tau"))
-    meta$samples <- jags_samples$samples
-    meta$jagsmodel <- jags_samples$jagsfile
-  }
+  if (attr(d, "family") %in% priors_stan())
+    meta$stan_messages <- capture.output(
+      meta$stanfit <- meta_stan(data_list, d = d, tau = tau, jzs = meta$jzs, ...))
 
-  meta$posterior.d <- posterior(meta, "d", rel.tol = rel.tol)
-  meta$posterior.tau <- posterior(meta, "tau", rel.tol = rel.tol)
-  meta$posterior.d <- check_posterior(meta$posterior.d, meta, "d.random")
-  meta$posterior.tau <- check_posterior(meta$posterior.tau, meta, "tau")
-  if (summarize == "integrate" || is.null(meta$estimates))
-    meta$estimates <- rbind(d = stats_density(meta$posterior.d, rel.tol = rel.tol),
-                            tau = stats_density(meta$posterior.tau, rel.tol = rel.tol))
+  if (logml == "integrate" || !attr(d, "family") %in% priors_stan())
+    meta$logml <- integrate_wrapper(data_list, d, tau, rel.tol = rel.tol)
+  meta <- meta_bridge_sampling(meta, logml, ...)
 
-  if (anyNA(meta$estimates) && sample > 0){
-    warning("Summary statistics computed with 'integrate' contain missings.\n",
-            "  Summary statistics of the JAGS samples are reported instead.")
-    meta$estimates <- rbind("d" = stats_samples(jags_samples$samples, "d.random"),
-                            "tau" = stats_samples(jags_samples$samples, "tau"))
-  }
+  meta$posterior_d <- posterior(meta, "d", rel.tol = rel.tol)
+  meta$posterior_tau <- posterior(meta, "tau", rel.tol = rel.tol)
 
-  meta$BF <- c(d_10 = meta$prior.d(0) / meta$posterior.d(0),
-               tau_10 = meta$prior.tau(0) / meta$posterior.tau(0))
-
-  meta$data <- meta$data[c("y", "SE", "labels")]
+  meta$estimates <- summary_meta(meta, summarize)
+  meta$BF <- c(d_10   = meta$prior_d(0)   / meta$posterior_d(0),
+               tau_10 = meta$prior_tau(0) / meta$posterior_tau(0))
   meta
 }
 

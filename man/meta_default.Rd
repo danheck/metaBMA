@@ -4,23 +4,23 @@
 \alias{meta_default}
 \title{Defaults for Model Averaging in Meta-Analysis}
 \usage{
-meta_default(y, SE, labels, data, field = "psychology", effect = "ttest",
+meta_default(y, se, labels, data, field = "psychology", effect = "ttest",
   ...)
 }
 \arguments{
 \item{y}{effect size per study. Can be provided as (1) a numeric vector,
 (2) the quoted or unquoted name of the variable in \code{data}, or
 (3) a \code{\link[stats]{formula}} to include discrete or continuous moderator
-variables (only for \code{meta_stan}).}
+variables.}
 
-\item{SE}{standard error of effect size for each study. Can be a numeric vector
+\item{se}{standard error of effect size for each study. Can be a numeric vector
 or the quoted or unquoted name of the variable in \code{data}}
 
 \item{labels}{optional: character values with study labels. Can be a character vector
 or the quoted or unquoted name of the variable in \code{data}}
 
 \item{data}{data frame containing the variables for effect size \code{y},
-standard error \code{SE}, \code{labels}, and moderators per study.}
+standard error \code{se}, \code{labels}, and moderators per study.}
 
 \item{field}{either\code{"psychology"} or \code{"medicine"}
 (uses partial matching, so \code{"p"} and "\code{"m"} are sufficient)}
@@ -62,8 +62,7 @@ For \code{field = "medicine"}, the following defaults are used:
 \dontrun{
 data(towels)
 d1 <- meta_default(logOR, SE, study, towels,
-                   field = "psych", effect = "logOR",
-                   sample = 5000)
+                   field = "psych", effect = "logOR")
 d1
 plot_forest(d1)
 }

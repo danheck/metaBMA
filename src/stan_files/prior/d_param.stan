@@ -1,1 +1,1 @@
-real<lower=p_d[3],  upper=p_d[4]> d;
+real<lower=d_bnd[1], upper=d_bnd[2]> d;

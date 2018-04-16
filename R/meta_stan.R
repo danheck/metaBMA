@@ -1,99 +1,131 @@
-#' Bayesian Meta-Analysis Using Stan
-#'
-#' Uses Stan to draw posterior samples of a fixed-effects or random-effects meta-analysis
-#' with or without moderator variables.
-#'
-#' @inheritParams meta_bma
-#' @param model whether to fit a \code{"random"} or \code{"fixed"} effects meta-analysis
-#'     (can be abbreviated by \code{"r"} and \code{"f"}).
-#' @param d parameters defining the prior on the mean effect size d
-#'     (parameters of a truncated t distribution: df, location, scale, lower, upper).
-#' @param tau parameters defining the prior on the heterogeneity tau
-#'     (parameters of a truncated t distribution: df, location, scale, lower, upper).
-#' @param scale scale parameter(s) of the JZS prior for the moderators.
-#'     If a scalar is provided, the same prior is used for all JZS blocks.
-#'     If a vector is provided, the scale values are assined in the same order as
-#'     defined in the formula \code{y}.
-#' @param show whether to print Stan output.
-#' @param ... further arguments that are passed to \code{rstan::sampling}
-#'     (see \code{\link[rstan]{stanmodel-method-sampling}}), for instance:
-#'     \code{iter=5000}, \code{warmup=500}, \code{chains=4},
-#'     \code{control=list(adapt_delta=.95)}
-#'
-#' @return a fitted stan model (see \code{\link[rstan]{stanfit-class}})
-#'
+# ' Fit a Bayesian Meta-Analysis Using Stan
+# '
+# ' Uses Stan to draw posterior samples of a fixed-effects or random-effects meta-analysis
+# ' with or without moderator variables. To compute Bayes factor and marginal probabilities,
+# ' use \code{\link{meta_fixed}}, \code{\link{meta_random}}, and \code{\link{meta_bma}}.
+# '
+# ' @return a fitted stan model (see \code{\link[rstan]{stanfit-class}}).
+# '     Note that the regression parameters are not meaningfully labeled.
 #' @import rstan
 #' @importFrom utils capture.output
-#'
-#' @examples
-#' data(towels)
-#'
-#' # random-effects:
-#' meta_stan(logOR, SE, study, towels, model = "r")
-#'
-#' # fixed-effects with formula interface:
-#' meta_stan(logOR ~ 1, SE, study, towels, model = "f")
-#' @export
-meta_stan <- function (y, SE, labels, data, model = c("random", "fixed"),
-                       d = c(1, 0, .3, -Inf, Inf),
-                       tau = c(1, 0, .5, 0, Inf),
-                       scale = .5, show = FALSE, ...){
-  dl <- data_list_eval(model, y, SE, labels, data, as.list(match.call()))
+meta_stan <- function (data_list,
+                       d = prior("norm", c(mean = 0, sd = .3), lower = 0),
+                       tau  = prior("t", c(mu = 0, sigma = .5, nu = 1), lower = 0),
+                       jzs = list(rscale_contin = 1/2,
+                                  rscale_discrete = sqrt(2)/2,
+                                  centering = TRUE),
+                       ...){
 
-  check_prior(d)
-  check_prior(tau, lower = 0)
-  dl$df_d <- as.integer(d[1])
-  dl$p_d <- d[2:5]
-  if (dl$model == "random"){
-    dl$df_tau <- as.integer(tau[1])
-    dl$p_tau <- tau[2:5]
+  data_list <- c(data_list, prior_as_list(d))
+  if (grepl("random", data_list$model)){
+    attr(tau, "label") <- "tau"
+    data_list <- c(data_list, prior_as_list(tau))
   }
+  if (attr(d, "family") == "0")
+    data_list$model <- paste0(data_list$model, "_H0")  # not possible: JZS + H0
 
-  dl <- add_jzs(dl, scale)
+  data_list <- add_jzs(data_list, jzs)
 
-  if (show){
-    stanfit <- sampling(stanmodels[[dl$model]], data = dl, ...)
-  } else {
-    capture.output(stanfit <- sampling(stanmodels[[dl$model]], data = dl, ...))
-  }
-  stanfit
+  sampling(stanmodels[[data_list$model]], data = data_list, ...)
+}
+
+prior_as_list <- function (prior){
+  par <- attr(prior, "label")
+  prior <- check_prior(prior, lower = ifelse(par == "tau", 0, -Inf))
+  param <- attr(prior, "param")
+
+  family_idx <- match(attr(prior, "family"), priors_stan())
+  data_list <- list(family = as.integer(family_idx),
+             param = param, bnd = bounds_prior(prior))
+  if (attr(prior, "family") == "0")
+    data_list$bnd[2] <- 1
+  if (length(param) < 3)
+    data_list$param <- c(param, rep(-1, 3 - length(param)))
+  names(data_list) <- paste0(par, "_", names(data_list))
+  data_list
 }
 
 # translate formula into data objects
-add_jzs <- function (data_list, scale){
-  if (is.null(data_list$model.frame))
+add_jzs <- function (data_list, jzs){
+  mf <- data_list$model.frame
+  if (is.null(mf))
     return (data_list)
 
-  ######################### TODO : JZS BLOCKS / DISCRETE-CONTINUOUS
-
   # find out which moderators are continuous / discrete / disallow interactions
-  factors <- !sapply(data_list$model.frame, is.numeric)
+  formula <- attr(mf, "terms")
+  terms <- attr(formula, "term.labels")
+  if(any(grepl(":", terms, fixed = TRUE)))
+    stop("Interaction terms are currently not supported.")
+  discr_l <- !sapply(mf[terms], is.numeric)
+  with_contin <- any(!discr_l)
+  contin <- names(discr_l)[!discr_l]
+  discr <- names(discr_l)[discr_l]
+  number_levels <- unlist(sapply(mf[discr], function(x) length(unique(x))))
 
-  formula <- attr(data_list$model.frame, "terms")
-  X <- model.matrix(formula, data_list$model.frame)
-  # X must be centered (for continuous covariates. for discrete?)
-  X <- scale(X[,attr(X, "assign") != 0,drop = FALSE], scale = FALSE)
-  attr(X, "scale") <- NULL
-
-
-  P <- array(ncol(X), dim = 1)
-  if (all(P == 0))
+  B <- as.integer(any(!discr_l) + sum(discr_l))           # number of JZS blocks (1 contin + B-1 discrete)
+  if (B == 0)
     return(data_list)
-  scale <- array(scale, dim = 1)
-  L <- array(1, c(1,P,P))
-  L[1,,] <- chol_inv_cov(X)
-  b_idx <- cbind(1, P)
+  P <- array(c(sum(!discr_l)[with_contin], number_levels - 1), dim = B)   # number of slope parameters per block
+  rscale <- array(c(jzs$rscale_contin[with_contin],
+                    rep(jzs$rscale_discrete, B - with_contin)), dim = B)
+  L <- array(0, c(B, max(P), max(P)))            # cholesky of solve(var(X)) per block
+  b_idx <- cbind(from = cumsum(c(1, P))[seq_along(P)],
+                 to = cumsum(P))
+  rownames(b_idx) <- names(P) <- names(rscale) <- c("contin"[with_contin], discr)
 
-  data_list$model <- paste0(data_list$model, "_JZS")
-  c(data_list,
-    list(B = 1L, P = P, X = X, L = L, b_idx = b_idx, s = scale))
+  X <- matrix(NA, nrow(mf), sum(P),
+              dimnames = list(data_list$labels, seq(sum(P))))
+
+  # continuous moderators: all captured within the first JZS block
+  if (with_contin){
+    idx_c <- 1:P[1]
+    X[,idx_c] <- do.call("cbind", mf[contin])
+    if (jzs$centering)
+      X[,idx_c] <- scale(X[,idx_c,drop = FALSE], scale = FALSE)
+    colnames(X)[idx_c] <- contin
+    L[1, idx_c, idx_c] <- chol_inv_cov(X[,idx_c])
+  }
+
+  # discrete moderators: modeled in separate JZS blocks
+  #       => centering for discrete variables?! (unbalanced designs?!)
+  if (any(discr_l)){
+    for (i in seq_along(discr)){
+      idx_d <- sum(P[seq_len(i - 1 + with_contin)]) + seq_len(P[i + with_contin])
+      X[,idx_d] <- Xd <- design_matrix(mf, discr[i])
+      colnames(X)[idx_d] <- colnames(Xd)
+      L[i + with_contin, seq(P[i]), seq(P[i])] <- diag(ncol(Xd))
+    }
+  }
+
+  c(data_list, list(B = B, P = P, X = X, L = L, b_idx = b_idx, rscale = rscale))
 }
 
+# construct design matrix with fixed-effects contrasts (Rouder & Morey, 2012)
+#
+# mf: a model.frame/data.frame/list
+# discr: the name of the discrete factor variable
+design_matrix <- function(model.frame, discr){
+
+  model.frame[[discr]] <- as.factor(model.frame[[discr]])
+  levels <- sort(unique(levels(model.frame[[discr]])))
+  number_levels <- length(levels)
+  stopifnot(number_levels > 1)
+
+  Z <- diag(number_levels) - 1/number_levels
+  ev <- eigen(Z, symmetric = TRUE)$vectors
+  contrasts <- as.matrix(ev[,seq(number_levels - 1)])
+  rownames(contrasts) <- levels
+
+  contrasts(model.frame[[discr]]) <- contrasts
+  X <- model.matrix(as.formula(paste("~", discr)), model.frame)
+  # drop intercept:
+  X[,attr(X, "assign") != 0, drop = FALSE]
+}
 
 # cholesky decomposition (stan needs lower triangular): V = L %*% t(L)
 chol_inv_cov <- function(X){
-  V <- solve(var(X))
-  L <- t(chol(V))
-  L
+  if (is.null(dim(X))) X <- matrix(X)
+  V <- solve(var(X) * (nrow(X) - 1) / nrow(X))
+  t(chol(V))  # = L
 }
 

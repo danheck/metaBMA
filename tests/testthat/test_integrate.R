@@ -6,43 +6,26 @@ test_that("extreme priors/misspecified models provide correct results with integ
   library("rstan")
 
   # check different ways of defining priors
-  expect_silent(meta_fixed(logOR, SE, study, towels, d = "cauchy",
-                           d.par = .1, sample = 0))
+  expect_silent(meta_fixed(logOR, SE, study, towels,
+                           d = prior("t", c(0, .1, 1))))
   expect_silent(meta_random(logOR, SE, study, towels, summarize = "int",
-                            d = "cauchy", d.par = .1,
-                            tau = "halfnorm", tau.par=c(0,.3), sample = 0))
-  expect_silent(meta_fixed(logOR, SE, study, towels, d = prior("cauchy", .1), sample = 0))
-  expect_silent(meta_fixed(logOR, SE, study, towels, d = prior("cauchy", .1),
-                           summarize = "j", sample = 1000))
+                            d = prior("t", c(0, .1, 1)),
+                            tau = prior("norm", c(0,.3), 0)))
+  expect_silent(meta_fixed(logOR, SE, study, towels, d = prior("beta", c(1,1)), iter = 5000))
 
-  mf_jags <- meta_fixed(logOR, SE, study, towels, sample = 10000,
-                        d.par = c(mean = 0.2, sd = .01), summarize = "jags")
-  expect_silent(mf_int <- meta_fixed(logOR, SE, study, towels,
-                                     d.par = c(mean = 0.2, sd = .01)))
-  expect_silent(mf_stan <- meta_stan(logOR, SE, study, towels,  model = "fixed",
-                                     d = c(1e5, .2, .01, -Inf, Inf), iter = 10000))
-  expect_equal(mf_jags$estimates, mf_int$estimates, tolerance = .01)
-  expect_equal(unname(mf_int$estimates[,1:5]),
-               unname(summary(mf_stan)$summary["d",c("mean", "50%", "sd", "2.5%", "97.5%")]),
-               tolerance = .01)
+  d <- prior("norm", c(mean = 0.2, sd = .01))
+  mf_stan <- meta_fixed(logOR, SE, study, towels, d= d, summarize = "stan", iter = 1e5)
+  expect_silent(mf_int <- meta_fixed(logOR, SE, study, towels, d = d))
+  expect_equal(mf_stan$estimates, mf_int$estimates, tolerance = .01)
 
-  expect_silent(mf_int <- meta_random(logOR, SE, study, towels,
-                                      d.par = c(mean = 0.2, sd = .01)))
-  mf_jags <- meta_random(logOR, SE, study, towels,
-                         d.par = c(mean = 0.2, sd = .01), summ = "j", sample = 10000)
-  expect_silent(mf_stan <- meta_stan(logOR, SE, study, towels,  model = "random",
-                                     d = c(1e5, .2, .01, -Inf, Inf),
-                                     tau = c(1, 0, .5, 0, Inf), iter = 10000))
-  expect_equal(mf_jags$estimates, mf_int$estimates, tolerance = .05)
-  expect_equal(unname(mf_int$estimates[,1:5]),
-               unname(summary(mf_stan)$summary[c("d", "tau"),
-                                               c("mean", "50%", "sd", "2.5%", "97.5%")]),
-               tolerance = .05)
+  expect_silent(mr_stan <- meta_random(logOR, SE, study, towels, iter = 1e5, d = d))
+  expect_silent(mr_int <- meta_random(logOR, SE, study, towels, d = d, summ = "int"))
+  expect_equal(mr_stan$estimates, mr_int$estimates, tolerance = .03)
 })
 
 
 
 test_that("extreme priors/misspecified models still provide correct results", {
-  expect_silent(meta_fixed(logOR, SE, study, towels,  d.par = c(mean = 0.2, sd = .01)))
-  expect_silent(meta_random(logOR, SE, study, towels, d.par = c(mean = 0.2, sd = .05)))
+  expect_silent(meta_fixed(logOR, SE, study, towels,  d = prior("norm", c(mean = 0.2, sd = .01))))
+  expect_silent(meta_random(logOR, SE, study, towels, d = prior("norm", c(mean = 0.2, sd = .05))))
 })

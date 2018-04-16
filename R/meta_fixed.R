@@ -10,53 +10,50 @@
 #' data(towels)
 #' ### Bayesian Fixed-Effects Meta-Analysis (H1: d>0 Cauchy)
 #' mf <- meta_fixed(logOR, SE, study, data = towels,
-#'                  d = "halfnorm", d.par = c(0, .3), sample = 0,
-#'                  summarize = "integrate")
+#'                  d = prior("norm", c(mean=0, sd=.3), lower=0))
 #' mf
 #' plot_posterior(mf)
 #' plot_forest(mf)
 #' @export
-meta_fixed <- function(y, SE, labels, data,
-                       d = "halfnorm", d.par = c(mean=0, sd=0.3),
-                       # d = prior("halfnorm", c(mean=0, sd=0.3)
-                       sample = 5000, summarize = "integrate",
-                       rel.tol = .Machine$double.eps^.5, ...){
-  summarize <- match.arg(summarize, c("jags", "integrate", "none"))
-  if (summarize == "jags" && sample <= 0)
-    stop("if summarize = 'jags', it is necessary to use sample > 0.")
+meta_fixed <- function(y, se, labels, data,
+                       d = prior("norm", c(mean = 0, sd = .3), lower = 0),
+                       rscale_contin = 1/2, rscale_discrete = sqrt(2)/2,
+                       centering = TRUE,
+                       logml = "integrate", summarize = "integrate", ci = .95,
+                       rel.tol = .Machine$double.eps^.3, ...){
 
-  data_list <- data_list("fixed", y = y, SE = SE, labels = labels, data = data,
-                         d = d, d.par = d.par, args = as.list(match.call()))
+  logml <- match.arg(logml, c("integrate", "stan"))
+  data_list <- data_list("fixed", y = y, se = se, labels = labels, data = data,
+                         args = as.list(match.call()))
 
-  logml <- integrate_wrapper(data = data_list, rel.tol = rel.tol)
+  d <- check_prior(d)
+  tau <- prior("0", c(), label = "tau")
 
-  meta <- list("data" = data_list,
-               "prior.d" = data_list$prior.d,
-               "posterior.d" = NA,
-               "logmarginal"  = logml,
-               "logmarginal.H0" = loglik_fixed_H0(data_list),
-               "BF" = c("d_10" = exp(logml - loglik_fixed_H0(data_list))),
-               "estimates" = NULL)
+  meta <- list("model" = data_list$model,
+               "data" =  data_list, "prior_d" = d, "prior_tau" = tau,
+               "jzs" = list(rscale_contin = rscale_contin,
+                            rscale_discrete = rscale_discrete,
+                            centering = centering),
+               "posterior_d" = NA, "posterior_tau" = tau,
+               "logml"  = NA,  "BF" = NULL, "estimates" = NULL)
   class(meta) <- "meta_fixed"
 
-  if (sample > 0){
-    jags_samples <- get_samples(data = data_list, sample = sample, ...)
-    if (summarize == "jags")
-      meta$estimates <- rbind("d" = stats_samples(jags_samples$samples, "d.fixed"))
-    meta$samples <- jags_samples$samples
-    meta$jagsmodel <- jags_samples$jagsfile
-  }
+  if (attr(d, "family") %in% priors_stan())
+    meta$stan_messages <- capture.output(
+      meta$stanfit <- meta_stan(data_list, d = d, jzs=meta$jzs, ...))
 
-  meta$posterior.d <- posterior(meta, "d", rel.tol = rel.tol)
-  meta$posterior.d <- check_posterior(meta$posterior.d, meta, "d.fixed")
-  if (summarize == "integrate" || is.null(meta$estimates))
-    meta$estimates <- rbind("d" = stats_density(meta$posterior.d, rel.tol = rel.tol))
-  if (anyNA(meta$estimates) && sample > 0){
-    warning("Summary statistics computed with 'integrate' contain missings.\n",
-            "  Summary statistics of the JAGS samples are reported instead.")
-    meta$estimates <- rbind("d" = stats_samples(jags_samples$samples, "d.fixed"))
-  }
+  if (logml == "integrate" || !attr(d, "family") %in% priors_stan())
+    meta$logml <- integrate_wrapper(data_list, d, rel.tol = rel.tol)
+  meta <- meta_bridge_sampling(meta, logml, ...)
 
-  meta$data <- meta$data[c("y", "SE", "labels")]
+  # not for fixed_jzs
+  meta$posterior_d <- posterior(meta, "d", rel.tol = rel.tol)
+
+  meta$estimates <- summary_meta(meta, summarize)
+
+  if (data_list$model == "fixed")  # only without jzs:
+    meta$BF <- c("d_10" = exp(meta$logml - loglik_fixed_H0(data_list)))
+  else
+    meta$BF <- c("d_10" = d(0) / meta$posterior_d(0))
   meta
 }

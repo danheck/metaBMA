@@ -1,40 +1,19 @@
 ### Make data-list structure and check data
-data_list <- function (model, y, SE, labels = NULL, data,
-                       d = NULL, d.par = NULL, tau = NULL, tau.par = NULL,
-                       prior = NULL, args){
+data_list <- function (model, y, se, labels, data, args){
 
-  dl <- data_list_eval(model, y, SE, labels, data, args)
-
-  if (class(d) == "prior"){
-    dl$prior.d <- d
-  } else {
-    dl$prior.d <- prior(d, d.par, "d")
-  }
-
-  if (dl$model != "fixed"){
-    if (class(tau) == "prior"){
-      dl$prior.tau <- tau
-    } else {
-      dl$prior.tau <- prior(tau, tau.par, "tau")
-    }
-  } else {
-    dl$prior.tau <- prior("0", NA, "tau")
-  }
-  if (dl$model == "bma")
-    dl$prior.models <- prior/sum(prior)
-
-  dl
-}
-
-data_list_eval <- function (model, y, SE, labels, data, args){
+  model <- match.arg(model, c("random", "fixed"))
 
   if (!missing(data) && is.list(data)){
+    if (all(c("model", "N", "y", "se", "labels", "data", "model.frame") %in% names(data))){
+      data$model <- model
+      return(data)
+    }
     y <- eval(args$y, data) #y <- eval(substitute(y), data)
-    SE <- eval(args$SE, data)
+    se <- eval(args$se, data)
     labels <- eval(args$labels, data)
 
-    if (is.character(y))   y <- data[[y]]
-    if (is.character(SE)) SE <- data[[SE]]
+    if (is.character(y)) y <- data[[y]]
+    if (is.character(se)) se <- data[[se]]
     if (!missing(labels) && length(labels) == 1 && is.character(labels))
       labels <- data[[labels]]
   } else {
@@ -44,16 +23,19 @@ data_list_eval <- function (model, y, SE, labels, data, args){
   if (class(y) == "formula"){
     mf <- model.frame(y, data)
     y <- model.response(mf)
+    X <- model.matrix(attr(mf, "terms"), mf)
+    if (any(attr(X, "assign") != 0))
+      model <- paste0(model, "_jzs")
+
   } else {
     mf <- NULL
   }
   if (missing(labels) || is.null(labels))
-    labels <- paste("Study", 1:length(eval(SE)))
+    labels <- paste("Study", 1:length(eval(se)))
 
-  check_y_SE(y, SE, labels)
+  check_y_se(y, se, labels)
 
-  list(model = match.arg(model, c("random", "fixed")),
-       N = length(SE), y = y, se = SE, SE = SE, labels = labels,
-       data = data, model.frame = mf)
+  list("model" = model, "N" = length(se), "y" = y, "se" = se, "labels" = labels,
+       "data" = data, "model.frame" = mf)
 }
 

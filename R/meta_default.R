@@ -38,30 +38,28 @@
 #' \dontrun{
 #' data(towels)
 #' d1 <- meta_default(logOR, SE, study, towels,
-#'                    field = "psych", effect = "logOR",
-#'                    sample = 5000)
+#'                    field = "psych", effect = "logOR")
 #' d1
 #' plot_forest(d1)
 #' }
 #' @seealso \code{\link{meta_bma}}, \code{\link{plot_default}}
 #' @template ref_gronau2017
 #' @export
-meta_default <- function(y, SE, labels, data,
+meta_default <- function(y, se, labels, data,
                          field = "psychology", effect = "ttest", ...){
-  def <- get_default(field, effect)
 
-  dl <- data_list_eval("random", y = y, SE = SE, labels = labels, data = data,
-                       args = as.list(match.call()))
-  res <- meta_bma(y = y, SE = SE, labels = labels, data = dl,
-                  d = def$d, d.par = def$d.par, tau = def$tau, tau.par = def$tau.par,
+  def <- get_default(field, effect)
+  dl <- data_list("random", y = y, se = se, labels = labels, data = data,
+                  args = as.list(match.call()))
+  res <- meta_bma(y = "y", se = "se", labels = "labels", data = dl,
+                  d = def$d,  tau = def$tau,
                   ...)
-  res$default <- c(field = field, effect = effect)
+  res$default <- c("field" = field, "effect" = effect)
   res
 }
 
 
-get_default <- function(field,
-                        effect){
+get_default <- function (field, effect){
   field <- match.arg(field, c("psychology", "medicine"))
   effect <- match.arg(effect, c("ttest", "logOR", "corr"))
 
@@ -70,22 +68,16 @@ get_default <- function(field,
          "psychology" = {
            switch(effect,
                   "ttest" = {
-                    d = "halfnorm"
-                    d.par <- c(mean = 0, sd = .3)
-                    tau  <- "halfcauchy"
-                    tau.par <- c(scale = .5)
+                    d = prior("norm", c(mean = 0, sd = .3), lower = 0)
+                    tau  <- prior("t", c(mu = 0, sigma = .5, nu = 1), lower = 0)
                   },
                   "logOR" = {
-                    d = "halfnorm"
-                    d.par <- c(mean = 0, sd = .3)
-                    tau  <- "halfcauchy"
-                    tau.par <- c(scale = .5)
+                    d = prior("norm", c(mean = 0, sd = .3), lower = 0)
+                    tau  <- prior("t", c(mu = 0, sigma = .5, nu = 1), lower = 0)
                   },
                   "corr" = {
-                    d = "halfnorm"
-                    d.par <- c(mean = 0, sd = .3)
-                    tau  <- "halfcauchy"
-                    tau.par <- c(scale = .5)
+                    d = prior("norm", c(mean = 0, sd = .3), lower = 0)
+                    tau  <- prior("t", c(mu = 0, sigma = .5, nu = 1), lower = 0)
                   },
                   stop("'effect' not supported."))
          },
@@ -94,28 +86,22 @@ get_default <- function(field,
          "medicine" = {
            switch(effect,
                   "ttest" = {
-                    d = "halfnorm"
-                    d.par <- c(mean = 0, sd = .3)
-                    tau  <- "halfcauchy"
-                    tau.par <- c(scale = .5)
+                    d = prior("norm", c(mean = 0, sd = .3), lower = 0)
+                    tau  <- prior("t", c(mu = 0, sigma = .5, nu = 1), lower = 0)
                   },
                   "logOR" = {
-                    d = "halfnorm"
-                    d.par <- c(mean = 0, sd = .3)
-                    tau  <- "halfcauchy"
-                    tau.par <- c(scale = .5)
+                    d = prior("norm", c(mean = 0, sd = .3), lower = 0)
+                    tau  <- prior("t", c(mu = 0, sigma = .5, nu = 1), lower = 0)
                   },
                   "corr" = {
-                    d = "halfnorm"
-                    d.par <- c(mean = 0, sd = .3)
-                    tau  <- "halfcauchy"
-                    tau.par <- c(scale = .5)
+                    d = prior("norm", c(mean = 0, sd = .3), lower = 0)
+                    tau  <- prior("t", c(mu = 0, sigma = .5, nu = 1), lower = 0)
                   },
                   stop("'effect' not supported."))
          },
          stop("'field' not supported."))
 
-  list(d = d, d.par = d.par, tau = tau, tau.par = tau.par)
+  list(d = d, tau = tau)
 }
 
 
@@ -133,7 +119,7 @@ plot_default <- function(field, effect, ...){
   mfrow <- par()$mfrow
   par(mfrow = c(1,2))
   def <- get_default(field, effect)
-  plot(prior(def$d, def$d.par), xlab = "Mean effect (d)", ...)
-  plot(prior(def$tau, def$tau.par), xlab = "Standard deviation (tau)", ...)
+  plot(def$d, xlab = "Mean effect (d)", ...)
+  plot(def$tau, xlab = "Standard deviation (tau)", ...)
   par(mfrow = mfrow)
 }

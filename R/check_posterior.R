@@ -1,47 +1,55 @@
 
-check_posterior <- function (dpost, meta, parameter = "d"){
+check_posterior <- function (dpost, meta, parameter = "d",
+                             rel.tol = .Machine$double.eps^0.3, abs.tol = .001){
 
-  mini <- max(0, attr(dpost, "lower"))
-  maxi <- min(10, attr(dpost, "upper"))
-  xx <- seq(mini, maxi, length.out = 101)
-  dp_const <- NA
-  if (attr(dpost, "lower") < attr(dpost, "upper"))
-    try(dp_const <- integrate(dpost,
-                              attr(dpost, "lower"),
-                              attr(dpost, "upper"))$value, silent = TRUE)
-  else
-    dp_const <- 1
-  # if (is.na(dp_const) || abs(dp_const - 1) > .0005)
-  #   try({
-  #     m <- meta$estimates[names(attr(dpost, "lower")),"Mean"]
-  #     sd <- meta$estimates[names(attr(dpost, "lower")),"SD"]
-  #     lb <- max(attr(dpost, "lower"), m - 50*sd)
-  #     ub <- max(attr(dpost, "lower"), m + 50*sd)
-  #     dp_const <- integrate(dpost, lb, ub)$value
-  #   }, silent = TRUE)
+  bnd <- bounds_prior(dpost)
+  mini <- max(-3, bnd[1])
+  maxi <- min(3, bnd[2])
+  dx <- dpost(seq(mini, maxi, length.out = 11))
+  dp_const <- 1
+  dpost2 <- dpost
 
-  if (any(is.na(dpost(xx))) || is.na(dp_const) || abs(dp_const - 1) > .0005){
+  if (any(is.na(dx)) || is.na(dp_const)){
     warning ("Posterior distribution could not be approximated numerically\n",
              "  (posterior density integrates to: ", dp_const, ")\n",
-             "  A density approximation to the JAGS samples is used instead")
-    ss <- meta$samples[,parameter]
-    if (!is.null(ss)){
-      lspline <- logspline(ss, min(ss), max(ss))
-      dlog <- function(x, log = FALSE){
-        dx <- dlogspline(x, lspline)
-        if (log) dx <- log(dx)
-        dx
-      }
-      attr(dlog, "lower") <- attr(dpost, "lower")
-      attr(dlog, "upper") <- attr(dpost, "upper")
-      class(dlog) <- "posterior"
-      attr(dlog, "model") <- attr(dpost, "model")
-      return (dlog)
-    } else {
-      stop ("JAGS samples missing: To approximate the posterior density",
-            "\n  by MCMC samples, one of the available priors must be used (see ?prior)",
-            "\n and the argument 'sample' must be larger than zero!")
-    }
+             "  A logspline density approximation to the MCMC/Stan samples is used instead.")
+    dpost2 <- stan_logspline(meta$stanfit, parameter,
+                             prior = meta[[paste0("prior_", parameter)]])
   }
-  dpost
+
+  if (bnd[1] < bnd[2])
+    try(dp_const <- integrate(dpost2, lower = bnd[1], upper = bnd[2],
+                              rel.tol = rel.tol, subdivisions = 1000L)$value,
+        silent = TRUE)
+  if (abs(dp_const - 1) > abs.tol){
+    dpost2 <- function(x) dpost(x) / dp_const
+  }
+  class(dpost2) <- "posterior"
+  attr(dpost2, "lower") <- attr(dpost, "lower")
+  attr(dpost2, "upper") <- attr(dpost, "upper")
+  attr(dpost2, "model") <- attr(dpost, "model")
+  attr(dpost2, "parameter") <- parameter
+  dpost2
+}
+
+stan_logspline <- function (stanfit, parameter, prior){
+  if (missing(stanfit) || is.null(stanfit))
+    warning ("MCMC/Stan samples missing: To approximate the posterior density",
+             "\n  by MCMC samples, one of the available priors must be used (see ?prior)",
+             "\n and the argument 'sample' must be larger than zero!")
+  if (class(stanfit) == "stanfit")
+    ss <- extract(stanfit, parameter)[[parameter]]
+  else
+    ss <- stanfit  # samples
+  if (!is.null(ss)){
+    bnd <- bounds_prior(prior)
+    mini <- max(-3, bnd[1])
+    maxi <- min(3, bnd[2])
+    lspline <- logspline(ss, min(ss, mini), max(ss, maxi))
+    dens <- function(x) dlogspline(x, lspline)
+    # if (log) dx <- log(dx)
+  } else {
+    stop("parameter '", parameter, "' not included in stanfit object.")
+  }
+  dens
 }

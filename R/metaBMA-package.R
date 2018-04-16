@@ -28,7 +28,6 @@
 #' @import bridgesampling
 #' @import graphics
 #' @importFrom logspline logspline dlogspline
-#' @importFrom runjags run.jags runjags.options combine.mcmc
 #' @importFrom mvtnorm rmvnorm dmvnorm
 #' @importFrom coda spectrum0.ar HPDinterval as.mcmc varnames mcmc
 #' @importFrom LaplacesDemon dhalfcauchy dst rst rhalft rhalfcauchy

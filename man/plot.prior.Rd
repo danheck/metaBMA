@@ -19,10 +19,10 @@
 Plot the probability density function of a prior distribution.
 }
 \examples{
-p1 <- prior("halfcauchy", c(scale = .5))
+p1 <- prior("t", c(mu=0, sigma=.5, nu=1), 0, 3)
 plot(p1, 0, 2)
 
 # define custom prior pdf up to a constant:
-p2 <- prior("custom", function(x) x^.5, "poly", 0,.5)
+p2 <- prior("custom", function(x) x^.5, 0, .5)
 plot(p2)
 }

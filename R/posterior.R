@@ -1,57 +1,63 @@
 
 # construct posterior density function
-posterior <- function (meta,
-                       parameter = "d",
+posterior <- function (meta, parameter = "d",
                        rel.tol = .Machine$double.eps^0.5){
 
   if (class(meta) == "meta_bma"){
-    w <- meta$posterior.models
+    if (parameter != "d") stop("bma currently. only working for parameter='d' ")
     # average across posterior densities:
-    dp1 <- function (d)
+    weights <- meta$posterior_models
+    dpost_bma <- function (d)
       sapply(d, function (dd){
-        sum(w*sapply(meta$posterior.d,
-                     function(dp) dp(dd)))
+        sum(weights*sapply(meta$posterior_d, function(dp) dp(dd)))
       })
-    lb <- sapply(meta$prior.d, attr, which = "lower")
-    ub <- sapply(meta$prior.d, attr, which = "upper")
-    attr(dp1, "lower") <- min(lb)
-    attr(dp1, "upper") <- max(ub)
-    class(dp1) <- "posterior"
-    attr(dp1, "model") <- "bma"
-    return (dp1)
+    lb <- sapply(meta$prior_d, attr, which = "lower")
+    ub <- sapply(meta$prior_d, attr, which = "upper")
+    attr(dpost_bma, "lower") <- min(lb)
+    attr(dpost_bma, "upper") <- max(ub)
+    attr(dpost_bma, "model") <- "bma"
+    return(check_posterior(dpost_bma, meta, parameter, rel.tol))
+  }
 
-  } else if (parameter == "d"){
-    if (class(meta) == "meta_fixed"){
-      dp2 <- function (d)
-        post_fixed(d = d, data = meta$data, rel.tol = rel.tol)/exp(meta$logmarginal)
-    } else {
-      dp2 <- function (d)
-        post_random_d(d = d, data = meta$data, rel.tol = rel.tol)/exp(meta$logmarginal)
+  dpost <- NULL
+  if (length(parameter) == 1){
+
+    if (parameter == "d"){
+      if (meta$model == "fixed")
+        dpost <- function (x)
+          post_fixed(d = x, data = meta$data, meta$prior_d, rel.tol = rel.tol)/exp(meta$logml)
+      else if (meta$model == "random")
+        dpost <- function (x)
+          post_random_d(d = x, data = meta$data, prior_d = meta$prior_d,
+                        prior_tau = meta$prior_tau, rel.tol = rel.tol)/exp(meta$logml)
+
+    } else if (parameter == "tau"){
+      if (meta$model == "random")
+        dpost <- function (x)
+          post_random_tau(tau = x, data = meta$data, prior_d = meta$prior_d,
+                          prior_tau = meta$prior_tau, rel.tol = rel.tol)/exp(meta$logml)
     }
-    attr(dp2, "lower") <- attr(meta$prior.d, "lower")
-    attr(dp2, "upper") <- attr(meta$prior.d, "upper")
-    class(dp2) <- "posterior"
-    attr(dp2, "model") <- "fixed"
-    return(dp2)
 
-  } else if (parameter == "tau"){
-    dp3 <- function (tau)
-      post_random_tau(tau = tau, data = meta$data, rel.tol = rel.tol)/exp(meta$logmarginal)
-    attr(dp3, "lower") <- attr(meta$prior.tau, "lower")
-    attr(dp3, "upper") <- attr(meta$prior.tau, "upper")
-    class(dp3) <- "posterior"
-    attr(dp3, "model") <- "random"
-    return (dp3)
+    prior <- meta[[paste0("prior_", parameter)]]
+    if (is.null(dpost))
+      dpost <- stan_logspline(meta$stanfit, parameter, prior)  # JZS!
+    attr(dpost, "lower") <- attr(prior, "lower")
+    attr(dpost, "upper") <- attr(prior, "upper")
+    attr(dpost, "model") <- meta$model
+    attr(dpost, "param") <- parameter
+    return(check_posterior(dpost, meta, parameter, rel.tol))
 
+  } else  if (meta$model == "random"){
+    dpost_tau_d <- function (tau, d)
+      post_random(tau = tau, d = d, data = meta$data, prior_d = meta$prior_d,
+                  prior_tau = meta$prior_tau, rel.tol = rel.tol)/exp(meta$logml)
+    attr(dpost_tau_d, "lower") <- c(attr(meta$prior_tau, "lower"),
+                                    attr(meta$prior_d, "lower"))
+    attr(dpost_tau_d, "upper") <- c(attr(meta$prior_tau, "upper"),
+                                    attr(meta$prior_d, "upper"))
+    attr(dpost_tau_d, "model") <- meta$model
+    return(check_posterior(dpost_tau_d, meta, parameter, rel.tol))
   } else {
-    dp4 <- function (tau, d)
-      post_random(tau = tau, d = d, data = meta$data)/exp(meta$logmarginal)
-    attr(dp4, "lower") <- c(attr(meta$prior.tau, "lower"),
-                           attr(meta$prior.d, "lower"))
-    attr(dp4, "upper") <- c(attr(meta$prior.tau, "upper"),
-                           attr(meta$prior.d, "upper"))
-    class(dp4) <- "posterior"
-    attr(dp4, "model") <- "random"
-    return (dp4)
+    return(NULL)  # 2D- kernel density for JZS required!
   }
 }

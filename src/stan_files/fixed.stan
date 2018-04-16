@@ -6,6 +6,7 @@ data {
 }
 
 transformed data{
+  real d_const = 0;
 #include /prior/d_trunc.stan
 }
 
@@ -15,5 +16,5 @@ parameters {
 
 model {
 #include /prior/d_target.stan
-target += normal_lpdf(y | d, se);
+  target += normal_lpdf(y | d, se);
 }

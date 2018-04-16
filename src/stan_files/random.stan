@@ -7,9 +7,11 @@ data {
 }
 
 transformed data{
+  real d_const = 0;
+  real tau_const = 0;
+#include /auxiliary/se_squared.stan
 #include /prior/d_trunc.stan
 #include /prior/tau_trunc.stan
-#include /auxiliary/se_squared.stan
 }
 
 parameters {
@@ -20,5 +22,5 @@ parameters {
 model {
 #include /prior/d_target.stan
 #include /prior/tau_target.stan
-target += normal_lpdf(y | d, sqrt(se2 + tau^2));
+  target += normal_lpdf(y | d, sqrt(se2 + tau^2));
 }

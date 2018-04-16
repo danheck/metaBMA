@@ -3,7 +3,7 @@ BOOST_NOT_IN_BH_SRC = `"$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" --vanilla -e "cat(sy
 PKG_CPPFLAGS = -I"../inst/include" -I"$(STANHEADERS_SRC)" -I"$(BOOST_NOT_IN_BH_SRC)" -DBOOST_RESULT_OF_USE_TR1 -DBOOST_NO_DECLTYPE -DBOOST_DISABLE_ASSERTS -DEIGEN_NO_DEBUG -DBOOST_NO_CXX11_RVALUE_REFERENCES
 
 CXX_STD = CXX11
-SOURCES = stan_files/fixed.stan stan_files/fixed_JZS.stan  stan_files/random.stan stan_files/random_JZS.stan stan_files/random_delta.stan
+SOURCES = stan_files/fixed.stan stan_files/fixed_jzs.stan  stan_files/random.stan stan_files/random_jzs.stan stan_files/random_delta.stan stan_files/random_H0.stan
 OBJECTS = $(SOURCES:.stan=.o) init.o
 
 all: $(SHLIB)

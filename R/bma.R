@@ -10,26 +10,20 @@
 #' @examples
 #' data(towels)
 #' fix1 <- meta_fixed(logOR, SE, study, towels,
-#'                    d = "halfnorm", d.par = c(mean=0, sd=.2),
-#'                    sample = 0, summarize = "integrate")
+#'                    d = prior("norm", c(mean=0, sd=.2), lower=0))
 #' fix2 <- meta_fixed(logOR, SE, study, towels,
-#'                    d = "beta", d.par = c(alpha=1, beta=1),
-#'                    sample = 0, summarize = "integrate")
+#'                    d = prior("beta", c(shape1=1, shape2=1), upper = 2))
 #' fix3 <- meta_fixed(logOR, SE, study, towels,
-#'                    d = "triangular",
-#'                    d.par = c(min=0, peak=.3, max=1),
-#'                    sample = 0, summarize = "integrate")
+#'                    d = prior("custom", function(x) x^2, 0, 1))
 #'
 #' averaged <- bma(list(Halfnormal = fix1, Uniform = fix2,
-#'                      Triangular = fix3))
+#'                      Quadratic = fix3))
 #' averaged
 #' plot_posterior(averaged)
 #' plot_forest(averaged, mar = c(4.5,20,4,.3))
 #' @export
-bma <- function (meta, prior = 1, parameter = "d", summarize = "integrate",
+bma <- function (meta, prior = 1, parameter = "d", summarize = "integrate", ci = .95,
                  rel.tol = .Machine$double.eps^0.5){
-
-  summarize <- match.arg(summarize, c("jags", "integrate", "none"))
 
   classes <- sapply(meta, class) %in% c("meta_fixed", "meta_random")
   if (!is.list(meta) || !all(classes))
@@ -37,32 +31,43 @@ bma <- function (meta, prior = 1, parameter = "d", summarize = "integrate",
           "       (fitted with meta_fixed and meta_random).")
   if (is.null(names(meta)))
     names(meta) <- paste0("meta", seq_along(meta))
+  check_data_identical(meta)
 
-  sel.prior <- paste0("prior.", parameter)
-  sel.post <- paste0("posterior.", parameter)
-  logml <- sapply(meta, "[[", "logmarginal")
+  sel.prior <- paste0("prior_", parameter)
+  sel.post <- paste0("posterior_", parameter)
+  logml <- sapply(meta, "[[", "logml")
   incl <- inclusion(logml, prior = prior)
 
   res_bma <- list("meta" = meta,
-                  "logmarginal" = logml,
-                  "prior.models" = incl$prior,
-                  "posterior.models" = incl$posterior,
-                  "prior.d" = sapply(meta, function(x) x[[sel.prior]]),
-                  "posterior.d" = sapply(meta, function(x) x[[sel.post]]),
+                  "logml" = logml,
+                  "prior_models" = incl$prior,
+                  "posterior_models" = incl$posterior,
+                  "prior_d" = lapply(meta, function(x) x[[sel.prior]]),
+                  "posterior_d" = lapply(meta, function(x) x[[sel.post]]),
                   "estimates" = NULL)
   class(res_bma) <- "meta_bma"
 
   # BMA: weighted posterior of effects
-  res_bma$posterior.d <- posterior(res_bma, rel.tol = rel.tol)
-  if (summarize %in% c("integrate", "jags")){
-    ests <- t(sapply(meta, function(x) x$estimates[parameter,]))
-    res_bma$estimates <- rbind("Averaged" = stats_density(res_bma$posterior.d, rel.tol =rel.tol),
+  summarize <- match.arg(summarize, c("stan", "integrate"))
+  ests <- do.call("rbind", lapply(meta, function(x) x$estimates[parameter,]))
+  if (summarize == "integrate"){
+    res_bma[[paste0("posterior_", parameter)]] <-
+      posterior(res_bma, parameter, rel.tol = rel.tol)
+    res_bma$estimates <- rbind("Averaged" = summary_integrate(res_bma$posterior_d,
+                                                              ci = ci, rel.tol = rel.tol),
                                ests)
-  } else {
-    meta
+  } else if (summarize == "stan"){
+    samples <- lapply(meta, function(m) extract(m$stanfit, parameter)[[1]])
+    maxiter <- max(sapply(samples, length))
+    nn <- round(maxiter * incl$posterior)
+    avg_samples <- unlist(mapply(sample, x = samples, size = nn,
+                                 MoreArgs = list(replace = TRUE)))
+    res_bma$estimates <- rbind("Averaged" = summary_samples(avg_samples), ests)
+    res_bma[[paste0("posterior_", parameter)]] <-
+      stan_logspline(avg_samples, parameter, meta[[1]][[paste0("prior_", parameter)]])
   }
 
-  res_bma$BF <- outer(exp(res_bma$logmarginal),
-                      exp(res_bma$logmarginal), "/")
-  return (res_bma)
+  res_bma$BF <- outer(exp(res_bma$logml), exp(res_bma$logml), "/")
+  names(dimnames(res_bma$BF)) <- c("numerator", "denominator")
+  res_bma
 }

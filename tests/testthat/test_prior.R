@@ -4,12 +4,13 @@
 
 test_that('prior returns vectorized function', {
 
-  priors <- c("norm", "halfnorm", "cauchy", "halfcauchy","truncnorm",
-              "scaledt", "halft", "triangular", "beta")
-  params <- list(c(0,.3), c(0,.3), .5, .5, c(1,2,0,3),
-                 c(0, .2, 2), c(.2, 2), c(0,1,2),c(1,1))
+  priors <- c("norm", "t", "invgamma", "beta")
+  params <- list(c(0,.3), c(0,.3,1.4), c(1,1), c(1,2))
+
   for(i in seq_along(priors)){
-    pp <- prior(priors[i], params[[i]], "xx")
+    expect_silent(pp <- prior(priors[i], params[[i]], upper = 2))
+    expect_silent(plot(pp))
+    expect_silent(plot(pp, from = -1, to = 1.5))
     expect_s3_class(pp, "prior")
     expect_true(is.function(pp))
     expect_length(pp(1:10), 10)

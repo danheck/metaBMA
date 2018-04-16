@@ -1,16 +1,19 @@
+set.seed(123452)
+se <- runif(10, .3,1.3)
+d <- data.frame(yyy = rnorm(10), se = se, xx = rnorm(10), study = 1:10)
+data_list <- list(model = "random", N = nrow(d), y = d$yyy, se = d$se, labels = d$study,
+                  data = NULL, model.frame = NULL)
+
 
 test_that("priors for stan models are properly checked", {
 
-  set.seed(123452)
-  d <- data.frame(yyy = rnorm(10), se = runif(10), xx = rnorm(10), study = 1:10)
-
-  expect_error(meta_stan(yyy, se, data = d,
-                         tau = c(1e5, 0, 100, -1, Inf)))
-  expect_error(meta_stan(yyy, se, data = d,
-                         d = c(1e5, 0, 100, -Inf, NA)))
-  expect_error(meta_stan(yyy, se, data = d,
-                         d = c(1e5, 0, 100, 4, 1)))
-  expect_silent(meta_stan(yyy, se, data = d,
-                         d = c(1e5, 0, 100, -3,3),
-                         tau = c(1e5, 0, 100, 0, 3), iter = 50))
+  expect_output(ms <- metaBMA:::meta_stan(data_list, iter = 1000))
+  expect_true(class(ms) == "stanfit")
+  ms <- meta_random(yyy, se, data = d, iter = 100)
+  expect_true(class(ms) == "meta_random")
+  expect_true(class(ms$stanfit) == "stanfit")
+  expect_error(metaBMA:::meta_stan(data_list, d = prior("dsad"), iter = 100))
+  expect_error(metaBMA:::meta_stan(data_list, prior("t", c(1,0,0)), iter = 100))
+  expect_error(metaBMA:::meta_stan(data_list, prior("t", c(1,3,-10)), iter = 100))
 })
+

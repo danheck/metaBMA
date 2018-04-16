@@ -1,1 +1,1 @@
-  real<lower=p_tau[3], upper=p_tau[4]> tau;
+real<lower=tau_bnd[1], upper=tau_bnd[2]> tau;
