@@ -10,3 +10,12 @@ src/stan_files/*.so
 src/stan_files/*.dll
 src/stan_files/*.hpp
 src/stan_files/*.cc
+
+src/metaBMA.so
+src/metaBMA.dll
+src/init.o
+man/*.Rd
+vignettes/*.R
+!vignettes/*.Rmd
+vignettes/*.html
+vignettes/*_files
