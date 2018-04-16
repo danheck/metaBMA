@@ -30,10 +30,10 @@ test_that("meta_fixed supports data as vector/variable names", {
 test_that("meta_bma supports data as vector/variable names", {
 
   fit7 <- meta_bma("yyy", "se", "study", d, control=list(adapt_delta=.9), summ="i")
-  fit8 <- meta_bma(yyy, se, study, d, rel.tol = .1, iter = 6000,warmup=1000,
+  fit8 <- meta_bma(yyy, se, study, d, rel.tol = .1, iter = 10000,warmup=1000,
                    control=list(adapt_delta=.9), summ = "s")
   fit9 <- meta_bma("yyy", se, study, d, control=list(adapt_delta=.9), iter = 10000, warmup=1000, logml="s")
-  fit10 <- meta_bma(yyy, se, study, d, control=list(adapt_delta=.9), iter = 6000, warmup=1000)
+  fit10 <- meta_bma(yyy, se, study, d, control=list(adapt_delta=.9), iter = 10000, warmup=1000)
 
   expect_equal(fit7$logml, fit8$logml)
   expect_identical(fit7$logml, fit10$logml)

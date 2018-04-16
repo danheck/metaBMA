@@ -10,5 +10,5 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with stanpackage.  If not, see <http://www.gnu.org/licenses/>.
+    along with metaBMA.  If not, see <http://www.gnu.org/licenses/>.
 */
