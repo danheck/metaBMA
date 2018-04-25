@@ -19,5 +19,5 @@ parameters {
 model {
 #include /prior/d_target.stan
 #include /jzs/target.stan
-  target += normal_lpdf(y | d + X * alpha, se);
+  target += normal_lpdf(y | d + X * alpha, SE);
 }

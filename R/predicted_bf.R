@@ -6,12 +6,12 @@
 #'
 #' @param meta model-averaged meta-analysis
 #'     (fitted with \code{\link{meta_bma}} or \code{\link{meta_default}}).
-#' @param se a scalar: the expected standard error of future study.
-#'     For instance, se = 1/sqrt(N) for standardized effect sizes and N = sample size)
+#' @param SE a scalar: the expected standard error of future study.
+#'     For instance, SE = 1/sqrt(N) for standardized effect sizes and N = sample size)
 #' @param sample number of simulated Bayes factors
 #' @param ... further arguments passed to rstan::sampling to draw posterior samples for d and tau.
 #' @export
-predicted_bf <- function (meta, se, sample = 100, ...){
+predicted_bf <- function (meta, SE, sample = 100, ...){
 
   if (class(meta) != "meta_bma")
     stop ("Prediction only supported for models fitted via ?meta_bma or ?meta_default")
@@ -19,7 +19,7 @@ predicted_bf <- function (meta, se, sample = 100, ...){
   check_data_identical(meta$meta)
   data_list <- meta$meta$data
   y <- meta$meta[[1]]$data$y
-  SEs <- meta$meta[[1]]$data$se
+  SEs <- meta$meta[[1]]$data$SE
   labels <- meta$meta[[1]]$data$labels
   d <- meta$meta$random$prior_d
   tau <- meta$meta$random$prior_tau
@@ -62,16 +62,16 @@ predicted_bf <- function (meta, se, sample = 100, ...){
   }
 
   #--------------  sample data sets
-  d.pred <- c(rstudy(nn["fixed_H0"], "fixed", param.fH0, se),
-              rstudy(nn["fixed_H1"], "fixed", param.fH1, se),
-              rstudy(nn["random_H0"], "random", param.rH0, se),
-              rstudy(nn["random_H1"], "random", param.rH1, se))
+  d.pred <- c(rstudy(nn["fixed_H0"], "fixed", param.fH0, SE),
+              rstudy(nn["fixed_H1"], "fixed", param.fH1, SE),
+              rstudy(nn["random_H0"], "random", param.rH0, SE),
+              rstudy(nn["random_H1"], "random", param.rH1, SE))
 
   #--------------  compute predicted Bayes factors
   meta_list <- list()
   for (i in seq_along(d.pred)){
     meta_list[[i]] <-
-      meta_bma(c(y, d.pred[i]), c(SEs, se), c(labels, "new"), d = d, tau = tau,
+      meta_bma(c(y, d.pred[i]), c(SEs, SE), c(labels, "new"), d = d, tau = tau,
                prior = meta$prior_models, ...)
 
   }

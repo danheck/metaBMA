@@ -22,5 +22,5 @@ parameters {
 model {
 #include /prior/d_target.stan
 #include /prior/tau_target.stan
-  target += normal_lpdf(y | d, sqrt(se2 + tau^2));
+  target += normal_lpdf(y | d, sqrt(SE2 + tau^2));
 }

@@ -16,5 +16,5 @@ parameters {
 
 model {
 #include /prior/d_target.stan
-  target += normal_lpdf(y | d, se);
+  target += normal_lpdf(y | d, SE);
 }

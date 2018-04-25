@@ -16,7 +16,7 @@
 #' mr
 #' plot_posterior(mr)
 #' @export
-meta_random <- function (y, se, labels, data,
+meta_random <- function (y, SE, labels, data,
                          d = prior("norm", c(mean=0, sd=.3), lower=0),
                          tau  = prior("t", c(mu=0, sigma=.5, nu=1), lower=0),
                          rscale_contin = 1/2, rscale_discrete = sqrt(2)/2,
@@ -25,7 +25,7 @@ meta_random <- function (y, se, labels, data,
                          rel.tol = .Machine$double.eps^.3, ...){
 
   logml <- match.arg(logml, c("integrate", "stan"))
-  data_list <- data_list("random", y = y, se = se, labels = labels, data = data,
+  data_list <- data_list("random", y = y, SE = SE, labels = labels, data = data,
                          args = as.list(match.call()))
 
   d <- check_prior(d)

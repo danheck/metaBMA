@@ -10,7 +10,7 @@ post_fixed <- function (d = 0, data, prior,  log = FALSE,
   }
 
   loglik <-  sapply(d, function (dd)
-    sum(dnorm(data$y, mean = dd, sd = data$se, log = TRUE)))
+    sum(dnorm(data$y, mean = dd, sd = data$SE, log = TRUE)))
 
   post <- logprior + loglik
   if (!log)
@@ -19,7 +19,7 @@ post_fixed <- function (d = 0, data, prior,  log = FALSE,
 }
 
 loglik_fixed_H0 <- function(data) {
-  sum(dnorm(data$y, mean = 0, sd = data$se, log = TRUE))
+  sum(dnorm(data$y, mean = 0, sd = data$SE, log = TRUE))
 }
 
 post_fixed_norm <- function (d, data, prior, log = FALSE,

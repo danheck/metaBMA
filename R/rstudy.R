@@ -1,12 +1,12 @@
-rstudy <- function (n, model, param, se){
+rstudy <- function (n, model, param, SE){
 
-  stopifnot(se >= 0)
+  stopifnot(SE >= 0)
   if (n == 0)
     return (NULL)
 
   if (model == "fixed"){
     # fixed H0 / H1
-    rr <- rnorm(n, param, se)
+    rr <- rnorm(n, param, SE)
 
   } else {
     if (is.null(dim(param))){
@@ -16,7 +16,7 @@ rstudy <- function (n, model, param, se){
       # random H1
       delta <- rnorm(n, param[,"d"], param[,"tau"])
     }
-    rr <- rnorm(n, delta, se)
+    rr <- rnorm(n, delta, SE)
   }
   rr
 }

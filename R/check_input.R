@@ -44,11 +44,11 @@ check_prior <- function(prior, lower = -Inf){
   prior
 }
 
-check_y_se <- function (y, se, labels){
+check_y_se <- function (y, SE, labels){
   stopifnot(is.numeric(y))
-  stopifnot(is.numeric(se))
-  stopifnot(all(se >= 0))
-  stopifnot(length(y) == length(se))
+  stopifnot(is.numeric(SE))
+  stopifnot(all(SE >= 0))
+  stopifnot(length(y) == length(SE))
   stopifnot(length(y) == length(labels))
 }
 
@@ -59,8 +59,8 @@ check_data_identical <- function(meta_list){
     for (i in seq(2, length(meta_list))){
       stopifnot(identical(unname(meta_list[[1]]$data$y),
                           unname(meta_list[[i]]$data$y)))
-      stopifnot(identical(unname(meta_list[[1]]$data$se),
-                          unname(meta_list[[i]]$data$se)))
+      stopifnot(identical(unname(meta_list[[1]]$data$SE),
+                          unname(meta_list[[i]]$data$SE)))
       stopifnot(identical(unname(meta_list[[1]]$data$N),
                           unname(meta_list[[i]]$data$N)))
     }

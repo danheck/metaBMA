@@ -23,5 +23,5 @@ model {
 #include /prior/d_target.stan
 #include /prior/tau_target.stan
   target += normal_lpdf(delta | 0, tau);
-  target += normal_lpdf(y | d + delta, se);
+  target += normal_lpdf(y | d + delta, SE);
 }

@@ -45,13 +45,13 @@
 #' @seealso \code{\link{meta_bma}}, \code{\link{plot_default}}
 #' @template ref_gronau2017
 #' @export
-meta_default <- function(y, se, labels, data,
+meta_default <- function(y, SE, labels, data,
                          field = "psychology", effect = "ttest", ...){
 
   def <- get_default(field, effect)
-  dl <- data_list("random", y = y, se = se, labels = labels, data = data,
+  dl <- data_list("random", y = y, SE = SE, labels = labels, data = data,
                   args = as.list(match.call()))
-  res <- meta_bma(y = "y", se = "se", labels = "labels", data = dl,
+  res <- meta_bma(y = "y", SE = "SE", labels = "labels", data = dl,
                   d = def$d,  tau = def$tau,
                   ...)
   res$default <- c("field" = field, "effect" = effect)

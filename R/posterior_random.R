@@ -15,7 +15,7 @@ post_random <- function(tau, d = 0, data, prior_d, prior_tau, log = FALSE,
   ### loglikelihood
   pars <- cbind(d, tau)
   ll <- function(x) sum(dnorm(data$y, mean = x[1],
-                              sd = sqrt(data$se^2 + x[2]^2), log = TRUE))
+                              sd = sqrt(data$SE^2 + x[2]^2), log = TRUE))
   loglik <- apply(pars, 1, ll)
 
   post <- prior + loglik
@@ -70,8 +70,8 @@ post_random_theta <- function(theta, idx, data, prior_d, prior_tau, log = FALSE,
   f.d.tau <- function(d, theta, tau)
     sapply(d, function(dd)
       dnorm(theta,
-            mean = (1/tau^2*dd + 1/data$se[idx]^2 * data$y[idx])/(1/tau^2 + 1/data$se[idx]^2),
-            sd = 1/sqrt(1/tau^2 + 1/data$se[idx]^2)) *
+            mean = (1/tau^2*dd + 1/data$SE[idx]^2 * data$y[idx])/(1/tau^2 + 1/data$SE[idx]^2),
+            sd = 1/sqrt(1/tau^2 + 1/data$SE[idx]^2)) *
         prior_d(dd) *
         prior_tau(1/tau^2))  ## prior_tau(tau) ??? ### CHECK!!!
 

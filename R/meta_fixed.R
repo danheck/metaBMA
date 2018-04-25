@@ -15,7 +15,7 @@
 #' plot_posterior(mf)
 #' plot_forest(mf)
 #' @export
-meta_fixed <- function(y, se, labels, data,
+meta_fixed <- function(y, SE, labels, data,
                        d = prior("norm", c(mean = 0, sd = .3), lower = 0),
                        rscale_contin = 1/2, rscale_discrete = sqrt(2)/2,
                        centering = TRUE,
@@ -23,7 +23,7 @@ meta_fixed <- function(y, se, labels, data,
                        rel.tol = .Machine$double.eps^.3, ...){
 
   logml <- match.arg(logml, c("integrate", "stan"))
-  data_list <- data_list("fixed", y = y, se = se, labels = labels, data = data,
+  data_list <- data_list("fixed", y = y, SE = SE, labels = labels, data = data,
                          args = as.list(match.call()))
 
   d <- check_prior(d)

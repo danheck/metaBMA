@@ -3,7 +3,7 @@ integrate_wrapper <- function (data, d, tau,
                                ratio.tol = .0001){
 
   # shifting the posterior to have the mode (approximately) at zero
-  weights <- 1/data$se^2
+  weights <- 1/data$SE^2
   shift <- sum(data$y * weights) / sum(weights)
 
   if (data$model == "fixed" && attr(d, "family") != "0"){

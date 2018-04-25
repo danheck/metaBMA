@@ -75,8 +75,8 @@ plot_forest.default <- function(meta, from, to, shrinked = "random",
   if ("Averaged" %in% rownames(meta$estimates))
     sel <- 1:nrow(meta$estimates)
   n.ests <- length(sel)
-  lower <- meta$data$y - qnorm( (ci+1)/2) * meta$data$se
-  upper <- meta$data$y + qnorm( (ci+1)/2) * meta$data$se
+  lower <- meta$data$y - qnorm( (ci+1)/2) * meta$data$SE
+  upper <- meta$data$y + qnorm( (ci+1)/2) * meta$data$SE
 
   ss <- NULL
   if (class(meta) == "meta_bma"){

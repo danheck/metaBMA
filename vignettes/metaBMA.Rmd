@@ -99,6 +99,6 @@ md
 Often, it is of interest to judge how much additional evidence future studies can contribute to the present knowledge. Conditional on the outcome of the model averaging for meta-analysis, the function `predicted_bf()` samples new data sets from the posterior and performes a model selection for each replication. Thereby, a distribution of predicted Bayes factors is obtain that represents the expected evidence one expects when running a new study:
 
 ```{r, fig.height=4.5, fig.width=6}
-# mp <- predicted_bf(mb, se = .2, sample = 30)
+# mp <- predicted_bf(mb, SE = .2, sample = 30)
 # plot(mp)
 ```

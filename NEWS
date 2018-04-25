@@ -3,7 +3,6 @@ metaBMA 0.5.0
 
 * Major refactoring (breaks compatibiltiy with previous versions)
 * Possible to provide data frame via argument 'data'
-* Renamed argument "SE" to "se" for consistency
 * Removed arguments "d.par" and "tau.par": priors are now defined via d=prior(...), tau=prior(...)
 * Possibility to fit random and fixed effects meta-analysis with moderators in stan (with JZS priors)
 * Computation of log marginal likelihood with Stan samples and bridge sampling (via logml="stan")

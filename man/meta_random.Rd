@@ -4,7 +4,7 @@
 \alias{meta_random}
 \title{Bayesian Random-Effects Meta-Analysis}
 \usage{
-meta_random(y, se, labels, data, d = prior("norm", c(mean = 0, sd = 0.3),
+meta_random(y, SE, labels, data, d = prior("norm", c(mean = 0, sd = 0.3),
   lower = 0), tau = prior("t", c(mu = 0, sigma = 0.5, nu = 1), lower = 0),
   rscale_contin = 1/2, rscale_discrete = sqrt(2)/2, centering = TRUE,
   logml = "integrate", summarize = "stan", ci = 0.95,
@@ -16,14 +16,14 @@ meta_random(y, se, labels, data, d = prior("norm", c(mean = 0, sd = 0.3),
 (3) a \code{\link[stats]{formula}} to include discrete or continuous moderator
 variables.}
 
-\item{se}{standard error of effect size for each study. Can be a numeric vector
+\item{SE}{standard error of effect size for each study. Can be a numeric vector
 or the quoted or unquoted name of the variable in \code{data}}
 
 \item{labels}{optional: character values with study labels. Can be a character vector
 or the quoted or unquoted name of the variable in \code{data}}
 
 \item{data}{data frame containing the variables for effect size \code{y},
-standard error \code{se}, \code{labels}, and moderators per study.}
+standard error \code{SE}, \code{labels}, and moderators per study.}
 
 \item{d}{\code{prior} distribution on the average effect size \eqn{d}.
 The prior probability density function is defined via \code{\link{prior}}.}

@@ -10,12 +10,12 @@
 #'     (2) the quoted or unquoted name of the variable in \code{data}, or
 #'     (3) a \code{\link[stats]{formula}} to include discrete or continuous moderator
 #'     variables.
-#' @param se standard error of effect size for each study. Can be a numeric vector
+#' @param SE standard error of effect size for each study. Can be a numeric vector
 #'     or the quoted or unquoted name of the variable in \code{data}
 #' @param labels optional: character values with study labels. Can be a character vector
 #'     or the quoted or unquoted name of the variable in \code{data}
 #' @param data data frame containing the variables for effect size \code{y},
-#'     standard error \code{se}, \code{labels}, and moderators per study.
+#'     standard error \code{SE}, \code{labels}, and moderators per study.
 #'
 #' @param d \code{prior} distribution on the average effect size \eqn{d}.
 #'     The prior probability density function is defined via \code{\link{prior}}.
@@ -70,7 +70,7 @@
 #' @seealso \link{meta_default}, \link{meta_fixed}, \link{meta_random}
 #' @template ref_gronau2017
 #' @export
-meta_bma <- function (y, se, labels, data,
+meta_bma <- function (y, SE, labels, data,
                       d = prior("norm", c(mean = 0, sd = .3), lower = 0),
                       tau  = prior("t", c(mu = 0, sigma = .5, nu = 1), lower = 0),
                       rscale_contin = 1/2, rscale_discrete = sqrt(2)/2,
@@ -78,13 +78,13 @@ meta_bma <- function (y, se, labels, data,
                       logml = "integrate", summarize = "stan", ci = .95,
                       rel.tol = .Machine$double.eps^.3, ...){
 
-  dl <- data_list("random", y = y, se = se, labels = labels, data = data,
+  dl <- data_list("random", y = y, SE = SE, labels = labels, data = data,
                   args = as.list(match.call()))
 
   # fit meta-analysis models
-  fixed_H1 <- meta_fixed(y, se, labels, data = dl, d = d, logml = logml,
+  fixed_H1 <- meta_fixed(y, SE, labels, data = dl, d = d, logml = logml,
                          summarize = summarize, ci = ci, rel.tol = rel.tol, ...)
-  random_H1 <- meta_random(y, se, labels, data = dl, d = d, tau = tau, logml = logml,
+  random_H1 <- meta_random(y, SE, labels, data = dl, d = d, tau = tau, logml = logml,
                            summarize = summarize, ci = ci, rel.tol = rel.tol, ...)
 
   # model averaging for:  d | H1

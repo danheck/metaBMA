@@ -1,3 +1,3 @@
-vector[N] se2;
+vector[N] SE2;
 for (i in 1:N)
-  se2[i] = se[i]^2;
+  SE2[i] = SE[i]^2;
