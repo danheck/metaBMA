@@ -6,3 +6,5 @@ README.md
 man-roxygen/*
 ^codecov\.yml$
 ^\.travis\.yml$
+
+development.R

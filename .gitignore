@@ -22,3 +22,5 @@ vignettes/*.R
 !vignettes/*.Rmd
 vignettes/*.html
 vignettes/*_files
+
+development.R
