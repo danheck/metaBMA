@@ -11,6 +11,9 @@ src/stan_files/*.dll
 src/stan_files/*.hpp
 src/stan_files/*.cc
 
+src-i386/*
+src-x64/*
+
 src/metaBMA.so
 src/metaBMA.dll
 src/init.o

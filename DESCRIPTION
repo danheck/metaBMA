@@ -21,28 +21,28 @@ Description: Computes the posterior model probabilities for four meta-analysis m
 Encoding: UTF-8
 LazyData: true
 Depends:
-    R (>= 3.3.0), 
-    Rcpp (>= 0.12.16), 
+    R (>= 3.4.0),
+    Rcpp (>= 0.12.0), 
     methods
 Imports:
     mvtnorm,
     logspline,
     coda,
     LaplacesDemon,
-    rstan (>= 2.17.3), 
-    rstantools (>= 1.4.0),
+    rstan (>= 2.18.1), 
+    rstantools,
     bridgesampling
 Suggests: 
     testthat,
     knitr,
     covr
 LinkingTo: 
-    StanHeaders (>= 2.17.2), 
-    rstan (>= 2.17.3), 
-    BH (>= 1.66.0.1), 
-    Rcpp (>= 0.12.16), 
-    RcppEigen (>= 0.3.3.4.0)
+    StanHeaders (>= 2.18.0), 
+    rstan (>= 2.18.1), 
+    BH (>= 1.66.0), 
+    Rcpp (>= 0.12.0), 
+    RcppEigen (>= 0.3.3.3.0)
 VignetteBuilder: knitr
 URL: https://github.com/danheck/metaBMA
 License: GPL-3
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
