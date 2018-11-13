@@ -4,8 +4,8 @@
 \alias{meta_fixed}
 \title{Bayesian Fixed-Effects Meta-Analysis}
 \usage{
-meta_fixed(y, SE, labels, data, d = prior("norm", c(mean = 0, sd = 0.3), lower
-  = 0), rscale_contin = 1/2, rscale_discrete = sqrt(2)/2,
+meta_fixed(y, SE, labels, data, d = prior("norm", c(mean = 0, sd = 0.3),
+  lower = 0), rscale_contin = 1/2, rscale_discrete = sqrt(2)/2,
   centering = TRUE, logml = "integrate", summarize = "integrate",
   ci = 0.95, rel.tol = .Machine$double.eps^0.3, ...)
 }

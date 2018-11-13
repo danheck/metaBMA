@@ -5,10 +5,10 @@
 \title{Bayesian Random-Effects Meta-Analysis}
 \usage{
 meta_random(y, SE, labels, data, d = prior("norm", c(mean = 0, sd = 0.3),
-  lower = 0), tau = prior("t", c(mu = 0, sigma = 0.5, nu = 1), lower = 0),
-  rscale_contin = 1/2, rscale_discrete = sqrt(2)/2, centering = TRUE,
-  logml = "integrate", summarize = "stan", ci = 0.95,
-  rel.tol = .Machine$double.eps^0.3, ...)
+  lower = 0), tau = prior("t", c(mu = 0, sigma = 0.5, nu = 1), lower =
+  0), rscale_contin = 1/2, rscale_discrete = sqrt(2)/2,
+  centering = TRUE, logml = "integrate", summarize = "stan",
+  ci = 0.95, rel.tol = .Machine$double.eps^0.3, ...)
 }
 \arguments{
 \item{y}{effect size per study. Can be provided as (1) a numeric vector,
