@@ -22,9 +22,9 @@ To install the latest developer version of `metaBMA` from GitHub, run:
 
 ```r
 ### Dependencies:
-# install.packages("rstan", "rstantools", "bridgesampling",
-#                  "LaplacesDemon", "logspline", "mvtnorm",
-#                  "coda", "knitr", "methods")
+# install.packages(c("rstan", "rstantools", "bridgesampling",
+#                    "LaplacesDemon", "logspline", "mvtnorm",
+#                    "coda", "knitr", "methods"))
 
 if (!require("devtools"))
   install.packages("devtools")
