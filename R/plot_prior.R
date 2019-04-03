@@ -8,7 +8,7 @@
 #' @param ... further arguments passed to \code{\link[graphics]{plot}}
 #'
 #' @examples
-#' p1 <- prior("t", c(mu=0, sigma=.5, nu=1), 0, 3)
+#' p1 <- prior("t", c(location=0, scale=0.707, nu=1), 0, 3)
 #' plot(p1, 0, 2)
 #'
 #' # define custom prior pdf up to a constant:

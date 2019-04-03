@@ -26,5 +26,5 @@ or the Bayesian credibility interval \code{"bci"}.}
 Plot Posterior Distribution
 }
 \seealso{
-\link{meta_default}, \link{meta_bma}, \link{meta_fixed}, \link{meta_random}
+\link{meta_bma}, \link{meta_fixed}, \link{meta_random}
 }

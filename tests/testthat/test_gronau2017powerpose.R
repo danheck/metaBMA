@@ -3,9 +3,9 @@ test_that("Gronau (2017): power pose analysis (reported) are correct ", {
   data("power_pose")
   tmp <- capture_output(eval(power_pose))
 
-  priorEStesting <- prior(family = "t", param = c(mu = 0, sigma = 1/sqrt(2), nu = 1),
+  priorEStesting <- prior(family = "t", param = c(location = 0, scale = 1/sqrt(2), nu = 1),
                           lower = 0, label = "d")
-  priorESestimation <- prior(family = "t", param = c(mu=0, sigma=1/sqrt(2), nu=1), label = "d")
+  priorESestimation <- prior(family = "t", param = c(location=0, scale=1/sqrt(2), nu=1), label = "d")
   priorTau <- prior("invgamma", c(1, .15), label = "tau")
 
   m_testing <- meta_bma(y = effectSize, SE = SE, d = priorEStesting, data = power_pose,
@@ -24,9 +24,9 @@ test_that("Gronau (2017): power pose analysis with informed t prior ", {
   data("power_pose")
   tmp <- capture_output(eval(power_pose))
 
-  priorEStesting <- prior(family = "t", param = c(mu = 0.34999, sigma = 0.1021, nu = 3),
+  priorEStesting <- prior(family = "t", param = c(location = 0.34999, scale = 0.1021, nu = 3),
                           lower = 0, label = "d")
-  priorESestimation <- prior(family = "t", param = c(mu = 0.34999, sigma = 0.1021, nu = 3),
+  priorESestimation <- prior(family = "t", param = c(location = 0.34999, scale = 0.1021, nu = 3),
                              label = "d")
   priorTau <- prior("invgamma", c(1, .15), label = "tau")
 
@@ -48,9 +48,9 @@ test_that("Gronau (2017): power pose analysis (only unfamiliar with default prio
   data("power_pose_unfamiliar", "metaBMA")
   tmp <- capture_output(eval(power_pose_unfamiliar))
 
-  priorEStesting <- prior(family = "t", param = c(mu = 0, sigma = 1/sqrt(2), nu = 1),
+  priorEStesting <- prior(family = "t", param = c(location = 0, scale = 1/sqrt(2), nu = 1),
                           lower = 0, label = "d")
-  priorESestimation <- prior(family = "t", param = c(mu=0, sigma=1/sqrt(2), nu=1), label = "d")
+  priorESestimation <- prior(family = "t", param = c(location=0, scale=1/sqrt(2), nu=1), label = "d")
   priorTau <- prior("invgamma", c(1, .15), label = "tau")
 
   # conduct analyses
@@ -70,9 +70,9 @@ test_that("Gronau (2017): power pose analysis (only unfamiliar and informed t pr
   data("power_pose_unfamiliar", "metaBMA")
   tmp <- capture_output(eval(power_pose_unfamiliar))
 
-  priorEStesting <- prior(family = "t", param = c(mu = 0.34999, sigma = 0.1021, nu = 3),
+  priorEStesting <- prior(family = "t", param = c(location = 0.34999, scale = 0.1021, nu = 3),
                           lower = 0, label = "d")
-  priorESestimation <- prior(family = "t", param = c(mu = 0.34999, sigma = 0.1021, nu = 3),
+  priorESestimation <- prior(family = "t", param = c(location = 0.34999, scale = 0.1021, nu = 3),
                              label = "d")
   priorTau <- prior("invgamma", c(1, .15), label = "tau")
 

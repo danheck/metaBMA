@@ -24,3 +24,4 @@ vignettes/*.html
 vignettes/*_files
 
 development.R
+document-build-roxygen2-error.R

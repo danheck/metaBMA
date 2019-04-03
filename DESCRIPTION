@@ -1,13 +1,12 @@
 Package: metaBMA
 Type: Package
-Date: 2018-11-13
+Date: 2019-04-05
 Title: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis
-Version: 0.5.0
+Version: 0.6.0
 Authors@R: c(person("Daniel W.","Heck",email="heck@uni-mannheim.de",role=c("aut","cre")),
-             person("Quentin F.", "Gronau", email="quentingronau@web.de", role = c("aut")),
-             person("Eric-Jan", "Wagenmakers", email="ej.wagenmakers@gmail.com", role = c("aut")))
+             person("Quentin F.", "Gronau", email="quentingronau@web.de", role = c("ctb")))
 Maintainer: Daniel W. Heck <heck@uni-mannheim.de>
-Description: Computes the posterior model probabilities for four meta-analysis models 
+Description: Computes the posterior model probabilities for standard meta-analysis models 
     (null model vs. alternative model assuming either fixed- or random-effects, respectively).
     These posterior probabilities are used to estimate the overall mean effect size 
     as the weighted average of the mean effect size estimates of the random- and 
@@ -18,30 +17,33 @@ Description: Computes the posterior model probabilities for four meta-analysis m
     meta-analysis with continuous and discrete moderators with Jeffreys-Zellner-Siow (JZS) 
     priors can be fitted and tested. This allows Bayesian model averaging across random- and 
     fixed-effects meta-analysis with and without moderators.
-Encoding: UTF-8
-LazyData: true
 Depends:
     R (>= 3.4.0),
-    Rcpp (>= 0.12.0), 
+    Rcpp (>= 1.0.1),
     methods
 Imports:
     mvtnorm,
     logspline,
     coda,
     LaplacesDemon,
-    rstan (>= 2.18.1), 
-    rstantools,
+    rstan (>= 2.18.2),
+    rstantools (>= 1.5.1),
     bridgesampling
 Suggests: 
     testthat,
     knitr
 LinkingTo: 
-    StanHeaders (>= 2.18.0), 
-    rstan (>= 2.18.1), 
-    BH (>= 1.66.0), 
-    Rcpp (>= 0.12.0), 
-    RcppEigen (>= 0.3.3.3.0)
+    BH (>= 1.69.0-1),
+    Rcpp (>= 1.0.0),
+    RcppEigen (>= 0.3.3.5.0),
+    rstan (>= 2.18.0),
+    StanHeaders (>= 2.18.0)
 VignetteBuilder: knitr
 URL: https://github.com/danheck/metaBMA
 License: GPL-3
+Encoding: UTF-8
+LazyData: true
+NeedsCompilation: yes
+SystemRequirements: GNU make
 RoxygenNote: 6.1.1
+

@@ -38,11 +38,12 @@ meta_fixed <- function(y, SE, labels, data,
                "logml"  = NA,  "BF" = NULL, "estimates" = NULL)
   class(meta) <- "meta_fixed"
 
-  if (attr(d, "family") %in% priors_stan())
-    meta$stan_messages <- capture.output(
-      meta$stanfit <- meta_stan(data_list, d = d, jzs=meta$jzs, ...))
+  if (attr(d, "family") %in% priors_stan() && attr(d, "family") != "0")
+    meta$stanfit <- meta_stan(data_list, d = d, jzs=meta$jzs, ...)
 
-  if (logml == "integrate" || !attr(d, "family") %in% priors_stan())
+  if (logml == "integrate" ||
+      attr(d, "family") == "0" ||
+      !attr(d, "family") %in% priors_stan())
     meta$logml <- integrate_wrapper(data_list, d, rel.tol = rel.tol)
   meta <- meta_bridge_sampling(meta, logml, ...)
 

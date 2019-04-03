@@ -4,8 +4,7 @@
 #' samples the distribution of predicted Bayes factors for a new study given the
 #' current evidence.
 #'
-#' @param meta model-averaged meta-analysis
-#'     (fitted with \code{\link{meta_bma}} or \code{\link{meta_default}}).
+#' @param meta model-averaged meta-analysis (fitted with \code{\link{meta_bma}}).
 #' @param SE a scalar: the expected standard error of future study.
 #'     For instance, SE = 1/sqrt(N) for standardized effect sizes and N = sample size)
 #' @param sample number of simulated Bayes factors
@@ -14,7 +13,7 @@
 predicted_bf <- function (meta, SE, sample = 100, ...){
 
   if (class(meta) != "meta_bma")
-    stop ("Prediction only supported for models fitted via ?meta_bma or ?meta_default")
+    stop ("Prediction only supported for models fitted via ?meta_bma")
 
   check_data_identical(meta$meta)
   data_list <- meta$meta$data

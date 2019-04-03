@@ -1,4 +1,4 @@
-print.est <- function(estimates = NULL, digits = 4){
+print.est <- function(estimates = NULL, digits = 3){
   if (is.null(estimates)){
     cat("\n  (no summary statistics for parameters computed)\n")
   }else{

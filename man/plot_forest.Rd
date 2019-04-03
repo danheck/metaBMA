@@ -36,5 +36,5 @@ mf <- meta_fixed(logOR, SE, study, towels)
 plot_forest(mf, mar = c(4.5,20,4,.2), xlab="Log Odds Ratio")
 }
 \seealso{
-\link{meta_default}, \link{meta_bma}, \link{meta_fixed}, \link{meta_random}
+\link{meta_bma}, \link{meta_fixed}, \link{meta_random}
 }

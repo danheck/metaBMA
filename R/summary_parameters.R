@@ -19,6 +19,7 @@ summary_meta <- function(meta, summarize = "integrate", ci = .95,
     }
   }
 
+  # fallback: Stan samples
   if (is.null(estimates)){
     if (is.null(meta$stanfit)){
       warning("summarize = 'stan' not supported for model: ", meta$model,

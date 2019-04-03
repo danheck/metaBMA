@@ -15,7 +15,7 @@
 #'     or the Bayesian credibility interval \code{"bci"}.
 #' @param ... arguments passed to \code{\link[graphics]{plot}} (e.g., \code{from}, \code{to})
 #'
-#' @seealso \link{meta_default}, \link{meta_bma}, \link{meta_fixed}, \link{meta_random}
+#' @seealso \link{meta_bma}, \link{meta_fixed}, \link{meta_random}
 #' @examples
 #' data(towels)
 #' mf <- meta_fixed(logOR, SE, study, towels)
@@ -81,6 +81,7 @@ plot_forest.default <- function(meta, from, to, shrinked = "random",
   ss <- NULL
   if (class(meta) == "meta_bma"){
     ss <- meta$meta[[shrinked]]$samples
+    # ss <- extract(meta$meta[[shrinked]]$stanfit)
   } else if (class(meta) == "meta_random" && shrinked != ""){
     ss <- meta$samples
   }

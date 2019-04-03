@@ -14,15 +14,15 @@ bma(meta, prior = 1, parameter = "d", summarize = "integrate",
 
 \item{parameter}{eiher the mean effect \code{"d"} or the heterogeneity across studies \code{"tau"}}
 
-\item{summarize}{how to estimate parameter summaries (mean, median, SD, etc.):
-Either by numerical integration (\code{summarize = "integrate"}) or based
-on MCMC/Stan samples (\code{summarize = "stan"}).}
+\item{summarize}{how to estimate parameter summaries (mean, median, SD,
+etc.): Either by numerical integration (\code{summarize = "integrate"}) or
+based on MCMC/Stan samples (\code{summarize = "stan"}).}
 
 \item{ci}{probability for the credibility/highest-density intervals.}
 
 \item{rel.tol}{relative tolerance used for numerical integration using
-\code{\link[stats]{integrate}}. Use \code{rel.tol=.Machine$double.eps}
-for maximal precision (however, this might be slow).}
+\code{\link[stats]{integrate}}. Use \code{rel.tol=.Machine$double.eps} for
+maximal precision (however, this might be slow).}
 }
 \description{
 Model averaging of meta-analysis models according to their posterior model probability.

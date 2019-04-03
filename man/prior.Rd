@@ -36,7 +36,7 @@ The following prior distributions are currently implemented:
 \itemize{
 \item \code{"norm"}: Normal distribution with \code{param = c(mean, sd)}
     (see \code{\link[stats]{Normal}}).
-\item \code{"t"}: Student t distribution with \code{param = c(mean, sigma, nu)}
+\item \code{"t"}: Student t distribution with \code{param = c(location, scale, nu)}
     (see \code{\link[LaplacesDemon]{dist.Student.t}}).
     Note that a Cauchy distribution is defined by setting the degrees of freedom \code{nu=1}.
 \item \code{"invgamma"}: Inverse gamma distribution with \code{param = c(shape, scale)}
@@ -57,7 +57,7 @@ p1(c(-1,1,3))
 plot(p1, -.1, 1)
 
 ### Half-Cauchy Distribution
-p2 <- prior("t", c(mu = 0, sigma = .3, nu = 1), lower = 0)
+p2 <- prior("t", c(location = 0, scale = .3, nu = 1), lower = 0)
 plot(p2, -.5, 3)
 
 ### Custom Prior Distribution

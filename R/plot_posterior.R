@@ -5,7 +5,7 @@
 #' @inheritParams plot_forest
 #' @param ... arguments passed to \code{\link[graphics]{plot}}
 #'
-#' @seealso \link{meta_default}, \link{meta_bma}, \link{meta_fixed}, \link{meta_random}
+#' @seealso \link{meta_bma}, \link{meta_fixed}, \link{meta_random}
 #' @export
 plot_posterior <- function (meta, parameter = "d", from, to,
                             summary = c("mean", "hpd"), ...) {

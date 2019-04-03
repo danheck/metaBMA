@@ -1,22 +1,34 @@
-describe_prior <- function (prior){
+describe_prior <- function (prior, digits = 3){
 
   if (is.null(prior) || class(prior) != "prior")
     return (NULL)
 
+  family <- attr(prior, "family")
   param <- attr(prior, "param")
-  labels <- switch (attr(prior, "family"),
-
+  if (is.numeric(param))
+    param <- round(param, digits)
+  labels <- switch (family,
                     "norm" = paste0("mean=", param[1], ", sd=", param[2]),
-                    "t" = paste0("mu=", param[1], ", sigma=", param[2], ", nu=", param[3]),
+                    "t" = paste0("location=", param[1], ", scale=", param[2], ", nu=", param[3]),
                     "invgamma" =  paste0("shape=", param[1], ", scale=", param[2]),
                     "beta" =  paste0("shape1=", param[1], ", shape2=", param[2]),
                     "0" = paste0("H0: ", attr(prior, "label"), " = 0) "),
                     "custom" = paste0("user-specified function"),
                     stop ("Distribution not supported."))
-  trunc <- switch(attr(prior, "family"),
+
+  if (family == "custom"){
+    truncated <- TRUE
+  } else {
+    truncated <-
+      default_lower(family) != attr(prior, "lower") ||
+      default_upper(family) != attr(prior, "upper")
+  }
+  trunc <- switch(family,
                   "beta" = ") rescaled to the interval",
                   "0" = "",
-                  ") truncated to the interval")
+                  ifelse(truncated,
+                         ") truncated to the interval",
+                         ") with support on the interval"))
   paste0("'", attr(prior, "family"), "' (", labels, trunc, " [",
          attr(prior, "lower"), ",", attr(prior, "upper"), "].")
 }
@@ -38,7 +50,7 @@ rprior <- function (n, prior){
                "norm" = rtrunc(n, spec = "norm", lower, upper,
                                mean = param[1], sd = param[2]),
                "t" = rtrunc(n, "st", lower, upper,
-                            mu = param[1], sigma = param[2], nu = param[3]),
+                            location = param[1], scale = param[2], nu = param[3]),
                "invgamma" = rtrunc(n, "invgamma", lower, upper,
                                    shape = param[1], scale = param[2]),
                "beta" = lower + (upper - lower) * rbeta(n, param[1], param[2]),

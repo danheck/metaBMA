@@ -4,7 +4,8 @@ posterior <- function (meta, parameter = "d",
                        rel.tol = .Machine$double.eps^0.5){
 
   if (class(meta) == "meta_bma"){
-    if (parameter != "d") stop("bma currently. only working for parameter='d' ")
+    if (parameter != "d")
+      stop("bma currently. only working for parameter='d' ")
     # average across posterior densities:
     weights <- meta$posterior_models
     dpost_bma <- function (d)

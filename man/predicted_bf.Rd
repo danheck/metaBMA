@@ -7,8 +7,7 @@
 predicted_bf(meta, SE, sample = 100, ...)
 }
 \arguments{
-\item{meta}{model-averaged meta-analysis
-(fitted with \code{\link{meta_bma}} or \code{\link{meta_default}}).}
+\item{meta}{model-averaged meta-analysis (fitted with \code{\link{meta_bma}}).}
 
 \item{SE}{a scalar: the expected standard error of future study.
 For instance, SE = 1/sqrt(N) for standardized effect sizes and N = sample size)}

@@ -1,7 +1,7 @@
 prior_pars <- function(prior){
   par_labels <- switch(attr(prior, "family"),
                        "norm" = c("mean", "sd"),
-                       "t" = c("mu", "sigma", "nu"),
+                       "t" = c("location", "scale", "nu"),
                        "invgamma" = c("shape", "scale"),
                        "beta" = c("shape1", "shape2"),
                        "0" = vector("numeric", 0),
@@ -9,12 +9,13 @@ prior_pars <- function(prior){
   par_labels
 }
 
-check_prior <- function(prior, lower = -Inf){
+check_prior <- function(prior, lower = -Inf, upper = Inf){
   attr(prior, "family") <- match.arg(attr(prior, "family"), priors())
 
   stopifnot(class(prior) == "prior")
   stopifnot(attr(prior, "label") %in% c("d", "tau"))
   stopifnot(attr(prior, "lower") >= lower)  # nonnegative parameters (tau)
+  stopifnot(attr(prior, "upper") <= upper)  # nonnegative parameters (tau)
 
   if (attr(prior, "family") == "0"){
     attr(prior, "param") <- c(0,0)

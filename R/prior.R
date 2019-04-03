@@ -18,7 +18,7 @@
 #' \itemize{
 #' \item \code{"norm"}: Normal distribution with \code{param = c(mean, sd)}
 #'     (see \code{\link[stats]{Normal}}).
-#' \item \code{"t"}: Student t distribution with \code{param = c(mean, sigma, nu)}
+#' \item \code{"t"}: Student t distribution with \code{param = c(location, scale, nu)}
 #'     (see \code{\link[LaplacesDemon]{dist.Student.t}}).
 #'     Note that a Cauchy distribution is defined by setting the degrees of freedom \code{nu=1}.
 #' \item \code{"invgamma"}: Inverse gamma distribution with \code{param = c(shape, scale)}
@@ -42,7 +42,7 @@
 #' plot(p1, -.1, 1)
 #'
 #' ### Half-Cauchy Distribution
-#' p2 <- prior("t", c(mu = 0, sigma = .3, nu = 1), lower = 0)
+#' p2 <- prior("t", c(location = 0, scale = .3, nu = 1), lower = 0)
 #' plot(p2, -.5, 3)
 #'
 #' ### Custom Prior Distribution
@@ -64,9 +64,35 @@ prior <- function (family, param, lower, upper, label = "d",
   if (!is.character(family) || length(family) != 1)
     stop ("The prior must be defined by a character value. See ?metaBMA::prior")
 
-  family <- match.arg(family, c("norm", "t", "beta", "invgamma", "0", "custom"))
-  if (family == "0")
-    param <- vector("numeric", 0)
+  family <- match.arg(family, c("norm", "t", "beta", "invgamma", "0", "custom",
+                                "scaledt", "cauchy", "halfcauchy"))
+
+  # compatibility with old (non-Stan) metaBMA version
+  switch(family,
+         "scaledt" = {
+           family = "t"},
+         "cauchy" = {
+           stopifnot(length(param) == 1, param > 0)
+           family = "t"
+           param = c(location = 0, scale = param, nu = 1)},
+         "halfcauchy" = {
+           stopifnot(length(param) == 1, param > 0)
+           family = "t"
+           param = c(location = 0, scale = param, nu = 1)
+           lower = 0}  )
+
+  # family-specific constraints on "param"
+  switch(family,
+         "norm" = function(x, log = FALSE){
+           stopifnot(length(param) == 2, param[2] > 0)},
+         "t" = function(x, log = FALSE){
+           stopifnot(length(param) == 3, param[2] > 0, param[3] > 0,
+                     param[3] == round(param[3]))},
+         "invgamma" = function(x, log = FALSE){
+           stopifnot(length(param) == 2, all(param > 0))},
+         "beta" = function(x, log = FALSE){
+           stopifnot(length(param) == 2, all(param > 0))},
+         "0" = { param <- vector("numeric", 0)}  )
 
   # custom probability density: needs normalization
   if (family == "custom"){
@@ -95,14 +121,14 @@ prior <- function (family, param, lower, upper, label = "d",
       lower <- default_lower(family)
       upper <- default_upper(family)
       dprior <- switch(family,
-                       "norm" = function(x, log = FALSE)
-                         dnorm(x, mean = param[1], sd = param[2], log = log),
-                       "t" = function(x, log = FALSE)
-                         dst(x, mu = param[1], sigma = param[2], nu = param[3], log = log),
-                       "invgamma" = function(x, log = FALSE)
-                         dinvgamma(x, shape = param[1], scale = param[2], log = log),
-                       "beta" = function(x, log = FALSE)
-                         dbeta(x, shape1 = param[1], shape2 = param[2], log = log),
+                       "norm" = function(x, log = FALSE){
+                         dnorm(x, mean = param[1], sd = param[2], log = log)},
+                       "t" = function(x, log = FALSE){
+                         dst(x, mu = param[1], sigma = param[2], nu = param[3], log = log)},
+                       "invgamma" = function(x, log = FALSE){
+                         dinvgamma(x, shape = param[1], scale = param[2], log = log)},
+                       "beta" = function(x, log = FALSE){
+                         dbeta(x, shape1 = param[1], shape2 = param[2], log = log)},
                        "0" = function(x){
                          dx <- ifelse(x == 0, 1, 0)
                          ifelse(log, log(dx), dx)
@@ -140,7 +166,7 @@ prior <- function (family, param, lower, upper, label = "d",
   attr(dprior, "lower") <- lower
   attr(dprior, "upper") <- upper
   attr(dprior, "label") <- label
-  check_prior(dprior, attr(dprior, "lower"))
+  check_prior(dprior, lower = attr(dprior, "lower"))
 }
 
 # list of available priors:

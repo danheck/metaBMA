@@ -1,3 +1,10 @@
+metaBMA 0.6.0
+===========
+
+* Remove meta_default() and plot_default()
+* new function meta_ordered() for order-constrained study-effects in random-effects meta-analysis
+
+
 metaBMA 0.5.0
 ===========
 

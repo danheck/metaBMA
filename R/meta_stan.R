@@ -10,7 +10,7 @@
 #' @importFrom utils capture.output
 meta_stan <- function (data_list,
                        d = prior("norm", c(mean = 0, sd = .3), lower = 0),
-                       tau  = prior("t", c(mu = 0, sigma = .5, nu = 1), lower = 0),
+                       tau  = prior("t", c(location = 0, scale = .5, nu = 1), lower = 0),
                        jzs = list(rscale_contin = 1/2,
                                   rscale_discrete = sqrt(2)/2,
                                   centering = TRUE),
@@ -25,8 +25,23 @@ meta_stan <- function (data_list,
     data_list$model <- paste0(data_list$model, "_H0")  # not possible: JZS + H0
 
   data_list <- add_jzs(data_list, jzs)
+  if (grepl("jzs", data_list$model))
+    stop("Moderators are not supported if truncated=TRUE")
 
-  sampling(stanmodels[[data_list$model]], data = data_list, ...)
+  # default settings for stan
+  dots <- list(...)
+  if (is.null(dots$iter)) dots$iter <- 2000
+  if (is.null(dots$warmup)) dots$warmup <- min(dots$iter/2, 500)
+  if (is.null(dots$control)) dots$control <- list("adapt_delta" = .95,
+                                                  "max_treedepth" = 20)
+  if (is.null(dots$init))
+    dots$init = function() ml_estimates(data_list$y, data_list$SE,
+                                        model = data_list$model,
+                                        normal_noise = .05)
+
+  args <- c(list("object" = stanmodels[[data_list$model]],
+                 "data" = data_list), dots)
+  do.call("sampling", args)
 }
 
 prior_as_list <- function (prior){
@@ -35,8 +50,9 @@ prior_as_list <- function (prior){
   param <- attr(prior, "param")
 
   family_idx <- match(attr(prior, "family"), priors_stan())
-  data_list <- list(family = as.integer(family_idx),
-             param = param, bnd = bounds_prior(prior))
+  data_list <- list("family" = as.integer(family_idx),
+                    "param" = param,
+                    "bnd" = bounds_prior(prior))
   if (attr(prior, "family") == "0")
     data_list$bnd[2] <- 1
   if (length(param) < 3)
@@ -44,6 +60,7 @@ prior_as_list <- function (prior){
   names(data_list) <- paste0(par, "_", names(data_list))
   data_list
 }
+
 
 # translate formula into data objects
 add_jzs <- function (data_list, jzs){
@@ -100,6 +117,7 @@ add_jzs <- function (data_list, jzs){
   c(data_list, list(B = B, P = P, X = X, L = L, b_idx = b_idx, rscale = rscale))
 }
 
+
 # construct design matrix with fixed-effects contrasts (Rouder & Morey, 2012)
 #
 # mf: a model.frame/data.frame/list
@@ -121,6 +139,7 @@ design_matrix <- function(model.frame, discr){
   # drop intercept:
   X[,attr(X, "assign") != 0, drop = FALSE]
 }
+
 
 # cholesky decomposition (stan needs lower triangular): V = L %*% t(L)
 chol_inv_cov <- function(X){
