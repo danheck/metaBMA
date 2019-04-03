@@ -81,8 +81,8 @@ meta_random <- function(y, SE, labels, data,
   }
   meta <- meta_bridge_sampling(meta, logml, ...)
 
-  meta$posterior_d <- posterior(meta, "d", rel.tol = rel.tol)
-  meta$posterior_tau <- posterior(meta, "tau", rel.tol = rel.tol)
+  meta$posterior_d <- posterior(meta, "d", summarize, rel.tol = rel.tol)
+  meta$posterior_tau <- posterior(meta, "tau", summarize, rel.tol = rel.tol)
 
   meta$estimates <- summary_meta(meta, summarize)
   meta$BF <- c("d_10" = meta$prior_d(0) / meta$posterior_d(0),

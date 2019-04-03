@@ -13,8 +13,8 @@ check_posterior <- function (dpost, meta, parameter = "d",
     warning ("Posterior distribution could not be approximated numerically\n",
              "  (posterior density integrates to: ", dp_const, ")\n",
              "  A logspline density approximation to the MCMC/Stan samples is used instead.")
-    dpost2 <- stan_logspline(meta$stanfit, parameter,
-                             prior = meta[[paste0("prior_", parameter)]])
+    dpost2 <- posterior_logspline(meta$stanfit, parameter,
+                                  prior = meta[[paste0("prior_", parameter)]])
   }
 
   if (bnd[1] < bnd[2])
@@ -32,24 +32,4 @@ check_posterior <- function (dpost, meta, parameter = "d",
   dpost2
 }
 
-stan_logspline <- function (stanfit, parameter, prior){
-  if (missing(stanfit) || is.null(stanfit))
-    warning ("MCMC/Stan samples missing: To approximate the posterior density",
-             "\n  by MCMC samples, one of the available priors must be used (see ?prior)",
-             "\n and the argument 'sample' must be larger than zero!")
-  if (class(stanfit) == "stanfit")
-    ss <- extract(stanfit, parameter)[[parameter]]
-  else
-    ss <- stanfit  # samples
-  if (!is.null(ss)){
-    bnd <- bounds_prior(prior)
-    mini <- max(-3, bnd[1])
-    maxi <- min(3, bnd[2])
-    lspline <- logspline(ss, min(ss, mini), max(ss, maxi))
-    dens <- function(x) dlogspline(x, lspline)
-    # if (log) dx <- log(dx)
-  } else {
-    stop("parameter '", parameter, "' not included in stanfit object.")
-  }
-  dens
-}
+

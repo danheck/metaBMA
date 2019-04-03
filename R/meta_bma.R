@@ -107,7 +107,8 @@ meta_bma <- function (y, SE, labels, data,
   # inclusion bayes factors etc.
   logml_fixed_H0 <- fixed_H1$logml - log(fixed_H1$BF["d_10"])
   logml_random_H0 <- random_H1$logml - log(random_H1$BF["d_10"])
-  meta_bma$logml <- c("fixed_H0" = matrix(logml_fixed_H0), # CHECK loglik_fixed_H0(fixed_H1$data),
+  meta_bma$logml <- c("fixed_H0" = matrix(logml_fixed_H0),
+                                       # CHECK loglik_fixed_H0(fixed_H1$data),
                       "fixed_H1" = fixed_H1$logml,
                       "random_H0" = matrix(logml_random_H0),
                       "random_H1" = random_H1$logml)

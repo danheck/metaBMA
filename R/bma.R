@@ -50,21 +50,22 @@ bma <- function (meta, prior = 1, parameter = "d", summarize = "integrate", ci =
   # BMA: weighted posterior of effects
   summarize <- match.arg(summarize, c("stan", "integrate"))
   ests <- do.call("rbind", lapply(meta, function(x) x$estimates[parameter,]))
+
+  res_bma[[paste0("posterior_", parameter)]] <-
+    posterior(res_bma, parameter, rel.tol = rel.tol)
   if (summarize == "integrate"){
-    res_bma[[paste0("posterior_", parameter)]] <-
-      posterior(res_bma, parameter, rel.tol = rel.tol)
     res_bma$estimates <- rbind("Averaged" = summary_integrate(res_bma$posterior_d,
                                                               ci = ci, rel.tol = rel.tol),
                                ests)
   } else if (summarize == "stan"){
-    samples <- lapply(meta, function(m) extract(m$stanfit, parameter)[[1]])
+    samples <- lapply(meta, function(m) extract(m$stanfit, parameter)[[parameter]])
     maxiter <- max(sapply(samples, length))
     nn <- round(maxiter * incl$posterior)
     avg_samples <- unlist(mapply(sample, x = samples, size = nn,
                                  MoreArgs = list(replace = TRUE)))
     res_bma$estimates <- rbind("Averaged" = summary_samples(avg_samples), ests)
-    res_bma[[paste0("posterior_", parameter)]] <-
-      stan_logspline(avg_samples, parameter, meta[[1]][[paste0("prior_", parameter)]])
+    # res_bma[[paste0("posterior_", parameter)]] <-
+    #   posterior_logspline(avg_samples, parameter, meta[[1]][[paste0("prior_", parameter)]])
   }
 
   res_bma$BF <- outer(exp(res_bma$logml), exp(res_bma$logml), "/")

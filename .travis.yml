@@ -9,7 +9,21 @@ r_build_args: '--no-build-vignettes'
 r_packages:
   - remotes
   - knitr
+  - rmarkdown
   - testthat
+  - mvtnorm
+  - logspline
+  - coda
+  - LaplacesDemon
+  - rstan
+  - rstantools
+  - bridgesampling
+  - BH
+  - Rcpp
+  - RcppEigen
+  - rstan
+  - StanHeaders
+  - ggplot2
 
 env:
   global:
