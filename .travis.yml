@@ -15,6 +15,7 @@ r_packages:
   - testthat
 
 install:
+  - R -e 'install.packages("remotes")'
   - R -e 'remotes::install_version("roxygen2", "6.1.0")'
 
 env:
