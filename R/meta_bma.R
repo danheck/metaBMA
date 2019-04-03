@@ -71,7 +71,7 @@
 #' set.seed(123)
 #' mb <- meta_bma(logOR, SE, study, towels,
 #'                d = prior("norm", c(mean=0, sd=.3), lower=0),
-#'                tau = prior("t", c(location=0, scale=.5, nu=1), lower=0),
+#'                tau = prior("invgamma", c(shape = 1, scale = 0.15)),
 #'                rel.tol = .Machine$double.eps^.15)  # speed!
 #' mb
 #' plot_posterior(mb, "d")
@@ -80,7 +80,7 @@
 #' @export
 meta_bma <- function (y, SE, labels, data,
                       d = prior("norm", c(mean = 0, sd = .3), lower = 0),
-                      tau  = prior("t", c(location = 0, scale = .5, nu = 1), lower = 0),
+                      tau  = prior("invgamma", c(shape = 1, scale = 0.15)),
                       rscale_contin = 1/2, rscale_discrete = sqrt(2)/2,
                       centering = TRUE, prior = c(1,1,1,1),
                       logml = "integrate", summarize = "stan", ci = .95,

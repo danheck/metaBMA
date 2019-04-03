@@ -28,7 +28,7 @@
 #' @export
 meta_random <- function(y, SE, labels, data,
                         d = prior("norm", c(mean=0, sd=.3), lower=0),
-                        tau  = prior("t", c(location=0, scale=.5, nu=1), lower=0),
+                        tau  = prior("invgamma", c(shape = 1, scale = 0.15)),
                         rscale_contin = 1/2, rscale_discrete = sqrt(2)/2, centering = TRUE,
                         logml = "integrate", summarize = "stan", ci = .95,
                         rel.tol = .Machine$double.eps^.3,

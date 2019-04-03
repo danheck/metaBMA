@@ -5,11 +5,11 @@
 \title{Model Averaging for Meta-Analysis}
 \usage{
 meta_bma(y, SE, labels, data, d = prior("norm", c(mean = 0, sd = 0.3),
-  lower = 0), tau = prior("t", c(location = 0, scale = 0.5, nu = 1),
-  lower = 0), rscale_contin = 1/2, rscale_discrete = sqrt(2)/2,
-  centering = TRUE, prior = c(1, 1, 1, 1), logml = "integrate",
-  summarize = "stan", ci = 0.95, rel.tol = .Machine$double.eps^0.3,
-  logml_iter = 5000, ...)
+  lower = 0), tau = prior("invgamma", c(shape = 1, scale = 0.15)),
+  rscale_contin = 1/2, rscale_discrete = sqrt(2)/2, centering = TRUE,
+  prior = c(1, 1, 1, 1), logml = "integrate", summarize = "stan",
+  ci = 0.95, rel.tol = .Machine$double.eps^0.3, logml_iter = 5000,
+  ...)
 }
 \arguments{
 \item{y}{effect size per study. Can be provided as (1) a numeric vector, (2)
@@ -98,7 +98,7 @@ data(towels)
 set.seed(123)
 mb <- meta_bma(logOR, SE, study, towels,
                d = prior("norm", c(mean=0, sd=.3), lower=0),
-               tau = prior("t", c(location=0, scale=.5, nu=1), lower=0),
+               tau = prior("invgamma", c(shape = 1, scale = 0.15)),
                rel.tol = .Machine$double.eps^.15)  # speed!
 mb
 plot_posterior(mb, "d")

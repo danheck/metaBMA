@@ -7,13 +7,18 @@ latex: true
 r_check_args: '--ignore-vignettes'
 r_build_args: '--no-build-vignettes'
 
-
 install:
+  - R -e 'install.packages("remotes")'
   - R -e 'remotes::install_version("roxygen2", "6.1.0")'
 
 env:
   global:
     - MAKEFLAGS="-j 2"
+
+r:
+ - 3.5
+ - devel
+
 
 matrix:
   include:
