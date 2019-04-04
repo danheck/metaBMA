@@ -1,9 +1,10 @@
+library(metaBMA)
+library(testthat)
+library(rstan)
 
 test_that("extreme priors/misspecified models provide correct results with integrate/JAGS/stan", {
   data(towels)
-  eval(towels)
   set.seed(12345)
-  library("rstan")
 
   # check different ways of defining priors
   expect_silent(meta_fixed(logOR, SE, study, towels,
@@ -22,7 +23,6 @@ test_that("extreme priors/misspecified models provide correct results with integ
   expect_silent(mr_int <- meta_random(logOR, SE, study, towels, d = d, summ = "int"))
   expect_equal(mr_stan$estimates, mr_int$estimates, tolerance = .03)
 })
-
 
 
 test_that("extreme priors/misspecified models still provide correct results", {

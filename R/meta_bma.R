@@ -49,6 +49,7 @@
 #'   for computing the marginal likelihood for the random-effects model with bridge sampling.
 #'   Note that the argument \code{iter=2000} controls the number of iterations
 #'   for parameter estimation of the random effects.
+#' @param silent_stan whether to suppress the Stan progress bar.
 #' @param ... further arguments passed to \code{rstan::sampling} (see
 #'   \code{\link[rstan]{stanmodel-method-sampling}}). For instance:
 #'   \code{warmup=500}, \code{chains=4}, \code{control=list(adapt_delta=.95)}).

@@ -1,5 +1,5 @@
-library("testthat")
-library("metaBMA")
+library(metaBMA)
+library(testthat)
 
 set.seed(123452)
 SE <- runif(10, .3,1.3)

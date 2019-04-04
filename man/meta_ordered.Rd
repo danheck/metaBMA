@@ -53,6 +53,8 @@ based on MCMC/Stan samples (\code{summarize = "stan"}).}
 \code{\link[stats]{integrate}}. Use \code{rel.tol=.Machine$double.eps} for
 maximal precision (however, this might be slow).}
 
+\item{silent_stan}{whether to suppress the Stan progress bar.}
+
 \item{...}{further arguments passed to \code{rstan::sampling} (see
 \code{\link[rstan]{stanmodel-method-sampling}}). For instance:
 \code{warmup=500}, \code{chains=4}, \code{control=list(adapt_delta=.95)}).}
@@ -67,7 +69,7 @@ encompassing Bayes factor.
 }
 \examples{
 data(towels)
-debug(meta_ordered)
+# debug(meta_ordered)
 mo <- meta_ordered(logOR, SE, study, towels,
                    d = prior("norm", c(mean=0, sd=.3), lower=0),
                    tau = prior("invgamma", c(shape = 1, scale = 0.15)))

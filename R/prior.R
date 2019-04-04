@@ -204,7 +204,12 @@ dtrunc <- function (x, family, lower = -Inf, upper = Inf, log = FALSE, ...){
 }
 
 rtrunc <- function (n, family, lower = -Inf, upper = Inf, ...){
-  stopifnot(lower < upper, lower != -Inf || upper != Inf)
+  stopifnot(lower < upper)
+
+  if (lower == -Inf && upper == Inf){
+    rng <- get(paste0("r", family), mode = "function")
+    return(rng(n, ...))
+  }
 
   cdf <- get(paste0("p", family), mode = "function")
   qdf <- get(paste0("q", family), mode = "function")

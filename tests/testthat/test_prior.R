@@ -1,9 +1,11 @@
-library("testthat")
-library("metaBMA")
+library(metaBMA)
+library(testthat)
 
 priors <- c("norm", "t", "invgamma", "beta")
-params <- list(c(0,.3), c(0,.3,1), c(1,1), c(1,2))
-
+params <- list("norm" = c(mean = 0, sd = .3),
+               "t" = c(location = 0, scale = .3, nu = 1),
+               "invgamma" = c(shape = 1, scale = 1),
+               "beta" = c(1, 2))
 
 test_that('prior returns vectorized function', {
 

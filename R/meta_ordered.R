@@ -14,7 +14,7 @@
 #'
 #' @examples
 #' data(towels)
-#' debug(meta_ordered)
+#' # debug(meta_ordered)
 #' mo <- meta_ordered(logOR, SE, study, towels,
 #'                    d = prior("norm", c(mean=0, sd=.3), lower=0),
 #'                    tau = prior("invgamma", c(shape = 1, scale = 0.15)))
@@ -59,7 +59,6 @@ meta_ordered <- function (y, SE, labels, data,
   p_pos <- exp(N * pnorm(0, mcmc_prior$d, mcmc_prior$tau,
                          lower.tail = direction == "negative", log.p = TRUE))
   p_prior <- mean(p_pos)
-  p_prior
   bf_ordered1 <- (cnt_post$cnt / cnt_post$M) / p_prior
 
   # check_prior <- rep(NA, args$iter)
@@ -89,7 +88,8 @@ meta_ordered <- function (y, SE, labels, data,
   }
   # bf_ordered0 <- bf_ordered1 * meta_ordered$BF$
   meta_ordered$meta[[direction]]$BF <- c("ordered_vs_random" = bf_ordered1,
-                                         "ordered_vs_null" = NA)
+                                         "ordered_vs_null" = NA,
+                                         "fixed_vs_H0" = meta_ordered$BF$d_10_fixed)
   # bf_ordered0 = exp(logml_ordered - logml_0)
   # meta_ordered$meta[[direction]]$logml <- log(bf_ordered0) + meta$
   meta_ordered$meta[[direction]]$logml  <- NA
@@ -102,14 +102,11 @@ meta_ordered <- function (y, SE, labels, data,
     names(meta_ordered$posterior_models) <-
     c("null", "fixed", modelname, "random")
   meta_ordered$estimates <- rbind(meta_ordered$estimates["fixed",,drop=FALSE],
-                                  summary_ordered[direction,,drop=FALSE],
+                                  summary_ordered["d",,drop=FALSE],
                                   meta_ordered$estimates["random",,drop=FALSE])
+  rownames(meta_ordered$estimates)[2] <- direction
 
   meta_ordered$posterior_d <- function(x) rep(-1, length(x))
-
-  meta_ordered$BF <- list("fixed_vs_H0" = meta_ordered$BF$d_10_fixed,
-                          "ordered_vs_random" = bf_ordered1)
-
 
   # TODO
   meta_ordered$posterior_models
