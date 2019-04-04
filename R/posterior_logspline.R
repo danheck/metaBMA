@@ -1,12 +1,16 @@
 
 posterior_logspline <- function(stanfit, parameter, prior){
 
-  if (missing(stanfit) || is.null(stanfit) || class(stanfit) != "stanfit")
+  if (missing(stanfit) || is.null(stanfit))
     warning ("MCMC/Stan samples missing: To approximate the posterior density",
              "\n  by MCMC samples, one of the available priors must be used (see ?prior)",
              "\n and the argument 'sample' must be larger than zero!")
 
-  ss <- extract(stanfit, parameter)[[parameter]]
+  if (class(stanfit) == "stanfit"){
+    ss <- extract(stanfit, parameter)[[parameter]]
+  } else {
+    ss <- stanfit
+  }
 
   bnd <- bounds_prior(prior)
   mini <- max(-Inf, bnd[1])

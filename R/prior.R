@@ -65,7 +65,7 @@ prior <- function (family, param, lower, upper, label = "d",
     stop ("The prior must be defined by a character value. See ?metaBMA::prior")
 
   family <- match.arg(family, c("norm", "t", "beta", "invgamma", "0", "custom",
-                                "scaledt", "cauchy", "halfcauchy"))
+                                "scaledt", "cauchy", "halfcauchy", "halfnorm"))
 
   # compatibility with old (non-Stan) metaBMA version
   switch(family,
@@ -79,7 +79,12 @@ prior <- function (family, param, lower, upper, label = "d",
            stopifnot(length(param) == 1, param > 0)
            family = "t"
            param = c(location = 0, scale = param, nu = 1)
-           lower = 0}  )
+           lower = 0},
+         "halfnorm" = {
+           stopifnot(length(param) == 1, param > 0)
+           family = "norm"
+           param = c(mean = 0, sd = param)
+           lower = 0}   )
 
   # family-specific constraints on "param"
   switch(family,
@@ -194,7 +199,7 @@ dtrunc <- function (x, family, lower = -Inf, upper = Inf, log = FALSE, ...){
 
 #' @importFrom stats pgamma dgamma
 pinvgamma <- function(q, shape = 1, scale = 1, lower.tail = TRUE, log.p = FALSE){
-  p <- rep(0, length(q))
+  # p <- rep(0, length(q))
   # wikipedia:
   # pinvgamma = upper_inv_gamma(shape, scale/x) / gamma(shape)
   # and:

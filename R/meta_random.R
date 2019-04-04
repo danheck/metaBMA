@@ -20,8 +20,8 @@
 #' data(towels)
 #' mr <- meta_random(logOR, SE, study, data = towels,
 #'                   d = prior("norm", c(mean=0, sd=.3)),
-#'                   tau = prior("t", c(location=0, scale=.5, nu=1), lower=0),
-#'                   rel.tol = .Machine$double.eps^.2)  # speed!
+#'                   tau = prior("invgamma", c(shape = 1, scale = 0.15)),
+#'                   rel.tol = .Machine$double.eps^.15)  # speed!
 #'                   # (no summary: only for CRAN checks)
 #' mr
 #' plot_posterior(mr)

@@ -8,11 +8,13 @@ bma(meta, prior = 1, parameter = "d", summarize = "integrate",
   ci = 0.95, rel.tol = .Machine$double.eps^0.5)
 }
 \arguments{
-\item{meta}{list of meta-analysis models (fitted via \code{\link{meta_random}} or \code{\link{meta_fixed}})}
+\item{meta}{list of meta-analysis models (fitted via
+\code{\link{meta_random}} or \code{\link{meta_fixed}})}
 
 \item{prior}{prior probabilities over models (possibly unnormalized). For instance, if the first model is as likely as models 2, 3 and 4 together: \code{prior = c(3,1,1,1)}. The default is a discrete uniform distribution over models.}
 
-\item{parameter}{eiher the mean effect \code{"d"} or the heterogeneity across studies \code{"tau"}}
+\item{parameter}{eiher the mean effect \code{"d"} or the heterogeneity across
+studies \code{"tau"}}
 
 \item{summarize}{how to estimate parameter summaries (mean, median, SD,
 etc.): Either by numerical integration (\code{summarize = "integrate"}) or
@@ -25,9 +27,11 @@ based on MCMC/Stan samples (\code{summarize = "stan"}).}
 maximal precision (however, this might be slow).}
 }
 \description{
-Model averaging of meta-analysis models according to their posterior model probability.
+Model averaging for different meta-analysis models (e.g., random-effects,
+fixed-effects, or different priors) based on the posterior model probability.
 }
 \examples{
+# model averaging for different priors on overall effect size d
 data(towels)
 fix1 <- meta_fixed(logOR, SE, study, towels,
                    d = prior("norm", c(mean=0, sd=.2), lower=0))

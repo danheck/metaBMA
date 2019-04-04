@@ -64,7 +64,7 @@
 #' heterogeneity parameter \eqn{tau}.
 #'
 #' @examples
-#' # Note: The following code optimizes speed (for CRAN checks).
+#' # Note: The following example optimizes speed (for CRAN checks).
 #' #       The settings are not suitable for actual data analysis!
 #'
 #' data(towels)
@@ -78,14 +78,14 @@
 #' @seealso \link{meta_fixed}, \link{meta_random}
 #' @template ref_gronau2017
 #' @export
-meta_bma <- function (y, SE, labels, data,
-                      d = prior("norm", c(mean = 0, sd = .3), lower = 0),
-                      tau  = prior("invgamma", c(shape = 1, scale = 0.15)),
-                      rscale_contin = 1/2, rscale_discrete = sqrt(2)/2,
-                      centering = TRUE, prior = c(1,1,1,1),
-                      logml = "integrate", summarize = "stan", ci = .95,
-                      rel.tol = .Machine$double.eps^.3,
-                      logml_iter = 5000, ...){
+meta_bma <- function(y, SE, labels, data,
+                     d = prior("norm", c(mean = 0, sd = .3), lower = 0),
+                     tau  = prior("invgamma", c(shape = 1, scale = 0.15)),
+                     rscale_contin = 1/2, rscale_discrete = sqrt(2)/2,
+                     centering = TRUE, prior = c(1,1,1,1),
+                     logml = "integrate", summarize = "stan", ci = .95,
+                     rel.tol = .Machine$double.eps^.3,
+                     logml_iter = 5000, ...){
 
   dl <- data_list(model = "random", y = y, SE = SE, labels = labels, data = data,
                   args = as.list(match.call()))

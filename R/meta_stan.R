@@ -14,6 +14,7 @@ meta_stan <- function (data_list,
                        jzs = list(rscale_contin = 1/2,
                                   rscale_discrete = sqrt(2)/2,
                                   centering = TRUE),
+                       ml_init = TRUE,
                        ...){
 
   data_list <- c(data_list, prior_as_list(d))
@@ -34,13 +35,16 @@ meta_stan <- function (data_list,
   if (is.null(dots$warmup)) dots$warmup <- min(dots$iter/2, 500)
   if (is.null(dots$control)) dots$control <- list("adapt_delta" = .95,
                                                   "max_treedepth" = 20)
-  if (is.null(dots$init))
+  if (ml_init && is.null(dots$init))
     dots$init = function() ml_estimates(data_list$y, data_list$SE,
                                         model = data_list$model,
+                                        d = d, tau = tau,
                                         normal_noise = .05)
 
   args <- c(list("object" = stanmodels[[data_list$model]],
                  "data" = data_list), dots)
+  args$data$data <- args$data$model <- args$data$labels <- NULL
+  args
   do.call("sampling", args)
 }
 

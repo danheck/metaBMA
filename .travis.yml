@@ -23,7 +23,6 @@ r_packages:
   - RcppEigen
   - rstan
   - StanHeaders
-  - ggplot2
 
 env:
   global:

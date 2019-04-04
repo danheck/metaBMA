@@ -91,7 +91,7 @@ the posterior distributions of the average effect size \eqn{d} and the
 heterogeneity parameter \eqn{tau}.
 }
 \examples{
-# Note: The following code optimizes speed (for CRAN checks).
+# Note: The following example optimizes speed (for CRAN checks).
 #       The settings are not suitable for actual data analysis!
 
 data(towels)

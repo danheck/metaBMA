@@ -1,13 +1,17 @@
 #' Bayesian Model Averaging
 #'
-#' Model averaging of meta-analysis models according to their posterior model probability.
+#' Model averaging for different meta-analysis models (e.g., random-effects,
+#' fixed-effects, or different priors) based on the posterior model probability.
 #'
-#' @param meta list of meta-analysis models (fitted via \code{\link{meta_random}} or \code{\link{meta_fixed}})
+#' @param meta list of meta-analysis models (fitted via
+#'   \code{\link{meta_random}} or \code{\link{meta_fixed}})
 #' @inheritParams inclusion
 #' @inheritParams meta_bma
-#' @param parameter eiher the mean effect \code{"d"} or the heterogeneity across studies \code{"tau"}
+#' @param parameter eiher the mean effect \code{"d"} or the heterogeneity across
+#'   studies \code{"tau"}
 #'
 #' @examples
+#' # model averaging for different priors on overall effect size d
 #' data(towels)
 #' fix1 <- meta_fixed(logOR, SE, study, towels,
 #'                    d = prior("norm", c(mean=0, sd=.2), lower=0))
@@ -22,8 +26,8 @@
 #' plot_posterior(averaged)
 #' plot_forest(averaged, mar = c(4.5,20,4,.3))
 #' @export
-bma <- function (meta, prior = 1, parameter = "d", summarize = "integrate", ci = .95,
-                 rel.tol = .Machine$double.eps^0.5){
+bma <- function(meta, prior = 1, parameter = "d", summarize = "integrate", ci = .95,
+                rel.tol = .Machine$double.eps^0.5){
 
   classes <- sapply(meta, class) %in% c("meta_fixed", "meta_random")
   if (!is.list(meta) || !all(classes))
@@ -48,11 +52,14 @@ bma <- function (meta, prior = 1, parameter = "d", summarize = "integrate", ci =
   class(res_bma) <- "meta_bma"
 
   # BMA: weighted posterior of effects
-  summarize <- match.arg(summarize, c("stan", "integrate"))
   ests <- do.call("rbind", lapply(meta, function(x) x$estimates[parameter,]))
 
+  # obtain density function (weighted average of densities)
   res_bma[[paste0("posterior_", parameter)]] <-
     posterior(res_bma, parameter, rel.tol = rel.tol)
+
+  # get posterior summary statistics
+  summarize <- match.arg(summarize, c("stan", "integrate"))
   if (summarize == "integrate"){
     res_bma$estimates <- rbind("Averaged" = summary_integrate(res_bma$posterior_d,
                                                               ci = ci, rel.tol = rel.tol),
