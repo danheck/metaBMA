@@ -20,7 +20,7 @@ meta_fixed <- function(y, SE, labels, data,
                        rscale_contin = 1/2, rscale_discrete = sqrt(2)/2,
                        centering = TRUE,
                        logml = "integrate", summarize = "integrate", ci = .95,
-                       rel.tol = .Machine$double.eps^.3, ...){
+                       rel.tol = .Machine$double.eps^.3, silent_stan = TRUE, ...){
 
   logml <- match.arg(logml, c("integrate", "stan"))
   data_list <- data_list("fixed", y = y, SE = SE, labels = labels, data = data,
@@ -39,7 +39,7 @@ meta_fixed <- function(y, SE, labels, data,
   class(meta) <- "meta_fixed"
 
   if (attr(d, "family") %in% priors_stan() && attr(d, "family") != "0")
-    meta$stanfit <- meta_stan(data_list, d = d, jzs=meta$jzs, ...)
+    meta$stanfit <- meta_stan(data_list, d = d, jzs=meta$jzs, silent_stan = silent_stan, ...)
 
   if (logml == "integrate" ||
       attr(d, "family") == "0" ||

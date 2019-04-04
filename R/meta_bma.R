@@ -85,7 +85,7 @@ meta_bma <- function(y, SE, labels, data,
                      centering = TRUE, prior = c(1,1,1,1),
                      logml = "integrate", summarize = "stan", ci = .95,
                      rel.tol = .Machine$double.eps^.3,
-                     logml_iter = 5000, ...){
+                     logml_iter = 5000, silent_stan = TRUE, ...){
 
   dl <- data_list(model = "random", y = y, SE = SE, labels = labels, data = data,
                   args = as.list(match.call()))
@@ -93,11 +93,12 @@ meta_bma <- function(y, SE, labels, data,
   # fit meta-analysis models
   cat(format(Sys.time()), "--- Fit fixed-effects meta-analysis\n")
   fixed_H1 <- meta_fixed(y, SE, labels, data = dl, d = d, logml = logml,
-                         summarize = summarize, ci = ci, rel.tol = rel.tol, ...)
+                         summarize = summarize, ci = ci, rel.tol = rel.tol,
+                         silent_stan = silent_stan, ...)
   cat(format(Sys.time()), "--- Fit random-effects meta-analysis\n")
   random_H1 <- meta_random(y, SE, labels, data = dl, d = d, tau = tau, logml = logml,
                            summarize = summarize, ci = ci, rel.tol = rel.tol,
-                           logml_iter = logml_iter, ...)
+                           silent_stan = silent_stan, logml_iter = logml_iter, ...)
 
   # model averaging for:  d | H1
   meta <- list("fixed" = fixed_H1, "random" = random_H1)

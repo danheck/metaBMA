@@ -17,7 +17,7 @@ src-x64/*
 src/metaBMA.so
 src/metaBMA.dll
 src/init.o
-man/*.Rd
+
 vignettes/*.R
 !vignettes/*.Rmd
 vignettes/*.html

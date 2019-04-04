@@ -15,6 +15,7 @@ meta_stan <- function (data_list,
                                   rscale_discrete = sqrt(2)/2,
                                   centering = TRUE),
                        ml_init = TRUE,
+                       silent_stan = TRUE,
                        ...){
 
   data_list <- c(data_list, prior_as_list(d))
@@ -31,7 +32,7 @@ meta_stan <- function (data_list,
 
   # default settings for stan
   dots <- list(...)
-  if (is.null(dots$iter)) dots$iter <- 2000
+  if (is.null(dots$iter)) dots$iter <- 3000
   if (is.null(dots$warmup)) dots$warmup <- min(dots$iter/2, 500)
   if (is.null(dots$control)) dots$control <- list("adapt_delta" = .95,
                                                   "max_treedepth" = 20)
@@ -43,10 +44,17 @@ meta_stan <- function (data_list,
 
   args <- c(list("object" = stanmodels[[data_list$model]],
                  "data" = data_list), dots)
-  args$data$data <- args$data$model <- args$data$labels <- NULL
-  args
-  do.call("sampling", args)
+  args$data$data <- args$data$model <- args$data$labels <-
+    args$data$model.frame <- NULL
+
+  if (silent_stan)
+    capture.output(fit <- do.call("sampling", args))
+  else
+    fit <- do.call("sampling", args)
+
+  fit
 }
+
 
 prior_as_list <- function (prior){
   par <- attr(prior, "label")

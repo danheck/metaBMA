@@ -17,7 +17,7 @@ posterior_logspline <- function(stanfit, parameter, prior){
   maxi <- min(Inf, bnd[2])
 
   args <- list("x" = ss,
-               "knots" = quantile(ss, probs = seq(.2,.7,.15)),
+               "knots" = quantile(ss, probs = c(.20,.50, .80)),
                "maxknots" = 5)
   if (mini != -Inf) args$lbound <- mini
   if (maxi != Inf) args$ubound <- maxi

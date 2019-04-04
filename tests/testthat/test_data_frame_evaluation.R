@@ -7,17 +7,17 @@ d <- data.frame(yyy = rnorm(10), SE = SE, study = 1:10,
 test_that("meta_fixed supports data as vector/variable names", {
 
   # vectors:
-  fit1 <- meta_fixed(d$yyy, d$SE, d$study, control=list(adapt_delta=.9))
-  fit2 <- meta_fixed(d[["yyy"]], d[["SE"]], d[["study"]], control=list(adapt_delta=.9))
-  fit3 <- meta_fixed(d$yyy, d$SE, d$study, control=list(adapt_delta=.9))
+  fit1 <- meta_fixed(d$yyy, d$SE, d$study)
+  fit2 <- meta_fixed(d[["yyy"]], d[["SE"]], d[["study"]])
+  fit3 <- meta_fixed(d$yyy, d$SE, d$study)
   expect_identical(fit1$logml, fit2$logml)
   expect_identical(fit1$logml, fit3$logml)
   expect_identical(fit1$estimates, fit3$estimates)
 
   # (un)quoted variable names
-  fit4 <- meta_fixed("yyy", "SE", "study", d, control=list(adapt_delta=.9))
-  fit5 <- meta_fixed("yyy", SE, study, d, control=list(adapt_delta=.9))
-  fit6 <- meta_fixed(yyy, SE, study, d, control=list(adapt_delta=.9))
+  fit4 <- meta_fixed("yyy", "SE", "study", d)
+  fit5 <- meta_fixed("yyy", SE, study, d)
+  fit6 <- meta_fixed(yyy, SE, study, d)
   expect_identical(fit1$logml, fit4$logml)
   expect_identical(fit1$logml, fit5$logml)
   expect_identical(fit1$logml, fit6$logml)
@@ -29,40 +29,42 @@ test_that("meta_fixed supports data as vector/variable names", {
 
 test_that("meta_bma supports data as vector/variable names", {
 
-  fit7 <- meta_bma("yyy", "SE", "study", d, control=list(adapt_delta=.9), summ="i")
-  fit8 <- meta_bma(yyy, SE, study, d, rel.tol = .1, iter = 10000,warmup=1000,
-                   control=list(adapt_delta=.9), summ = "s")
-  fit9 <- meta_bma("yyy", SE, study, d, control=list(adapt_delta=.9), iter = 10000, warmup=1000, logml="s")
-  fit10 <- meta_bma(yyy, SE, study, d, control=list(adapt_delta=.9), iter = 10000, warmup=1000)
+  fit7 <- meta_bma("yyy", "SE", "study", d, summ="int")
+  fit8 <- meta_bma(yyy, SE, study, d, rel.tol = .1, iter = 10000, summ = "stan")
+  fit9 <- meta_bma("yyy", SE, study, d, iter = 10000, logml="stan")
+  fit10 <- meta_bma(yyy, SE, study, d, iter = 10000)
 
-  expect_equal(fit7$logml, fit8$logml)
+  # plot_posterior(fit8$meta$random, "tau")
+  # hist(extract(fit8$meta$random$stanfit)[["tau"]], 300, add=T,freq=F)
+
+  expect_equal(fit7$logml, fit8$logml, tolerance = 1e-5)
   expect_identical(fit7$logml, fit10$logml)
-  expect_equal(fit7$logml, fit9$logml, tolerance = .001)
+  expect_equal(fit7$logml, fit9$logml, tolerance = .01)
 
   expect_equal(fit7$estimates, fit8$estimates, tolerance = .03)
-  expect_equal(fit7$estimates, fit9$estimates, tolerance = .01)
-  expect_equal(fit7$estimates, fit10$estimates, tolerance = .01)
+  expect_equal(fit7$estimates, fit9$estimates, tolerance = .03)
+  expect_equal(fit7$estimates, fit10$estimates, tolerance = .03)
 })
 
 
 test_that("meta_fixed supports y as formula", {
-  fit <- meta_fixed(yyy, SE, data = d, study, control=list(adapt_delta=.9))
-  fit2 <- meta_fixed(yyy ~ 1, SE, data = d, study, control=list(adapt_delta=.9))
+  fit <- meta_fixed(yyy, SE, data = d, study)
+  fit2 <- meta_fixed(yyy ~ 1, SE, data = d, study)
   expect_equal(fit$logml, fit2$logml)
 })
 
 
 test_that("JZS prior is correctly defined via formula", {
-  fit1 <- meta_fixed(yyy ~ xx, SE, study, d, iter = 6000, warmup = 1000,
-                     logml="s", summ="s", control=list(adapt_delta=.9))
+  fit1 <- meta_fixed(yyy ~ xx, SE, study, d, iter = 6000,
+                     logml="s", summ="s")
   expect_identical(rownames(fit1$estimates), c("d", "alpha_xx"))
 
-  fit2 <- meta_fixed(yyy ~ cat, SE, study, d, iter = 6000, warmup = 1000,
-                     logml="s", summ="s", control=list(adapt_delta=.9))
+  fit2 <- meta_fixed(yyy ~ cat, SE, study, d, iter = 6000,
+                     logml="s", summ="s")
   expect_identical(rownames(fit2$estimates), c("d", "alpha_cat1"))
 
-  fit3 <- meta_fixed(yyy ~ xx + cat, SE, study, d, iter = 6000, warmup = 1000,
-                     logml="s", summ="s", control=list(adapt_delta=.9))
+  fit3 <- meta_fixed(yyy ~ xx + cat, SE, study, d, iter = 6000,
+                     logml="s", summ="s")
   expect_identical(rownames(fit3$estimates), c("d", "alpha_xx", "alpha_cat1"))
 })
 

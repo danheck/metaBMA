@@ -1,8 +1,8 @@
 
 #' @importFrom bridgesampling bridge_sampler
 meta_bridge_sampling <- function(meta, logml = "integrate",
-                                 min_samples = 10000,
-                                 rel.error = .005, ...){
+                                 min_samples = 5000,
+                                 rel.error = .01, ...){
 
   if (logml == "integrate" && is.na(meta$logml)){
     warning ("Integral for marginal likelihood could not be computed with ?integrate.\n",
@@ -19,7 +19,7 @@ meta_bridge_sampling <- function(meta, logml = "integrate",
   }
 
   # refit stan and use bridge_sampler
-  nsamples <- length(extract(meta$stanfit)[[1]])
+  nsamples <- length(extract(meta$stanfit, "d")[["d"]])
   if (nsamples < min_samples){
     nsamples <- min_samples
     args <- c(list("data_list" = meta$data,

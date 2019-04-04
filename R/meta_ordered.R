@@ -28,7 +28,8 @@ meta_ordered <- function (y, SE, labels, data,
                           tau  = prior("invgamma", c(shape = 1, scale = 0.15)),
                           prior = c(1,1,1,1),
                           logml = "integrate", summarize = "stan", ci = .95,
-                          rel.tol = .Machine$double.eps^.3, ...){
+                          rel.tol = .Machine$double.eps^.3,
+                          silent_stan = TRUE, ...){
 
   # check whether constraints are one-directional (+/- 0)
   if (attr(d, "lower") == 0 && attr(d, "upper") == Inf)
@@ -107,7 +108,7 @@ meta_ordered <- function (y, SE, labels, data,
   meta_ordered$posterior_d <- function(x) rep(-1, length(x))
 
   meta_ordered$BF <- list("fixed_vs_H0" = meta_ordered$BF$d_10_fixed,
-                          "ordered_vs_random" = bf_ordered)
+                          "ordered_vs_random" = bf_ordered1)
 
 
   # TODO

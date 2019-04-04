@@ -32,7 +32,7 @@ meta_random <- function(y, SE, labels, data,
                         rscale_contin = 1/2, rscale_discrete = sqrt(2)/2, centering = TRUE,
                         logml = "integrate", summarize = "stan", ci = .95,
                         rel.tol = .Machine$double.eps^.3,
-                        logml_iter = 3000, ...){
+                        logml_iter = 3000, silent_stan = TRUE, ...){
 
   data_list <- data_list(model = "random", y = y, SE = SE, labels = labels,
                          data = data, args = as.list(match.call()))
@@ -60,7 +60,8 @@ meta_random <- function(y, SE, labels, data,
     data_list2 <- data_list
     data_list2$model <- paste0(data_list$model, "_dstudy")
     meta$stanfit_dstudy <- meta_stan(data_list2, d = d, tau = tau, jzs = meta$jzs,
-                                     pars = c("d", "tau", "dstudy"), ...)
+                                     pars = c("d", "tau", "dstudy"),
+                                     silent_stan = silent_stan, ...)
 
     # get samples for bridge sampling / BF
     if (logml == "stan"){
@@ -85,8 +86,20 @@ meta_random <- function(y, SE, labels, data,
   meta$posterior_tau <- posterior(meta, "tau", summarize, rel.tol = rel.tol)
 
   meta$estimates <- summary_meta(meta, summarize)
-  meta$BF <- c("d_10" = meta$prior_d(0) / meta$posterior_d(0),
-               "tau_10" = meta$prior_tau(0) / meta$posterior_tau(0))
+
+  if (logml == "integrate" && data_list$model == "random"){  # only without jzs:
+    logml_d0 <- integrate_wrapper(data_list, d = prior("0", "d"), tau, rel.tol = rel.tol)
+    data_list_fe <- data_list
+    data_list_fe$model <- "fixed"
+    logml_tau0 <- integrate_wrapper(data_list_fe, d, tau, rel.tol = rel.tol)
+    meta$BF <- c("d_10" = exp(meta$logml - logml_d0),
+                 "tau_10" = exp(meta$logml - logml_tau0))
+
+  } else {
+    # Savage-Dickey (also okay if JZS present):
+    meta$BF <- c("d_10" = meta$prior_d(0) / meta$posterior_d(0),
+                 "tau_10" = meta$prior_tau(0) / meta$posterior_tau(0))
+  }
   meta
 }
 

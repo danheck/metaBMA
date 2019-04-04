@@ -10,24 +10,26 @@ integrate_wrapper <- function (data, d, tau,
     ####### fixed H1
     target <- function(x)
       post_fixed(x + shift, data = data, prior = d)
+    bnd <- bounds_prior(d) - shift
 
   } else if (data$model == "random" && attr(d, "family") == "0"){
     ####### random H0
     target <- function(x)
       post_random(x + shift, d = 0, data = data, prior_d = d, prior_tau = tau)
+    bnd <- bounds_prior(tau) - shift
 
   } else if (data$model == "random") {
     ####### random H1
     target <- function(x)
       post_random_d(x + shift, data=data, prior_d = d, prior_tau = tau, rel.tol = rel.tol)
+    bnd <- bounds_prior(d) - shift
+
   } else {
     return(NA)
   }
 
   # integrate twice to ensure stability
   scale <- NA
-
-  bnd <- bounds_prior(d) - shift
   scale_int <- integrate(target, lower = bnd[1], upper = bnd[2], rel.tol = rel.tol,
                          subdivisions = 1000L, stop.on.error = FALSE)
  if (scale_int$message != "OK" ||
