@@ -7,7 +7,8 @@
 meta_ordered(y, SE, labels, data, d = prior("norm", c(mean = 0, sd =
   0.3), lower = 0), tau = prior("invgamma", c(shape = 1, scale = 0.15)),
   prior = c(1, 1, 1, 1), logml = "integrate", summarize = "stan",
-  ci = 0.95, rel.tol = .Machine$double.eps^0.3, ...)
+  ci = 0.95, rel.tol = .Machine$double.eps^0.3, silent_stan = TRUE,
+  ...)
 }
 \arguments{
 \item{y}{effect size per study. Can be provided as (1) a numeric vector, (2)

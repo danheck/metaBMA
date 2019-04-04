@@ -1,27 +1,37 @@
+library("testthat")
+library("metaBMA")
 
-# Test prior functions
+priors <- c("norm", "t", "invgamma", "beta")
+params <- list(c(0,.3), c(0,.3,1), c(1,1), c(1,2))
 
 
 test_that('prior returns vectorized function', {
 
-  priors <- c("norm", "t", "invgamma", "beta")
-  params <- list(c(0,.3), c(0,.3,1.4), c(1,1), c(1,2))
-
   for(i in seq_along(priors)){
-    expect_silent(pp <- prior(priors[i], params[[i]], upper = 2))
-    expect_silent(plot(pp))
-    expect_silent(plot(pp, from = -1, to = 1.5))
-    expect_s3_class(pp, "prior")
-    expect_true(is.function(pp))
-    expect_length(pp(1:10), 10)
+    for (lower in c(-Inf, 0)){
+      for (upper in c(1, Inf)){
+        if (! (priors[i] == "beta" & (lower==-Inf || upper == Inf))){
+          pp <- prior(priors[i], params[[i]], lower = lower, upper = upper)
+          plot(pp)
+          plot(pp, from = -1, to = 1.5)
+          expect_s3_class(pp, "prior")
+          expect_true(is.function(pp))
+          expect_length(pp(1:10), 10)
 
-    expect_equal(pp(1:3, log = TRUE), log(pp(1:3)))
-    aa <- attributes(pp)
-    expect_true(all(c("family", "param", "label",
-                      "lower", "upper") %in% names(aa)))
-    expect_is(aa$lower, "numeric")
-    expect_is(aa$upper, "numeric")
-    expect_lt(aa$lower, aa$upper)
+          expect_equal(pp(1:3, log = TRUE), log(pp(1:3)))
+          aa <- attributes(pp)
+          expect_true(all(c("family", "param", "label",
+                            "lower", "upper") %in% names(aa)))
+          expect_is(aa$lower, "numeric")
+          expect_is(aa$upper, "numeric")
+          expect_lt(aa$lower, aa$upper)
+
+          # random number generation
+          expect_silent(x <- metaBMA:::rprior(3, pp))
+          expect_length(x, 3)
+        }
+      }
+    }
   }
 
 })
@@ -38,3 +48,5 @@ test_that('prior crashes for non-vectorized/negative functions', {
   expect_error(prior("custom", function(x) -dunif(x), "xx"))
 
 })
+
+

@@ -68,36 +68,42 @@ prior <- function (family, param, lower, upper, label = "d",
                                 "scaledt", "cauchy", "halfcauchy", "halfnorm"))
 
   # compatibility with old (non-Stan) metaBMA version
-  switch(family,
-         "scaledt" = {
-           family = "t"},
-         "cauchy" = {
-           stopifnot(length(param) == 1, param > 0)
-           family = "t"
-           param = c(location = 0, scale = param, nu = 1)},
-         "halfcauchy" = {
-           stopifnot(length(param) == 1, param > 0)
-           family = "t"
-           param = c(location = 0, scale = param, nu = 1)
-           lower = 0},
-         "halfnorm" = {
-           stopifnot(length(param) == 1, param > 0)
-           family = "norm"
-           param = c(mean = 0, sd = param)
-           lower = 0}   )
+  if (family == "scaledt"){
+    family = "t"
+  } else if (family == "cauchy"){
+    stopifnot(length(param) == 1, param > 0)
+    family = "t"
+    param = c(location = 0, scale = param, nu = 1)
+  } else if (family == "halfcauchy"){
+    stopifnot(length(param) == 1, param > 0)
+    family = "t"
+    param = c(location = 0, scale = param, nu = 1)
+    lower = 0
+  } else if (family == "halfnorm"){
+    stopifnot(length(param) == 1, param > 0)
+    family = "norm"
+    param = c(mean = 0, sd = param)
+    lower = 0
+  }
 
   # family-specific constraints on "param"
-  switch(family,
-         "norm" = function(x, log = FALSE){
-           stopifnot(length(param) == 2, param[2] > 0)},
-         "t" = function(x, log = FALSE){
-           stopifnot(length(param) == 3, param[2] > 0, param[3] > 0,
-                     param[3] == round(param[3]))},
-         "invgamma" = function(x, log = FALSE){
-           stopifnot(length(param) == 2, all(param > 0))},
-         "beta" = function(x, log = FALSE){
-           stopifnot(length(param) == 2, all(param > 0))},
-         "0" = { param <- vector("numeric", 0)}  )
+  if(family == "norm"){
+    stopifnot(length(param) == 2, param[2] > 0)
+  } else if (family == "t"){
+    stopifnot(length(param) == 3, param[2] > 0, param[3] > 0,
+              param[3] == round(param[3]))
+  } else if (family == "invgamma"){
+    stopifnot(length(param) == 2, all(param > 0))
+    if (lower < 0){
+      warning('Lower truncation boundary for prior("invgamma", ...) is set to lower=0')
+      lower <- 0
+    }
+  } else if (family == "beta"){
+    stopifnot(length(param) == 2, all(param > 0))
+  } else if (family == "0"){
+    param <- vector("numeric", 0)
+
+  }
 
   # custom probability density: needs normalization
   if (family == "custom"){
@@ -197,7 +203,21 @@ dtrunc <- function (x, family, lower = -Inf, upper = Inf, log = FALSE, ...){
   dens
 }
 
+rtrunc <- function (n, family, lower = -Inf, upper = Inf, ...){
+  stopifnot(lower < upper, lower != -Inf || upper != Inf)
+
+  cdf <- get(paste0("p", family), mode = "function")
+  qdf <- get(paste0("q", family), mode = "function")
+
+  u <- runif(n, cdf(lower, ...), cdf(upper, ...))
+  qdf(u, ...)
+}
+
+
 #' @importFrom stats pgamma dgamma
+dinvgamma <- function(x, shape=1, scale=1, log=FALSE)
+  ifelse(x == 0, 0, LaplacesDemon::dinvgamma(x, shape, scale, log))
+
 pinvgamma <- function(q, shape = 1, scale = 1, lower.tail = TRUE, log.p = FALSE){
   # p <- rep(0, length(q))
   # wikipedia:
@@ -207,15 +227,27 @@ pinvgamma <- function(q, shape = 1, scale = 1, lower.tail = TRUE, log.p = FALSE)
   pgamma(scale/q, shape, lower.tail = !lower.tail, log.p = log.p)
 }
 
-dinvgamma <- function(x, shape=1, scale=1, log=FALSE)
-  ifelse(x == 0, 0, LaplacesDemon::dinvgamma(x, shape, scale, log))
+qinvgamma <- function(p, shape = 1, scale = 1, lower.tail = TRUE, log.p = FALSE){
+  1 / qgamma(p = p, shape = shape, scale = 1/scale,
+             lower.tail = !lower.tail, log.p = log.p)
+}
+# u <- runif(100)
+# u - pinvgamma(qinvgamma(u, shape = 3.5, scale = .34), shape = 3.5, scale = .34)
 
-# check:
-# a <- .3
-# b <- 2
+
+# ######## check
+# b <- .12
 # curve(pinvgamma(x, a, b), 0, 10, n = 1001)
 # xx <- seq(0.001,10, .01)
-# # curve(LaplacesDemon::dinvgamma(x, shape = a, scale = b),0, 100, n= 1001)
 # p <- sapply(xx, function(qq)
 #   integrate(LaplacesDemon::dinvgamma, shape = a, scale = b, 0, qq)$value)
 # lines(xx, p, col = 2, lty=2)
+#
+# curve(qinvgamma(x, a, b), 0, .95, n = 1001)
+# lines(pinvgamma(xx, a, b), xx, col = "red", lty=2)
+# abline(v=.95)
+#
+# xx1 <- rtrunc(50000, "invgamma", shape = a, scale = b, lower = 1)
+# xx2 <- LaplacesDemon::rinvgamma(500000, shape = a, scale = b)
+# qqplot(log(xx1), log(xx2[xx2 >= 1]))
+# abline(0,1,col=2)

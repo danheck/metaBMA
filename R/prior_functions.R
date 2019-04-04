@@ -40,7 +40,7 @@ print.prior <- function (x, ...){
 }
 
 
-#' @importFrom LaplacesDemon rtrunc rinvgamma rst
+#' @importFrom LaplacesDemon rinvgamma rst dst pst qst
 rprior <- function (n, prior){
   if (is.null(prior)) return (NULL)
 
@@ -49,15 +49,16 @@ rprior <- function (n, prior){
   upper <- attr(prior, "upper")
 
   truncated <- lower != default_lower(attr(prior, "family")) ||
-               upper != default_upper(attr(prior, "family"))
+    upper != default_upper(attr(prior, "family"))
 
   if (truncated){
     x <- switch (attr(prior, "family"),
 
-                 "norm" = rtrunc(n, spec = "norm", lower, upper,
-                                 mean = param[1], sd = param[2]),
-                 "t" = rtrunc(n, "st", lower, upper,
-                              location = param[1], scale = param[2], nu = param[3]),
+                 "norm" = LaplacesDemon::rtrunc(n, spec = "norm", lower, upper,
+                                                mean = param[1], sd = param[2]),
+                 "t" = LaplacesDemon::rtrunc(n, "st", lower, upper,
+                                             mu = param[1], sigma = param[2], nu = param[3]),
+                 # custom function for inverse gamma:
                  "invgamma" = rtrunc(n, "invgamma", lower, upper,
                                      shape = param[1], scale = param[2]),
                  "beta" = lower + (upper - lower) * rbeta(n, param[1], param[2]),
@@ -70,7 +71,7 @@ rprior <- function (n, prior){
 
                  "norm" = rnorm(n, mean = param[1], sd = param[2]),
                  "t" = rst(n, mu = param[1], sigma = param[2], nu = param[3]),
-                 "invgamma" = rinvgamma(n, shape = param[1], scale = param[2]),
+                 "invgamma" = LaplacesDemon::rinvgamma(n, shape = param[1], scale = param[2]),
                  "beta" = rbeta(n, param[1], param[2]),
                  "0" = rep(0, n),
                  "custom" = stop("Custom prior not supported."),
@@ -80,33 +81,34 @@ rprior <- function (n, prior){
   x
 }
 
+
 ############## random sampling for custom prior not supported
-  # lb <- attr(prior, "lower")
-  # ub <- attr(prior, "upper")
-  # px <- function(p) sapply(p, function(pp)
-  #   integrate(prior, lb, pp)$value )
-  # u <- runif(n, lb, ub)
-  #
-  # xx <- seq(max(lb, 0), min(ub, 3), length.out = 201)
-  # cnt <- 1
-  # while (px(xx[1]) > .002){
-  #   cnt <- cnt + 1
-  #   newx <- seq(min(xx)-1, min(xx), length.out = 41)
-  #   xx <- c(newx, xx)
-  # }
-  # cnt <- 1
-  # while (px(max(xx)) < .998){
-  #   cnt <- cnt + 1
-  #   newx <- seq(from = max(xx), to = max(xx)+1, length.out = 41)
-  #   xx <- c(xx, newx)
-  # }
-  # dx <- prior(xx)
-  # px <- cumsum(dx)
-  # qdens <- splinefun(px, xx)
-  # length.interval <- function (start){
-  #   qdens(start+ci)-qdens(start)
-  # }
-  # oo <- optim((1-ci)/2, length.interval, method = "L-BFGS-B",
-  #             lower=min(px), upper=max(px)-ci)
-  # if (log) dx <- log(dx)
-  # return (dx)
+# lb <- attr(prior, "lower")
+# ub <- attr(prior, "upper")
+# px <- function(p) sapply(p, function(pp)
+#   integrate(prior, lb, pp)$value )
+# u <- runif(n, lb, ub)
+#
+# xx <- seq(max(lb, 0), min(ub, 3), length.out = 201)
+# cnt <- 1
+# while (px(xx[1]) > .002){
+#   cnt <- cnt + 1
+#   newx <- seq(min(xx)-1, min(xx), length.out = 41)
+#   xx <- c(newx, xx)
+# }
+# cnt <- 1
+# while (px(max(xx)) < .998){
+#   cnt <- cnt + 1
+#   newx <- seq(from = max(xx), to = max(xx)+1, length.out = 41)
+#   xx <- c(xx, newx)
+# }
+# dx <- prior(xx)
+# px <- cumsum(dx)
+# qdens <- splinefun(px, xx)
+# length.interval <- function (start){
+#   qdens(start+ci)-qdens(start)
+# }
+# oo <- optim((1-ci)/2, length.interval, method = "L-BFGS-B",
+#             lower=min(px), upper=max(px)-ci)
+# if (log) dx <- log(dx)
+# return (dx)
