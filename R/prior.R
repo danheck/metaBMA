@@ -94,7 +94,7 @@ prior <- function (family, param, lower, upper, label = "d",
               param[3] == round(param[3]))
   } else if (family == "invgamma"){
     stopifnot(length(param) == 2, all(param > 0))
-    if (lower < 0){
+    if (!missing(lower) && lower < 0){
       warning('Lower truncation boundary for prior("invgamma", ...) is set to lower=0')
       lower <- 0
     }

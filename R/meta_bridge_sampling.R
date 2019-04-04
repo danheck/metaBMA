@@ -37,10 +37,10 @@ meta_bridge_sampling <- function(meta, logml = "integrate",
     meta$stanfit <- do.call("meta_stan", args)
   }
 
-  cat(format(Sys.time()), "--- Bridge sampling starts...\n")
+  # cat(format(Sys.time()), "--- Bridge sampling starts...\n")
   bs <- bridge_sampler(meta$stanfit, silent = TRUE, use_neff = FALSE)
   # if (!is.null(options()$mc.cores)) cores = options()$mc.cores
-  cat(format(Sys.time()), "--- Bridge sampling finished.\n")
+  # cat(format(Sys.time()), "--- Bridge sampling finished.\n")
   em <- error_measures(bs)
   if (em$cv > rel.error)
     warning("Relative error of log-marginal likelihood with bridge sampling: ", em$percentage,

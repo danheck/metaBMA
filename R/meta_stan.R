@@ -27,8 +27,8 @@ meta_stan <- function (data_list,
     data_list$model <- paste0(data_list$model, "_H0")  # not possible: JZS + H0
 
   data_list <- add_jzs(data_list, jzs)
-  if (grepl("jzs", data_list$model))
-    stop("Moderators are not supported if truncated=TRUE")
+  # if (truncation && grepl("jzs", data_list$model))
+  #   stop("Moderators are not supported if truncated=TRUE")
 
   # default settings for stan
   dots <- list(...)
