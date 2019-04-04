@@ -2,9 +2,10 @@ library(metaBMA)
 library(testthat)
 library(rstan)
 
+data(towels)
+set.seed(12345)
+
 test_that("extreme priors/misspecified models provide correct results with integrate/JAGS/stan", {
-  data(towels)
-  set.seed(12345)
 
   # check different ways of defining priors
   expect_silent(meta_fixed(logOR, SE, study, towels,
@@ -19,13 +20,15 @@ test_that("extreme priors/misspecified models provide correct results with integ
   expect_silent(mf_int <- meta_fixed(logOR, SE, study, towels, d = d))
   expect_equal(mf_stan$estimates, mf_int$estimates, tolerance = .01)
 
-  expect_silent(mr_stan <- meta_random(logOR, SE, study, towels, iter = 1e5, d = d))
+  mr_stan <- meta_random(logOR, SE, study, towels, iter = 20000, d = d)
   expect_silent(mr_int <- meta_random(logOR, SE, study, towels, d = d, summ = "int"))
-  expect_equal(mr_stan$estimates, mr_int$estimates, tolerance = .03)
+  expect_equal(mr_stan$estimates, mr_int$estimates, tolerance = .025)
 })
 
 
 test_that("extreme priors/misspecified models still provide correct results", {
-  expect_silent(meta_fixed(logOR, SE, study, towels,  d = prior("norm", c(mean = 0.2, sd = .01))))
-  expect_silent(meta_random(logOR, SE, study, towels, d = prior("norm", c(mean = 0.2, sd = .05))))
+  expect_silent(meta_fixed(logOR, SE, study, towels,
+                           d = prior("norm", c(mean = 0.2, sd = .01))))
+  expect_silent(meta_random(logOR, SE, study, towels,
+                            d = prior("norm", c(mean = 0.2, sd = .05))))
 })

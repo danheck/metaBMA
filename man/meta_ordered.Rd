@@ -74,7 +74,6 @@ mo <- meta_ordered(logOR, SE, study, towels,
                    d = prior("norm", c(mean=0, sd=.3), lower=0),
                    tau = prior("invgamma", c(shape = 1, scale = 0.15)))
 mo
-plot_posterior(mo, "d")
 }
 \references{
 Haaf, J. M., & Rouder, J. N. (in press). Some do and some don’t? Accounting for variability of individual difference structures. Psychonomic Bulletin & Review. doi: 10.3758/s13423-018-1522-x

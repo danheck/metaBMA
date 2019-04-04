@@ -85,9 +85,9 @@ meta_random <- function(y, SE, labels, data,
   meta$posterior_d <- posterior(meta, "d", summarize, rel.tol = rel.tol)
   meta$posterior_tau <- posterior(meta, "tau", summarize, rel.tol = rel.tol)
 
-  meta$estimates <- summary_meta(meta, summarize)
+  meta$estimates <- summary_meta(meta, summarize)[c("d", "tau"),,drop = FALSE]
 
-  if (logml == "integrate" && data_list$model == "random"){  # only without jzs:
+  if (data_list$model == "random"){  # only without JZS moderator structure!
     logml_d0 <- integrate_wrapper(data_list, d = prior("0", "d"), tau, rel.tol = rel.tol)
     data_list_fe <- data_list
     data_list_fe$model <- "fixed"
@@ -96,9 +96,31 @@ meta_random <- function(y, SE, labels, data,
                  "tau_10" = exp(meta$logml - logml_tau0))
 
   } else {
-    # Savage-Dickey (also okay if JZS present):
-    meta$BF <- c("d_10" = meta$prior_d(0) / meta$posterior_d(0),
-                 "tau_10" = meta$prior_tau(0) / meta$posterior_tau(0))
+    meta$BF <- c("d_10" = NA, "tau_10" = NA)
+
+    # Savage-Dickey (if JZS present):
+    n_samples <- length(extract(meta$stanfit, "d")[["d"]])
+    if (n_samples < 10000)
+      warning("If discrete/continuous moderators are specified, the Bayes factor is computed",
+              "\nbased on the Savage-Dickey density ratio. For high precision, this requires",
+              "\na larger number of samples for estimation as specified via:\n    iter=10000")
+
+    if (meta$prior_d(0) == 0)
+      warning("Savage-Dickey density ratio can only be used if the prior on the",
+              "\noverall effect size d is strictly positive at zero. For example, use:",
+              "\n  d=prior('halfcauchy', c(scale=0.707))")
+    else
+      meta$BF["d_10"] <- meta$prior_d(0) / meta$posterior_d(0)
+
+
+    if (meta$prior_d(0) == 0)
+      warning("Savage-Dickey density ratio can only be used if the prior on the",
+              "\noverall effect size d is strictly positive at zero. For example, use:",
+              "\n  d=prior('halfcauchy', c(scale=0.707))")
+    else
+      meta$BF["tau_10"] <- meta$prior_tau(0) / meta$posterior_tau(0)
+
+    # JZS: no analytical integration / bridgesampling for nested models!
   }
   meta
 }

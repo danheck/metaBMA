@@ -1,4 +1,4 @@
-library(metBMA)
+library(metaBMA)
 library(testthat)
 
 set.seed(123452)
@@ -8,7 +8,7 @@ d$xx <- rnorm(20, d$yyy, 1)
 d$cat <- rep(c("a", "b"), 10)
 
 
-test_that("JZS continuous predictors", {
+test_that("JZS works for continuous predictors", {
 
   fe_xx <- meta_fixed(yyy ~ xx, SE, study, data = d, logml= "s", summ = "s", iter = 6000)
   re_xx <- meta_random(yyy ~ xx, SE, study, data = d, logml= "s", summ = "s", iter = 6000)
@@ -18,14 +18,16 @@ test_that("JZS continuous predictors", {
   expect_silent(plot_posterior(bm))
 })
 
-test_that("JZS discrete predictors", {
+
+test_that("JZS works for discrete predictors", {
 
   fe_xx <- meta_fixed(yyy ~ cat, SE, study, data = d, logml= "s", summ = "s", iter = 6000)
   re_xx <- meta_random(yyy ~ cat, SE, study, data = d, logml= "s", summ = "s", iter = 6000)
   expect_silent(bm <- bma(list(fe_xx, re_xx)))
 })
 
-test_that("JZS continuous + discrete predictors", {
+
+test_that("JZS works for continuous + discrete predictors", {
 
   fe_both <- meta_fixed(yyy ~ cat + xx, SE, study, data = d, logml= "s",
                         summ = "s", iter = 6000)

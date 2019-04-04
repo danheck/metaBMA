@@ -19,7 +19,6 @@
 #'                    d = prior("norm", c(mean=0, sd=.3), lower=0),
 #'                    tau = prior("invgamma", c(shape = 1, scale = 0.15)))
 #' mo
-#' plot_posterior(mo, "d")
 #' @seealso \link{meta_random}
 #' @template ref_haaf2019
 #' @export

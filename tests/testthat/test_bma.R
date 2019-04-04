@@ -1,4 +1,6 @@
-library("rstan")
+library(rstan)
+library(testthat)
+library(metaBMA)
 
 set.seed(12352)
 SE <- runif(20, .3, 1.3)
@@ -18,7 +20,7 @@ test_that("bma works for fitted meta_* objects", {
   expect_silent(bb <- bma(list(a = r1a, b = r1b)))
   expect_equal(bb$posterior_models, c(a = .5, b = .5), tolerance = .01)
 
-  expect_silent(bb <- bma(list(a = f1, b = f1a, c= r1, d = r1a)))
+  expect_silent(bb <- bma(list(a = f1a, b = f1b, c= r1a, d = r1b)))
   mean_avg <- sum(bb$posterior_models * bb$estimates[-1,"mean"])
   expect_equal(mean_avg, bb$estimates["Averaged","mean"], tolerance = .005)
 })
