@@ -82,6 +82,20 @@ rprior <- function (n, prior){
 }
 
 
+truncnorm_mean <- function(mean, sd, lower, upper){
+  alpha <- (lower - mean) / sd
+  beta <- (upper - mean) / sd
+  diff_cdf <- pnorm(beta) - pnorm(alpha)
+  diff_pdf <- dnorm(alpha) - dnorm(beta)
+  mean + sd * diff_pdf / diff_cdf
+}
+
+log_diff_exp <- function(logx1, logx2) {
+  c <- max(logx1, logx2)
+  # log(exp(logx1 - c) - exp(logx2 - c)) + c
+  log(1 - exp(logx2 - c)) + c
+}
+
 ############## random sampling for custom prior not supported
 # lb <- attr(prior, "lower")
 # ub <- attr(prior, "upper")

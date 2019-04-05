@@ -80,7 +80,6 @@ approach, the default number of MCMC iterations for \code{meta_ordered} is
 }
 \examples{
 data(towels)
-# debug(meta_ordered)
 mo <- meta_ordered(logOR, SE, study, towels,
                    d = prior("norm", c(mean=0, sd=.3), lower=0),
                    tau = prior("invgamma", c(shape = 1, scale = 0.15)))
