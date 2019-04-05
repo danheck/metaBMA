@@ -1,27 +1,26 @@
 #' Bayesian Model Averaging
 #'
-#' Model averaging for different meta-analysis models (e.g., random-effects,
-#' fixed-effects, or different priors) based on the posterior model probability.
+#' Model averaging for different meta-analysis models (e.g., random-effects or
+#' fixed-effects with different priors) based on the posterior model
+#' probability.
 #'
 #' @param meta list of meta-analysis models (fitted via
 #'   \code{\link{meta_random}} or \code{\link{meta_fixed}})
+#' @param only_unique whether to exclude models with identical log-marginal
+#'   likelihood (e.g., if the same null model H0 is present in all models in
+#'   \code{meta})
 #' @inheritParams inclusion
 #' @inheritParams meta_bma
 #' @param parameter eiher the mean effect \code{"d"} or the heterogeneity across
 #'   studies \code{"tau"}
 #'
 #' @examples
-#' # model averaging for different priors on overall effect size d
+#' # model averaging for fixed and random effects
 #' data(towels)
-#' fix1 <- meta_fixed(logOR, SE, study, towels,
-#'                    d = prior("norm", c(mean=0, sd=.2), lower=0))
-#' fix2 <- meta_fixed(logOR, SE, study, towels,
-#'                    d = prior("beta", c(shape1=1, shape2=1), upper = 2))
-#' fix3 <- meta_fixed(logOR, SE, study, towels,
-#'                    d = prior("custom", function(x) x^2, 0, 1))
+#' fixed <- meta_fixed(logOR, SE, study, towels)
+#' random <- meta_random(logOR, SE, study, towels, iter = 1000)
 #'
-#' averaged <- bma(list(Halfnormal = fix1, Uniform = fix2,
-#'                      Quadratic = fix3))
+#' averaged <- bma(list("fixed" = fixed, "random" = random))
 #' averaged
 #' plot_posterior(averaged)
 #' plot_forest(averaged, mar = c(4.5,20,4,.3))
@@ -39,7 +38,9 @@ bma <- function(meta, prior = 1, parameter = "d", summarize = "integrate", ci = 
 
   sel.prior <- paste0("prior_", parameter)
   sel.post <- paste0("posterior_", parameter)
-  logml <- sapply(meta, "[[", "logml")
+  logml <- unlist(lapply(meta, "[[", "logml"))
+  names(logml) <- gsub("random.random", "random",
+                       gsub("fixed.fixed", "fixed", names(logml)))
   incl <- inclusion(logml, prior = prior)
 
   res_bma <- list("meta" = meta,
@@ -61,7 +62,7 @@ bma <- function(meta, prior = 1, parameter = "d", summarize = "integrate", ci = 
   # get posterior summary statistics
   summarize <- match.arg(summarize, c("stan", "integrate"))
   if (summarize == "integrate"){
-    res_bma$estimates <- rbind("Averaged" = summary_integrate(res_bma$posterior_d,
+    res_bma$estimates <- rbind("averaged" = summary_integrate(res_bma$posterior_d,
                                                               ci = ci, rel.tol = rel.tol),
                                ests)
   } else if (summarize == "stan"){
@@ -70,12 +71,11 @@ bma <- function(meta, prior = 1, parameter = "d", summarize = "integrate", ci = 
     nn <- round(maxiter * incl$posterior)
     avg_samples <- unlist(mapply(sample, x = samples, size = nn,
                                  MoreArgs = list(replace = TRUE)))
-    res_bma$estimates <- rbind("Averaged" = summary_samples(avg_samples), ests)
+    res_bma$estimates <- rbind("averaged" = summary_samples(avg_samples), ests)
     # res_bma[[paste0("posterior_", parameter)]] <-
     #   posterior_logspline(avg_samples, parameter, meta[[1]][[paste0("prior_", parameter)]])
   }
 
-  res_bma$BF <- outer(exp(res_bma$logml), exp(res_bma$logml), "/")
-  names(dimnames(res_bma$BF)) <- c("numerator", "denominator")
+  res_bma$BF <- make_BF(res_bma$logml)
   res_bma
 }

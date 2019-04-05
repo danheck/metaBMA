@@ -19,7 +19,7 @@
 #' plot_posterior(mr)
 #' @export
 meta_random <- function(y, SE, labels, data,
-                        d = prior("norm", c(mean=0, sd=.3), lower=0),
+                        d = prior("norm", c(mean=0, sd=.3)),
                         tau  = prior("invgamma", c(shape = 1, scale = 0.15)),
                         rscale_contin = 1/2, rscale_discrete = sqrt(2)/2, centering = TRUE,
                         logml = "integrate", summarize = "stan", ci = .95,
@@ -27,7 +27,7 @@ meta_random <- function(y, SE, labels, data,
                         logml_iter = 3000, silent_stan = TRUE, ...){
 
   data_list <- data_list(model = "random", y = y, SE = SE, labels = labels,
-                         data = data, args = as.list(match.call()))
+                         data = data, args = as.list(match.call())[-1])
 
   d <- check_prior(d)
   tau <- check_prior(tau, 0)
@@ -69,53 +69,49 @@ meta_random <- function(y, SE, labels, data,
          "\nUse logml='integrate' and summarize='integrate'")
   }
 
-  if (logml == "integrate"){
+  if (logml == "integrate")
     meta$logml <- integrate_wrapper(data_list, d, tau, rel.tol = rel.tol)
-  }
   meta <- meta_bridge_sampling(meta, logml, ...)
 
   meta$posterior_d <- posterior(meta, "d", summarize, rel.tol = rel.tol)
   meta$posterior_tau <- posterior(meta, "tau", summarize, rel.tol = rel.tol)
-
   meta$estimates <- summary_meta(meta, summarize)[c("d", "tau"),,drop = FALSE]
 
-  if (data_list$model == "random"){  # only without JZS moderator structure!
-    logml_d0 <- integrate_wrapper(data_list, d = prior("0", "d"), tau, rel.tol = rel.tol)
-    data_list_fe <- data_list
-    data_list_fe$model <- "fixed"
-    logml_tau0 <- integrate_wrapper(data_list_fe, d, tau, rel.tol = rel.tol)
-    meta$BF <- c("d_10" = exp(meta$logml - logml_d0),
-                 "tau_10" = exp(meta$logml - logml_tau0))
+  logml_randomH0 <- NA
+  # analytical/numerical integration: only without JZS moderator structure!
+  if (data_list$model == "random")
+    logml_randomH0 <- integrate_wrapper(data_list, d = prior("0", "d"), tau, rel.tol = rel.tol)
 
-    ###### TODO: CHECKS lgml for H0
-
-  } else {
-    meta$BF <- c("d_10" = NA, "tau_10" = NA)
-
-    # Savage-Dickey (if JZS present):
+  # Savage-Dickey (if JZS present):
+  if (is.na(logml_randomH0)){
     n_samples <- length(extract(meta$stanfit, "d")[["d"]])
     if (n_samples < 10000)
       warning("If discrete/continuous moderators are specified, the Bayes factor is computed",
               "\nbased on the Savage-Dickey density ratio. For high precision, this requires",
               "\na larger number of samples for estimation as specified via:\n    iter=10000")
 
-    if (meta$prior_d(0) == 0)
+    if (meta$prior_d(0) == 0){
       warning("Savage-Dickey density ratio can only be used if the prior on the",
               "\noverall effect size d is strictly positive at zero. For example, use:",
               "\n  d=prior('halfcauchy', c(scale=0.707))")
-    else
-      meta$BF["d_10"] <- meta$prior_d(0) / meta$posterior_d(0)
+    } else {
+      bf_random_10 <- meta$prior_d(0) / meta$posterior_d(0)
+      logml_randomH0 <- -log(bf_random_10) + meta$logml
+    }
 
-
-    if (meta$prior_d(0) == 0)
-      warning("Savage-Dickey density ratio can only be used if the prior on the",
-              "\noverall effect size d is strictly positive at zero. For example, use:",
-              "\n  d=prior('halfcauchy', c(scale=0.707))")
-    else
-      meta$BF["tau_10"] <- meta$prior_tau(0) / meta$posterior_tau(0)
-
-    # JZS: no analytical integration / bridgesampling for nested models!
+    # if (meta$prior_d(0) == 0)
+    #   warning("Savage-Dickey density ratio can only be used if the prior on the",
+    #           "\noverall effect size d is strictly positive at zero. For example, use:",
+    #           "\n  d=prior('halfcauchy', c(scale=0.707))")
+    # else
+    #   meta$BF["tau_10"] <- meta$prior_tau(0) / meta$posterior_tau(0)
   }
+
+  meta$logml <- c("random_H0" = logml_randomH0, "random_H1" = meta$logml)
+  meta$BF <- make_BF(meta$logml)
+  inclusion <- inclusion(meta$logml, include = c(2), prior = c(1,1))
+  meta$prior_models <- inclusion$prior
+  meta$posterior_models <- inclusion$posterior
   meta
 }
 

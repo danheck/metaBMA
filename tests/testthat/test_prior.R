@@ -55,9 +55,9 @@ test_that('prior crashes for non-vectorized/negative functions', {
 
 test_that('expected value in truncnorm_mean() is correct', {
   x <- metaBMA:::rtrunc(5e5, "norm", 0, Inf, mean=.14, sd=.5)
-  expect_silent(avg <- truncnorm_mean(.14, .5, 0, Inf))
-  expect_equal(mean(x), avg, tolerance = .0001)
-  expect_length(truncnorm_mean(0:1, c(.3,.4), 0, 4), 2)
+  expect_silent(avg <- metaBMA:::truncnorm_mean(.14, .5, 0, Inf))
+  expect_equal(mean(x), avg, tolerance = .001)
+  expect_length(metaBMA:::truncnorm_mean(0:1, c(.3,.4), 0, 4), 2)
 })
 
 

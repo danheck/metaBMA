@@ -84,13 +84,13 @@ the truncated normal distribution) and not to the location parameter \code{d}
 \examples{
 data(towels)
 mo <- meta_ordered(logOR, SE, study, towels,
-                   d = prior("norm", c(mean=0, sd=.3), lower=0),
-                   tau = prior("invgamma", c(shape = 1, scale = 0.15)))
+                   d = prior("norm", c(mean=0, sd=.3), lower=0))
 mo
+plot_posterior(mo)
 }
 \references{
 Haaf, J. M., & Rouder, J. N. (in press). Some do and some don’t? Accounting for variability of individual difference structures. Psychonomic Bulletin & Review. doi: 10.3758/s13423-018-1522-x
 }
 \seealso{
-\link{meta_random}
+\link{meta_bma}, \link{meta_random}
 }

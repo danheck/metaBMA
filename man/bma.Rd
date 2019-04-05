@@ -25,23 +25,23 @@ based on MCMC/Stan samples (\code{summarize = "stan"}).}
 \item{rel.tol}{relative tolerance used for numerical integration using
 \code{\link[stats]{integrate}}. Use \code{rel.tol=.Machine$double.eps} for
 maximal precision (however, this might be slow).}
+
+\item{only_unique}{whether to exclude models with identical log-marginal
+likelihood (e.g., if the same null model H0 is present in all models in
+\code{meta})}
 }
 \description{
-Model averaging for different meta-analysis models (e.g., random-effects,
-fixed-effects, or different priors) based on the posterior model probability.
+Model averaging for different meta-analysis models (e.g., random-effects or
+fixed-effects with different priors) based on the posterior model
+probability.
 }
 \examples{
-# model averaging for different priors on overall effect size d
+# model averaging for fixed and random effects
 data(towels)
-fix1 <- meta_fixed(logOR, SE, study, towels,
-                   d = prior("norm", c(mean=0, sd=.2), lower=0))
-fix2 <- meta_fixed(logOR, SE, study, towels,
-                   d = prior("beta", c(shape1=1, shape2=1), upper = 2))
-fix3 <- meta_fixed(logOR, SE, study, towels,
-                   d = prior("custom", function(x) x^2, 0, 1))
+fixed <- meta_fixed(logOR, SE, study, towels)
+random <- meta_random(logOR, SE, study, towels, iter = 1000)
 
-averaged <- bma(list(Halfnormal = fix1, Uniform = fix2,
-                     Quadratic = fix3))
+averaged <- bma(list("fixed" = fixed, "random" = random))
 averaged
 plot_posterior(averaged)
 plot_forest(averaged, mar = c(4.5,20,4,.3))

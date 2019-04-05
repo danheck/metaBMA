@@ -13,7 +13,8 @@ test_that("meta_fixed: logml for H0 is correct", {
   f1 <- meta_fixed(yyy, SE, study, data = d, logml = "int")
   f1a <- meta_fixed(yyy ~ 1, SE, study, data = d, logml = "int")
   expect_silent(bb <- bma(list(a = f1, b = f1a)))
-  expect_equal(bb$posterior_models, c(a = .5, b = .5))
+  postprob <- unname(bb$posterior_models[c(2,4)])
+  expect_equal(postprob/sum(postprob), c(.5, .5))
 
   # logml with Stan
   f2 <- meta_fixed(yyy, SE, study, data = d, logml = "stan", iter = 6000, warmup = 1000)
@@ -23,7 +24,7 @@ test_that("meta_fixed: logml for H0 is correct", {
   expect_warning(f3 <- meta_fixed(yyy ~ xx, SE, study, data = d,   # warning: JZS
                                   logml = "stan", iter = 6000, warmup = 1000))
   expect_equal(f1$logml, f2$logml, tolerance = .01)
-  expect_true(f1$logml > f3$logml + 1)
+  expect_true(f1$logml["fixed_H1"] > f3$logml["fixed_H1"] + 1)
 })
 
 
@@ -40,7 +41,7 @@ test_that("meta_random: logml for H0 is correct", {
   dl$model <- "random_H0"
   tmp <- capture_output(stanfit <- metaBMA:::meta_stan(dl, iter = 30000))
   bs <- bridgesampling:::bridge_sampler(stanfit, silent = TRUE, use_neff = FALSE)
-  # expect_equal(bs$logml, f1$logml - log(f1$BF[["d_10"]]), tolerance = .001)
+  # expect_equal(bs$logml, unname(f1$logml["random_H0"]), tolerance = .001)
 
   # TODO: check random_H0 logml  / BF
 

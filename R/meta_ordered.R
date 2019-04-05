@@ -29,10 +29,10 @@
 #' @examples
 #' data(towels)
 #' mo <- meta_ordered(logOR, SE, study, towels,
-#'                    d = prior("norm", c(mean=0, sd=.3), lower=0),
-#'                    tau = prior("invgamma", c(shape = 1, scale = 0.15)))
+#'                    d = prior("norm", c(mean=0, sd=.3), lower=0))
 #' mo
-#' @seealso \link{meta_random}
+#' plot_posterior(mo)
+#' @seealso \link{meta_bma}, \link{meta_random}
 #' @template ref_haaf2019
 #' @export
 meta_ordered <- function (y, SE, labels, data,
@@ -50,7 +50,7 @@ meta_ordered <- function (y, SE, labels, data,
          "    d=prior('norm', c(mean=0, sd=.3), lower=-Inf, upper=0) ")
 
   # start with standard meta_bma
-  args <- as.list(match.call())
+  args <- as.list(match.call())[-1]
   if (is.null(args$iter)) args$iter <- 20000
   m_ordered <- do.call("meta_bma", args)
   names(m_ordered$logml) <-
@@ -121,14 +121,10 @@ meta_ordered <- function (y, SE, labels, data,
     posterior_logspline(samples[,"tau"], "tau", tau)
 
   # p(y|Mo) = B_{Mo,Mr} * p(y|Mr)
-  m_ordered$meta$ordered$logml  <- m_ordered$logml[["ordered"]] <-
-    log(bf_ordered1) + m_ordered$meta$random$logml
-  logml_null <-
-    - log(m_ordered$meta$fixed$BF[["d_10"]]) + m_ordered$meta$fixed$logml
-  m_ordered$meta$ordered$BF <-
-    c("d_ordered_vs_fixedH0" = exp(m_ordered$logml[["ordered"]] - logml_null),
-      "d_ordered_vs_randomH1" = bf_ordered1)
-
+  m_ordered$logml[["ordered"]] <- log(bf_ordered1) + m_ordered$meta$random$logml["random_H1"]
+  m_ordered$meta$ordered$logml  <- c("fixed_H0" = unname(m_ordered$meta$fixed$logml["fixed_H0"]),
+                                     "ordered_H1" = m_ordered$logml[["ordered"]])
+  m_ordered$meta$ordered$BF <- make_BF(m_ordered$meta$ordered$logml)
 
   # postproces structure of meta-bma object
   m_ordered$estimates <-
@@ -137,13 +133,12 @@ meta_ordered <- function (y, SE, labels, data,
           m_ordered$estimates["random",,drop=FALSE])
   rownames(m_ordered$estimates)[2] <- "ordered"
 
-  m_ordered$posterior_d <- function(x) rep(-1, length(x))
+  m_ordered$posterior_d <- m_ordered$meta$ordered$posterior_d
 
-  m_ordered$BF <- exp(outer(m_ordered$logml, m_ordered$logml, "-"))
-
-  inclusion <- inclusion(m_ordered$logml, include = c(1), prior = prior)
-  m_ordered$prior_models <- prior/sum(prior)
-  m_ordered$posterior_models <- inclusion$posterior
+  m_ordered$BF <- make_BF(m_ordered$logml)
+  m_ordered$inclusion <- inclusion(m_ordered$logml, include = c(2:4), prior = prior)
+  m_ordered$prior_models <- m_ordered$inclusion$prior
+  m_ordered$posterior_models <- m_ordered$inclusion$posterior
 
   m_ordered
 }

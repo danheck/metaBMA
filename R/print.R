@@ -15,9 +15,11 @@ print.est <- function(estimates = NULL, what = "", digits = 3){
 print.meta_fixed <- function (x, digits = 3, ...){
   cat("### Bayesian Fixed-Effects Meta-Analysis ###\n",
       "\n   Prior on d:   ", describe_prior(x$prior_d, digits) ,
-      "\n   Bayes factor (d ~ prior vs. d = 0) =", round(x$BF, digits = digits),
-      "\n\n")
-  print.est(x$estimates, what = " of fixed-effects meta-analysis", digits = digits)
+      # "\n   Bayes factor (d ~ prior vs. d = 0) =", round(x$BF, digits = digits),
+      "\n")
+  cat("\n# Bayes factors:\n")
+  print(x$BF, digits = digits)
+  print.est(x$estimates, what = " of fixed-effects parameters", digits = digits)
 }
 
 
@@ -26,10 +28,13 @@ print.meta_random <- function (x, digits = 3, ...){
   cat("### Bayesian Random-Effects Meta-Analysis ###\n",
       "\n   Prior on d:     ", describe_prior(x$prior_d, digits) ,
       "\n   Prior on tau:   ", describe_prior(x$prior_tau, digits),
-      "\n   Bayes factor (d ~ prior vs. d = 0)      =", x$BF["d_10"],
-      "\n   Bayes factor (tau ~ prior vs. tau = 0)  =", x$BF["tau_10"],
-      "\n\n")
-  print.est(x$estimates, what = " of random-effects meta-analysis", digits = digits)
+      # "\n   Bayes factor (d ~ prior vs. d = 0)      =", x$BF["d_10"],
+      # "\n   Bayes factor (tau ~ prior vs. tau = 0)  =", x$BF["tau_10"],
+      "\n")
+
+  cat("\n# Bayes factors:\n")
+  print(x$BF, digits = digits)
+  print.est(x$estimates, what = " of random-effects parameters", digits = digits)
 }
 
 
@@ -62,7 +67,7 @@ print.meta_bma <- function (x, digits = 3, ...){
     print(x$prior_d, digits)
   }
   cat("\n# Bayes factors:\n")
-  print(as.data.frame(x$BF, row.names("")), digits = digits)
+  print(x$BF, digits = digits)
 
   cat("\n# Model posterior probabilities:\n")
   tab <- data.frame("prior" = x$prior_models,

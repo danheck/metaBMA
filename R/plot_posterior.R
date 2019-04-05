@@ -58,14 +58,24 @@ plot_posterior.meta_bma <- function (meta, parameter = "d", from, to,
 
   others <- sapply(meta$meta, function (x) x$posterior_d)
   dpost.ave <- meta$posterior_d
-  plot_density(dprior, dpost.ave, stats = meta$estimates["Averaged",],
+  stats <- NULL
+  if ("averaged" %in% rownames(meta$estimates)){
+    stats <- meta$estimates["averaged",]
+    label_main <- "Posterior (averaged)"
+  } else if ("ordered" %in% rownames(meta$estimates)){
+    stats <- meta$estimates["ordered",]
+    label_main <- "Order-constrained"
+    others$ordered <- NULL
+  }
+  plot_density(dprior, dpost.ave, stats = stats,
                others = others, from = from, to = to, summary = summary,
-               xlab = "Overall Effect", ...)
+               xlab = "Overall Effect", label_main = label_main, ...)
 }
 
 
 plot_density <- function (dprior, dpost, stats = NULL, others = NULL,
-                          from, to, summary = c("mean", "hpd"), ...){
+                          from, to, summary = c("mean", "hpd"),
+                          label_main = "Posterior (averaged)", ...){
 
   # get x and y values
   if (missing (from)) from <- -Inf
@@ -113,7 +123,7 @@ plot_density <- function (dprior, dpost, stats = NULL, others = NULL,
   draw_dens(xx, dpo, stats = stats, col = cols[2], lty = ltys[2])
 
   post.label <- ifelse(is.null(dx.others),
-                       "Posterior", "Posterior (averaged)")
+                       "Posterior", label_main)
   legend("topright", bty="n",
          legend = c("Prior",post.label, names(others)),
          col = cols, lty = ltys, lwd = 2)

@@ -16,7 +16,7 @@
 #' plot_forest(mf)
 #' @export
 meta_fixed <- function(y, SE, labels, data,
-                       d = prior("norm", c(mean = 0, sd = .3), lower = 0),
+                       d = prior("norm", c(mean = 0, sd = .3)),
                        rscale_contin = 1/2, rscale_discrete = sqrt(2)/2,
                        centering = TRUE,
                        logml = "integrate", summarize = "integrate", ci = .95,
@@ -24,7 +24,7 @@ meta_fixed <- function(y, SE, labels, data,
 
   logml <- match.arg(logml, c("integrate", "stan"))
   data_list <- data_list("fixed", y = y, SE = SE, labels = labels, data = data,
-                         args = as.list(match.call()))
+                         args = as.list(match.call())[-1])
 
   d <- check_prior(d)
   tau <- prior("0", c(), label = "tau")
@@ -49,12 +49,35 @@ meta_fixed <- function(y, SE, labels, data,
 
   # not for fixed_jzs
   meta$posterior_d <- posterior(meta, "d", rel.tol = rel.tol)
-
   meta$estimates <- summary_meta(meta, summarize)
 
-  if (data_list$model == "fixed")  # only without jzs:
-    meta$BF <- c("d_10" = exp(meta$logml - loglik_fixed_H0(data_list)))
-  else
-    meta$BF <- c("d_10" = d(0) / meta$posterior_d(0))
+  logml_fixedH0 <- NA
+  # analytical/numerical integration: only without JZS moderator structure!
+  if (data_list$model == "fixed")
+    logml_fixedH0 <- loglik_fixed_H0(data_list)
+
+  # Savage-Dickey (if JZS present):
+  if (is.na(logml_fixedH0)){
+    n_samples <- length(extract(meta$stanfit, "d")[["d"]])
+    if (n_samples < 10000)
+      warning("If discrete/continuous moderators are specified, the Bayes factor is computed",
+              "\nbased on the Savage-Dickey density ratio. For high precision, this requires",
+              "\na larger number of samples for estimation as specified via:\n    iter=10000")
+
+    if (meta$prior_d(0) == 0){
+      warning("Savage-Dickey density ratio can only be used if the prior on the",
+              "\noverall effect size d is strictly positive at zero. For example, use:",
+              "\n  d=prior('halfcauchy', c(scale=0.707))")
+    } else {
+      bf_fixed_10 <- d(0) / meta$posterior_d(0)
+      logml_fixedH0 <- -log(bf_fixed_10) + meta$logml
+    }
+  }
+
+  meta$logml <- c("fixed_H0" = logml_fixedH0, "fixed_H1" = meta$logml)
+  meta$BF <- make_BF(meta$logml)
+  inclusion <- inclusion(meta$logml, include = c(2), prior = c(1,1))
+  meta$prior_models <- inclusion$prior
+  meta$posterior_models <- inclusion$posterior
   meta
 }

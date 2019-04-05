@@ -72,7 +72,7 @@ plot_forest.default <- function(meta, from, to, shrinked = "random",
 
   n.studies <- length(meta$data$y)
   sel <- grep("d", rownames(meta$estimates))
-  if ("Averaged" %in% rownames(meta$estimates))
+  if ("averaged" %in% rownames(meta$estimates))
     sel <- 1:nrow(meta$estimates)
   n.ests <- length(sel)
   lower <- meta$data$y - qnorm( (ci+1)/2) * meta$data$SE

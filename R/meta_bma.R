@@ -73,14 +73,14 @@
 #' mb <- meta_bma(logOR, SE, study, towels,
 #'                d = prior("norm", c(mean=0, sd=.3), lower=0),
 #'                tau = prior("invgamma", c(shape = 1, scale = 0.15)),
-#'                rel.tol = .Machine$double.eps^.15)  # speed!
+#'                rel.tol = .Machine$double.eps^.15)  # (faster)
 #' mb
 #' plot_posterior(mb, "d")
 #' @seealso \link{meta_fixed}, \link{meta_random}
 #' @template ref_gronau2017
 #' @export
 meta_bma <- function(y, SE, labels, data,
-                     d = prior("norm", c(mean = 0, sd = .3), lower = 0),
+                     d = prior("norm", c(mean = 0, sd = .3)),
                      tau  = prior("invgamma", c(shape = 1, scale = 0.15)),
                      rscale_contin = 1/2, rscale_discrete = sqrt(2)/2,
                      centering = TRUE, prior = c(1,1,1,1),
@@ -89,7 +89,7 @@ meta_bma <- function(y, SE, labels, data,
                      logml_iter = 5000, silent_stan = TRUE, ...){
 
   dl <- data_list(model = "random", y = y, SE = SE, labels = labels, data = data,
-                  args = as.list(match.call()))
+                  args = as.list(match.call())[-1])
 
   # fit meta-analysis models
   # cat(format(Sys.time()), "--- Fit fixed-effects meta-analysis\n")
@@ -103,18 +103,11 @@ meta_bma <- function(y, SE, labels, data,
 
   # model averaging for:  d | H1
   meta <- list("fixed" = fixed_H1, "random" = random_H1)
-  meta_bma <- bma(meta, prior = prior[c(2, 4)], parameter = "d",
+  meta_bma <- bma(meta, prior = prior, parameter = "d",
                   summarize = summarize, ci = ci, rel.tol = rel.tol)
 
   # inclusion bayes factors etc.
-  logml_fixed_H0 <- fixed_H1$logml - log(fixed_H1$BF["d_10"])
-  logml_random_H0 <- random_H1$logml - log(random_H1$BF["d_10"])
-  meta_bma$logml <- c("fixed_H0" = matrix(logml_fixed_H0),
-                                       # CHECK loglik_fixed_H0(fixed_H1$data),
-                      "fixed_H1" = fixed_H1$logml,
-                      "random_H0" = matrix(logml_random_H0),
-                      "random_H1" = random_H1$logml)
-  meta_bma$inclusion <- inclusion(meta_bma$logml, include = c(2,4), prior = prior)
+  meta_bma$inclusion <- inclusion(meta_bma$logml, include = c(2, 4), prior = prior)
   meta_bma$prior_models <- prior/sum(prior)
   meta_bma$posterior_models <- meta_bma$inclusion$posterior
 
@@ -123,7 +116,8 @@ meta_bma <- function(y, SE, labels, data,
   #                     "d_10_averaged" = meta_bma$inclusion$incl.BF)
   #                     # "tau_10_H1" = c(random_H1$BF["tau_10"])
 
-  meta_bma$BF <- exp(outer(meta_bma$logml, meta_bma$logml, "-"))
-
+  meta_bma$BF <- make_BF(meta_bma$logml)
   meta_bma
 }
+
+
