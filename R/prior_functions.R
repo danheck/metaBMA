@@ -91,9 +91,8 @@ truncnorm_mean <- function(mean, sd, lower, upper){
 }
 
 log_diff_exp <- function(logx1, logx2) {
-  c <- max(logx1, logx2)
-  # log(exp(logx1 - c) - exp(logx2 - c)) + c
-  log(1 - exp(logx2 - c)) + c
+  c <- logx1
+  log(exp(logx1 - c) - exp(logx2 - c)) + c
 }
 
 ############## random sampling for custom prior not supported

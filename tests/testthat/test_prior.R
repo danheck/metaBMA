@@ -62,7 +62,7 @@ test_that('expected value in truncnorm_mean() is correct', {
 
 
 test_that("log_diff_exp() correctly implemented", {
-  x <- runif(2, -10,-1)
+  x <- c(-3.2, -4.5)
   expect_silent(lde <- metaBMA:::log_diff_exp(x[1], x[2]))
   expect_equal(lde, log(exp(x)[1] - exp(x)[2]))
 })

@@ -30,10 +30,10 @@ standard error \code{SE}, \code{labels}, and moderators per study.}
 \item{d}{\code{prior} distribution on the average effect size \eqn{d}. The
 prior probability density function is defined via \code{\link{prior}}.}
 
-\item{tau}{\code{prior} distribution on the standard deviation \eqn{\tau} of
-the study effect sizes in a random-effects meta-analysis (i.e., the SD of
-\eqn{d} across studies). A (nonnegative) prior probability density function
-is defined via \code{\link{prior}}.}
+\item{tau}{\code{prior} distribution on the between-study heterogeneity
+\eqn{\tau} (i.e., the standard deviation of the study effect sizes
+\code{dstudy} in a random-effects meta-analysis. A (nonnegative) prior
+probability density function is defined via \code{\link{prior}}.}
 
 \item{rscale_contin}{scale parameter of the JZS prior for the continuous
 covariates.}

@@ -21,7 +21,10 @@
 #' The Bayes factor for the order-constrained model is computed using the
 #' encompassing Bayes factor. Since many posterior samples are required for this
 #' approach, the default number of MCMC iterations for \code{meta_ordered} is
-#' \code{iter=20000}.
+#' \code{iter=20000}. The posterior summary statistics for the model
+#' \code{ordered} refer to the overall effect size (i.e., the expected value of
+#' the truncated normal distribution) and not to the location parameter \code{d}
+#' (which is not the expected value of a truncated normal).
 #'
 #' @examples
 #' data(towels)
@@ -40,13 +43,6 @@ meta_ordered <- function (y, SE, labels, data,
                           rel.tol = .Machine$double.eps^.3,
                           silent_stan = TRUE, ...){
 
-  # check whether constraints are one-directional (+/- 0)
-  # if (attr(d, "lower") == 0 && attr(d, "upper") == Inf)
-  #   direction <- "positive"
-  # else if (attr(d, "lower") == -Inf && attr(d, "upper") == 0)
-  #   direction <- "negative"
-  # else
-  #   direction <- "truncated"
   if (attr(d, "lower") == -Inf && attr(d, "upper") == Inf)
     stop("The study-specific effects in the ordered random-effects meta-analysis must\n",
          "be order-constrained/truncated, e.g., to be all positive or all negative:\n",
@@ -71,6 +67,7 @@ meta_ordered <- function (y, SE, labels, data,
   p_post <- cnt_post$cnt / cnt_post$M
 
   # count prior samples
+  # (note: prior sampling not possible with current stan files)
   mcmc_prior <- list("d" = rprior(args$iter, d),
                      "tau" = rprior(args$iter, tau))
   N <- length(meta_ordered$meta$fixed$data$y)
@@ -151,17 +148,6 @@ meta_ordered <- function (y, SE, labels, data,
 
   meta_ordered
 }
-
-################  prior sampling not possible with stan files
-#                 (requires generated quantities!)
-# args_prior <- c(list("data_list" = meta_ordered$meta$random$data,
-#                      "d" = d, "tau" = tau, "ml_init" = FALSE),
-#                 list(...))
-# args_prior$iter <- args$iter
-# args_prior$data_list$N <- 0
-# args_prior$data_list$y <- args_prior$data_list$SE <- vector("numeric")
-# fit_prior <- do.call("meta_stan", args_prior)
-# cnt_prior <- count_dstudy(fit_prior, prior = d)
 
 
 # count how many prior/posterior samples are inside constraints

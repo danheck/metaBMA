@@ -29,10 +29,10 @@ standard error \code{SE}, \code{labels}, and moderators per study.}
 \item{d}{\code{prior} distribution on the average effect size \eqn{d}. The
 prior probability density function is defined via \code{\link{prior}}.}
 
-\item{tau}{\code{prior} distribution on the standard deviation \eqn{\tau} of
-the study effect sizes in a random-effects meta-analysis (i.e., the SD of
-\eqn{d} across studies). A (nonnegative) prior probability density function
-is defined via \code{\link{prior}}.}
+\item{tau}{\code{prior} distribution on the between-study heterogeneity
+\eqn{\tau} (i.e., the standard deviation of the study effect sizes
+\code{dstudy} in a random-effects meta-analysis. A (nonnegative) prior
+probability density function is defined via \code{\link{prior}}.}
 
 \item{prior}{prior probabilities over models (possibly unnormalized) in the
 order \code{c(fixed_H0, fixed_H1, ordered_H1, random_H1)}. Note that the
@@ -76,7 +76,10 @@ random-effects are positive (not just the overall mean effect size).
 The Bayes factor for the order-constrained model is computed using the
 encompassing Bayes factor. Since many posterior samples are required for this
 approach, the default number of MCMC iterations for \code{meta_ordered} is
-\code{iter=20000}.
+\code{iter=20000}. The posterior summary statistics for the model
+\code{ordered} refer to the overall effect size (i.e., the expected value of
+the truncated normal distribution) and not to the location parameter \code{d}
+(which is not the expected value of a truncated normal).
 }
 \examples{
 data(towels)
