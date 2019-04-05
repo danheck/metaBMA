@@ -1,7 +1,7 @@
 ### Make data-list structure and check data
 data_list <- function (model, y, SE, labels, data, args){
 
-  model <- match.arg(model, c("random", "fixed", "random_truncated"))
+  model <- match.arg(model, c("random", "fixed", "random_ordered"))
 
   if (!missing(data) && is.list(data)){
     if (all(c("model", "N", "y", "SE", "labels", "data", "model.frame") %in% names(data))){

@@ -64,8 +64,19 @@ Computes the Bayes factor for the hypothesis that the true study effects in a
 random-effects meta-anaysis are all positive or negative.
 }
 \details{
+Usually, in random-effects meta-analysis,the study-specific random-effects
+are allowed to be both negative or positive even when the prior on the
+overall effect size \code{d} is truncated to be positive). In contrast, the
+function \code{meta_ordered} tests a model in which the random effects are
+forced to be either all positive or all negative. The direction of the
+study-specific random-effects is defined via the prior on \code{d}. For
+instance, \code{d=prior("norm", c(0,.5), lower=0)} means that all
+random-effects are positive (not just the overall mean effect size).
+
 The Bayes factor for the order-constrained model is computed using the
-encompassing Bayes factor.
+encompassing Bayes factor. Since many posterior samples are required for this
+approach, the default number of MCMC iterations for \code{meta_ordered} is
+\code{iter=20000}.
 }
 \examples{
 data(towels)

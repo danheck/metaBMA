@@ -4,13 +4,6 @@
 #' studies with standard deviation \eqn{\tau} (i.e., a random-effects model).
 #'
 #' @inheritParams meta_bma
-# ' @param truncation whether the study-specific random-effects should be
-# '   truncated. The default \code{truncation=FALSE} corresponds to a standard
-# '   random-effects meta-analysis in which study specific effects can be both
-# '   negative and positive (even if the prior for the overall effect size
-# '   \code{d} is truncated). If \code{truncation=TRUE}, the truncation
-# '   boundaries of the study-specific random-effects are defined via
-# '   \code{d=prior(..., lower=0, upper=Inf)}.
 #'
 #' @examples
 #' ### Bayesian Random-Effects Meta-Analysis
@@ -22,7 +15,6 @@
 #'                   d = prior("norm", c(mean=0, sd=.3)),
 #'                   tau = prior("invgamma", c(shape = 1, scale = 0.15)),
 #'                   rel.tol = .Machine$double.eps^.15)  # speed!
-#'                   # (no summary: only for CRAN checks)
 #' mr
 #' plot_posterior(mr)
 #' @export
@@ -94,6 +86,8 @@ meta_random <- function(y, SE, labels, data,
     logml_tau0 <- integrate_wrapper(data_list_fe, d, tau, rel.tol = rel.tol)
     meta$BF <- c("d_10" = exp(meta$logml - logml_d0),
                  "tau_10" = exp(meta$logml - logml_tau0))
+
+    ###### TODO: CHECKS lgml for H0
 
   } else {
     meta$BF <- c("d_10" = NA, "tau_10" = NA)

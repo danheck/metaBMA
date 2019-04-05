@@ -83,7 +83,6 @@ mr <- meta_random(logOR, SE, study, data = towels,
                   d = prior("norm", c(mean=0, sd=.3)),
                   tau = prior("invgamma", c(shape = 1, scale = 0.15)),
                   rel.tol = .Machine$double.eps^.15)  # speed!
-                  # (no summary: only for CRAN checks)
 mr
 plot_posterior(mr)
 }
