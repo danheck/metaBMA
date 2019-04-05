@@ -27,8 +27,17 @@ test_that("extreme priors/misspecified models provide correct results with integ
 
 
 test_that("extreme priors/misspecified models still provide correct results", {
-  expect_silent(meta_fixed(logOR, SE, study, towels,
-                           d = prior("norm", c(mean = 0.2, sd = .01))))
-  expect_silent(meta_random(logOR, SE, study, towels,
-                            d = prior("norm", c(mean = 0.2, sd = .05))))
+  mf <- meta_fixed(logOR, SE, study, towels,
+                   d = prior("norm", c(mean = 0.2, sd = .01)))
+  expect_equal(mf$estimates[1:2], c(.2, .01), tolerance = .005)
+  mr <- meta_random(logOR, SE, study, towels,
+                    d = prior("norm", c(mean = 0.2, sd = .01)))
+  expect_equal(mr$estimates[1], .2, tolerance = .005)
+
+  mr <- meta_random(logOR, SE, study, towels,
+                    d = prior("norm", c(mean = 0.2, sd = .01)),
+                    tau = prior("t", c(.5, .01, 2), lower=.2))
+  expect_equal(mr$estimates[1], .2, tolerance = .005)
+  expect_silent(plot_posterior(mr, "d", from = .1, to = .3))
+  expect_silent(plot_posterior(mr, "tau", from = .4, to = .6))
 })
