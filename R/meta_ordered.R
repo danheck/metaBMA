@@ -52,14 +52,14 @@ meta_ordered <- function (y, SE, labels, data,
   # start with standard meta_bma
   args <- as.list(match.call())
   if (is.null(args$iter)) args$iter <- 20000
-  meta_ordered <- do.call("meta_bma", args)
-  names(meta_ordered$logml) <-
-    names(meta_ordered$prior_models) <-
-    names(meta_ordered$posterior_models) <-
+  m_ordered <- do.call("meta_bma", args)
+  names(m_ordered$logml) <-
+    names(m_ordered$prior_models) <-
+    names(m_ordered$posterior_models) <-
     c("null", "fixed", "ordered", "random")
 
   # count posterior samples
-  samples <- extract(meta_ordered$meta$random$stanfit_dstudy, "dstudy")[["dstudy"]]
+  samples <- extract(m_ordered$meta$random$stanfit_dstudy, "dstudy")[["dstudy"]]
   check_post <- apply(samples >= attr(d, "lower") &
                       samples <= attr(d, "upper"), 1, all)
   cnt_post <- list("cnt" = sum(check_post),
@@ -70,7 +70,7 @@ meta_ordered <- function (y, SE, labels, data,
   # (note: prior sampling not possible with current stan files)
   mcmc_prior <- list("d" = rprior(args$iter, d),
                      "tau" = rprior(args$iter, tau))
-  N <- length(meta_ordered$meta$fixed$data$y)
+  N <- length(m_ordered$meta$fixed$data$y)
   if (attr(d, "upper") == Inf)   # positive REs
     logp_dstudy <- pnorm(attr(d, "lower"), mcmc_prior$d, mcmc_prior$tau,
                          lower.tail = FALSE, log.p = TRUE)
@@ -93,18 +93,18 @@ meta_ordered <- function (y, SE, labels, data,
 
 
   # get parameter estimates for order-constrained model
-  meta_ordered$meta$ordered <- meta_ordered$meta$random
-  meta_ordered$meta$ordered$model <- meta_ordered$meta$ordered$data$model <-
+  m_ordered$meta$ordered <- m_ordered$meta$random
+  m_ordered$meta$ordered$model <- m_ordered$meta$ordered$data$model <-
     "random_ordered"
 
   if (cnt_post$cnt >= 2000){
-    meta_ordered$meta$ordered$stanfit_dstudy <- NULL
-    samples <- do.call("cbind", extract(meta_ordered$meta$random$stanfit_dstudy,
+    m_ordered$meta$ordered$stanfit_dstudy <- NULL
+    samples <- do.call("cbind", extract(m_ordered$meta$random$stanfit_dstudy,
                                         c("d", "tau")))[check_post,]
   } else{
-    meta_ordered$meta$ordered$stanfit_dstudy <-
-      meta_stan(meta_ordered$meta$ordered$data, d, tau, silent_stan = silent_stan, ...)
-    samples <- do.call("cbind", extract(meta_ordered$meta$ordered$stanfit_dstudy,
+    m_ordered$meta$ordered$stanfit_dstudy <-
+      meta_stan(m_ordered$meta$ordered$data, d, tau, silent_stan = silent_stan, ...)
+    samples <- do.call("cbind", extract(m_ordered$meta$ordered$stanfit_dstudy,
                                         c("d", "tau")))
   }
   # # check truncated sampling  vs. rejection sampling:
@@ -114,39 +114,38 @@ meta_ordered <- function (y, SE, labels, data,
   average_effect <- truncnorm_mean(samples[,"d"], samples[,"tau"],
                                    attr(d, "lower"), attr(d, "upper"))
   samples <- cbind(samples, average_effect)
-  meta_ordered$meta$ordered$estimates <- t(apply(samples, 2, summary_samples))
-  meta_ordered$meta$ordered$posterior_d <-
+  m_ordered$meta$ordered$estimates <- t(apply(samples, 2, summary_samples))
+  m_ordered$meta$ordered$posterior_d <-
     posterior_logspline(samples[,"d"], "d", d)
-  meta_ordered$meta$ordered$posterior_tau <-
+  m_ordered$meta$ordered$posterior_tau <-
     posterior_logspline(samples[,"tau"], "tau", tau)
 
   # p(y|Mo) = B_{Mo,Mr} * p(y|Mr)
-  meta_ordered$meta$ordered$logml  <- meta_ordered$logml[["ordered"]] <-
-    log(bf_ordered1) + meta_ordered$meta$random$logml
+  m_ordered$meta$ordered$logml  <- m_ordered$logml[["ordered"]] <-
+    log(bf_ordered1) + m_ordered$meta$random$logml
   logml_null <-
-    - log(meta_ordered$meta$fixed$BF[["d_10"]]) + meta_ordered$meta$fixed$logml
-  meta_ordered$meta$ordered$BF <-
-    c("d_ordered_vs_fixedH0" = exp(meta_ordered$logml[["ordered"]] - logml_null),
+    - log(m_ordered$meta$fixed$BF[["d_10"]]) + m_ordered$meta$fixed$logml
+  m_ordered$meta$ordered$BF <-
+    c("d_ordered_vs_fixedH0" = exp(m_ordered$logml[["ordered"]] - logml_null),
       "d_ordered_vs_randomH1" = bf_ordered1)
 
 
   # postproces structure of meta-bma object
-  meta_ordered$estimates <-
-    rbind(meta_ordered$estimates["fixed",,drop=FALSE],
-          meta_ordered$meta$ordered$estimates["average_effect",,drop=FALSE],
-          meta_ordered$estimates["random",,drop=FALSE])
-  rownames(meta_ordered$estimates)[2] <- "ordered"
+  m_ordered$estimates <-
+    rbind(m_ordered$estimates["fixed",,drop=FALSE],
+          m_ordered$meta$ordered$estimates["average_effect",,drop=FALSE],
+          m_ordered$estimates["random",,drop=FALSE])
+  rownames(m_ordered$estimates)[2] <- "ordered"
 
-  meta_ordered$posterior_d <- function(x) rep(-1, length(x))
+  m_ordered$posterior_d <- function(x) rep(-1, length(x))
 
-  meta_ordered$BF <- exp(outer(unlist(meta_ordered$logml),
-                               unlist(meta_ordered$logml), "-"))
+  m_ordered$BF <- exp(outer(m_ordered$logml, m_ordered$logml, "-"))
 
-  inclusion <- inclusion(meta_ordered$logml, include = c(1), prior = prior)
-  meta_ordered$prior_models <- prior/sum(prior)
-  meta_ordered$posterior_models <- inclusion$posterior
+  inclusion <- inclusion(m_ordered$logml, include = c(1), prior = prior)
+  m_ordered$prior_models <- prior/sum(prior)
+  m_ordered$posterior_models <- inclusion$posterior
 
-  meta_ordered
+  m_ordered
 }
 
 
