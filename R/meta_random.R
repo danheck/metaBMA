@@ -12,7 +12,7 @@
 #'
 #' data(towels)
 #' mr <- meta_random(logOR, SE, study, data = towels,
-#'                   d = prior("norm", c(mean=0, sd=.3)),
+#'                   d = prior("norm", c(mean=0, sd=.3), lower = 0),
 #'                   tau = prior("invgamma", c(shape = 1, scale = 0.15)),
 #'                   rel.tol = .Machine$double.eps^.15)  # speed!
 #' mr
@@ -26,6 +26,8 @@ meta_random <- function(y, SE, labels, data,
                         rel.tol = .Machine$double.eps^.3,
                         logml_iter = 3000, silent_stan = TRUE, ...){
 
+  logml <- match.arg(logml, c("integrate", "stan"))
+  summarize <- match.arg(summarize, c("integrate", "stan"))
   data_list <- data_list(model = "random", y = y, SE = SE, labels = labels,
                          data = data, args = as.list(match.call())[-1])
 
@@ -45,7 +47,6 @@ meta_random <- function(y, SE, labels, data,
                "estimates" = NULL)
   class(meta) <- "meta_random"
 
-  logml <- match.arg(logml, c("integrate", "stan"))
   if (attr(d, "family") %in% priors_stan()){
 
     # estimate random effects
@@ -82,7 +83,7 @@ meta_random <- function(y, SE, labels, data,
   if (data_list$model == "random")
     logml_randomH0 <- integrate_wrapper(data_list, d = prior("0", "d"), tau, rel.tol = rel.tol)
 
-  # Savage-Dickey (if JZS present):
+  # Savage-Dickey (if JZS present or numerical integration failed):
   if (is.na(logml_randomH0)){
     n_samples <- length(extract(meta$stanfit, "d")[["d"]])
     if (n_samples < 10000)
@@ -93,18 +94,11 @@ meta_random <- function(y, SE, labels, data,
     if (meta$prior_d(0) == 0){
       warning("Savage-Dickey density ratio can only be used if the prior on the",
               "\noverall effect size d is strictly positive at zero. For example, use:",
-              "\n  d=prior('halfcauchy', c(scale=0.707))")
+              "\n  d=prior('halfnorm', c(sd=0.3))")
     } else {
       bf_random_10 <- meta$prior_d(0) / meta$posterior_d(0)
       logml_randomH0 <- -log(bf_random_10) + meta$logml
     }
-
-    # if (meta$prior_d(0) == 0)
-    #   warning("Savage-Dickey density ratio can only be used if the prior on the",
-    #           "\noverall effect size d is strictly positive at zero. For example, use:",
-    #           "\n  d=prior('halfcauchy', c(scale=0.707))")
-    # else
-    #   meta$BF["tau_10"] <- meta$prior_tau(0) / meta$posterior_tau(0)
   }
 
   meta$logml <- c("random_H0" = logml_randomH0, "random_H1" = meta$logml)

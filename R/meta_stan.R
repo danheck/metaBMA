@@ -9,8 +9,8 @@
 #' @import rstan
 #' @importFrom utils capture.output
 meta_stan <- function (data_list,
-                       d = prior("norm", c(mean = 0, sd = .3), lower = 0),
-                       tau  = prior("t", c(location = 0, scale = .5, nu = 1), lower = 0),
+                       d = prior("norm", c(mean = 0, sd = .3)),
+                       tau  = prior("invgamma", c(shape = 1, scale = .15)),
                        jzs = list(rscale_contin = 1/2,
                                   rscale_discrete = sqrt(2)/2,
                                   centering = TRUE),
@@ -23,8 +23,10 @@ meta_stan <- function (data_list,
     attr(tau, "label") <- "tau"
     data_list <- c(data_list, prior_as_list(tau))
   }
-  if (attr(d, "family") == "0")
+  if (attr(d, "family") == "0" && !grepl("_H0", data_list$model))
     data_list$model <- paste0(data_list$model, "_H0")  # not possible: JZS + H0
+  if (grepl("_H0", data_list$model))
+    d <- prior("0", "d")
 
   data_list <- add_jzs(data_list, jzs)
   # if (truncation && grepl("jzs", data_list$model))

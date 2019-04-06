@@ -13,7 +13,7 @@ print.est <- function(estimates = NULL, what = "", digits = 3){
 # ' @param ... ignored
 #' @export
 print.meta_fixed <- function (x, digits = 3, ...){
-  cat("### Bayesian Fixed-Effects Meta-Analysis ###\n",
+  cat("### Bayesian Fixed-Effects Meta-Analysis ###",
       "\n   Prior on d:   ", describe_prior(x$prior_d, digits) ,
       # "\n   Bayes factor (d ~ prior vs. d = 0) =", round(x$BF, digits = digits),
       "\n")
@@ -25,7 +25,7 @@ print.meta_fixed <- function (x, digits = 3, ...){
 
 #' @export
 print.meta_random <- function (x, digits = 3, ...){
-  cat("### Bayesian Random-Effects Meta-Analysis ###\n",
+  cat("### Bayesian Random-Effects Meta-Analysis ###",
       "\n   Prior on d:     ", describe_prior(x$prior_d, digits) ,
       "\n   Prior on tau:   ", describe_prior(x$prior_tau, digits),
       # "\n   Bayes factor (d ~ prior vs. d = 0)      =", x$BF["d_10"],
@@ -42,7 +42,7 @@ print.meta_random <- function (x, digits = 3, ...){
 print.meta_bma <- function (x, digits = 3, ...){
 
   if (length(x$meta) == 2 && all(names(x$meta) %in% c("fixed", "random")) ){
-    cat("### Bayesian Model Averaging of Meta-Analysis ###\n")
+    cat("### Meta-Analysis with Bayesian Model Averaging ###")
     cat("\n   Fixed H0:  d = 0",
         "\n   Fixed H1:  d ~",describe_prior(x$meta$fixed$prior_d, digits),
         "\n   Random H0: d   = 0,  ",
@@ -51,7 +51,7 @@ print.meta_bma <- function (x, digits = 3, ...){
         "\n              tau ~",describe_prior(x$meta$random$prior_tau, digits),"\n")
   } else if (length(x$meta) == 3 &&
              all(names(x$meta) %in% c("fixed", "random", "ordered")) ){
-    cat("### Bayesian Meta-Analysis with Order Constraints ###\n")
+    cat("### Bayesian Meta-Analysis with Order Constraints ###")
     cat("\n   null:    d = 0",
         "\n   fixed:   d ~ ",describe_prior(x$meta$fixed$prior_d, digits),
         "\n   ordered: d      ~ ", describe_prior(x$meta$random$prior_d, digits),
@@ -62,12 +62,21 @@ print.meta_bma <- function (x, digits = 3, ...){
         "\n            tau    ~ ",describe_prior(x$meta$random$prior_tau, digits),
         "\n            dstudy ~ Normal(d,tau)\n", sep="")
   } else {
-    cat("### Bayesian Model Averaging of Meta-Analysis ###\n\n")
-    cat("  Overall effect d:\n")
+    cat("### Meta-Analysis with Bayesian Model Averaging ###")
+    cat("\n  Overall effect d:\n")
     print(x$prior_d, digits)
   }
   cat("\n# Bayes factors:\n")
   print(x$BF, digits = digits)
+
+  if (length(x$meta) == 2 && all(names(x$meta) %in% c("fixed", "random")) &&
+      !is.null(x$inclusion)){
+    cat("\n# Bayesian Model Averaging\n")
+    cat("  Comparison: (fixed_H1 & random_H1) vs. (fixed_H0 & random_H0)\n")
+    cat("  Inclusion Bayes factor:", round(x$inclusion$incl.BF, digits), "\n")
+    cat("  Inclusion posterior probability:",
+        round(x$inclusion$incl.posterior, digits), "\n")
+  }
 
   cat("\n# Model posterior probabilities:\n")
   tab <- data.frame("prior" = x$prior_models,

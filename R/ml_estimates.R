@@ -19,8 +19,9 @@ ml_estimates <- function(y, SE, model = "random", d, tau, normal_noise = 0){
     est$delta <- y - est$d
   }
   if (normal_noise > 0) {
-    est$d <- rtrunc(1, family = "norm", attr(d, "lower"), attr(d, "upper"),
-                    mean = est$d, sd = normal_noise)
+    if (attr(d, "family") != "0")
+      est$d <- rtrunc(1, family = "norm", attr(d, "lower"), attr(d, "upper"),
+                      mean = est$d, sd = normal_noise)
     if (!is.null(est$tau))
       est$tau <- rtrunc(1, family = "norm", attr(tau, "lower"), attr(tau, "upper"),
                         mean = est$tau, sd = normal_noise)

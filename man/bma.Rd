@@ -25,10 +25,6 @@ based on MCMC/Stan samples (\code{summarize = "stan"}).}
 \item{rel.tol}{relative tolerance used for numerical integration using
 \code{\link[stats]{integrate}}. Use \code{rel.tol=.Machine$double.eps} for
 maximal precision (however, this might be slow).}
-
-\item{only_unique}{whether to exclude models with identical log-marginal
-likelihood (e.g., if the same null model H0 is present in all models in
-\code{meta})}
 }
 \description{
 Model averaging for different meta-analysis models (e.g., random-effects or

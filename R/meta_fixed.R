@@ -23,6 +23,7 @@ meta_fixed <- function(y, SE, labels, data,
                        rel.tol = .Machine$double.eps^.3, silent_stan = TRUE, ...){
 
   logml <- match.arg(logml, c("integrate", "stan"))
+  summarize <- match.arg(summarize, c("integrate", "stan"))
   data_list <- data_list("fixed", y = y, SE = SE, labels = labels, data = data,
                          args = as.list(match.call())[-1])
 

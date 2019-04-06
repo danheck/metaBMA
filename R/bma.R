@@ -6,9 +6,6 @@
 #'
 #' @param meta list of meta-analysis models (fitted via
 #'   \code{\link{meta_random}} or \code{\link{meta_fixed}})
-#' @param only_unique whether to exclude models with identical log-marginal
-#'   likelihood (e.g., if the same null model H0 is present in all models in
-#'   \code{meta})
 #' @inheritParams inclusion
 #' @inheritParams meta_bma
 #' @param parameter eiher the mean effect \code{"d"} or the heterogeneity across

@@ -80,7 +80,7 @@ studies with standard deviation \eqn{\tau} (i.e., a random-effects model).
 
 data(towels)
 mr <- meta_random(logOR, SE, study, data = towels,
-                  d = prior("norm", c(mean=0, sd=.3)),
+                  d = prior("norm", c(mean=0, sd=.3), lower = 0),
                   tau = prior("invgamma", c(shape = 1, scale = 0.15)),
                   rel.tol = .Machine$double.eps^.15)  # speed!
 mr

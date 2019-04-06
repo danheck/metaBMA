@@ -2,50 +2,67 @@ library(rstan)
 library(testthat)
 library(metaBMA)
 
-set.seed(123452)
+set.seed(12352)
 SE <- runif(20, .3,1.3)
-d <- data.frame(yyy = rnorm(20, 0, .5), SE = SE, study = 1:20)
-d$xx <- rnorm(20, 0, 1)
-d$cat <- rep(c("a", "b"), 10)
+dat <- data.frame(yyy = rnorm(20, 0, .5), SE = SE, study = 1:20)
+dat$xx <- rnorm(20, 0, 1)
+dat$cat <- rep(c("a", "b"), 10)
 
 test_that("meta_fixed: logml for H0 is correct", {
 
-  f1 <- meta_fixed(yyy, SE, study, data = d, logml = "int")
-  f1a <- meta_fixed(yyy ~ 1, SE, study, data = d, logml = "int")
+  f1 <- meta_fixed(yyy, SE, study, data = dat, logml = "int")
+  f1a <- meta_fixed(yyy ~ 1, SE, study, data = dat, logml = "int")
   expect_silent(bb <- bma(list(a = f1, b = f1a)))
   postprob <- unname(bb$posterior_models[c(2,4)])
   expect_equal(postprob/sum(postprob), c(.5, .5))
 
   # logml with Stan
-  f2 <- meta_fixed(yyy, SE, study, data = d, logml = "stan", iter = 6000, warmup = 1000)
+  f2 <- meta_fixed(yyy, SE, study, data = dat, logml = "stan", iter = 6000, warmup = 1000)
   expect_equal(f1$logml, f2$logml, tolerance = .01)
+  expect_equal(metaBMA:::loglik_fixed_H0(f1$data),
+               unname(f2$logml[1]), tolerance = .01)
 
   # different loglik for JZS
-  expect_warning(f3 <- meta_fixed(yyy ~ xx, SE, study, data = d,   # warning: JZS
+  expect_warning(f3 <- meta_fixed(yyy ~ xx, SE, study, data = dat,   # warning: JZS
                                   logml = "stan", iter = 6000, warmup = 1000))
   expect_equal(f1$logml, f2$logml, tolerance = .01)
   expect_true(f1$logml["fixed_H1"] > f3$logml["fixed_H1"] + 1)
 })
 
 
-test_that("meta_random: logml for H0 is correct", {
+test_that("meta_random: logml & estimates correct", {
 
-  f1 <- meta_random(yyy, SE, study, data = d, logml = "int")
-  f2 <- meta_random(yyy, SE, study, data = d, logml = "stan", summ = "s",
+  f1 <- meta_random(yyy, SE, study, data = dat, logml = "int", summ="int")
+  f2 <- meta_random(yyy, SE, study, data = dat, logml = "stan", summ = "s",
                     iter = 10000, logml_iter = 20000)
   expect_equal(f1$logml, f2$logml, tolerance = .02)
   expect_equal(f1$BF, f2$BF, tolerance = .01)
+  expect_equal(f1$estimates, f2$estimates, tolerance = .01)
+  expect_equal(f1$posterior_d(0) / f1$prior_d(0),
+               f2$BF["random_H0","random_H1"], tolerance = .1)
 
   # check: logml for "random_H0" with bridgesampling
-  dl <- f1$data
-  dl$model <- "random_H0"
-  tmp <- capture_output(stanfit <- metaBMA:::meta_stan(dl, iter = 30000))
+  stanfit <- metaBMA:::meta_stan(f1$data, d = prior("0"), iter = 10000)
   bs <- bridgesampling:::bridge_sampler(stanfit, silent = TRUE, use_neff = FALSE)
-  # expect_equal(bs$logml, unname(f1$logml["random_H0"]), tolerance = .001)
-
-  # TODO: check random_H0 logml  / BF
-
-  # f1$posterior_tau(0) / f1$prior_tau(0)
-  # hist(extract(stanfit)$tau, 100, freq=F)
-  # curve(f2$prior_tau(x), add=T, lwd=2)
+  expect_equal(bs$logml, unname(f1$logml["random_H0"]), tolerance = .003)
 })
+
+
+test_that("Stan models 'random_dstudy' and 'random' are equivalent", {
+  dl <- list(y = dat$yyy, SE = dat$SE, N = length(dat$SE))
+
+  dl$model <- "random"
+  stanfit1 <- metaBMA:::meta_stan(dl, iter = 10000)
+  bs1 <- bridgesampling:::bridge_sampler(stanfit1, silent = TRUE, use_neff = FALSE)
+
+  dl$model <- "random_dstudy"
+  stanfit2 <- metaBMA:::meta_stan(dl, iter = 10000)
+  bs2 <- bridgesampling:::bridge_sampler(stanfit2, silent = TRUE, use_neff = FALSE)
+
+  expect_equal(bs1$logml, bs2$logml, tolerance = .01)
+  sel <- c("mean", "sd", "25%", "50%", "75%")
+  expect_equal(summary(stanfit1, c("d", "tau"))$summary[,sel],
+               summary(stanfit2, c("d", "tau"))$summary[,sel],
+               tolerance = .01)
+})
+
