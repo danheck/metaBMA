@@ -32,12 +32,13 @@ test_that("meta_fixed: logml for H0 is correct", {
 
 test_that("meta_random: logml & estimates correct", {
 
-  f1 <- meta_random(yyy, SE, study, data = dat, logml = "int", summ="int")
+  f1 <- meta_random(yyy, SE, study, data = dat, logml = "int", summ="int",
+                    rel.tol = .Machine$double.eps)
   f2 <- meta_random(yyy, SE, study, data = dat, logml = "stan", summ = "s",
                     iter = 10000, logml_iter = 20000)
   expect_equal(f1$logml, f2$logml, tolerance = .02)
   expect_equal(f1$BF, f2$BF, tolerance = .01)
-  expect_equal(f1$estimates, f2$estimates, tolerance = .01)
+  expect_equal(f1$estimates, f2$estimates, tolerance = .03)
   expect_equal(f1$posterior_d(0) / f1$prior_d(0),
                f2$BF["random_H0","random_H1"], tolerance = .1)
 

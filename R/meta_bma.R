@@ -91,11 +91,11 @@ meta_bma <- function(y, SE, labels, data,
   dl <- data_list(model = "random", y = y, SE = SE, labels = labels, data = data,
                   args = as.list(match.call())[-1])
 
-  # fit meta-analysis models
   # cat(format(Sys.time()), "--- Fit fixed-effects meta-analysis\n")
   fixed_H1 <- meta_fixed(y, SE, labels, data = dl, d = d, logml = logml,
                          summarize = summarize, ci = ci, rel.tol = rel.tol,
                          silent_stan = silent_stan, ...)
+
   # cat(format(Sys.time()), "--- Fit random-effects meta-analysis\n")
   random_H1 <- meta_random(y, SE, labels, data = dl, d = d, tau = tau, logml = logml,
                            summarize = summarize, ci = ci, rel.tol = rel.tol,
@@ -110,12 +110,6 @@ meta_bma <- function(y, SE, labels, data,
   meta_bma$inclusion <- inclusion(meta_bma$logml, include = c(2, 4), prior = prior)
   meta_bma$prior_models <- prior/sum(prior)
   meta_bma$posterior_models <- meta_bma$inclusion$posterior
-
-  # meta_bma$BF <- list("d_10_fixed" = c(fixed_H1$BF["d_10"]),
-  #                     "d_10_random" = c(random_H1$BF["d_10"]),
-  #                     "d_10_averaged" = meta_bma$inclusion$incl.BF)
-  #                     # "tau_10_H1" = c(random_H1$BF["tau_10"])
-
   meta_bma$BF <- make_BF(meta_bma$logml)
   meta_bma
 }

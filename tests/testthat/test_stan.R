@@ -20,5 +20,8 @@ test_that("priors for stan models are properly checked", {
   expect_error(metaBMA:::meta_stan(data_list, d = prior("dsad"), iter = 100))
   expect_error(metaBMA:::meta_stan(data_list, prior("t", c(1,0,0)), iter = 100))
   expect_error(metaBMA:::meta_stan(data_list, prior("t", c(1,3,-10)), iter = 100))
+  expect_error(metaBMA:::meta_stan(data_list, prior("t", c(1,3,1.3)), iter = 100))
+  expect_error(metaBMA:::meta_stan(data_list, prior("t", c(1,3)), iter = 100))
+  expect_error(metaBMA:::meta_stan(data_list, prior("norm", c(1,-1)), iter = 100))
 })
 
