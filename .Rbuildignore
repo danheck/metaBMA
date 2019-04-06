@@ -8,3 +8,5 @@ man-roxygen/*
 ^\.travis\.yml$
 
 development.R
+document-build-roxygen2-error.R
+

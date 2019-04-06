@@ -54,7 +54,7 @@ before_install:
 script:
   - |
     travis_wait 42 R CMD build .
-    travis_wait 59 R CMD check metaBMA*tar.gz
+    travis_wait 59 R CMD check metaBMA*tar.gz --as-cran
 
 after_script:
   - tar -ztvf metaBMA_*.tar.gz
