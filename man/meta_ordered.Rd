@@ -76,15 +76,20 @@ random-effects are positive (not just the overall mean effect size).
 The Bayes factor for the order-constrained model is computed using the
 encompassing Bayes factor. Since many posterior samples are required for this
 approach, the default number of MCMC iterations for \code{meta_ordered} is
-\code{iter=20000}. The posterior summary statistics for the model
+\code{iter=10000} per chain. The posterior summary statistics for the model
 \code{ordered} refer to the overall effect size (i.e., the expected value of
 the truncated normal distribution) and not to the location parameter \code{d}
 (which is not the expected value of a truncated normal).
 }
 \examples{
+### Bayesian Meta-Analysis with Order Constraints
+Note: The following code optimizes speed (for CRAN checks).
+      The settings are not suitable for actual data analysis!
+
 data(towels)
 mo <- meta_ordered(logOR, SE, study, towels,
-                   d = prior("norm", c(mean=0, sd=.3), lower=0))
+                   d = prior("norm", c(mean=0, sd=.3), lower=0),
+                   iter = 1000)  # default: iter=10000
 mo
 plot_posterior(mo)
 }
