@@ -83,8 +83,8 @@ the truncated normal distribution) and not to the location parameter \code{d}
 }
 \examples{
 ### Bayesian Meta-Analysis with Order Constraints
-Note: The following code optimizes speed (for CRAN checks).
-      The settings are not suitable for actual data analysis!
+# Note: The following code optimizes speed (for CRAN checks).
+#       The settings are not suitable for actual data analysis!
 
 data(towels)
 mo <- meta_ordered(logOR, SE, study, towels,
