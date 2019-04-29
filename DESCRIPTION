@@ -19,14 +19,14 @@ Description: Computes the posterior model probabilities for standard meta-analys
     fixed-effects meta-analysis with and without moderators.
 Depends:
     R (>= 3.4.0),
-    Rcpp (>= 1.0.1),
+    Rcpp (>= 1.0.0),
     methods
 Imports:
     mvtnorm,
     logspline,
     coda,
     LaplacesDemon,
-    rstan (>= 2.18.2),
+    rstan (>= 2.18.1),
     rstantools (>= 1.5.1),
     bridgesampling
 Suggests: 
@@ -36,7 +36,7 @@ LinkingTo:
     BH (>= 1.69.0-1),
     Rcpp (>= 1.0.0),
     RcppEigen (>= 0.3.3.5.0),
-    rstan (>= 2.18.0),
+    rstan (>= 2.18.1),
     StanHeaders (>= 2.18.0)
 VignetteBuilder: knitr
 URL: https://github.com/danheck/metaBMA

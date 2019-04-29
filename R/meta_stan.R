@@ -121,10 +121,11 @@ add_jzs <- function (data_list, jzs){
   #       => centering for discrete variables?! (unbalanced designs?!)
   if (any(discr_l)){
     for (i in seq_along(discr)){
-      idx_d <- sum(P[seq_len(i - 1 + with_contin)]) + seq_len(P[i + with_contin])
+      seq_levels <- seq_len(P[i + with_contin])
+      idx_d <- sum(P[seq_len(i - 1 + with_contin)]) + seq_levels
       X[,idx_d] <- Xd <- design_matrix(mf, discr[i])
       colnames(X)[idx_d] <- colnames(Xd)
-      L[i + with_contin, seq(P[i]), seq(P[i])] <- diag(ncol(Xd))
+      L[i + with_contin, seq_levels, seq_levels] <- diag(ncol(Xd))
     }
   }
 
