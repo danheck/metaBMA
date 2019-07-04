@@ -73,16 +73,16 @@ prior <- function (family, param, lower, upper, label = "d",
   } else if (family == "cauchy"){
     stopifnot(length(param) == 1, param > 0)
     family = "t"
-    param = c(location = 0, scale = param, nu = 1)
+    param = c(location = 0, scale = unname(param), nu = 1)
   } else if (family == "halfcauchy"){
     stopifnot(length(param) == 1, param > 0)
     family = "t"
-    param = c(location = 0, scale = param, nu = 1)
+    param = c(location = 0, scale = unname(param), nu = 1)
     lower = 0
   } else if (family == "halfnorm"){
     stopifnot(length(param) == 1, param > 0)
     family = "norm"
-    param = c(mean = 0, sd = param)
+    param = c(mean = 0, sd = unname(param))
     lower = 0
   }
 
