@@ -7,7 +7,11 @@ posterior <- function (meta, parameter = "d", summarize = "integrate",
     if (parameter != "d")
       stop("bma currently. only working for parameter='d' ")
     # average across posterior densities:
-    weights <- meta$posterior_models
+    if (length(meta$posterior_models) == 4 && length(meta$posterior_d) == 2)
+      models <- paste0(names(meta$posterior_d), "_H1")
+    else
+      models <- seq_along(meta)
+    weights <- meta$posterior_models[models]
     dpost_bma <- function (d)
       sapply(d, function (dd){
         sum(weights*sapply(meta$posterior_d, function(dp) dp(dd)))
