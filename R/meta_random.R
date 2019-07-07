@@ -52,12 +52,13 @@ meta_random <- function(y, SE, labels, data,
     # estimate random effects
     data_list2 <- data_list
     data_list2$model <- paste0(data_list$model, "_dstudy")
+    jzs <- grepl("jzs", data_list2$model)
+    pars <-  c("d", "tau", "dstudy", c("alpha")[jzs])
     meta$stanfit_dstudy <- meta_stan(data_list2, d = d, tau = tau, jzs = meta$jzs,
-                                     pars = c("d", "tau", "dstudy"),
-                                     silent_stan = silent_stan, ...)
+                                     pars = pars, silent_stan = silent_stan, ...)
 
     # get samples for bridge sampling / BF
-    if (logml == "stan"){
+    if (logml == "stan" || jzs){
       args <- c(list("data_list" = data_list, "d" = d, "tau" = tau, "jzs" = meta$jzs),
                 list(...))
       args$iter <- logml_iter
@@ -76,7 +77,8 @@ meta_random <- function(y, SE, labels, data,
 
   meta$posterior_d <- posterior(meta, "d", summarize, rel.tol = rel.tol)
   meta$posterior_tau <- posterior(meta, "tau", summarize, rel.tol = rel.tol)
-  meta$estimates <- summary_meta(meta, summarize)[c("d", "tau"),,drop = FALSE]
+  summ <- summary_meta(meta, summarize)
+  meta$estimates <- summ[c("d", "tau", grep("alpha", rownames(summ), value = TRUE)),,drop = FALSE]
 
   logml_randomH0 <- NA
   # analytical/numerical integration: only without JZS moderator structure!

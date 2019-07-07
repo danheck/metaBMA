@@ -26,6 +26,7 @@ meta_fixed <- function(y, SE, labels, data,
   summarize <- match.arg(summarize, c("integrate", "stan"))
   data_list <- data_list("fixed", y = y, SE = SE, labels = labels, data = data,
                          args = as.list(match.call())[-1])
+  jzs <- grepl("jzs", data_list$model)
 
   d <- check_prior(d)
   tau <- prior("0", c(), label = "tau")
@@ -39,7 +40,7 @@ meta_fixed <- function(y, SE, labels, data,
                "logml"  = NA,  "BF" = NULL, "estimates" = NULL)
   class(meta) <- "meta_fixed"
 
-  if (attr(d, "family") %in% priors_stan() && attr(d, "family") != "0")
+  if (attr(d, "family") %in% priors_stan() && attr(d, "family") != "0" || jzs)
     meta$stanfit <- meta_stan(data_list, d = d, jzs=meta$jzs, silent_stan = silent_stan, ...)
 
   if (logml == "integrate" ||
@@ -50,7 +51,8 @@ meta_fixed <- function(y, SE, labels, data,
 
   # not for fixed_jzs
   meta$posterior_d <- posterior(meta, "d", rel.tol = rel.tol)
-  meta$estimates <- summary_meta(meta, summarize)
+  summ <- summary_meta(meta, summarize)
+  meta$estimates <- summ[c("d", grep("alpha", rownames(summ), value = TRUE)),,drop = FALSE]
 
   logml_fixedH0 <- NA
   # analytical/numerical integration: only without JZS moderator structure!

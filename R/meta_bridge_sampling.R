@@ -5,8 +5,8 @@ meta_bridge_sampling <- function(meta, logml = "integrate",
                                  rel.error = .01, ...){
 
   if (logml == "integrate" && is.na(meta$logml)){
-    warning ("Integral for marginal likelihood could not be computed with ?integrate.\n",
-             "  MCMC/Stan sampling and bridge_sampler will be used instead.")
+    warning ("Marginal likelihood could not be computed with numerical integration (logml='integrate)'.\n",
+             "  MCMC/Stan sampling and bridge_sampler are used instead (logml='stan').")
     logml <- "stan"
   }
 
