@@ -30,9 +30,9 @@ test_that("meta_fixed supports data as vector/variable names", {
 test_that("meta_bma supports data as vector/variable names", {
 
   fit7 <- meta_bma("yyy", "SE", "study", d, summ="int")
-  fit8 <- meta_bma(yyy, SE, study, d, rel.tol = .1, iter = 10000, summ = "stan")
-  fit9 <- meta_bma("yyy", SE, study, d, iter = 10000, logml="stan")
-  fit10 <- meta_bma(yyy, SE, study, d, iter = 10000)
+  fit8 <- meta_bma(yyy, SE, study, d, rel.tol = .1, iter = 15000, summ = "stan")
+  fit9 <- meta_bma("yyy", SE, study, d, iter = 15000, logml="stan")
+  fit10 <- meta_bma(yyy, SE, study, d, iter = 15000)
 
   # plot_posterior(fit8$meta$random, "tau")
   # hist(extract(fit8$meta$random$stanfit)[["tau"]], 300, add=T,freq=F)
@@ -41,9 +41,9 @@ test_that("meta_bma supports data as vector/variable names", {
   expect_identical(fit7$logml, fit10$logml)
   expect_equal(fit7$logml, fit9$logml, tolerance = .01)
 
-  expect_equal(fit7$estimates, fit8$estimates, tolerance = .03)
-  expect_equal(fit7$estimates, fit9$estimates, tolerance = .03)
-  expect_equal(fit7$estimates, fit10$estimates, tolerance = .03)
+  expect_equal(fit7$estimates, fit8$estimates, tolerance = .05)
+  expect_equal(fit7$estimates, fit9$estimates, tolerance = .05)
+  expect_equal(fit7$estimates, fit10$estimates, tolerance = .05)
 })
 
 
