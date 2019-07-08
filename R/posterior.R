@@ -8,7 +8,7 @@ posterior <- function (meta, parameter = "d", summarize = "integrate",
       stop("bma currently. only working for parameter='d' ")
     # average across posterior densities:
     if (length(meta$posterior_models) != length(meta$posterior_d))
-      models <- grep("H1",names(meta$posterior_models),
+      models <- grep("H1", names(meta$posterior_models),
                      value  = TRUE, fixed = TRUE)
     else
       models <- seq_along(meta)
@@ -50,7 +50,7 @@ posterior <- function (meta, parameter = "d", summarize = "integrate",
 
     prior <- meta[[paste0("prior_", parameter)]]
     if (is.null(dpost))
-      dpost <- posterior_logspline(meta$stanfit, parameter, prior)  # JZS!
+      dpost <- posterior_logspline(meta$stanfit, parameter, prior)  # TODO: JZS alpha parameters!
     attr(dpost, "lower") <- attr(prior, "lower")
     attr(dpost, "upper") <- attr(prior, "upper")
     attr(dpost, "model") <- meta$model

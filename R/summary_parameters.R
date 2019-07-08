@@ -46,7 +46,13 @@ summary_samples <- function(x, ci = .95){
 
   hpd <- c(HPDinterval(mcmc(x), ci))
   names(hpd) <-  paste0("hpd", round(ci*100,2), c("_lower", "_upper"))
-  c(s, hpd)
+
+  ##### n_eff / Rhat
+  # coda:::gelman.diag(as.mcmc(x))
+  # coda:::effectiveSize(as.mcmc(x))
+  # => not enough information to use in bma: random subset of samples
+  # => information about chains and order is lost!
+  c(s, hpd, "n_eff" = NA, "Rhat" = NA)
 }
 
 #' @importFrom coda varnames
@@ -57,6 +63,10 @@ summary_stanfit <- function (stanfit, ci = .95){
   mcmc <- do.call("rbind", samples)
   summ <- t(apply(mcmc, 2, summary_samples))
   sel <- rownames(summ) != "lp__" & !grepl("g[", rownames(summ), fixed = TRUE)
+
+  # add convergence diagnostics
+  summ[sel, "n_eff"] <- round(summary(stanfit)$summary[sel, "n_eff"], 1)
+  summ[sel, "Rhat"]  <- round(summary(stanfit)$summary[sel, "Rhat"], 3)
   summ[sel,,drop = FALSE]
 }
 
@@ -103,7 +113,9 @@ summary_integrate <- function (density, lb = NULL, ub = NULL, ci = .95,
     xx <- seq(max(lb, qq[1] - i*SD), min(ub, qq[3] + i*SD), length.out = 201)
     dx <- sapply(xx, density)*diff(xx[1:2])
     px <- cumsum(dx)
-    qdens <- splinefun(px, xx)
+    # use monotonic spline function to approximate inverse of cdf
+    qdens <- splinefun(px, xx, method = "monoH.FC", ties = "mean")
+    # plot(px ,xx, col = "gray") ; curve(qdens, add =TRUE)
 
     length.interval <- function (start){
       qdens(start+ci)-qdens(start)
@@ -124,5 +136,5 @@ summary_integrate <- function (density, lb = NULL, ub = NULL, ci = .95,
     warning(warn)
 
   names(qq) <- paste0(round(probs* 100, digits = 1), "%")
-  c("mean" = mean, "sd" = SD, qq, hpd)
+  c("mean" = mean, "sd" = SD, qq, hpd, "n_eff" = NA, "Rhat" = NA)
 }

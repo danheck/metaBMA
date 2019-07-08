@@ -1,17 +1,22 @@
 library(testthat)
 library(metaBMA)
 
+set.seed(123)
+
 test_that("Gronau (2017): power pose analysis (reported) are correct ", {
-  data(power_pose)
+  data(power_pose, package = "metaBMA")
   tmp <- capture_output(eval(power_pose))
 
-  priorEStesting <- prior(family = "t", param = c(location = 0, scale = 1/sqrt(2), nu = 1),
-                          lower = 0, label = "d")
-  priorESestimation <- prior(family = "t", param = c(location=0, scale=1/sqrt(2), nu=1), label = "d")
-  priorTau <- prior("invgamma", c(1, .15), label = "tau")
+  expect_silent(
+    priorEStesting <- prior(family = "t", param = c(location = 0, scale = 1/sqrt(2), nu = 1), lower = 0, label = "d"))
+  expect_silent(
+    priorESestimation <- prior(family = "t", param = c(location=0, scale=1/sqrt(2), nu=1), label = "d"))
+  expect_silent(
+    priorTau <- prior("invgamma", c(1, .15), label = "tau"))
 
   m_testing <- meta_bma(y = effectSize, SE = SE, d = priorEStesting, data = power_pose,
                         tau = priorTau, iter = 1000, summ = "int")
+
   bf_reported <- c("d_10_fixed" = 89.570, "d_10_random" = 9.374)
   expect_equal(unname(unlist(m_testing$BF)[c(2,12)]),
                unname(bf_reported), tolerance = .0001)
@@ -20,12 +25,12 @@ test_that("Gronau (2017): power pose analysis (reported) are correct ", {
   m_estimation <- meta_bma(y = effectSize, SE = SE, data =power_pose, d = priorESestimation,
                            tau = priorTau, iter = 1000, summarize = "int")
   expect_equal(m_estimation$estimates["averaged",c(4, 6:7)],
-               c("50%" = 0.22, "hpd95_lower" = 0.09, "hpd95_upper" = 0.34), tolerance = .03)
+               c("50%" = 0.22, "hpd95_lower" = 0.09, "hpd95_upper" = 0.34), tolerance = .01)
 })
 
 
 test_that("Gronau (2017): power pose analysis with informed t prior ", {
-  data(power_pose)
+  data(power_pose, package = "metaBMA")
   tmp <- capture_output(eval(power_pose))
 
   priorEStesting <- prior(family = "t",
@@ -46,13 +51,13 @@ test_that("Gronau (2017): power pose analysis with informed t prior ", {
   m_estimation <- meta_bma(y = effectSize, SE = SE, data =power_pose, d = priorESestimation,
                            tau = priorTau, iter = 1000, summ = "int")
   expect_equal(m_estimation$estimates["averaged",c(4, 6:7)],
-               c("50%" = 0.26, "hpd95_lower" = 0.14, "hpd95_upper" = 0.37), tolerance = .02)
+               c("50%" = 0.26, "hpd95_lower" = 0.14, "hpd95_upper" = 0.37), tolerance = .01)
 })
 
 
 
 test_that("Gronau (2017): power pose analysis (only unfamiliar with default prior)", {
-  # data(power_pose_unfamiliar)
+  # data(power_pose_unfamiliar, package = "metaBMA")
   tmp <- capture_output(eval(power_pose_unfamiliar))
 
   priorEStesting <- prior(family = "t", param = c(location = 0, scale = 1/sqrt(2), nu = 1),
@@ -71,12 +76,12 @@ test_that("Gronau (2017): power pose analysis (only unfamiliar with default prio
                            d = priorESestimation,
                            tau = priorTau, iter = 1000, summarize = "int")
   expect_equal(m_estimation$estimates["averaged",c(4, 6:7)],
-               c("50%" = .18, "hpd95_lower" = .03, "hpd95_upper" = .33), tolerance = .02)
+               c("50%" = .18, "hpd95_lower" = .03, "hpd95_upper" = .33), tolerance = .01)
 })
 
 
 test_that("Gronau (2017): power pose analysis (only unfamiliar and informed t prior) ", {
-  # data("power_pose_unfamiliar", package = "metaBMA")
+  # data(power_pose_unfamiliar, package = "metaBMA")
   tmp <- capture_output(eval(power_pose_unfamiliar))
 
   priorEStesting <- prior(family = "t",

@@ -50,7 +50,8 @@ bma <- function(meta, prior = 1, parameter = "d", summarize = "integrate", ci = 
   class(res_bma) <- "meta_bma"
 
   # BMA: weighted posterior of effects
-  ests <- do.call("rbind", lapply(meta, function(x) x$estimates[parameter,]))
+  summ_list <- lapply(meta, function(x) x$estimates[parameter,])
+  ests <- do.call("rbind", summ_list)
 
   # obtain density function (weighted average of densities)
   res_bma[[paste0("posterior_", parameter)]] <-

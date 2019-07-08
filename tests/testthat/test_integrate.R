@@ -12,7 +12,7 @@ test_that("check old prior labels with logml='stan'/'integrate'", {
                    tau = prior("t", c(0, .3, 1), lower = 0))
   m2 <- meta_fixed(logOR, SE, study, towels, d = prior("halfcauchy", .1),
                    tau = prior("cauchy", .3, lower = 0), logml = "stan")
-  expect_equal(m1$estimates, m2$estimates, tolerance = .005)
+  expect_equal(m1$estimates[,1:7,drop=FALSE], m2$estimates[,1:7,drop=FALSE], tolerance = .005)
   expect_equal(m1$logml, m2$logml, tolerance = .01)
 
   mr1 <- meta_random(logOR, SE, study, towels, summarize = "int",
@@ -21,7 +21,7 @@ test_that("check old prior labels with logml='stan'/'integrate'", {
   mr2 <- meta_random(logOR, SE, study, towels, summarize = "int",
                      d = prior("scaledt", c(0, .1, 5), lower=0),
                      tau = prior("halfnorm", .3), logml = "stan")
-  expect_equal(mr1$estimates, mr2$estimates, tolerance = .02)
+  expect_equal(mr1$estimates[,1:7,drop=FALSE], mr2$estimates[,1:7,drop=FALSE], tolerance = .02)
   expect_equal(mr1$logml, mr2$logml, tolerance = .02)
 
 })

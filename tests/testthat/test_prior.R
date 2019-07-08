@@ -14,7 +14,8 @@ test_that('prior returns vectorized function', {
     for (lower in c(-Inf, 0)){
       for (upper in c(1, Inf)){
         if (! (priors[i] == "beta" & (lower==-Inf || upper == Inf))){
-          pp <- prior(priors[i], params[[i]], lower = lower, upper = upper)
+          # suppress warning for inverse gamma: lower truncation must be 0 (automatically adjusted)
+          suppressWarnings(pp <- prior(priors[i], params[[i]], lower = lower, upper = upper))
           plot(pp)
           plot(pp, from = -1, to = 1.5)
           expect_s3_class(pp, "prior")

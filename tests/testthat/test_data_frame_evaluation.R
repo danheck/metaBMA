@@ -12,7 +12,7 @@ test_that("meta_fixed supports data as vector/variable names", {
   fit3 <- meta_fixed(d$yyy, d$SE, d$study)
   expect_identical(fit1$logml, fit2$logml)
   expect_identical(fit1$logml, fit3$logml)
-  expect_identical(fit1$estimates, fit3$estimates)
+  expect_identical(fit1$estimates[,1:7,drop=FALSE], fit3$estimates[,1:7,drop=FALSE])
 
   # (un)quoted variable names
   fit4 <- meta_fixed("yyy", "SE", "study", d)
@@ -21,9 +21,9 @@ test_that("meta_fixed supports data as vector/variable names", {
   expect_identical(fit1$logml, fit4$logml)
   expect_identical(fit1$logml, fit5$logml)
   expect_identical(fit1$logml, fit6$logml)
-  expect_identical(fit1$estimates, fit4$estimates)
-  expect_identical(fit1$estimates, fit5$estimates)
-  expect_identical(fit1$estimates, fit6$estimates)
+  expect_identical(fit1$estimates[,1:7,drop=FALSE], fit4$estimates[,1:7,drop=FALSE])
+  expect_identical(fit1$estimates[,1:7,drop=FALSE], fit5$estimates[,1:7,drop=FALSE])
+  expect_identical(fit1$estimates[,1:7,drop=FALSE], fit6$estimates[,1:7,drop=FALSE])
 })
 
 
@@ -41,9 +41,9 @@ test_that("meta_bma supports data as vector/variable names", {
   expect_identical(fit7$logml, fit10$logml)
   expect_equal(fit7$logml, fit9$logml, tolerance = .01)
 
-  expect_equal(fit7$estimates, fit8$estimates, tolerance = .05)
-  expect_equal(fit7$estimates, fit9$estimates, tolerance = .05)
-  expect_equal(fit7$estimates, fit10$estimates, tolerance = .05)
+  expect_equal(fit7$estimates[,1:7,drop=FALSE], fit8$estimates[,1:7,drop=FALSE], tolerance = .05)
+  expect_equal(fit7$estimates[,1:7,drop=FALSE], fit9$estimates[,1:7,drop=FALSE], tolerance = .05)
+  expect_equal(fit7$estimates[,1:7,drop=FALSE], fit10$estimates[,1:7,drop=FALSE], tolerance = .05)
 })
 
 

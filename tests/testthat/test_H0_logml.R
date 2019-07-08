@@ -39,7 +39,7 @@ test_that("meta_random: logml & estimates correct", {
                     iter = 10000, logml_iter = 20000)
   expect_equal(f1$logml, f2$logml, tolerance = .02)
   expect_equal(f1$BF, f2$BF, tolerance = .1)
-  expect_equal(f1$estimates, f2$estimates, tolerance = .03)
+  expect_equal(f1$estimates[,1:7,drop=FALSE], f2$estimates[,1:7,drop=FALSE], tolerance = .03)
   expect_equal(f1$posterior_d(0) / f1$prior_d(0),
                f2$BF["random_H0","random_H1"], tolerance = .1)
 

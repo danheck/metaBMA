@@ -19,7 +19,11 @@ print.meta_fixed <- function (x, digits = 3, ...){
       "\n")
   cat("\n# Bayes factors:\n")
   print(x$BF, digits = digits)
-  print.est(x$estimates, what = " of fixed-effects parameters", digits = digits)
+  print.est(x$estimates, what = " of fixed-effects model", digits = digits)
+
+  if (any(grepl("alpha", rownames(x$estimates))))
+    cat("  (Note: moderators in meta-regression are ",
+        ifelse(fe_xx$jzs$centering, "", "NOT ") , "mean-centered.)\n", sep = "")
 }
 
 
@@ -34,7 +38,11 @@ print.meta_random <- function (x, digits = 3, ...){
 
   cat("\n# Bayes factors:\n")
   print(x$BF, digits = digits)
-  print.est(x$estimates, what = " of random-effects parameters", digits = digits)
+  print.est(x$estimates, what = " of random-effects model", digits = digits)
+
+  if (any(grepl("alpha", rownames(x$estimates))))
+    cat("  (Note: moderators in meta-regression are ",
+        ifelse(fe_xx$jzs$centering, "", "NOT ") , "mean-centered.)\n", sep = "")
 }
 
 
@@ -85,5 +93,5 @@ print.meta_bma <- function (x, digits = 3, ...){
                     row.names = names(x$logml))
   print(tab, digits = digits)
 
-  print.est(x$estimates, what = " of overall effect size", digits = digits)
+  print.est(x$estimates, what = " of average effect size", digits = digits)
 }
