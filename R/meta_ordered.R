@@ -32,9 +32,10 @@
 #' #       The settings are not suitable for actual data analysis!
 #'
 #' data(towels)
+#' set.seed(123)
 #' mo <- meta_ordered(logOR, SE, study, towels,
 #'                    d = prior("norm", c(mean=0, sd=.3), lower=0),
-#'                    iter = 1000)  # default: iter=10000
+#'                    rel.tol=.Machine$double.eps^.15, iter=2000)
 #' mo
 #' plot_posterior(mo)
 #' @seealso \link{meta_bma}, \link{meta_random}
@@ -48,6 +49,7 @@ meta_ordered <- function (y, SE, labels, data,
                           rel.tol = .Machine$double.eps^.3,
                           silent_stan = TRUE, ...){
 
+  check_deprecated(list(...))  # error: backwards compatibility
   if (attr(d, "lower") == -Inf && attr(d, "upper") == Inf)
     stop("The study-specific effects in the ordered random-effects meta-analysis must\n",
          "be order-constrained/truncated, e.g., to be all positive or all negative:\n",

@@ -28,6 +28,7 @@ meta_fixed <- function(y, SE, labels, data,
                          args = as.list(match.call())[-1])
   jzs <- grepl("jzs", data_list$model)
 
+  check_deprecated(list(...))  # error: backwards compatibility
   d <- check_prior(d)
   tau <- prior("0", c(), label = "tau")
 

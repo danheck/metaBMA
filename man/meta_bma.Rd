@@ -101,7 +101,7 @@ set.seed(123)
 mb <- meta_bma(logOR, SE, study, towels,
                d = prior("norm", c(mean=0, sd=.3), lower=0),
                tau = prior("invgamma", c(shape = 1, scale = 0.15)),
-               rel.tol = .Machine$double.eps^.15)  # (faster)
+               rel.tol = .Machine$double.eps^.15, iter=1000)
 mb
 plot_posterior(mb, "d")
 }

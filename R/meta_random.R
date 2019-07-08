@@ -11,10 +11,11 @@
 #' #       The settings are not suitable for actual data analysis!
 #'
 #' data(towels)
+#' set.seed(123)
 #' mr <- meta_random(logOR, SE, study, data = towels,
 #'                   d = prior("norm", c(mean=0, sd=.3), lower = 0),
 #'                   tau = prior("invgamma", c(shape = 1, scale = 0.15)),
-#'                   rel.tol = .Machine$double.eps^.15)  # speed!
+#'                   rel.tol=.Machine$double.eps^.15, iter=1000)
 #' mr
 #' plot_posterior(mr)
 #' @export
@@ -24,8 +25,9 @@ meta_random <- function(y, SE, labels, data,
                         rscale_contin = 1/2, rscale_discrete = sqrt(2)/2, centering = TRUE,
                         logml = "integrate", summarize = "stan", ci = .95,
                         rel.tol = .Machine$double.eps^.3,
-                        logml_iter = 3000, silent_stan = TRUE, ...){
+                        logml_iter = 5000, silent_stan = TRUE, ...){
 
+  check_deprecated(list(...))  # error: backwards compatibility
   logml <- match.arg(logml, c("integrate", "stan"))
   summarize <- match.arg(summarize, c("integrate", "stan"))
   data_list <- data_list(model = "random", y = y, SE = SE, labels = labels,

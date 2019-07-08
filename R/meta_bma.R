@@ -73,7 +73,7 @@
 #' mb <- meta_bma(logOR, SE, study, towels,
 #'                d = prior("norm", c(mean=0, sd=.3), lower=0),
 #'                tau = prior("invgamma", c(shape = 1, scale = 0.15)),
-#'                rel.tol = .Machine$double.eps^.15)  # (faster)
+#'                rel.tol = .Machine$double.eps^.15, iter=1000)
 #' mb
 #' plot_posterior(mb, "d")
 #' @seealso \link{meta_fixed}, \link{meta_random}
@@ -87,6 +87,8 @@ meta_bma <- function(y, SE, labels, data,
                      logml = "integrate", summarize = "stan", ci = .95,
                      rel.tol = .Machine$double.eps^.3,
                      logml_iter = 5000, silent_stan = TRUE, ...){
+
+  check_deprecated(list(...))  # error: backwards compatibility
 
   dl <- data_list(model = "random", y = y, SE = SE, labels = labels, data = data,
                   args = as.list(match.call())[-1])

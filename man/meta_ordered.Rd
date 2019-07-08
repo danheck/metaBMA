@@ -87,9 +87,10 @@ the truncated normal distribution) and not to the location parameter \code{d}
 #       The settings are not suitable for actual data analysis!
 
 data(towels)
+set.seed(123)
 mo <- meta_ordered(logOR, SE, study, towels,
                    d = prior("norm", c(mean=0, sd=.3), lower=0),
-                   iter = 1000)  # default: iter=10000
+                   rel.tol=.Machine$double.eps^.15, iter=2000)
 mo
 plot_posterior(mo)
 }

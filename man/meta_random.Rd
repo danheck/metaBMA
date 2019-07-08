@@ -8,7 +8,7 @@ meta_random(y, SE, labels, data, d = prior("norm", c(mean = 0, sd =
   0.3)), tau = prior("invgamma", c(shape = 1, scale = 0.15)),
   rscale_contin = 1/2, rscale_discrete = sqrt(2)/2, centering = TRUE,
   logml = "integrate", summarize = "stan", ci = 0.95,
-  rel.tol = .Machine$double.eps^0.3, logml_iter = 3000,
+  rel.tol = .Machine$double.eps^0.3, logml_iter = 5000,
   silent_stan = TRUE, ...)
 }
 \arguments{
@@ -79,10 +79,11 @@ studies with standard deviation \eqn{\tau} (i.e., a random-effects model).
 #       The settings are not suitable for actual data analysis!
 
 data(towels)
+set.seed(123)
 mr <- meta_random(logOR, SE, study, data = towels,
                   d = prior("norm", c(mean=0, sd=.3), lower = 0),
                   tau = prior("invgamma", c(shape = 1, scale = 0.15)),
-                  rel.tol = .Machine$double.eps^.15)  # speed!
+                  rel.tol=.Machine$double.eps^.15, iter=1000)
 mr
 plot_posterior(mr)
 }
