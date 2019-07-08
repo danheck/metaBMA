@@ -113,7 +113,7 @@ summary_integrate <- function (density, lb = NULL, ub = NULL, ci = .95,
     xx <- seq(max(lb, qq[1] - i*SD), min(ub, qq[3] + i*SD), length.out = 201)
     dx <- sapply(xx, density)*diff(xx[1:2])
     px <- cumsum(dx)
-    # use monotonic spline function to approximate inverse of cdf
+    # use monotonic spline function
     qdens <- splinefun(px, xx, method = "monoH.FC", ties = "mean")
     # plot(px ,xx, col = "gray") ; curve(qdens, add =TRUE)
 

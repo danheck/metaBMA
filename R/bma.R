@@ -8,8 +8,8 @@
 #'   \code{\link{meta_random}} or \code{\link{meta_fixed}})
 #' @inheritParams inclusion
 #' @inheritParams meta_bma
-#' @param parameter eiher the mean effect \code{"d"} or the heterogeneity across
-#'   studies \code{"tau"}
+#' @param parameter either the mean effect \code{"d"} or the heterogeneity \code{"tau"}
+#'   (i.e., the across-study standard deviation of population effect sizes).
 #'
 #' @examples
 #' # model averaging for fixed and random effects

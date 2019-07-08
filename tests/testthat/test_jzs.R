@@ -25,9 +25,10 @@ test_that("JZS works for continuous predictors", {
   plot_posterior(re_xx)
 
   expect_silent(bm <- bma(list("fixed" = fe_xx, "random" = re_xx), summ="integrate"))
-  expect_silent(bm <- bma(list("fixed" = fe_xx, "random" = re_xx), parameter = "alpha_xx", summ="stan"))
-  expect_silent(bm <- inclusion(list("fixed" = fe_xx, "random" = re_xx), include = "H1"))
+  # expect_silent(bm <- bma(list("fixed" = fe_xx, "random" = re_xx), parameter = "alpha_xx", summ="stan"))
   expect_silent(plot_posterior(bm))
+
+  expect_silent(bm <- inclusion(list("fixed" = fe_xx, "random" = re_xx), include = "H1"))
 
   s1 <- summary(re_xx$stanfit)$summary[c("d", "tau", "alpha[1]"), c(1,3:8)]
   s2 <- summary(re_xx$stanfit_dstudy)$summary[c("d", "tau", "alpha[1]"), c(1,3:8)]
