@@ -78,29 +78,30 @@ plot_forest.default <- function(meta, from, to, shrinked = "random",
   lower <- meta$data$y - qnorm( (ci+1)/2) * meta$data$SE
   upper <- meta$data$y + qnorm( (ci+1)/2) * meta$data$SE
 
-  ss <- NULL
+  stanfit_dstudy <- ss <- NULL
   if (class(meta) == "meta_bma"){
-    ss <- meta$meta[[shrinked]]$samples
-    # ss <- extract(meta$meta[[shrinked]]$stanfit)
+    stanfit_dstudy <- meta$meta[[shrinked]]$stanfit_dstudy
   } else if (class(meta) == "meta_random" && shrinked != ""){
-    ss <- meta$samples
+    stanfit_dstudy <- meta$stanfit_dstudy
   }
+  if (!is.null(stanfit_dstudy))
+    try(ss <- as.mcmc(rstan::extract(stanfit_dstudy, "dstudy")$dstudy), silent = TRUE)
 
   if (!is.null(ss)){
     summ <- summary(ss)
-    sel.d <- paste0("d[",seq_len(n.studies),"]")
+    # sel.d <- paste0("d[",seq_len(n.studies),"]")
     if (summary[1] == "Mean"){
-      rand.est <- summ$statistics[sel.d, "Mean"]
+      rand.est <- summ$statistics[, "Mean"]
     } else {
-      rand.est <- summ$quantiles[sel.d, "50%"]
+      rand.est <- summ$quantiles[, "50%"]
     }
     if (summary[2] == "HPD"){
-      hpd <- HPDinterval(ss[,sel.d], ci)
+      hpd <- HPDinterval(ss[,], ci)
       rand.low <- hpd[,1]
       rand.up <- hpd[,2]
     } else {
-      rand.low <- summ$quantiles[sel.d, "2.5%"]
-      rand.up <- summ$quantiles[sel.d, "97.5%"]
+      rand.low <- summ$quantiles[, "2.5%"]
+      rand.up <- summ$quantiles[, "97.5%"]
     }
 
   }
