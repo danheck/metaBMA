@@ -23,7 +23,7 @@ print.meta_fixed <- function (x, digits = 3, ...){
 
   if (any(grepl("alpha", rownames(x$estimates))))
     cat("  (Note: moderators in meta-regression are ",
-        ifelse(fe_xx$jzs$centering, "", "NOT ") , "mean-centered.)\n", sep = "")
+        ifelse(x$jzs$centering, "", "NOT ") , "mean-centered.)\n", sep = "")
 }
 
 
@@ -42,7 +42,7 @@ print.meta_random <- function (x, digits = 3, ...){
 
   if (any(grepl("alpha", rownames(x$estimates))))
     cat("  (Note: moderators in meta-regression are ",
-        ifelse(fe_xx$jzs$centering, "", "NOT ") , "mean-centered.)\n", sep = "")
+        ifelse(x$jzs$centering, "", "NOT ") , "mean-centered.)\n", sep = "")
 }
 
 
