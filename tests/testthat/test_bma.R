@@ -49,6 +49,7 @@ test_that("bma works for fitted meta_* objects", {
 })
 
 test_that("meta_bma gives identical results for stan/integrate", {
+  skip_on_cran()
   mf_stan <- meta_bma(yyy, SE, study, dat, summarize = "stan", logml = "stan",
                       logml_iter = 1750, iter = 1750)
   mf_int  <- meta_bma(yyy, SE, study, dat, summarize = "int", logml = "int",iter = 100,
