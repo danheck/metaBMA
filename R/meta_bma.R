@@ -13,11 +13,17 @@
 #' @param y mean in each study
 #' @param SE standard error in each study
 #' @param labels optional: character values with study labels
-#' @param d type of prior for mean effect \eqn{d} (see \code{\link{prior}})
-#' @param d.par prior parameters for \eqn{d}
-#' @param tau type of prior for standard deviation of study effects \eqn{\tau}
-#'     in random-effects meta-analysis (i.e., the SD of d across studies; see \code{\link{prior}})
-#' @param tau.par prior parameters for \eqn{\tau}
+#' @param d a character value specifying the prior family for the mean effect
+#'     size \eqn{d} (see \code{\link{prior}}). Alternatively, \code{d} can be a
+#'     \code{prior}-function as returned by \code{\link{prior}} (in which case \code{d.par}
+#'     is ignored).
+#' @param d.par prior parameters for \eqn{d}.
+#' @param tau a character specifying the prior family for the standard deviation \eqn{\tau}
+#'     of the study effects in a random-effects meta-analysis (i.e., the SD of d
+#'     across studies; see \code{\link{prior}}). Alternatively, \code{tau} can be a
+#'     \code{prior}-function as returned by \code{\link{prior}} (in which case \code{tau.par}
+#'     is ignored).
+#' @param tau.par prior parameters for \eqn{\tau}.
 # ' @param marginal how to integrate marginal likelihood (\code{"bridge"} or \code{"integrate"})
 #' @param sample number of samples in JAGS after burn-in and thinning (see
 #'     \code{\link[runjags]{run.jags}}). Samples are used to get posterior
@@ -45,17 +51,11 @@
 #' @seealso \link{meta_default}, \link{meta_fixed}, \link{meta_random}
 #' @template ref_gronau2017
 #' @export
-meta_bma <- function (y,
-                      SE,
-                      labels = NULL,
-                      d = "norm",
-                      d.par = c(0, .3),
-                      tau = "halfcauchy",
-                      tau.par=.5,
-                      prior = c(1,1,1,1),
-                      sample = 10000,
-                      summarize = "integrate",
-                      rel.tol = .Machine$double.eps^.5,
+meta_bma <- function (y, SE, labels = NULL,
+                      d = "norm", d.par = c(0, .3),
+                      tau = "halfcauchy", tau.par=.5,
+                      prior = c(1,1,1,1), sample = 10000,
+                      summarize = "integrate", rel.tol = .Machine$double.eps^.5,
                       ...){
 
   data_list <- data_list(model = "bma", y = y, SE = SE,
@@ -92,5 +92,5 @@ meta_bma <- function (y,
                       # "H1_fixed_vs_random" = exp(m.fixed.H1$logmarginal -
                       #                            m.random.H1$logmarginal)
   )
-  return (meta_bma)
+  meta_bma
 }

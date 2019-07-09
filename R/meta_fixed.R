@@ -16,15 +16,11 @@
 #' plot_posterior(mf)
 #' plot_forest(mf)
 #' @export
-meta_fixed <- function(y,
-                       SE,
-                       labels = NULL,
-                       d = "halfnorm",
-                       d.par = c(mean=0, sd=0.3),
-                       sample = 5000,
-                       summarize = "integrate",
-                       rel.tol = .Machine$double.eps^.5,
-                       ...){
+meta_fixed <- function(y, SE, labels = NULL,
+                       d = "halfnorm", d.par = c(mean=0, sd=0.3),
+                       sample = 5000, summarize = "integrate",
+                       rel.tol = .Machine$double.eps^.5, ...){
+  summarize <- match.arg(summarize, c("jags", "integrate", "none"))
   if (summarize == "jags" && sample <= 0)
     stop("if summarize = 'jags', it is necessary to use sample > 0.")
 
@@ -42,7 +38,6 @@ meta_fixed <- function(y,
                "estimates" = NULL)
   class(meta) <- "meta_fixed"
 
-
   if (sample > 0){
     jags_samples <- get_samples(data = data_list, sample = sample, ...)
     if (summarize == "jags")
@@ -53,9 +48,14 @@ meta_fixed <- function(y,
 
   meta$posterior.d <- posterior(meta, "d", rel.tol = rel.tol)
   meta$posterior.d <- check_posterior(meta$posterior.d, meta, "d.fixed")
-  if (summarize == "integrate")
+  if (summarize == "integrate" || is.null(meta$estimates))
     meta$estimates <- rbind("d" = stats_density(meta$posterior.d, rel.tol = rel.tol))
+  if (anyNA(meta$estimates) && sample > 0){
+    warning("Summary statistics computed with 'integrate' contain missings.\n",
+            "  Summary statistics of the JAGS samples are reported instead.")
+    meta$estimates <- rbind("d" = stats_samples(jags_samples$samples, "d.fixed"))
+  }
 
   meta$data <- meta$data[c("y", "SE", "labels")]
-  return(meta)
+  meta
 }

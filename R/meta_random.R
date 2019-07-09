@@ -15,20 +15,21 @@
 #' mr
 #' plot_posterior(mr)
 #' @export
-meta_random <- function (y,
-                         SE,
-                         labels,
-                         d = "norm",
-                         d.par = c(0, .3),
-                         tau = "halfcauchy",
-                         tau.par = .5,
-                         sample = 10000,
-                         summarize = "jags",
+meta_random <- function (y, SE, labels,
+                         d = "norm", d.par = c(0, .3),
+                         tau = "halfcauchy", tau.par = .5,
+                         sample = 10000, summarize = "jags",
                          rel.tol = .Machine$double.eps^.5,
                          ...){
+<<<<<<< HEAD
   summarize <- match.arg(summarize, c("jags", "integrate"))
+=======
+  summarize <- match.arg(summarize, c("jags", "integrate", "none"))
+>>>>>>> f104613165224e5cf3842b230151d6ae7e062a47
   if (summarize == "jags" && sample <= 0)
     stop("if summarize = 'jags', it is necessary to use sample > 0.")
+  if (summarize == "none")
+    sample <- 0
 
   data_list <- data_list("random", y = y, SE = SE, labels = labels,
                          d = d, d.par = d.par, tau = tau, tau.par = tau.par)
@@ -58,15 +59,21 @@ meta_random <- function (y,
   meta$posterior.tau <- posterior(meta, "tau", rel.tol = rel.tol)
   meta$posterior.d <- check_posterior(meta$posterior.d, meta, "d.random")
   meta$posterior.tau <- check_posterior(meta$posterior.tau, meta, "tau")
-  if (summarize == "integrate")
+  if (summarize == "integrate" || is.null(meta$estimates))
     meta$estimates <- rbind(d = stats_density(meta$posterior.d, rel.tol = rel.tol),
                             tau = stats_density(meta$posterior.tau, rel.tol = rel.tol))
 
+  if (anyNA(meta$estimates) && sample > 0){
+    warning("Summary statistics computed with 'integrate' contain missings.\n",
+            "  Summary statistics of the JAGS samples are reported instead.")
+    meta$estimates <- rbind("d" = stats_samples(jags_samples$samples, "d.random"),
+                            "tau" = stats_samples(jags_samples$samples, "tau"))
+  }
 
   meta$BF <- c(d_10 = meta$prior.d(0) / meta$posterior.d(0),
                tau_10 = meta$prior.tau(0) / meta$posterior.tau(0))
 
   meta$data <- meta$data[c("y", "SE", "labels")]
-  return (meta)
+  meta
 }
 

@@ -1,11 +1,17 @@
 
 
 #' @export
-plot.prior <- function(x,
-                       from = 0,
-                       to = 1,
-                       ...){
+plot.prior <- function(x, from, to, ...){
   prior <- x
+
+  if (missing (from)) from <- -Inf
+  if (missing (to)) to <- Inf
+
+  from <- max(from, attr(prior, "lower"))
+  to <- min(to, attr(prior, "upper"))
+  if (from == -Inf) from <- -1
+  if (to == Inf) to <- 1
+
   xx <- seq(from, to, length.out = 401)
   dpr <- prior(xx)
 

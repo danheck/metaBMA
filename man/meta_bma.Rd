@@ -16,14 +16,20 @@ meta_bma(y, SE, labels = NULL, d = "norm", d.par = c(0, 0.3),
 
 \item{labels}{optional: character values with study labels}
 
-\item{d}{type of prior for mean effect \eqn{d} (see \code{\link{prior}})}
+\item{d}{a character value specifying the prior family for the mean effect
+size \eqn{d} (see \code{\link{prior}}). Alternatively, \code{d} can be a
+\code{prior}-function as returned by \code{\link{prior}} (in which case \code{d.par}
+is ignored).}
 
-\item{d.par}{prior parameters for \eqn{d}}
+\item{d.par}{prior parameters for \eqn{d}.}
 
-\item{tau}{type of prior for standard deviation of study effects \eqn{\tau}
-in random-effects meta-analysis (i.e., the SD of d across studies; see \code{\link{prior}})}
+\item{tau}{a character specifying the prior family for the standard deviation \eqn{\tau}
+of the study effects in a random-effects meta-analysis (i.e., the SD of d
+across studies; see \code{\link{prior}}). Alternatively, \code{tau} can be a
+\code{prior}-function as returned by \code{\link{prior}} (in which case \code{tau.par}
+is ignored).}
 
-\item{tau.par}{prior parameters for \eqn{\tau}}
+\item{tau.par}{prior parameters for \eqn{\tau}.}
 
 \item{prior}{prior probabilities over models (possibly unnormalized) in the
 order \code{c(fixed.H0, fixed.H1, random.H0, random.H1)}. For instance,

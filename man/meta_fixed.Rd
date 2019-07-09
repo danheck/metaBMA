@@ -15,9 +15,12 @@ meta_fixed(y, SE, labels = NULL, d = "halfnorm", d.par = c(mean = 0,
 
 \item{labels}{optional: character values with study labels}
 
-\item{d}{type of prior for mean effect \eqn{d} (see \code{\link{prior}})}
+\item{d}{a character value specifying the prior family for the mean effect
+size \eqn{d} (see \code{\link{prior}}). Alternatively, \code{d} can be a
+\code{prior}-function as returned by \code{\link{prior}} (in which case \code{d.par}
+is ignored).}
 
-\item{d.par}{prior parameters for \eqn{d}}
+\item{d.par}{prior parameters for \eqn{d}.}
 
 \item{sample}{number of samples in JAGS after burn-in and thinning (see
 \code{\link[runjags]{run.jags}}). Samples are used to get posterior
