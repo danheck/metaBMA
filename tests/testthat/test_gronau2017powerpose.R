@@ -19,7 +19,7 @@ test_that("Gronau (2017): power pose analysis (reported) are correct ", {
     priorTau <- prior("invgamma", c(1, .15), label = "tau"))
 
   m_testing <- meta_bma(y = effectSize, SE = SE, d = priorEStesting, data = power_pose,
-                        tau = priorTau, iter = 100, rel.tol = .01, summ = "stan")
+                        tau = priorTau, iter = 50, rel.tol = .1, summ = "stan")
 
   bf_reported <- c("d_10_fixed" = 89.570, "d_10_random" = 9.374)
   expect_equal(unname(unlist(m_testing$BF)[c(2,12)]),

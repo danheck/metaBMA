@@ -10,8 +10,9 @@ dat$cat <- rep(c("a", "b"), 10)
 
 
 test_that("bma works for fitted meta_* objects", {
-  f1a <- meta_fixed(yyy, SE, study, data = dat, chains = 1)
-  f1b <- meta_fixed(yyy ~ 1, SE, study, data = dat, logml = "stan", summarize = "stan")
+  f1a <- meta_fixed(yyy, SE, study, data = dat, chains = 1, rel.tol = .1)
+  f1b <- meta_fixed(yyy ~ 1, SE, study, data = dat,
+                    iter = 1750, logml = "stan", summarize = "stan", rel.tol = .1)
   expect_silent(bb <- bma(list("a" = f1a, "b" = f1b)))
   postprob <- unname(bb$posterior_models[c(2,4)])
   expect_equal(postprob/sum(postprob), c(.5, .5), tolerance = .01)
@@ -24,7 +25,7 @@ test_that("bma works for fitted meta_* objects", {
   r1a <- meta_random(yyy, SE, study, data = dat, summarize = "int",
                      rel.tol = .Machine$double.eps^.1, iter = 100)
   r1b <- meta_random(yyy ~ 1, SE, study, data = dat,
-                     logml = "stan", logml_iter = 2000, iter = 1000)
+                     logml = "stan", logml_iter = 1750, iter = 500)
   expect_silent(bb <- bma(list(a = r1a, b = r1b), rel.tol = .Machine$double.eps^.1))
   postprob <- unname(bb$posterior_models[c(2,4)])
   expect_equal(postprob/sum(postprob), c(.5, .5), tolerance = .005)
@@ -46,7 +47,7 @@ test_that("bma works for fitted meta_* objects", {
 
 test_that("meta_bma gives identical results for stan/integrate", {
   mf_stan <- meta_bma(yyy, SE, study, dat, summarize = "stan", logml = "stan",
-                      logml_iter = 2000, iter = 2000)
+                      logml_iter = 1750, iter = 1750)
   mf_int  <- meta_bma(yyy, SE, study, dat, summarize = "int",
                       rel.tol = .Machine$double.eps^.1)
   expect_equal(mf_stan$estimates[,1:7], mf_int$estimates[,1:7], tolerance = .03)

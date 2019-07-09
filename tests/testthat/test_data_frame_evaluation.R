@@ -7,17 +7,17 @@ d <- data.frame(yyy = rnorm(10), SE = SE, study = 1:10,
 test_that("meta_fixed supports data as vector/variable names", {
 
   # vectors:
-  fit1 <- meta_fixed(d$yyy, d$SE, d$study)
-  fit2 <- meta_fixed(d[["yyy"]], d[["SE"]], d[["study"]])
-  fit3 <- meta_fixed(d$yyy, d$SE, d$study)
+  fit1 <- meta_fixed(d$yyy, d$SE, d$study, rel.tol = .01)
+  fit2 <- meta_fixed(d[["yyy"]], d[["SE"]], d[["study"]], rel.tol = .01)
+  fit3 <- meta_fixed(d$yyy, d$SE, d$study, rel.tol = .01)
   expect_identical(fit1$logml, fit2$logml)
   expect_identical(fit1$logml, fit3$logml)
   expect_identical(fit1$estimates[,1:7,drop=FALSE], fit3$estimates[,1:7,drop=FALSE])
 
   # (un)quoted variable names
-  fit4 <- meta_fixed("yyy", "SE", "study", d)
-  fit5 <- meta_fixed("yyy", SE, study, d)
-  fit6 <- meta_fixed(yyy, SE, study, d)
+  fit4 <- meta_fixed("yyy", "SE", "study", d, rel.tol = .01)
+  fit5 <- meta_fixed("yyy", SE, study, d, rel.tol = .01)
+  fit6 <- meta_fixed(yyy, SE, study, d, rel.tol = .01)
   expect_identical(fit1$logml, fit4$logml)
   expect_identical(fit1$logml, fit5$logml)
   expect_identical(fit1$logml, fit6$logml)
@@ -55,13 +55,13 @@ test_that("meta_fixed supports y as formula", {
 
 
 test_that("JZS prior is correctly defined via formula", {
-  expect_warning(fit1 <- meta_fixed(yyy ~ xx, SE, study, d, iter = 100))
+  expect_warning(fit1 <- meta_fixed(yyy ~ xx, SE, study, d, iter = 100, rel.tol = .01))
   expect_identical(rownames(fit1$estimates), c("d", "alpha_xx"))
 
-  expect_warning(fit2 <- meta_fixed(yyy ~ cat, SE, study, d, iter = 100, logml="s", summ="s"))
+  expect_warning(fit2 <- meta_fixed(yyy ~ cat, SE, study, d, iter = 1750, logml="s", summ="s", rel.tol = .01))
   expect_identical(rownames(fit2$estimates), c("d", "alpha_cat1"))
 
-  expect_warning(fit3 <- meta_fixed(yyy ~ xx + cat, SE, study, d, iter = 100, logml="s", summ="s"))
+  expect_warning(fit3 <- meta_fixed(yyy ~ xx + cat, SE, study, d, iter = 1750, logml="s", summ="s"))
   expect_identical(rownames(fit3$estimates), c("d", "alpha_xx", "alpha_cat1"))
 })
 

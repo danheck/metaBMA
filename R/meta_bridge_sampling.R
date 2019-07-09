@@ -21,18 +21,18 @@ meta_bridge_sampling <- function(meta, logml = "integrate",
   # refit stan and use bridge_sampler
   nsamples <- length(extract(meta$stanfit, "d")[["d"]])
   if (nsamples < min_samples){
-    nsamples <- min_samples
     args <- c(list("data_list" = meta$data,
                    "d" = meta$prior_d,
                    "tau" = meta$prior_tau,
                    "jzs" = meta$jzs),
               list(...))
     if (is.null(args$warmup)) args$warmup <- 500
-    args$iter <- args$warmup + min_samples
+    if (is.null(args$chains)) args$chains <- 4
+    args$iter <- args$warmup + ceiling(min_samples / args$chains)
 
     warning("Only : ", nsamples, " MCMC/Stan samples available.",
-            "\n  To increase precision, model is refitted with:  iter=",
-            min_samples+args$warmup, ",warmup=",args$warmup)
+            "\n  To increase precision using ", min_samples," samples, model is refitted with:  ",
+            "\n  chains=", args$chains, ", iter=", args$iter, ", warmup=",args$warmup)
 
     meta$stanfit <- do.call("meta_stan", args)
   }
