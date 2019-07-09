@@ -17,7 +17,8 @@ test_that("meta_fixed: logml for H0 is correct", {
   expect_equal(postprob/sum(postprob), c(.5, .5))
 
   # logml with Stan
-  f2 <- meta_fixed(yyy, SE, study, data = dat, logml = "stan", iter = 300, warmup = 100, rel.tol = .1)
+  f2 <- meta_fixed(yyy, SE, study, data = dat, logml = "stan",
+                   iter = 1750, warmup = 200, rel.tol = .1)
   expect_equal(f1$logml, f2$logml, tolerance = .01)
   expect_equal(f1$BF, f1a$BF, tolerance = .1)
   expect_equal(metaBMA:::loglik_fixed_H0(f1$data),
@@ -31,6 +32,7 @@ test_that("meta_fixed: logml for H0 is correct", {
 })
 
 test_that("meta_random: logml & estimates correct", {
+  skip_on_cran()
 
   f1 <- meta_random(yyy, SE, study, data = dat,
                     iter =100, logml_iter = 200, logml = "int", summ="int", rel.tol = .1)

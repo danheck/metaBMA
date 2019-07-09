@@ -22,20 +22,14 @@ test_that("bma works for fitted meta_* objects", {
   expect_is(f1a$BF, "matrix")
   expect_is(f1a$estimates, "matrix")
 
-  r1a <- meta_random(yyy, SE, study, data = dat, summarize = "int",
-                     rel.tol = .Machine$double.eps^.1, iter = 100)
+
   r1b <- meta_random(yyy ~ 1, SE, study, data = dat,
                      logml = "stan", logml_iter = 1750, iter = 500)
-  expect_silent(bb <- bma(list(a = r1a, b = r1b), rel.tol = .Machine$double.eps^.1))
-  postprob <- unname(bb$posterior_models[c(2,4)])
-  expect_equal(postprob/sum(postprob), c(.5, .5), tolerance = .005)
-  expect_equal(r1a$estimates[,1:7], r1b$estimates[,1:7], tolerance = .05)
+  expect_is(r1b$logml, "numeric")
+  expect_is(r1b$BF, "matrix")
+  expect_is(r1b$estimates, "matrix")
 
-  expect_is(r1a$logml, "numeric")
-  expect_is(r1a$BF, "matrix")
-  expect_is(r1a$estimates, "matrix")
-
-  expect_silent(bb <- bma(list(a = f1a, b = f1b, c= r1a, d = r1b),
+  expect_silent(bb <- bma(list("a" = f1a, "b" = f1b, "d" = r1b),
                           rel.tol = .Machine$double.eps^.1))
   mean_avg <- sum(bb$posterior_models * bb$estimates[-1,"mean"])
   expect_equal(mean_avg, bb$estimates["averaged","mean"], tolerance = .005)
@@ -43,15 +37,25 @@ test_that("bma works for fitted meta_* objects", {
   expect_is(bb$logml, "numeric")
   expect_is(bb$BF, "matrix")
   expect_is(bb$estimates, "matrix")
+
+
+  skip_on_cran()
+  r1a <- meta_random(yyy, SE, study, data = dat, summarize = "int",
+                     rel.tol = .Machine$double.eps^.1, iter = 100)
+  expect_silent(bb <- bma(list(a = r1a, b = r1b), rel.tol = .Machine$double.eps^.1))
+  postprob <- unname(bb$posterior_models[c(2,4)])
+  expect_equal(postprob/sum(postprob), c(.5, .5), tolerance = .005)
+  expect_equal(r1a$estimates[,1:7], r1b$estimates[,1:7], tolerance = .05)
 })
 
 test_that("meta_bma gives identical results for stan/integrate", {
   mf_stan <- meta_bma(yyy, SE, study, dat, summarize = "stan", logml = "stan",
                       logml_iter = 1750, iter = 1750)
-  mf_int  <- meta_bma(yyy, SE, study, dat, summarize = "int",
-                      rel.tol = .Machine$double.eps^.1)
+  mf_int  <- meta_bma(yyy, SE, study, dat, summarize = "int", logml = "int",iter = 100,
+                      rel.tol = .05)
   expect_equal(mf_stan$estimates[,1:7], mf_int$estimates[,1:7], tolerance = .03)
   expect_equal(mf_stan$BF, mf_int$BF, tolerance = .01)
+  expect_equal(mf_stan$inclusion, mf_int$inclusion, tolerance = .01)
 
   expect_silent(plot_forest(mf_stan))
   expect_silent(plot_forest(mf_int))
@@ -59,11 +63,13 @@ test_that("meta_bma gives identical results for stan/integrate", {
   expect_silent(plot_posterior(mf_stan))
 })
 
-test_that("inclusion() works correctly", {
-  f1a <- meta_fixed(yyy, SE, study, data = dat, chains = 1)
-  f1b <- meta_fixed(yyy ~ 1, SE, study, data = dat, logml = "stan", summarize = "stan")
 
-  expect_silent(bb0 <- bma(list("a" = f1a, "b" = f1b)))
+test_that("inclusion() works correctly", {
+  expect_silent(f1a <- meta_fixed(yyy, SE, study, data = dat, chains = 1, rel.tol = .01))
+  expect_silent(f1b <- meta_fixed(yyy ~ 1, SE, study, data = dat, iter = 1750,
+                                  logml = "stan", summarize = "stan", rel.tol = .01))
+
+  expect_silent(bb0 <- bma(list("a" = f1a, "b" = f1b), rel.tol = .01))
   expect_silent(bb1 <- inclusion(list("a" = f1a, "b" = f1b), include = c(2,4)))
   expect_silent(bb2 <- inclusion(list("a" = f1a, "b" = f1b), include = "H1"))
 
