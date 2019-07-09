@@ -7,11 +7,16 @@
 \method{plot}{meta_pred}(x, which = "d_10_averaged", scale = "BF", ...)
 }
 \arguments{
-\item{x}{an objct of the class \code{"prediction"} which contains observed and predicted Bayes factors}
+\item{x}{an objct of the class \code{"prediction"} which contains observed
+and predicted Bayes factors}
 
-\item{which}{a character value defining which Bayes factor to plot (one of "d_10_fixed", "d_10_random", "d_10_averaged", "tau_10_random", "H1_fixed_vs_random")}
+\item{which}{a character value defining which Bayes factor to plot
+(one of "d_10_fixed", "d_10_random", "d_10_averaged", "tau_10_random",
+"H1_fixed_vs_random")}
 
-\item{scale}{either plots Bayes factors (\code{"BF"}), inverse Bayes factors (\code{"1/BF"}), log Bayes factors (\code{"log"}), or the log-inverse Bayes factor (\code{"1/log"})}
+\item{scale}{either plots Bayes factors (\code{"BF"}), inverse Bayes factors
+(\code{"1/BF"}), log Bayes factors (\code{"log"}), or the log-inverse
+Bayes factor (\code{"1/log"})}
 
 \item{...}{arguments passed to \code{\link[graphics]{plot}}}
 }
