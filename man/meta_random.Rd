@@ -5,8 +5,8 @@
 \title{Bayesian Random-Effects Meta-Analysis}
 \usage{
 meta_random(y, SE, labels, d = "norm", d.par = c(0, 0.3),
-  tau = "halfcauchy", tau.par = 0.5, sample = 10000, summarize = "jags",
-  rel.tol = .Machine$double.eps^0.5, ...)
+  tau = "halfcauchy", tau.par = 0.5, sample = 10000,
+  summarize = "jags", rel.tol = .Machine$double.eps^0.5, ...)
 }
 \arguments{
 \item{y}{mean in each study}

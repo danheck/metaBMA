@@ -4,8 +4,8 @@
 \alias{meta_fixed}
 \title{Bayesian Fixed-Effects Meta-Analysis}
 \usage{
-meta_fixed(y, SE, labels = NULL, d = "halfnorm", d.par = c(mean = 0, sd =
-  0.3), sample = 5000, summarize = "integrate",
+meta_fixed(y, SE, labels = NULL, d = "halfnorm", d.par = c(mean = 0,
+  sd = 0.3), sample = 5000, summarize = "integrate",
   rel.tol = .Machine$double.eps^0.5, ...)
 }
 \arguments{

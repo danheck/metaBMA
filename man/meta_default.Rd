@@ -4,8 +4,8 @@
 \alias{meta_default}
 \title{Defaults for Model Averaging in Meta-Analysis}
 \usage{
-meta_default(y, SE, labels = NULL, field = "psychology", effect = "ttest",
-  ...)
+meta_default(y, SE, labels = NULL, field = "psychology",
+  effect = "ttest", ...)
 }
 \arguments{
 \item{y}{mean in each study}
