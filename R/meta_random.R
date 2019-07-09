@@ -26,6 +26,7 @@ meta_random <- function (y,
                          summarize = "jags",
                          rel.tol = .Machine$double.eps^.5,
                          ...){
+  summarize <- match.arg(summarize, c("jags", "integrate"))
   if (summarize == "jags" && sample <= 0)
     stop("if summarize = 'jags', it is necessary to use sample > 0.")
 
