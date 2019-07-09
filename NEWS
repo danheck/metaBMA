@@ -1,8 +1,10 @@
 metaBMA 0.6.0
 ===========
 
-* Remove meta_default() and plot_default()
 * new function meta_ordered() for order-constrained study-effects in random-effects meta-analysis
+* table with estimates shows convergence statistics (Rhat, n_eff)
+* meta_default(): new labels for effect = "d", "r", "z", "logOR"
+* minor bugfixes and improvements
 
 
 metaBMA 0.5.0

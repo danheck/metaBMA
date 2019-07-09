@@ -11,12 +11,13 @@ data_list <- list(model = "random", N = nrow(dat),
 
 test_that("priors for stan models are properly checked", {
 
-  expect_output(ms <- metaBMA:::meta_stan(data_list, iter = 1000,
+  expect_output(ms <- metaBMA:::meta_stan(data_list, iter = 100,
                                           cores = 1, silent_stan = FALSE))
   expect_true(class(ms) == "stanfit")
-  ms <- meta_random(yyy, SE, data = dat, iter = 100)
+  ms <- meta_random(yyy, SE, data = dat, iter = 100, logml_iter = 100)
   expect_true(class(ms) == "meta_random")
   expect_true(class(ms$stanfit) == "stanfit")
+  expect_true(class(ms$stanfit_dstudy) == "stanfit")
   expect_error(metaBMA:::meta_stan(data_list, d = prior("dsad"), iter = 100))
   expect_error(metaBMA:::meta_stan(data_list, prior("t", c(1,0,0)), iter = 100))
   expect_error(metaBMA:::meta_stan(data_list, prior("t", c(1,3,-10)), iter = 100))
