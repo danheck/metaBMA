@@ -1,12 +1,26 @@
-
-
+#' Plot Prior Distribution
+#'
+#' Plot the probability density function of a prior distribution.
+#'
+#' @param x prior probability density function defined via \code{\link{prior}}.
+#' @param from lower boundary
+#' @param to upper boundary
+#' @param ... further arguments passed to \code{\link[graphics]{plot}}
+#'
+#' @examples
+#' p1 <- prior("t", c(location=0, scale=0.707, nu=1), 0, 3)
+#' plot(p1, 0, 2)
+#'
+#' # define custom prior pdf up to a constant:
+#' p2 <- prior("custom", function(x) x^.5, 0, .5)
+#' plot(p2)
+#' @method plot prior
 #' @export
 plot.prior <- function(x, from, to, ...){
   prior <- x
 
   if (missing (from)) from <- -Inf
   if (missing (to)) to <- Inf
-
   from <- max(from, attr(prior, "lower"))
   to <- min(to, attr(prior, "upper"))
   if (from == -Inf) from <- -1

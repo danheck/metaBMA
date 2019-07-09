@@ -1,4 +1,3 @@
-
 #' Plot Posterior Distribution
 #'
 #' @param meta fitted meta-analysis model
@@ -6,51 +5,35 @@
 #' @inheritParams plot_forest
 #' @param ... arguments passed to \code{\link[graphics]{plot}}
 #'
-#' @seealso \link{meta_default}, \link{meta_bma}, \link{meta_fixed}, \link{meta_random}
+#' @seealso \link{meta_bma}, \link{meta_fixed}, \link{meta_random}
 #' @export
-plot_posterior <- function (meta,
-                            parameter = "d",
-                            from = 0,
-                            to = 1,
-                            summary = c("Mean", "HPD"),
-                            ...) {
+plot_posterior <- function (meta, parameter = "d", from, to,
+                            summary = c("mean", "hpd"), ...) {
   UseMethod("plot_posterior", meta)
 }
 
 
 #' @export
-plot_posterior.meta_fixed <- function (meta,
-                                       parameter = "d",
-                                       from = 0,
-                                       to = 1,
-                                       summary = c("Mean", "HPD"),
-                                       ...){
+plot_posterior.meta_fixed <- function (meta, parameter = "d", from, to,
+                                       summary = c("mean", "hpd"), ...){
   NextMethod("plot_posterior", meta)
 }
 
 #' @export
-plot_posterior.meta_random <- function (meta,
-                                        parameter = "d",
-                                        from = 0,
-                                        to = 1,
-                                        summary = c("Mean", "HPD"),
-                                        ...){
+plot_posterior.meta_random <- function (meta, parameter = "d", from, to,
+                                        summary = c("mean", "hpd"), ...){
   NextMethod("plot_posterior", meta)
 }
 
 
 #' @export
-plot_posterior.default <- function (meta,
-                                    parameter = "d",
-                                    from = 0,
-                                    to = 1,
-                                    summary = c("Mean", "HPD"),
-                                    ...){
-  if (attr(meta$prior.d, "family") == "0" && parameter == "d")
+plot_posterior.default <- function (meta, parameter = "d", from, to,
+                                    summary = c("mean", "hpd"), ...){
+  if (attr(meta$prior_d, "family") == "0" && parameter == "d")
     stop("H0: d = 0 can't be plotted." )
 
-  dprior <- meta[[paste0("prior.",parameter)]]
-  dpost<- meta[[paste0("posterior.",parameter)]]
+  dprior <- meta[[paste0("prior_",parameter)]]
+  dpost<- meta[[paste0("posterior_",parameter)]]
   xlab <- ifelse(parameter == "tau",
                  "Heterogeneity of Effects",
                  ifelse(class(meta) == "meta_random",
@@ -62,38 +45,46 @@ plot_posterior.default <- function (meta,
 
 
 #' @export
-plot_posterior.meta_bma <- function (meta,
-                                     parameter = "d",
-                                     from = 0,
-                                     to = 1,
-                                     summary = c("Mean", "HPD"),
-                                     ...){
+plot_posterior.meta_bma <- function (meta, parameter = "d", from, to,
+                                     summary = c("mean", "hpd"), ...){
+  summary[1] <- match.arg(summary[1], c("mean", "50%"))
+  summary[2] <- match.arg(summary[2], c("hpd", "bci"))
   if (parameter != "d")
     stop ("Plot for average effect only available for parameter='d'.\n",
-          "  Run plot_posterior(fitted_meta_bma$meta$random.H1) to see heterogeneity.")
+          "  Run plot_posterior(fitted_meta_bma$meta$random_H1) to see heterogeneity.")
 
-  dprior <- function(x) rep(-1, length(x))
-  if (!is.null(meta$meta[["Fixed Effects"]]))
-    dprior <- meta$meta[["Fixed Effects"]]$prior.d
+  prior_list <- meta[[paste0("prior_", parameter)]]
+  dprior <- identical_prior(prior_list)
 
-  others <- sapply(meta$meta, function (x) x$posterior.d)
-  dpost.ave <- meta$posterior.d
-  plot_density(dprior, dpost.ave, stats = meta$estimates["Averaged",],
+  others <- sapply(meta$meta, function (x) x$posterior_d)
+  dpost.ave <- meta$posterior_d
+  stats <- NULL
+  if ("averaged" %in% rownames(meta$estimates)){
+    stats <- meta$estimates["averaged",]
+    label_main <- "Posterior (averaged)"
+  } else if ("ordered" %in% rownames(meta$estimates)){
+    stats <- meta$estimates["ordered",]
+    label_main <- "Order-constrained"
+    others$ordered <- NULL
+  }
+  plot_density(dprior, dpost.ave, stats = stats,
                others = others, from = from, to = to, summary = summary,
-               xlab = "Overall Effect", ...)
+               xlab = "Overall Effect", label_main = label_main, ...)
 }
 
 
-plot_density <- function (dprior,
-                          dpost,
-                          stats = NULL,
-                          others = NULL,
-                          from = 0,
-                          to = 1,
-                          summary = c("Mean", "HPD"),
-                          ...){
+plot_density <- function (dprior, dpost, stats = NULL, others = NULL,
+                          from, to, summary = c("mean", "hpd"),
+                          label_main = "Posterior (averaged)", ...){
 
   # get x and y values
+  if (missing (from)) from <- -Inf
+  if (missing (to)) to <- Inf
+  from <- max(from, attr(dprior, "lower"))
+  to <- min(to, attr(dprior, "upper"))
+  if (from == -Inf) from <- -1
+  if (to == Inf) to <- 1
+
   xx <- seq(from, to, length.out = 501)
   dpr <- dprior(xx)
   dpo <- dpost(xx)
@@ -112,10 +103,10 @@ plot_density <- function (dprior,
        ylim =  range(yticks), xlim = range(xticks), xaxs="i",
        las = 1, bty = "n", ...)
 
-  if (summary[2] == "HPD"){
-    stats <- stats[c(summary[1], "HPD95lower", "HPD95upper")]
+  if (summary[2] == "hpd"){
+    stats <- stats[c(summary[1], grep("hpd", names(stats), value = TRUE))]
   } else {
-    stats <- stats[c(summary[1], "q025", "q975")]
+    stats <- stats[c(summary[1], grep("%", names(stats), value = TRUE)[-2])]
   }
 
   ########### PRIOR, POSTERIOR
@@ -132,18 +123,14 @@ plot_density <- function (dprior,
   draw_dens(xx, dpo, stats = stats, col = cols[2], lty = ltys[2])
 
   post.label <- ifelse(is.null(dx.others),
-                       "Posterior", "Posterior (averaged)")
+                       "Posterior", label_main)
   legend("topright", bty="n",
          legend = c("Prior",post.label, names(others)),
          col = cols, lty = ltys, lwd = 2)
 }
 
 
-draw_dens <- function (xx,
-                       dx,
-                       col,
-                       lty,
-                       stats = NULL){
+draw_dens <- function (xx, dx, col, lty, stats = NULL){
 
   if (lty == 5 && all(dx >= 0)){
     polygon(c(xx, rev(xx)), c(dx, rep(0, 501)),

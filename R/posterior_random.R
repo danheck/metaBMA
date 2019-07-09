@@ -1,13 +1,13 @@
 
 ### random-effects: marginal posterior of both
-post_random <- function(tau, d = 0, data, log = FALSE,
+post_random <- function(tau, d = 0, data, prior_d, prior_tau, log = FALSE,
                         rel.tol = .Machine$double.eps^0.5){
 
   ### priors
-  prior <- data$prior.tau(tau, log = TRUE)
+  prior <- prior_tau(tau, log = TRUE)
 
-  if (attr(data$prior.d, "family") != "0"){
-    prior <- prior + data$prior.d(d, log = TRUE)
+  if (attr(prior_d, "family") != "0"){
+    prior <- prior + prior_d(d, log = TRUE)
   }else{
     d <- 0
   }
@@ -20,39 +20,39 @@ post_random <- function(tau, d = 0, data, log = FALSE,
 
   post <- prior + loglik
   if (!log) post <- exp(post)
-  return(post)
+  post
 }
 
 ################################## integration over 1 parameter ######
 
-post_random_d <- function(d, data, log = FALSE,
+post_random_d <- function(d, data, prior_d, prior_tau, log = FALSE,
                           rel.tol = .Machine$double.eps^0.5){
 
-  bounds <- bounds_prior(data$prior.tau)
+  bounds <- bounds_prior(prior_tau)
   # scale <- integrate(post_random, d = d[1], data = data, bounds[1], bounds[2],
   #                    rel.tol = rel.tol)$value
   func <- function(d)
-    integrate(function(x) post_random(x, d = d, data = data),
+    integrate(function(x) post_random(x, d = d, data = data, prior_d = prior_d, prior_tau = prior_tau),
               bounds[1], bounds[2], rel.tol = rel.tol)$value
 
   sapply(d, func) #* scale
 }
 
 
-post_random_tau <- function(tau, data, log = FALSE,
+post_random_tau <- function(tau, data, prior_d, prior_tau, log = FALSE,
                             rel.tol = .Machine$double.eps^0.5){
 
-  if (attr(data$prior.d, "family") != "0"){
-    bounds <- bounds_prior(data$prior.d)
+  if (attr(prior_d, "family") != "0"){
+    bounds <- bounds_prior(prior_d)
     # scale <- integrate( function(x) post_random(tau = tau[1], d = x, data = data),
     #                     lower = bounds[1],  upper = bounds[2],
     #                     rel.tol = rel.tol)$value
     func <- function (tau)
-      integrate( function(x) post_random(tau = tau, d = x, data = data),
+      integrate( function(x) post_random(tau = tau, d = x, data = data, prior_d, prior_tau),
                  lower = bounds[1],  upper = bounds[2],
                  rel.tol = rel.tol)$value
   } else {
-    func <- function(tau) post_random(tau = tau, d = 0, data = data)
+    func <- function(tau) post_random(tau = tau, d = 0, data = data, prior_d, prior_tau)
   }
 
   post <- sapply(tau, func) #* scale
@@ -61,22 +61,19 @@ post_random_tau <- function(tau, data, log = FALSE,
 }
 
 
-post_random_theta <- function(theta,
-                              idx,
-                              data,
-                              log = FALSE,
-                              rel.tol = .Machine$double.eps^0.35){
+post_random_theta <- function(theta, idx, data, prior_d, prior_tau, log = FALSE,
+                              rel.tol = .Machine$double.eps^0.5){
 
-  bd <- bounds_prior(data$prior.d)
-  bt <- bounds_prior(data$prior.tau)
+  bd <- bounds_prior(prior_d)
+  bt <- bounds_prior(prior_tau)
 
   f.d.tau <- function(d, theta, tau)
     sapply(d, function(dd)
       dnorm(theta,
             mean = (1/tau^2*dd + 1/data$SE[idx]^2 * data$y[idx])/(1/tau^2 + 1/data$SE[idx]^2),
             sd = 1/sqrt(1/tau^2 + 1/data$SE[idx]^2)) *
-        data$prior.d(dd) *
-        data$prior.tau(1/tau^2))
+        prior_d(dd) *
+        prior_tau(1/tau^2))  ## prior_tau(tau) ??? ### CHECK!!!
 
   f.tau <- function(tau, theta)
     sapply(tau, function(tt)
@@ -97,8 +94,8 @@ post_random_theta <- function(theta,
   #       #   dnorm(theta,
   #       #         mean = d,
   #       #         sd = 1/sqrt(tt)) *
-  #       data$prior.d(d) *
-  #       data$prior.tau(tt))
+  #       data$prior_d(d) *
+  #       data$prior_tau(tt))
   #
   # f.d <- function(d, theta)
   #   sapply(d, function(dd)
@@ -110,7 +107,7 @@ post_random_theta <- function(theta,
   #             rel.tol = .Machine$double.eps^0.25)$value)
 
   if (!log) post <- exp(post)
-  return(post)
+  post
 }
 
 # debug(metaBMA:::post_random_theta)

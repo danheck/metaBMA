@@ -4,61 +4,86 @@
 \alias{meta_random}
 \title{Bayesian Random-Effects Meta-Analysis}
 \usage{
-meta_random(y, SE, labels, d = "norm", d.par = c(0, 0.3),
-  tau = "halfcauchy", tau.par = 0.5, sample = 10000,
-  summarize = "jags", rel.tol = .Machine$double.eps^0.5, ...)
+meta_random(y, SE, labels, data, d = prior("norm", c(mean = 0, sd =
+  0.3)), tau = prior("invgamma", c(shape = 1, scale = 0.15)),
+  rscale_contin = 1/2, rscale_discrete = sqrt(2)/2, centering = TRUE,
+  logml = "integrate", summarize = "stan", ci = 0.95,
+  rel.tol = .Machine$double.eps^0.3, logml_iter = 5000,
+  silent_stan = TRUE, ...)
 }
 \arguments{
-\item{y}{mean in each study}
+\item{y}{effect size per study. Can be provided as (1) a numeric vector, (2)
+the quoted or unquoted name of the variable in \code{data}, or (3) a
+\code{\link[stats]{formula}} to include discrete or continuous moderator
+variables.}
 
-\item{SE}{standard error in each study}
+\item{SE}{standard error of effect size for each study. Can be a numeric
+vector or the quoted or unquoted name of the variable in \code{data}}
 
-\item{labels}{optional: character values with study labels}
+\item{labels}{optional: character values with study labels. Can be a
+character vector or the quoted or unquoted name of the variable in
+\code{data}}
 
-\item{d}{a character value specifying the prior family for the mean effect
-size \eqn{d} (see \code{\link{prior}}). Alternatively, \code{d} can be a
-\code{prior}-function as returned by \code{\link{prior}} (in which case \code{d.par}
-is ignored).}
+\item{data}{data frame containing the variables for effect size \code{y},
+standard error \code{SE}, \code{labels}, and moderators per study.}
 
-\item{d.par}{prior parameters for \eqn{d}.}
+\item{d}{\code{prior} distribution on the average effect size \eqn{d}. The
+prior probability density function is defined via \code{\link{prior}}.}
 
-\item{tau}{a character specifying the prior family for the standard deviation \eqn{\tau}
-of the study effects in a random-effects meta-analysis (i.e., the SD of d
-across studies; see \code{\link{prior}}). Alternatively, \code{tau} can be a
-\code{prior}-function as returned by \code{\link{prior}} (in which case \code{tau.par}
-is ignored).}
+\item{tau}{\code{prior} distribution on the between-study heterogeneity
+\eqn{\tau} (i.e., the standard deviation of the study effect sizes
+\code{dstudy} in a random-effects meta-analysis. A (nonnegative) prior
+probability density function is defined via \code{\link{prior}}.}
 
-\item{tau.par}{prior parameters for \eqn{\tau}.}
+\item{rscale_contin}{scale parameter of the JZS prior for the continuous
+covariates.}
 
-\item{sample}{number of samples in JAGS after burn-in and thinning (see
-\code{\link[runjags]{run.jags}}). Samples are used to get posterior
-estimates for each study effect (which will show shrinkage).
-Only works for priors defined in \code{\link{prior}}.}
+\item{rscale_discrete}{scale parameter of the JZS prior for discrete
+moderators.}
 
-\item{summarize}{whether and to compute parameter summaries (mean, median, SD,
-95\% quantile interval, HPD interval). If \code{summarize = "integrate"},
-numerical integration is used  (which is precise but can require some seconds
-of computing time and be unstable), \code{summarize = "jags"} summarizes the JAGS samples,
-and \code{summarize = "none"} suppresses parameter summaries.}
+\item{centering}{whether continuous moderators are centered.}
 
-\item{rel.tol}{relative tolerance used for numerical integration using \code{\link[stats]{integrate}}.
-Use \code{rel.tol=.Machine$double.eps} for maximal precision.}
+\item{logml}{how to estimate the log-marginal likelihood: either by numerical
+integration (\code{"integrate"}) or by bridge sampling using MCMC/Stan
+samples (\code{"stan"}). To obtain high precision with \code{logml="stan"},
+many MCMC samples are required (e.g., \code{iter=10000, warmup=1000}).}
 
-\item{...}{arguments passed to \link[runjags]{run.jags} (e.g., MCMC parameters
-such as \code{sample}, \code{burnin}, \code{n.chains}, \code{thin} or \code{method="parallel"})}
+\item{summarize}{how to estimate parameter summaries (mean, median, SD,
+etc.): Either by numerical integration (\code{summarize = "integrate"}) or
+based on MCMC/Stan samples (\code{summarize = "stan"}).}
+
+\item{ci}{probability for the credibility/highest-density intervals.}
+
+\item{rel.tol}{relative tolerance used for numerical integration using
+\code{\link[stats]{integrate}}. Use \code{rel.tol=.Machine$double.eps} for
+maximal precision (however, this might be slow).}
+
+\item{logml_iter}{number of iterations from the posterior of d and tau
+for computing the marginal likelihood for the random-effects model with bridge sampling.
+Note that the argument \code{iter=2000} controls the number of iterations
+for parameter estimation of the random effects.}
+
+\item{silent_stan}{whether to suppress the Stan progress bar.}
+
+\item{...}{further arguments passed to \code{rstan::sampling} (see
+\code{\link[rstan]{stanmodel-method-sampling}}). For instance:
+\code{warmup=500}, \code{chains=4}, \code{control=list(adapt_delta=.95)}).}
 }
 \description{
-Runs a Bayesian meta-analysis assuming that the effect size \eqn{d} varies across studies with standard deviation \eqn{\tau} (i.e., a random-effects analysis).
+Bayesian meta-analysis assuming that the effect size \eqn{d} varies across
+studies with standard deviation \eqn{\tau} (i.e., a random-effects model).
 }
 \examples{
-data(towels)
 ### Bayesian Random-Effects Meta-Analysis
-mr <- meta_random(towels$logOR, towels$SE, towels$study,
-                  d = "norm", d.par = c(0,.3),
-                  tau = "halfcauchy", tau.par = .5,
-                  rel.tol = .Machine$double.eps^.15,
-                  sample = 0, summarize = "none")
-                  # (no summary: only for CRAN checks)
+# Note: The following code optimizes speed (for CRAN checks).
+#       The settings are not suitable for actual data analysis!
+
+data(towels)
+set.seed(123)
+mr <- meta_random(logOR, SE, study, data = towels,
+                  d = prior("norm", c(mean=0, sd=.3), lower = 0),
+                  tau = prior("invgamma", c(shape = 1, scale = 0.15)),
+                  rel.tol=.Machine$double.eps^.15, iter=1000)
 mr
 plot_posterior(mr)
 }

@@ -17,19 +17,25 @@ Moreover, `meta_fixed` and `meta_random` fit a single meta-analysis models. The 
 
 ## Installing metaBMA
 
-`metaBMA` requires the software [JAGS](http://mcmc-jags.sourceforge.net/). To install the latest stable release of `metaBMA` from GitHub, run:
+`metaBMA` requires the software [Stan](http://mc-stan.org/). 
+To install the latest developer version of `metaBMA` from GitHub, run:
 
 ```r
 ### Dependencies:
-# install.packages("mvtnorm", "runjags", "LaplacesDemon", "logspline")
+# install.packages(c("rstan", "rstantools", "bridgesampling",
+#                    "LaplacesDemon", "logspline", "mvtnorm",
+#                    "coda", "knitr", "methods"))
 
 if (!require("devtools"))
   install.packages("devtools")
-devtools::install_github("danheck/metaBMA", build_vignettes = TRUE)
+devtools::install_github("danheck/metaBMA", ref = "dev")
 ```
+
 
 ## Citation
 
 If you use metaBMA, please cite the software as follows:
 
-Heck, D. W., Gronau, Q. F., & Wagenmakers, E.-J. (2017). metaBMA: Bayesian model averaging for random and fixed effects meta-analysis. Retrieved from https://github.com/danheck/metaBMA. doi:10.5281/zenodo.835494
+Heck, D. W., Gronau, Q. F., & Wagenmakers, E.-J. (2017). 
+metaBMA: Bayesian model averaging for random and fixed effects meta-analysis. 
+Retrieved from https://github.com/danheck/metaBMA. doi:10.5281/zenodo.835494

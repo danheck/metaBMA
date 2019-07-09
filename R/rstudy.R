@@ -1,10 +1,6 @@
-rstudy <- function (n,
-                    model,
-                    param,
-                    SE){
+rstudy <- function (n, model, param, SE){
 
-  if (SE < 0)
-    stop ("SD < 0!")
+  stopifnot(SE >= 0)
   if (n == 0)
     return (NULL)
 
@@ -15,12 +11,12 @@ rstudy <- function (n,
   } else {
     if (is.null(dim(param))){
       # random H0
-      d.random <- rnorm(n, 0, param)
+      delta <- rnorm(n, 0, param)
     } else {
       # random H1
-      d.random <- rnorm(n, param[,"d.random"], param[,"tau"])
+      delta <- rnorm(n, param[,"d"], param[,"tau"])
     }
-    rr <- rnorm(n, d.random, SE)
+    rr <- rnorm(n, delta, SE)
   }
-  return (rr)
+  rr
 }

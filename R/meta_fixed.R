@@ -9,53 +9,79 @@
 #' @examples
 #' data(towels)
 #' ### Bayesian Fixed-Effects Meta-Analysis (H1: d>0 Cauchy)
-#' mf <- meta_fixed(towels$logOR, towels$SE, towels$study,
-#'                  d = "halfnorm", d.par = c(0, .3), sample = 0,
-#'                  summarize = "integrate")
+#' mf <- meta_fixed(logOR, SE, study, data = towels,
+#'                  d = prior("norm", c(mean=0, sd=.3), lower=0))
 #' mf
 #' plot_posterior(mf)
 #' plot_forest(mf)
 #' @export
-meta_fixed <- function(y, SE, labels = NULL,
-                       d = "halfnorm", d.par = c(mean=0, sd=0.3),
-                       sample = 5000, summarize = "integrate",
-                       rel.tol = .Machine$double.eps^.5, ...){
-  summarize <- match.arg(summarize, c("jags", "integrate", "none"))
-  if (summarize == "jags" && sample <= 0)
-    stop("if summarize = 'jags', it is necessary to use sample > 0.")
+meta_fixed <- function(y, SE, labels, data,
+                       d = prior("norm", c(mean = 0, sd = .3)),
+                       rscale_contin = 1/2, rscale_discrete = sqrt(2)/2,
+                       centering = TRUE,
+                       logml = "integrate", summarize = "integrate", ci = .95,
+                       rel.tol = .Machine$double.eps^.3, silent_stan = TRUE, ...){
 
-  data_list <- data_list("fixed", y = y, SE = SE, labels = labels,
-                         d = d, d.par = d.par)
+  logml <- match.arg(logml, c("integrate", "stan"))
+  summarize <- match.arg(summarize, c("integrate", "stan"))
+  data_list <- data_list("fixed", y = y, SE = SE, labels = labels, data = data,
+                         args = as.list(match.call())[-1])
+  jzs <- grepl("jzs", data_list$model)
 
-  logml <- integrate_wrapper(data = data_list, rel.tol = rel.tol)
+  check_deprecated(list(...))  # error: backwards compatibility
+  d <- check_prior(d)
+  tau <- prior("0", c(), label = "tau")
 
-  meta <- list("data" = data_list,
-               "prior.d" = data_list$prior.d,
-               "posterior.d" = NA,
-               "logmarginal"  = logml,
-               "logmarginal.H0" = loglik_fixed_H0(data_list),
-               "BF" = c("d_10" = exp(logml - loglik_fixed_H0(data_list))),
-               "estimates" = NULL)
+  meta <- list("model" = data_list$model,
+               "data" =  data_list, "prior_d" = d, "prior_tau" = tau,
+               "jzs" = list(rscale_contin = rscale_contin,
+                            rscale_discrete = rscale_discrete,
+                            centering = centering),
+               "posterior_d" = NA, "posterior_tau" = tau,
+               "logml"  = NA,  "BF" = NULL, "estimates" = NULL)
   class(meta) <- "meta_fixed"
 
-  if (sample > 0){
-    jags_samples <- get_samples(data = data_list, sample = sample, ...)
-    if (summarize == "jags")
-      meta$estimates <- rbind("d" = stats_samples(jags_samples$samples, "d.fixed"))
-    meta$samples <- jags_samples$samples
-    meta$jagsmodel <- jags_samples$jagsfile
+  if (attr(d, "family") %in% priors_stan() && attr(d, "family") != "0" || jzs)
+    meta$stanfit <- meta_stan(data_list, d = d, jzs=meta$jzs, silent_stan = silent_stan, ...)
+
+  if (logml == "integrate" ||
+      attr(d, "family") == "0" ||
+      !attr(d, "family") %in% priors_stan())
+    meta$logml <- integrate_wrapper(data_list, d, rel.tol = rel.tol)
+  meta <- meta_bridge_sampling(meta, logml, ...)
+
+  # not for fixed_jzs
+  meta$posterior_d <- posterior(meta, "d", rel.tol = rel.tol)
+  summ <- summary_meta(meta, summarize)
+  meta$estimates <- summ[c("d", grep("alpha", rownames(summ), value = TRUE)),,drop = FALSE]
+
+  logml_fixedH0 <- NA
+  # analytical/numerical integration: only without JZS moderator structure!
+  if (data_list$model == "fixed")
+    logml_fixedH0 <- loglik_fixed_H0(data_list)
+
+  # Savage-Dickey (if JZS present):
+  if (is.na(logml_fixedH0)){
+    n_samples <- length(extract(meta$stanfit, "d")[["d"]])
+    if (n_samples < 10000)
+      warning("If discrete/continuous moderators are specified, the Bayes factor is computed",
+              "\nbased on the Savage-Dickey density ratio. For high precision, this requires",
+              "\na larger number of samples for estimation as specified via:\n    iter=10000")
+
+    if (meta$prior_d(0) == 0){
+      warning("Savage-Dickey density ratio can only be used if the prior on the",
+              "\noverall effect size d is strictly positive at zero. For example, use:",
+              "\n  d=prior('halfcauchy', c(scale=0.707))")
+    } else {
+      bf_fixed_10 <- d(0) / meta$posterior_d(0)
+      logml_fixedH0 <- -log(bf_fixed_10) + meta$logml
+    }
   }
 
-  meta$posterior.d <- posterior(meta, "d", rel.tol = rel.tol)
-  meta$posterior.d <- check_posterior(meta$posterior.d, meta, "d.fixed")
-  if (summarize == "integrate" || is.null(meta$estimates))
-    meta$estimates <- rbind("d" = stats_density(meta$posterior.d, rel.tol = rel.tol))
-  if (anyNA(meta$estimates) && sample > 0){
-    warning("Summary statistics computed with 'integrate' contain missings.\n",
-            "  Summary statistics of the JAGS samples are reported instead.")
-    meta$estimates <- rbind("d" = stats_samples(jags_samples$samples, "d.fixed"))
-  }
-
-  meta$data <- meta$data[c("y", "SE", "labels")]
+  meta$logml <- c("fixed_H0" = logml_fixedH0, "fixed_H1" = meta$logml)
+  meta$BF <- make_BF(meta$logml)
+  inclusion <- inclusion(meta$logml, include = c(2), prior = c(1,1))
+  meta$prior_models <- inclusion$prior
+  meta$posterior_models <- inclusion$posterior
   meta
 }

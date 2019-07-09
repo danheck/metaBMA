@@ -1,3 +1,21 @@
+metaBMA 0.6.0
+===========
+
+* Remove meta_default() and plot_default()
+* new function meta_ordered() for order-constrained study-effects in random-effects meta-analysis
+
+
+metaBMA 0.5.0
+===========
+
+* Major refactoring (breaks compatibiltiy with previous versions)
+* Possible to provide data frame via argument 'data'
+* Removed arguments "d.par" and "tau.par": priors are now defined via d=prior(...), tau=prior(...)
+* Possibility to fit random and fixed effects meta-analysis with moderators in stan (with JZS priors)
+* Computation of log marginal likelihood with Stan samples and bridge sampling (via logml="stan")
+* Improved numerical integration via integrate() [posterior distribution shifted to zero]
+
+
 metaBMA 0.3.9
 ===========
 

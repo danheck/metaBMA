@@ -4,15 +4,17 @@
 \alias{plot_default}
 \title{Plot Default Priors}
 \usage{
-plot_default(field, effect, ...)
+plot_default(field = "psychology", effect = "d", ...)
 }
 \arguments{
 \item{field}{either\code{"psychology"} or \code{"medicine"}
 (uses partial matching, so \code{"p"} and "\code{"m"} are sufficient)}
 
-\item{effect}{the type of effect size: either means (\code{"ttest"}),
-log-odds ratios (\code{"logOR"}) or
-(Fisher's z-transformed) correlations (\code{"corr"}) (also uses partial matching)}
+\item{effect}{the type of effect size: either
+Cohen's d (\code{"d"}),
+Pearson correlations (\code{"r"}),
+Fisher's z-transformed correlations (\code{"z"}),
+or log-odds ratios (\code{"logOR"}).}
 
 \item{...}{further arguments passed to \code{\link[graphics]{plot}} (e.g., \code{from}, \code{to})}
 }

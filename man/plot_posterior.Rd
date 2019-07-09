@@ -4,8 +4,8 @@
 \alias{plot_posterior}
 \title{Plot Posterior Distribution}
 \usage{
-plot_posterior(meta, parameter = "d", from = 0, to = 1,
-  summary = c("Mean", "HPD"), ...)
+plot_posterior(meta, parameter = "d", from, to, summary = c("mean",
+  "hpd"), ...)
 }
 \arguments{
 \item{meta}{fitted meta-analysis model}
@@ -16,7 +16,9 @@ plot_posterior(meta, parameter = "d", from = 0, to = 1,
 
 \item{to}{upper limit of the x-axis}
 
-\item{summary}{character vector with two values: first, either \code{"Mean"} or \code{"Median"}; and second, either highest-probability-density interval (\code{"HPD"}) or the quantile interval (\code{"quantile"}; function resets margin to default after plotting)}
+\item{summary}{character vector with two values: first, either \code{"mean"}
+or \code{"50\%"}; and second, either highest-probability-density interval \code{"hpd"}
+or the Bayesian credibility interval \code{"bci"}.}
 
 \item{...}{arguments passed to \code{\link[graphics]{plot}}}
 }
@@ -24,5 +26,5 @@ plot_posterior(meta, parameter = "d", from = 0, to = 1,
 Plot Posterior Distribution
 }
 \seealso{
-\link{meta_default}, \link{meta_bma}, \link{meta_fixed}, \link{meta_random}
+\link{meta_bma}, \link{meta_fixed}, \link{meta_random}
 }

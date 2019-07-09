@@ -5,51 +5,43 @@
 #' @param meta fitted meta-analysis model
 #' @param from lower limit of the x-axis
 #' @param to upper limit of the x-axis
-#' @param shrinked which meta-analysis model should be used to show (shrinked) estimates of the study effect sizes. The name must match the corresponding name in the list \code{meta}. Can be suppressed by \code{shrinked = ""}
-#' @param mar margin of the plot in the order \code{c(bottom, left, top, right)} (see \code{\link[graphics]{par}})
-#' @param summary character vector with two values: first, either \code{"Mean"} or \code{"Median"}; and second, either highest-probability-density interval (\code{"HPD"}) or the quantile interval (\code{"quantile"}; function resets margin to default after plotting)
+#' @param shrinked which meta-analysis model should be used to show (shrinked)
+#'     estimates of the study effect sizes. The name must match the corresponding
+#'     name in the list \code{meta}. Can be suppressed by \code{shrinked = ""}
+#' @param mar margin of the plot in the order \code{c(bottom, left, top, right)}
+#'     (see \code{\link[graphics]{par}})
+#' @param summary character vector with two values: first, either \code{"mean"}
+#'     or \code{"50\%"}; and second, either highest-probability-density interval \code{"hpd"}
+#'     or the Bayesian credibility interval \code{"bci"}.
 #' @param ... arguments passed to \code{\link[graphics]{plot}} (e.g., \code{from}, \code{to})
 #'
-#' @seealso \link{meta_default}, \link{meta_bma}, \link{meta_fixed}, \link{meta_random}
+#' @seealso \link{meta_bma}, \link{meta_fixed}, \link{meta_random}
 #' @examples
 #' data(towels)
-#' mf <- meta_fixed(towels$logOR, towels$SE, towels$study, sample = 0)
+#' mf <- meta_fixed(logOR, SE, study, towels)
 #' plot_forest(mf, mar = c(4.5,20,4,.2), xlab="Log Odds Ratio")
 #' @export
-plot_forest <- function(meta,
-                        from = 0,
-                        to = 1,
-                        shrinked = "Random Effects",
-                        summary = c("Mean", "HPD"),
-                        mar = c(4.5, 12, 4, .3),
+plot_forest <- function(meta, from, to, shrinked = "random",
+                        summary = c("mean", "hpd"), mar = c(4.5, 12, 4, .3),
                         ...){
   par(mar = mar)
   UseMethod("plot_forest", meta)
 }
 
 #' @export
-plot_forest.meta_fixed <- function(meta,
-                                   from = 0,
-                                   to = 1,
-                                   shrinked = "Random Effects",
-                                   summary = c("Mean", "HPD"),
-                                   mar = c(4.5, 12, 4, .3),
-                                   ...){
-  plot_forest.default(meta, from = from, to = to, summary = summary,
-                      shrinked = "", main = "Fixed-Effects Meta-Analysis",
-                      ...)
+plot_forest.meta_fixed <- function(meta, from, to, shrinked = "random",
+                                   summary = c("mean", "hpd"),
+                                   mar = c(4.5, 12, 4, .3), ...){
+  plot_forest.default(meta, from, to, summary = summary,
+                      shrinked = "", main = "Fixed-Effects Meta-Analysis", ...)
   axis(2, -1, "Total", las = 1, tick = FALSE)
   par(mar = c(5.1,4.1, 4.1, 2.1))
 }
 
 #' @export
-plot_forest.meta_random <- function(meta,
-                                    from = 0,
-                                    to = 1,
-                                    shrinked = "Random Effects",
-                                    summary = c("Mean", "HPD"),
-                                    mar = c(4.5, 12, 4, .3),
-                                    ...){
+plot_forest.meta_random <- function(meta, from, to, shrinked = "random",
+                                    summary = c("mean", "hpd"),
+                                    mar = c(4.5, 12, 4, .3), ...){
   plot_forest.default(meta, from = from, to = to, summary = summary,
                       shrinked = shrinked,
                       main = "Random-Effects Meta-Analysis", ...)
@@ -58,13 +50,9 @@ plot_forest.meta_random <- function(meta,
 }
 
 #' @export
-plot_forest.meta_bma <- function(meta,
-                                 from = 0,
-                                 to = 1,
-                                 shrinked = "Random Effects",
-                                 summary = c("Mean", "HPD"),
-                                 mar = c(4.5, 12, 4, .3),
-                                 ...){
+plot_forest.meta_bma <- function(meta, from, to, shrinked = "random",
+                                 summary = c("mean", "hpd"),
+                                 mar = c(4.5, 12, 4, .3), ...){
   meta$data <- meta$meta[[1]]$data
   plot_forest.default(meta, from = from, to = to, summary = summary,
                       shrinked = shrinked,
@@ -77,48 +65,48 @@ plot_forest.meta_bma <- function(meta,
 
 # ' @rdname plot_posterior
 #' @export
-plot_forest.default <- function(meta,
-                                from = 0,
-                                to = 1,
-                                shrinked = "Random Effects",
-                                summary = c("Mean", "HPD"),
-                                mar = c(4.5, 12, 4, .3),
-                                ...){
+plot_forest.default <- function(meta, from, to, shrinked = "random",
+                                summary = c("mean", "hpd"),
+                                mar = c(4.5, 12, 4, .3), ...){
   ci <- .95
 
   n.studies <- length(meta$data$y)
   sel <- grep("d", rownames(meta$estimates))
-  if ("Averaged" %in% rownames(meta$estimates))
+  if ("averaged" %in% rownames(meta$estimates))
     sel <- 1:nrow(meta$estimates)
   n.ests <- length(sel)
   lower <- meta$data$y - qnorm( (ci+1)/2) * meta$data$SE
   upper <- meta$data$y + qnorm( (ci+1)/2) * meta$data$SE
 
-  ss <- NULL
+  stanfit_dstudy <- ss <- NULL
   if (class(meta) == "meta_bma"){
-    ss <- meta$meta[[shrinked]]$samples
+    stanfit_dstudy <- meta$meta[[shrinked]]$stanfit_dstudy
   } else if (class(meta) == "meta_random" && shrinked != ""){
-    ss <- meta$samples
+    stanfit_dstudy <- meta$stanfit_dstudy
   }
+  if (!is.null(stanfit_dstudy))
+    try(ss <- as.mcmc(rstan::extract(stanfit_dstudy, "dstudy")$dstudy), silent = TRUE)
 
   if (!is.null(ss)){
     summ <- summary(ss)
-    sel.d <- paste0("d[",seq_len(n.studies),"]")
+    # sel.d <- paste0("d[",seq_len(n.studies),"]")
     if (summary[1] == "Mean"){
-      rand.est <- summ$statistics[sel.d, "Mean"]
+      rand.est <- summ$statistics[, "Mean"]
     } else {
-      rand.est <- summ$quantiles[sel.d, "50%"]
+      rand.est <- summ$quantiles[, "50%"]
     }
     if (summary[2] == "HPD"){
-      hpd <- HPDinterval(ss[,sel.d])
+      hpd <- HPDinterval(ss[,], ci)
       rand.low <- hpd[,1]
       rand.up <- hpd[,2]
     } else {
-      rand.low <- summ$quantiles[sel.d, "2.5%"]
-      rand.up <- summ$quantiles[sel.d, "97.5%"]
+      rand.low <- summ$quantiles[, "2.5%"]
+      rand.up <- summ$quantiles[, "97.5%"]
     }
 
   }
+  if (missing(from)) from <- max(attr(meta$prior_d, "lower"), -1)
+  if (missing(to)) to <- min(attr(meta$prior_d, "upper"), 1)
   xxx <- pretty(c(from, to, lower, upper))
 
   Effect <- -1000
@@ -147,20 +135,18 @@ plot_forest.default <- function(meta,
                                  "white", "darkgray"))
   }
 
-  if (summary[2] == "HPD"){
-    low <- "HPD95lower"
-    up <- "HPD95upper"
-  }else{
-    low <- "q025"
-    up <- "q975"
+  if (summary[2] == "hpd"){
+    bnd <- grep("hpd", colnames(meta$estimates))
+  } else {
+    bnd <- grep("%", colnames(meta$estimates))[-2]
   }
   segments(y0 = - seq_len(n.ests),
-           x0 = meta$estimates[sel,low],
-           x1 = meta$estimates[sel,up], lwd = 2)
+           x0 = meta$estimates[sel,bnd[1]],
+           x1 = meta$estimates[sel,bnd[2]], lwd = 2)
   segments(y0 = - seq_len(n.ests)-eps, y1 = - seq_len(n.ests)+eps,
-           x0 = meta$estimates[sel,low])
+           x0 = meta$estimates[sel,bnd[1]])
   segments(y0 = - seq_len(n.ests)-eps, y1 = - seq_len(n.ests)+eps,
-           x0 = meta$estimates[sel,up])
+           x0 = meta$estimates[sel,bnd[2]])
   points(meta$estimates[sel,summary[1]], - seq_len(n.ests), pch = 15, cex = 1.2)
 }
 

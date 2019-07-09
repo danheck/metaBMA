@@ -4,22 +4,33 @@
 \alias{meta_default}
 \title{Defaults for Model Averaging in Meta-Analysis}
 \usage{
-meta_default(y, SE, labels = NULL, field = "psychology",
-  effect = "ttest", ...)
+meta_default(y, SE, labels, data, field = "psychology", effect = "d",
+  ...)
 }
 \arguments{
-\item{y}{mean in each study}
+\item{y}{effect size per study. Can be provided as (1) a numeric vector, (2)
+the quoted or unquoted name of the variable in \code{data}, or (3) a
+\code{\link[stats]{formula}} to include discrete or continuous moderator
+variables.}
 
-\item{SE}{standard error in each study}
+\item{SE}{standard error of effect size for each study. Can be a numeric
+vector or the quoted or unquoted name of the variable in \code{data}}
 
-\item{labels}{optional: character values with study labels}
+\item{labels}{optional: character values with study labels. Can be a
+character vector or the quoted or unquoted name of the variable in
+\code{data}}
+
+\item{data}{data frame containing the variables for effect size \code{y},
+standard error \code{SE}, \code{labels}, and moderators per study.}
 
 \item{field}{either\code{"psychology"} or \code{"medicine"}
 (uses partial matching, so \code{"p"} and "\code{"m"} are sufficient)}
 
-\item{effect}{the type of effect size: either means (\code{"ttest"}),
-log-odds ratios (\code{"logOR"}) or
-(Fisher's z-transformed) correlations (\code{"corr"}) (also uses partial matching)}
+\item{effect}{the type of effect size: either
+Cohen's d (\code{"d"}),
+Pearson correlations (\code{"r"}),
+Fisher's z-transformed correlations (\code{"z"}),
+or log-odds ratios (\code{"logOR"}).}
 
 \item{...}{further arguments passed to \code{\link{meta_bma}}}
 }
@@ -32,33 +43,39 @@ Default prior distributions can be plotted using \code{\link{plot_default}}.
 
 For \code{field = "psychology"}, the following defaults are used:
 \itemize{
-\item \code{effect = "ttest"}: Half-normal with SD=0.3 on mean effect and
+\item \code{effect = "d"}: Half-normal with SD=0.3 on mean effect and
+    half-Cauchy with scale=.5 on standard deviation of effects.
+\item \code{effect = "r"}: Half-normal with SD=0.3 on mean effect and
+    half-Cauchy with scale=.5 on standard deviation of effects.
+\item \code{effect = "z"}: Half-normal with SD=0.3 on mean effect and
     half-Cauchy with scale=.5 on standard deviation of effects.
 \item \code{effect = "logOR"}: Half-normal with SD=0.3 on mean effect and
-    half-Cauchy with scale=.5 on standard deviation of effects.
-\item \code{effect = "corr"}: Half-normal with SD=0.3 on mean effect and
     half-Cauchy with scale=.5 on standard deviation of effects.
 }
 
 For \code{field = "medicine"}, the following defaults are used:
 \itemize{
-\item \code{effect = "ttest"}: Half-normal with SD=0.3 on mean effect and
+\item \code{effect = "d"}: Half-normal with SD=0.3 on mean effect and
+    half-Cauchy with scale=.5 on standard deviation of effects.
+\item \code{effect = "r"}: Half-normal with SD=0.3 on mean effect and
+    half-Cauchy with scale=.5 on standard deviation of effects.
+\item \code{effect = "z"}: Half-normal with SD=0.3 on mean effect and
     half-Cauchy with scale=.5 on standard deviation of effects.
 \item \code{effect = "logOR"}: Half-normal with SD=0.3 on mean effect and
-    half-Cauchy with scale=.5 on standard deviation of effects.
-\item \code{effect = "corr"}: Half-normal with SD=0.3 on mean effect and
     half-Cauchy with scale=.5 on standard deviation of effects.
 }
 }
 \examples{
-\dontrun{
+# Note: The following example optimizes speed (for CRAN checks).
+#       The settings are not suitable for actual data analysis!
+
 data(towels)
-d1 <- meta_default(towels$logOR, towels$SE, towels$study,
+set.seed(123)
+md <- meta_default(logOR, SE, study, towels,
                    field = "psych", effect = "logOR",
-                   sample = 5000)
-d1
-plot_forest(d1)
-}
+                   rel.tol=.Machine$double.eps^.15, iter=1000)
+md
+plot_forest(md)
 }
 \references{
 Gronau, Q. F., Erp, S. V., Heck, D. W., Cesario, J., Jonas, K. J., & Wagenmakers, E.-J. (2017). A Bayesian model-averaged meta-analysis of the power pose effect with informed and default priors: the case of felt power. Comprehensive Results in Social Psychology, 2(1), 123-138. \url{https://doi.org/10.1080/23743603.2017.1326760}

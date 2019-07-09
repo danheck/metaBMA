@@ -7,9 +7,16 @@
 inclusion(logml, include = 1, prior = 1)
 }
 \arguments{
-\item{logml}{a vector with log-marginal likelihoods. Alternatively, a list with meta-analysis models (fitted via \code{\link{meta_random}} or \code{\link{meta_fixed}})}
+\item{logml}{a vector with log-marginal likelihoods. Alternatively, a list
+with meta-analysis models (fitted via \code{\link{meta_random}} or \code{\link{meta_fixed}}).}
 
-\item{include}{integer vector which models to include in inclusion Bayes factor/posterior probability. If only two marginal likelihoods/meta-analyses are supplied, the Bayes factor BF_\{M1,M2\} is computed by default.}
+\item{include}{integer vector which models to include in inclusion Bayes
+factor/posterior probability. If only two marginal likelihoods/meta-analyses
+are supplied, the inclusion Bayes factor is identical to the usual Bayes factor
+BF_\{M1,M2\}. One can include models depending on the names of the models (such as
+\code{"random_H1"}) by providing a character value, for instance: \code{include="H1"}
+(all H1 vs. all H0 models) or \code{include="random"} (all random- vs. all
+fixed-effects models).}
 
 \item{prior}{prior probabilities over models (possibly unnormalized). For instance, if the first model is as likely as models 2, 3 and 4 together: \code{prior = c(3,1,1,1)}. The default is a discrete uniform distribution over models.}
 }
@@ -18,16 +25,16 @@ Computes the inclusion Bayes factor for two sets of models (e.g., A=\{M1,M2\} vs
 }
 \examples{
 #### Example with simple Normal-distribution models
-# data:
+# generate data:
 x <- rnorm(50)
 
 # Model 1: x ~ Normal(0,1)
 logm1 <- sum(dnorm(x, log = TRUE))
-# Model 2: x ~ Normal(1,1)
-logm2 <-sum(dnorm(x, mean = 1, log = TRUE))
+# Model 2: x ~ Normal(.2, 1)
+logm2 <- sum(dnorm(x, mean = .2, log = TRUE))
 # Model 3: x ~ Student-t(df=2)
-logm3 <-sum(dt(x, df=2, log = TRUE))
+logm3 <- sum(dt(x, df=2, log = TRUE))
 
-# BF: Correct (M1) vs. misspecified (M2, M3)
+# BF: Correct (Model 1) vs. misspecified (2 & 3)
 inclusion(c(logm1, logm2, logm3), include = 1)
 }

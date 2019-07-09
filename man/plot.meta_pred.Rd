@@ -11,7 +11,7 @@
 and predicted Bayes factors}
 
 \item{which}{a character value defining which Bayes factor to plot
-(one of "d_10_fixed", "d_10_random", "d_10_averaged", "tau_10_random",
+(one of "d_10_fixed", "d_10_random", "d_10_averaged",
 "H1_fixed_vs_random")}
 
 \item{scale}{either plots Bayes factors (\code{"BF"}), inverse Bayes factors

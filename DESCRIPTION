@@ -1,38 +1,49 @@
 Package: metaBMA
 Type: Package
-Date: 2017-09-07
+Date: 2019-07-05
 Title: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis
-Version: 0.4.0
+Version: 0.6.0
 Authors@R: c(person("Daniel W.","Heck",email="heck@uni-mannheim.de",role=c("aut","cre")),
-             person("Quentin F.", "Gronau", email="quentingronau@web.de", role = c("aut")),
-             person("Eric-Jan", "Wagenmakers", email="ej.wagenmakers@gmail.com", role = c("aut")))
+             person("Quentin F.", "Gronau", email="quentingronau@web.de", role = c("ctb")))
 Maintainer: Daniel W. Heck <heck@uni-mannheim.de>
-Description: Computes the posterior model probabilities for four meta-analysis models 
+Description: Computes the posterior model probabilities for standard meta-analysis models 
     (null model vs. alternative model assuming either fixed- or random-effects, respectively).
     These posterior probabilities are used to estimate the overall mean effect size 
     as the weighted average of the mean effect size estimates of the random- and 
     fixed-effect model as proposed by Gronau, Van Erp, Heck, Cesario, Jonas, & 
     Wagenmakers (2017, <doi:10.1080/23743603.2017.1326760>). The user can define 
-    a wide range of noninformative or informative priors for the mean effect size 
-    and the heterogeneity coefficient. Funding for this research was provided by 
-    the Berkeley Initiative for Transparency in the Social Sciences, a program of 
-    the Center for Effective Global Action (CEGA), with support from the Laura and 
-    John Arnold Foundation.
-Encoding: UTF-8
-LazyData: true
+    a wide range of non-informative or informative priors for the mean effect size 
+    and the heterogeneity coefficient. Moreover, using pre-compiled Stan models, 
+    meta-analysis with continuous and discrete moderators with Jeffreys-Zellner-Siow (JZS) 
+    priors can be fitted and tested. This allows to compute Bayes factors and 
+    perform Bayesian model averaging across random- and fixed-effects meta-analysis 
+    with and without moderators.
 Depends:
-    R (>= 3.0.0)
+    R (>= 3.4.0),
+    Rcpp (>= 1.0.0),
+    methods
 Imports:
     mvtnorm,
     logspline,
     coda,
-    runjags,
-    LaplacesDemon
-Suggests:
+    LaplacesDemon,
+    rstan (>= 2.18.1),
+    rstantools (>= 1.5.1),
+    bridgesampling
+Suggests: 
     testthat,
     knitr
+LinkingTo: 
+    BH (>= 1.69.0-1),
+    Rcpp (>= 1.0.0),
+    RcppEigen (>= 0.3.3.5.0),
+    rstan (>= 2.18.1),
+    StanHeaders (>= 2.18.0)
 VignetteBuilder: knitr
-SystemRequirements: JAGS (http://mcmc-jags.sourceforge.net)
 URL: https://github.com/danheck/metaBMA
 License: GPL-3
+Encoding: UTF-8
+LazyData: true
+NeedsCompilation: yes
+SystemRequirements: GNU make
 RoxygenNote: 6.1.1

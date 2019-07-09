@@ -4,4 +4,9 @@ README.md
 ^.*\.dll$
 ^.*\.o$
 man-roxygen/*
-.travis.yml
+^codecov\.yml$
+^\.travis\.yml$
+
+development.R
+document-build-roxygen2-error.R
+

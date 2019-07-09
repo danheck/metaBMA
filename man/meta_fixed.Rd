@@ -4,40 +4,58 @@
 \alias{meta_fixed}
 \title{Bayesian Fixed-Effects Meta-Analysis}
 \usage{
-meta_fixed(y, SE, labels = NULL, d = "halfnorm", d.par = c(mean = 0,
-  sd = 0.3), sample = 5000, summarize = "integrate",
-  rel.tol = .Machine$double.eps^0.5, ...)
+meta_fixed(y, SE, labels, data, d = prior("norm", c(mean = 0, sd = 0.3)),
+  rscale_contin = 1/2, rscale_discrete = sqrt(2)/2, centering = TRUE,
+  logml = "integrate", summarize = "integrate", ci = 0.95,
+  rel.tol = .Machine$double.eps^0.3, silent_stan = TRUE, ...)
 }
 \arguments{
-\item{y}{mean in each study}
+\item{y}{effect size per study. Can be provided as (1) a numeric vector, (2)
+the quoted or unquoted name of the variable in \code{data}, or (3) a
+\code{\link[stats]{formula}} to include discrete or continuous moderator
+variables.}
 
-\item{SE}{standard error in each study}
+\item{SE}{standard error of effect size for each study. Can be a numeric
+vector or the quoted or unquoted name of the variable in \code{data}}
 
-\item{labels}{optional: character values with study labels}
+\item{labels}{optional: character values with study labels. Can be a
+character vector or the quoted or unquoted name of the variable in
+\code{data}}
 
-\item{d}{a character value specifying the prior family for the mean effect
-size \eqn{d} (see \code{\link{prior}}). Alternatively, \code{d} can be a
-\code{prior}-function as returned by \code{\link{prior}} (in which case \code{d.par}
-is ignored).}
+\item{data}{data frame containing the variables for effect size \code{y},
+standard error \code{SE}, \code{labels}, and moderators per study.}
 
-\item{d.par}{prior parameters for \eqn{d}.}
+\item{d}{\code{prior} distribution on the average effect size \eqn{d}. The
+prior probability density function is defined via \code{\link{prior}}.}
 
-\item{sample}{number of samples in JAGS after burn-in and thinning (see
-\code{\link[runjags]{run.jags}}). Samples are used to get posterior
-estimates for each study effect (which will show shrinkage).
-Only works for priors defined in \code{\link{prior}}.}
+\item{rscale_contin}{scale parameter of the JZS prior for the continuous
+covariates.}
 
-\item{summarize}{whether and to compute parameter summaries (mean, median, SD,
-95\% quantile interval, HPD interval). If \code{summarize = "integrate"},
-numerical integration is used  (which is precise but can require some seconds
-of computing time and be unstable), \code{summarize = "jags"} summarizes the JAGS samples,
-and \code{summarize = "none"} suppresses parameter summaries.}
+\item{rscale_discrete}{scale parameter of the JZS prior for discrete
+moderators.}
 
-\item{rel.tol}{relative tolerance used for numerical integration using \code{\link[stats]{integrate}}.
-Use \code{rel.tol=.Machine$double.eps} for maximal precision.}
+\item{centering}{whether continuous moderators are centered.}
 
-\item{...}{arguments passed to \link[runjags]{run.jags} (e.g., MCMC parameters
-such as \code{sample}, \code{burnin}, \code{n.chains}, \code{thin} or \code{method="parallel"})}
+\item{logml}{how to estimate the log-marginal likelihood: either by numerical
+integration (\code{"integrate"}) or by bridge sampling using MCMC/Stan
+samples (\code{"stan"}). To obtain high precision with \code{logml="stan"},
+many MCMC samples are required (e.g., \code{iter=10000, warmup=1000}).}
+
+\item{summarize}{how to estimate parameter summaries (mean, median, SD,
+etc.): Either by numerical integration (\code{summarize = "integrate"}) or
+based on MCMC/Stan samples (\code{summarize = "stan"}).}
+
+\item{ci}{probability for the credibility/highest-density intervals.}
+
+\item{rel.tol}{relative tolerance used for numerical integration using
+\code{\link[stats]{integrate}}. Use \code{rel.tol=.Machine$double.eps} for
+maximal precision (however, this might be slow).}
+
+\item{silent_stan}{whether to suppress the Stan progress bar.}
+
+\item{...}{further arguments passed to \code{rstan::sampling} (see
+\code{\link[rstan]{stanmodel-method-sampling}}). For instance:
+\code{warmup=500}, \code{chains=4}, \code{control=list(adapt_delta=.95)}).}
 }
 \description{
 Runs a Bayesian meta-analysis assuming that the mean effect \eqn{d} in each
@@ -46,9 +64,8 @@ study is identical (i.e., a fixed-effects analysis).
 \examples{
 data(towels)
 ### Bayesian Fixed-Effects Meta-Analysis (H1: d>0 Cauchy)
-mf <- meta_fixed(towels$logOR, towels$SE, towels$study,
-                 d = "halfnorm", d.par = c(0, .3), sample = 0,
-                 summarize = "integrate")
+mf <- meta_fixed(logOR, SE, study, data = towels,
+                 d = prior("norm", c(mean=0, sd=.3), lower=0))
 mf
 plot_posterior(mf)
 plot_forest(mf)

@@ -4,8 +4,8 @@
 \alias{plot_forest}
 \title{Forest Plot for Meta-Analysis}
 \usage{
-plot_forest(meta, from = 0, to = 1, shrinked = "Random Effects",
-  summary = c("Mean", "HPD"), mar = c(4.5, 12, 4, 0.3), ...)
+plot_forest(meta, from, to, shrinked = "random", summary = c("mean",
+  "hpd"), mar = c(4.5, 12, 4, 0.3), ...)
 }
 \arguments{
 \item{meta}{fitted meta-analysis model}
@@ -14,11 +14,16 @@ plot_forest(meta, from = 0, to = 1, shrinked = "Random Effects",
 
 \item{to}{upper limit of the x-axis}
 
-\item{shrinked}{which meta-analysis model should be used to show (shrinked) estimates of the study effect sizes. The name must match the corresponding name in the list \code{meta}. Can be suppressed by \code{shrinked = ""}}
+\item{shrinked}{which meta-analysis model should be used to show (shrinked)
+estimates of the study effect sizes. The name must match the corresponding
+name in the list \code{meta}. Can be suppressed by \code{shrinked = ""}}
 
-\item{summary}{character vector with two values: first, either \code{"Mean"} or \code{"Median"}; and second, either highest-probability-density interval (\code{"HPD"}) or the quantile interval (\code{"quantile"}; function resets margin to default after plotting)}
+\item{summary}{character vector with two values: first, either \code{"mean"}
+or \code{"50\%"}; and second, either highest-probability-density interval \code{"hpd"}
+or the Bayesian credibility interval \code{"bci"}.}
 
-\item{mar}{margin of the plot in the order \code{c(bottom, left, top, right)} (see \code{\link[graphics]{par}})}
+\item{mar}{margin of the plot in the order \code{c(bottom, left, top, right)}
+(see \code{\link[graphics]{par}})}
 
 \item{...}{arguments passed to \code{\link[graphics]{plot}} (e.g., \code{from}, \code{to})}
 }
@@ -27,9 +32,9 @@ Plots estimated effect sizes for all studies.
 }
 \examples{
 data(towels)
-mf <- meta_fixed(towels$logOR, towels$SE, towels$study, sample = 0)
+mf <- meta_fixed(logOR, SE, study, towels)
 plot_forest(mf, mar = c(4.5,20,4,.2), xlab="Log Odds Ratio")
 }
 \seealso{
-\link{meta_default}, \link{meta_bma}, \link{meta_fixed}, \link{meta_random}
+\link{meta_bma}, \link{meta_fixed}, \link{meta_random}
 }
