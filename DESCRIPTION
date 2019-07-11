@@ -3,7 +3,8 @@ Type: Package
 Date: 2019-07-10
 Title: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis
 Version: 0.6.1
-Authors@R: c(person("Daniel W.","Heck",email="heck@uni-mannheim.de",role=c("aut","cre")),
+Authors@R: c(person("Daniel W.", "Heck", email="heck@uni-mannheim.de", role=c("aut","cre"),
+                    comment = c(ORCID = "0000-0002-6302-9252")),
              person("Quentin F.", "Gronau", email="quentingronau@web.de", role = c("ctb")))
 Maintainer: Daniel W. Heck <heck@uni-mannheim.de>
 Description: Computes the posterior model probabilities for standard meta-analysis models 
