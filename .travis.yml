@@ -78,15 +78,15 @@ before_install:
 
 script:
   - |
-    R CMD build .
-    R CMD check metaBMA*tar.gz --as-cran --no-build-vignettes
+    travis_wait 10 R CMD build .
+    travis_wait 5 R CMD check metaBMA*tar.gz --as-cran
 
 after_script:
   - tar -ztvf metaBMA_*.tar.gz
   - echo ${NOT_CRAN}
 
 after_success:
-  - travis_wait 14 tar -C .. -xf $PKG_TARBALL
+  - travis_wait 5 tar -C .. -xf $PKG_TARBALL
 
 after_failure:
   - cat metaBMA.Rcheck/00*
