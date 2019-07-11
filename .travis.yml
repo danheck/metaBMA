@@ -1,4 +1,8 @@
 language: r
+r:
+  - release
+  - devel
+
 sudo: false
 cache: packages
 dist: trusty
@@ -6,22 +10,24 @@ latex: true
 r_check_args: '--ignore-vignettes'
 r_build_args: '--no-build-vignettes'
 
+r_binary_packages:
+  - Rcpp
+  - RcppEigen
+  - mvtnorm
+  - rstan
+  - StanHeaders
+  - LaplacesDemon
+  - logspline
+  - testthat
+
 r_packages:
   - remotes
   - knitr
   - rmarkdown
-  - testthat
-  - mvtnorm
-  - logspline
   - coda
-  - LaplacesDemon
-  - rstan
   - rstantools
   - bridgesampling
   - BH
-  - Rcpp
-  - RcppEigen
-  - StanHeaders
 
 env:
   global:
