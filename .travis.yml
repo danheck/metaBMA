@@ -8,14 +8,7 @@ r_check_args: '--ignore-vignettes'
 r_build_args: '--no-build-vignettes'
 
 r_binary_packages:
-  - Rcpp
-  - RcppEigen
-  - mvtnorm
-  - rstan
-  - StanHeaders
-  - LaplacesDemon
-  - logspline
-  - testthat
+
 
 r_packages:
   - remotes
@@ -37,6 +30,26 @@ repos:
 matrix:
   include:
     - os: linux
+      dist: trusty
+      r: release
+      r_binary_packages:
+        - devtools
+        - Rcpp
+        - RcppEigen
+        - mvtnorm
+        - rstan
+        - StanHeaders
+        - LaplacesDemon
+        - logspline
+        - testthat
+      r_packages:
+        - remotes
+        - knitr
+        - rmarkdown
+        - coda
+        - rstantools
+        - bridgesampling
+        - BH
       addons:
         apt:
           sources:
@@ -45,6 +58,40 @@ matrix:
             - g++-7
       env:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+    - os: linux
+      dist: trusty
+      r: devel
+      r_binary_packages:
+        - devtools
+        - Rcpp
+        - RcppEigen
+        - mvtnorm
+        - rstan
+        - StanHeaders
+        - LaplacesDemon
+        - logspline
+        - testthat
+      r_packages:
+        - remotes
+        - knitr
+        - rmarkdown
+        - coda
+        - rstantools
+        - bridgesampling
+        - BH
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+      env:
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+    - os: osx
+      osx_image: xcode10
+      r: release
+      fortran: false
+
 
 before_install:
   - mkdir -p ~/.R/
@@ -54,15 +101,15 @@ before_install:
 
 script:
   - |
-    travis_wait 42 R CMD build .
-    travis_wait 59 R CMD check metaBMA*tar.gz --as-cran
+    travis_wait 30 R CMD build .
+    travis_wait 5 R CMD check metaBMA*tar.gz --as-cran
 
 after_script:
   - tar -ztvf metaBMA_*.tar.gz
   - echo ${NOT_CRAN}
 
 after_success:
-  - travis_wait 5 tar -C .. -xf $PKG_TARBALL
+  - travis_wait 10 tar -C .. -xf $PKG_TARBALL
 
 after_failure:
   - cat metaBMA.Rcheck/00*
