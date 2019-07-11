@@ -1,7 +1,4 @@
 language: r
-r:
-  - release
-  - devel
 
 sudo: false
 cache: packages
@@ -65,7 +62,7 @@ after_script:
   - echo ${NOT_CRAN}
 
 after_success:
-  - travis_wait 40 tar -C .. -xf $PKG_TARBALL
+  - travis_wait 5 tar -C .. -xf $PKG_TARBALL
 
 after_failure:
   - cat metaBMA.Rcheck/00*
