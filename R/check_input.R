@@ -48,7 +48,7 @@ check_prior <- function(prior, lower = -Inf, upper = Inf){
 check_y_se <- function (y, SE, labels){
   stopifnot(is.numeric(y))
   stopifnot(is.numeric(SE))
-  stopifnot(all(SE >= 0))
+  stopifnot(all(SE > 0))
   stopifnot(length(y) == length(SE))
   stopifnot(length(y) == length(labels))
 }
