@@ -7,8 +7,8 @@
 meta_ordered(y, SE, labels, data, d = prior("norm", c(mean = 0, sd =
   0.3), lower = 0), tau = prior("invgamma", c(shape = 1, scale = 0.15)),
   prior = c(1, 1, 1, 1), logml = "integrate", summarize = "stan",
-  ci = 0.95, rel.tol = .Machine$double.eps^0.3, silent_stan = TRUE,
-  ...)
+  ci = 0.95, rel.tol = .Machine$double.eps^0.3, logml_iter = 10000,
+  silent_stan = TRUE, ...)
 }
 \arguments{
 \item{y}{effect size per study. Can be provided as (1) a numeric vector, (2)
@@ -53,6 +53,11 @@ based on MCMC/Stan samples (\code{summarize = "stan"}).}
 \code{\link[stats]{integrate}}. Use \code{rel.tol=.Machine$double.eps} for
 maximal precision (however, this might be slow).}
 
+\item{logml_iter}{number of iterations from the posterior of d and tau
+for computing the marginal likelihood for the random-effects model with bridge sampling.
+Note that the argument \code{iter=2000} controls the number of iterations
+for parameter estimation of the random effects.}
+
 \item{silent_stan}{whether to suppress the Stan progress bar.}
 
 \item{...}{further arguments passed to \code{rstan::sampling} (see
@@ -67,19 +72,24 @@ random-effects meta-anaysis are all positive or negative.
 Usually, in random-effects meta-analysis,the study-specific random-effects
 are allowed to be both negative or positive even when the prior on the
 overall effect size \code{d} is truncated to be positive). In contrast, the
-function \code{meta_ordered} tests a model in which the random effects are
-forced to be either all positive or all negative. The direction of the
-study-specific random-effects is defined via the prior on \code{d}. For
-instance, \code{d=prior("norm", c(0,.5), lower=0)} means that all
-random-effects are positive (not just the overall mean effect size).
+function \code{meta_ordered} fits and tests a model in which the random
+effects are forced to be either all positive or all negative. The direction
+of the study-specific random-effects is defined via the prior on the mode of
+the truncated normal distribution \code{d}. For instance,
+\code{d=prior("norm", c(0,.5), lower=0)} means that all random-effects are
+positive (not just the overall mean effect size).
+
+The posterior summary statistics of the overall effect size in the model
+\code{ordered} refer to the the \emph{average/mean} of the study-specific
+effect sizes (as implied by the fitted truncated normal distribution) and
+\emph{not} to the location parameter \code{d} of the truncated normal
+distribution (which is only the mode, not the expected value of a truncated
+normal distribution).
 
 The Bayes factor for the order-constrained model is computed using the
 encompassing Bayes factor. Since many posterior samples are required for this
 approach, the default number of MCMC iterations for \code{meta_ordered} is
-\code{iter=10000} per chain. The posterior summary statistics for the model
-\code{ordered} refer to the overall effect size (i.e., the expected value of
-the truncated normal distribution) and not to the location parameter \code{d}
-(which is not the expected value of a truncated normal).
+\code{logml_iter=10000} per chain.
 }
 \examples{
 ### Bayesian Meta-Analysis with Order Constraints
@@ -90,7 +100,7 @@ data(towels)
 set.seed(123)
 mo <- meta_ordered(logOR, SE, study, towels,
                    d = prior("norm", c(mean=0, sd=.3), lower=0),
-                   rel.tol=.Machine$double.eps^.15, iter=2000)
+                   rel.tol=.Machine$double.eps^.15, iter=1000, logml_iter = 1000)
 mo
 plot_posterior(mo)
 }

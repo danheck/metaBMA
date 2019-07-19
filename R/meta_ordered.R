@@ -12,19 +12,24 @@
 #' Usually, in random-effects meta-analysis,the study-specific random-effects
 #' are allowed to be both negative or positive even when the prior on the
 #' overall effect size \code{d} is truncated to be positive). In contrast, the
-#' function \code{meta_ordered} tests a model in which the random effects are
-#' forced to be either all positive or all negative. The direction of the
-#' study-specific random-effects is defined via the prior on \code{d}. For
-#' instance, \code{d=prior("norm", c(0,.5), lower=0)} means that all
-#' random-effects are positive (not just the overall mean effect size).
+#' function \code{meta_ordered} fits and tests a model in which the random
+#' effects are forced to be either all positive or all negative. The direction
+#' of the study-specific random-effects is defined via the prior on the mode of
+#' the truncated normal distribution \code{d}. For instance,
+#' \code{d=prior("norm", c(0,.5), lower=0)} means that all random-effects are
+#' positive (not just the overall mean effect size).
+#'
+#' The posterior summary statistics of the overall effect size in the model
+#' \code{ordered} refer to the the \emph{average/mean} of the study-specific
+#' effect sizes (as implied by the fitted truncated normal distribution) and
+#' \emph{not} to the location parameter \code{d} of the truncated normal
+#' distribution (which is only the mode, not the expected value of a truncated
+#' normal distribution).
 #'
 #' The Bayes factor for the order-constrained model is computed using the
 #' encompassing Bayes factor. Since many posterior samples are required for this
 #' approach, the default number of MCMC iterations for \code{meta_ordered} is
-#' \code{iter=10000} per chain. The posterior summary statistics for the model
-#' \code{ordered} refer to the overall effect size (i.e., the expected value of
-#' the truncated normal distribution) and not to the location parameter \code{d}
-#' (which is not the expected value of a truncated normal).
+#' \code{logml_iter=10000} per chain.
 #'
 #' @examples
 #' ### Bayesian Meta-Analysis with Order Constraints
@@ -35,7 +40,7 @@
 #' set.seed(123)
 #' mo <- meta_ordered(logOR, SE, study, towels,
 #'                    d = prior("norm", c(mean=0, sd=.3), lower=0),
-#'                    rel.tol=.Machine$double.eps^.15, iter=2000)
+#'                    rel.tol=.Machine$double.eps^.15, iter=1000, logml_iter = 1000)
 #' mo
 #' plot_posterior(mo)
 #' @seealso \link{meta_bma}, \link{meta_random}
@@ -47,7 +52,7 @@ meta_ordered <- function (y, SE, labels, data,
                           prior = c(1,1,1,1),
                           logml = "integrate", summarize = "stan", ci = .95,
                           rel.tol = .Machine$double.eps^.3,
-                          silent_stan = TRUE, ...){
+                          logml_iter = 10000, silent_stan = TRUE, ...){
 
   check_deprecated(list(...))  # error: backwards compatibility
   if (attr(d, "lower") == -Inf && attr(d, "upper") == Inf)
@@ -58,7 +63,7 @@ meta_ordered <- function (y, SE, labels, data,
 
   # start with standard meta_bma
   args <- as.list(match.call())[-1]
-  if (is.null(args$iter)) args$iter <- 10000
+  #args$iter <- logml_iter
   m_ordered <- do.call("meta_bma", args)
   names(m_ordered$logml) <-
     names(m_ordered$prior_models) <-
@@ -68,15 +73,15 @@ meta_ordered <- function (y, SE, labels, data,
   # count posterior samples
   samples <- extract(m_ordered$meta$random$stanfit_dstudy, "dstudy")[["dstudy"]]
   check_post <- apply(samples >= attr(d, "lower") &
-                      samples <= attr(d, "upper"), 1, all)
+                        samples <= attr(d, "upper"), 1, all)
   cnt_post <- list("cnt" = sum(check_post),
                    "M" = length(check_post))
   p_post <- cnt_post$cnt / cnt_post$M
 
   # count prior samples
   # (note: prior sampling not possible with current stan files)
-  mcmc_prior <- list("d" = rprior(args$iter, d),
-                     "tau" = rprior(args$iter, tau))
+  mcmc_prior <- list("d" = rprior(logml_iter, d),
+                     "tau" = rprior(logml_iter, tau))
   N <- length(m_ordered$meta$fixed$data$y)
   if (attr(d, "upper") == Inf)   # positive REs
     logp_dstudy <- pnorm(attr(d, "lower"), mcmc_prior$d, mcmc_prior$tau,
@@ -104,16 +109,11 @@ meta_ordered <- function (y, SE, labels, data,
   m_ordered$meta$ordered$model <- m_ordered$meta$ordered$data$model <-
     "random_ordered"
 
-  if (cnt_post$cnt >= 2000){
-    m_ordered$meta$ordered$stanfit_dstudy <- NULL
-    samples <- do.call("cbind", extract(m_ordered$meta$random$stanfit_dstudy,
-                                        c("d", "tau")))[check_post,]
-  } else{
-    m_ordered$meta$ordered$stanfit_dstudy <-
-      meta_stan(m_ordered$meta$ordered$data, d, tau, silent_stan = silent_stan, ...)
-    samples <- do.call("cbind", extract(m_ordered$meta$ordered$stanfit_dstudy,
-                                        c("d", "tau")))
-  }
+  m_ordered$meta$ordered$stanfit_dstudy <- meta_stan(m_ordered$meta$ordered$data,
+                                                     d, tau, silent_stan = silent_stan, ...)
+  samples <- do.call("cbind", extract(m_ordered$meta$ordered$stanfit_dstudy,
+                                      c("d", "tau", "dstudy")))
+
   # # check truncated sampling  vs. rejection sampling:
   # qqplot(samples2[,"d"], samples[,"d"]) ; abline(0,1,col=2)
   # qqplot(samples2[,"tau"], samples[,"tau"]) ; abline(0,1,col=2)
@@ -155,7 +155,7 @@ meta_ordered <- function (y, SE, labels, data,
 count_dstudy <- function(stanfit, prior){
   samples <- extract(stanfit, "dstudy")[["dstudy"]]
   check_post <- apply(samples >= attr(prior, "lower") &
-                      samples <= attr(prior, "upper"), 1, all)
+                        samples <= attr(prior, "upper"), 1, all)
   list("cnt" = sum(check_post),
        "M" = length(check_post))
 }

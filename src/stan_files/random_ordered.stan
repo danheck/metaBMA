@@ -16,15 +16,15 @@ transformed data{
 parameters {
 #include /prior/d_param.stan
 #include /prior/tau_param.stan
-  vector<lower=d_bnd[1], upper=d_bnd[2]>[N] d_study;
+  vector<lower=d_bnd[1], upper=d_bnd[2]>[N] dstudy;
 }
 
 model {
 #include /prior/d_target.stan
 #include /prior/tau_target.stan
-  target += normal_lpdf(d_study | d, tau);
+  target += normal_lpdf(dstudy | d, tau);
   // model does not fit with the appropriate normalizing constant:
   // target += - N * log_diff_exp(normal_lcdf(d_bnd[2] | d, tau),
   //                              normal_lcdf(d_bnd[1] | d, tau));
-  target += normal_lpdf(y | d_study, SE);
+  target += normal_lpdf(y | dstudy, SE);
 }
