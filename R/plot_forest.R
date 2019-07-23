@@ -10,6 +10,7 @@
 #'     name in the list \code{meta}. Can be suppressed by \code{shrinked = ""}
 #' @param mar margin of the plot in the order \code{c(bottom, left, top, right)}
 #'     (see \code{\link[graphics]{par}})
+#' @param cex.axis size of the y-axis annotation for the labels of studies.
 #' @param summary character vector with two values: first, either \code{"mean"}
 #'     or \code{"50\%"}; and second, either highest-probability-density interval \code{"hpd"}
 #'     or the Bayesian credibility interval \code{"bci"}.
@@ -23,7 +24,7 @@
 #' @export
 plot_forest <- function(meta, from, to, shrinked = "random",
                         summary = c("mean", "hpd"), mar = c(4.5, 12, 4, .3),
-                        ...){
+                        cex.axis = 1, ...){
   par(mar = mar)
   UseMethod("plot_forest", meta)
 }
@@ -31,34 +32,38 @@ plot_forest <- function(meta, from, to, shrinked = "random",
 #' @export
 plot_forest.meta_fixed <- function(meta, from, to, shrinked = "random",
                                    summary = c("mean", "hpd"),
-                                   mar = c(4.5, 12, 4, .3), ...){
+                                   mar = c(4.5, 12, 4, .3),
+                                   cex.axis = 1,...){
   plot_forest.default(meta, from, to, summary = summary,
-                      shrinked = "", main = "Fixed-Effects Meta-Analysis", ...)
-  axis(2, -1, "Total", las = 1, tick = FALSE)
+                      shrinked = "", main = "Fixed-Effects Meta-Analysis",
+                      cex.axis = cex.axis, ...)
+  axis(2, -1, "Total", las = 1, tick = FALSE, cex.axis = cex.axis)
   par(mar = c(5.1,4.1, 4.1, 2.1))
 }
 
 #' @export
 plot_forest.meta_random <- function(meta, from, to, shrinked = "random",
                                     summary = c("mean", "hpd"),
-                                    mar = c(4.5, 12, 4, .3), ...){
+                                    mar = c(4.5, 12, 4, .3),
+                                    cex.axis = 1, ...){
   plot_forest.default(meta, from = from, to = to, summary = summary,
-                      shrinked = shrinked,
+                      shrinked = shrinked, cex.axis = cex.axis,
                       main = "Random-Effects Meta-Analysis", ...)
-  axis(2, -1, "Total", las = 1, tick = FALSE)
+  axis(2, -1, "Total", las = 1, tick = FALSE, cex.axis = cex.axis)
   par(mar = c(5.1,4.1, 4.1, 2.1))
 }
 
 #' @export
 plot_forest.meta_bma <- function(meta, from, to, shrinked = "random",
                                  summary = c("mean", "hpd"),
-                                 mar = c(4.5, 12, 4, .3), ...){
+                                 mar = c(4.5, 12, 4, .3),
+                                 cex.axis = 1, ...){
   meta$data <- meta$meta[[1]]$data
   plot_forest.default(meta, from = from, to = to, summary = summary,
-                      shrinked = shrinked,
+                      shrinked = shrinked, cex.axis = cex.axis,
                       main = "Meta-Analysis with Model-Averaging", ...)
   labels <- rownames(meta$estimates)
-  axis(2, - seq_along(labels), labels, las = 1, tick = TRUE)
+  axis(2, - seq_along(labels), labels, las = 1, tick = TRUE, cex.axis = cex.axis)
   par(mar = c(5.1,4.1, 4.1, 2.1))
 }
 
@@ -67,7 +72,8 @@ plot_forest.meta_bma <- function(meta, from, to, shrinked = "random",
 #' @export
 plot_forest.default <- function(meta, from, to, shrinked = "random",
                                 summary = c("mean", "hpd"),
-                                mar = c(4.5, 12, 4, .3), ...){
+                                mar = c(4.5, 12, 4, .3),
+                                cex.axis = 1, ...){
   ci <- .95
 
   n.studies <- length(meta$data$y)
@@ -115,7 +121,7 @@ plot_forest.default <- function(meta, from, to, shrinked = "random",
        ylim = c( - n.ests, n.studies),
        bty = "n", ...)
   abline(v = 0, col = "darkgray", lty = "dashed")
-  axis(2, n.studies:1, meta$data$labels, las = 1)
+  axis(2, n.studies:1, meta$data$labels, las = 1, cex.axis = cex.axis)
 
   segments(x0 = lower,  x1 = upper,  n.studies:1)
   eps <- .08

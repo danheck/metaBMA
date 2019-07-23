@@ -5,7 +5,7 @@
 \title{Forest Plot for Meta-Analysis}
 \usage{
 plot_forest(meta, from, to, shrinked = "random", summary = c("mean",
-  "hpd"), mar = c(4.5, 12, 4, 0.3), ...)
+  "hpd"), mar = c(4.5, 12, 4, 0.3), cex.axis = 1, ...)
 }
 \arguments{
 \item{meta}{fitted meta-analysis model}
@@ -24,6 +24,8 @@ or the Bayesian credibility interval \code{"bci"}.}
 
 \item{mar}{margin of the plot in the order \code{c(bottom, left, top, right)}
 (see \code{\link[graphics]{par}})}
+
+\item{cex.axis}{size of the y-axis annotation for the labels of studies.}
 
 \item{...}{arguments passed to \code{\link[graphics]{plot}} (e.g., \code{from}, \code{to})}
 }
