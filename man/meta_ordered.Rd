@@ -7,8 +7,8 @@
 meta_ordered(y, SE, labels, data, d = prior("norm", c(mean = 0, sd =
   0.3), lower = 0), tau = prior("invgamma", c(shape = 1, scale = 0.15)),
   prior = c(1, 1, 1, 1), logml = "integrate", summarize = "stan",
-  ci = 0.95, rel.tol = .Machine$double.eps^0.3, logml_iter = 10000,
-  silent_stan = TRUE, ...)
+  ci = 0.95, rel.tol = .Machine$double.eps^0.3, logml_iter = 5000,
+  iter = 5000, silent_stan = TRUE, ...)
 }
 \arguments{
 \item{y}{effect size per study. Can be provided as (1) a numeric vector, (2)
@@ -58,6 +58,10 @@ for computing the marginal likelihood for the random-effects model with bridge s
 Note that the argument \code{iter=2000} controls the number of iterations
 for parameter estimation of the random effects.}
 
+\item{iter}{number of MCMC iterations for the random-effects meta-analysis.
+Needs to be larger than usual to estimate the probability of all random
+effects being ordered (i.e., positive or negative).}
+
 \item{silent_stan}{whether to suppress the Stan progress bar.}
 
 \item{...}{further arguments passed to \code{rstan::sampling} (see
@@ -89,7 +93,7 @@ normal distribution).
 The Bayes factor for the order-constrained model is computed using the
 encompassing Bayes factor. Since many posterior samples are required for this
 approach, the default number of MCMC iterations for \code{meta_ordered} is
-\code{logml_iter=10000} per chain.
+\code{iter=5000} per chain.
 }
 \examples{
 ### Bayesian Meta-Analysis with Order Constraints
@@ -100,7 +104,7 @@ data(towels)
 set.seed(123)
 mo <- meta_ordered(logOR, SE, study, towels,
                    d = prior("norm", c(mean=0, sd=.3), lower=0),
-                   rel.tol=.Machine$double.eps^.15, iter=1000, logml_iter = 1000)
+                   rel.tol=.01, iter=1000)
 mo
 plot_posterior(mo)
 }

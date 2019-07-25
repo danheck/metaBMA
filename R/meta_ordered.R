@@ -7,6 +7,9 @@
 #' @param prior prior probabilities over models (possibly unnormalized) in the
 #'     order \code{c(fixed_H0, fixed_H1, ordered_H1, random_H1)}. Note that the
 #'     model \code{random_H0} is not included in the comparison.
+#' @param iter number of MCMC iterations for the random-effects meta-analysis.
+#'     Needs to be larger than usual to estimate the probability of all random
+#'     effects being ordered (i.e., positive or negative).
 #'
 #' @details
 #' Usually, in random-effects meta-analysis,the study-specific random-effects
@@ -29,7 +32,7 @@
 #' The Bayes factor for the order-constrained model is computed using the
 #' encompassing Bayes factor. Since many posterior samples are required for this
 #' approach, the default number of MCMC iterations for \code{meta_ordered} is
-#' \code{logml_iter=10000} per chain.
+#' \code{iter=5000} per chain.
 #'
 #' @examples
 #' ### Bayesian Meta-Analysis with Order Constraints
@@ -40,7 +43,7 @@
 #' set.seed(123)
 #' mo <- meta_ordered(logOR, SE, study, towels,
 #'                    d = prior("norm", c(mean=0, sd=.3), lower=0),
-#'                    rel.tol=.Machine$double.eps^.15, iter=1000, logml_iter = 1000)
+#'                    rel.tol=.01, iter=1000)
 #' mo
 #' plot_posterior(mo)
 #' @seealso \link{meta_bma}, \link{meta_random}
@@ -52,7 +55,7 @@ meta_ordered <- function (y, SE, labels, data,
                           prior = c(1,1,1,1),
                           logml = "integrate", summarize = "stan", ci = .95,
                           rel.tol = .Machine$double.eps^.3,
-                          logml_iter = 10000, silent_stan = TRUE, ...){
+                          logml_iter = 5000, iter = 5000, silent_stan = TRUE, ...){
 
   check_deprecated(list(...))  # error: backwards compatibility
   if (attr(d, "lower") == -Inf && attr(d, "upper") == Inf)
@@ -62,9 +65,13 @@ meta_ordered <- function (y, SE, labels, data,
          "    d=prior('norm', c(mean=0, sd=.3), lower=-Inf, upper=0) ")
 
   # start with standard meta_bma
-  args <- as.list(match.call())[-1]
-  #args$iter <- logml_iter
-  m_ordered <- do.call("meta_bma", args)
+  dl <- data_list(model = "random", y = y, SE = SE, labels = labels, data = data,
+                  args = as.list(match.call())[-1])
+  m_ordered <- meta_bma(y, SE, labels, data = dl, d = d, tau = tau, prior = prior,
+                        logml = logml, summarize = summarize, ci = ci, rel.tol = rel.tol,
+                        silent_stan = silent_stan, logml_iter = logml_iter,
+                        iter = iter, ...)
+
   names(m_ordered$logml) <-
     names(m_ordered$prior_models) <-
     names(m_ordered$posterior_models) <-
@@ -80,8 +87,8 @@ meta_ordered <- function (y, SE, labels, data,
 
   # count prior samples
   # (note: prior sampling not possible with current stan files)
-  mcmc_prior <- list("d" = rprior(logml_iter, d),
-                     "tau" = rprior(logml_iter, tau))
+  mcmc_prior <- list("d" = rprior(iter, d),
+                     "tau" = rprior(iter, tau))
   N <- length(m_ordered$meta$fixed$data$y)
   if (attr(d, "upper") == Inf)   # positive REs
     logp_dstudy <- pnorm(attr(d, "lower"), mcmc_prior$d, mcmc_prior$tau,
@@ -98,10 +105,10 @@ meta_ordered <- function (y, SE, labels, data,
   p_prior <- mean(p_pos)
   bf_ordered1 <- p_post / p_prior
 
-  # check_prior <- rep(NA, args$iter)
-  # for (i in 1:args$iter)
+  # check_prior <- rep(NA, iter)
+  # for (i in 1:iter)
   #   check_prior[i] <- all(rnorm(N, mcmc_prior$d[i], mcmc_prior$tau[i]) > 0)
-  # mean(check_prior)
+  # mean(check_prior)  # = p_prior!
 
 
   # get parameter estimates for order-constrained model
@@ -110,7 +117,8 @@ meta_ordered <- function (y, SE, labels, data,
     "random_ordered"
 
   m_ordered$meta$ordered$stanfit_dstudy <- meta_stan(m_ordered$meta$ordered$data,
-                                                     d, tau, silent_stan = silent_stan, ...)
+                                                     d, tau, silent_stan = silent_stan,
+                                                     iter = iter, ...)
   samples <- do.call("cbind", extract(m_ordered$meta$ordered$stanfit_dstudy,
                                       c("d", "tau", "dstudy")))
 
