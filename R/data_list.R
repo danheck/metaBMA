@@ -34,6 +34,10 @@ data_list <- function (model, y, SE, labels, data, args){
     labels <- paste("Study", 1:length(eval(SE)))
 
   check_y_se(y, SE, labels)
+  if (grepl("random", model) && length(y) < 2)
+    stop("At least n=2 studies are required for a random-effects meta-analysis.")
+  if (grepl("jzs", model) && length(y) < 2)
+    stop("At least n=2 studies are required for a meta-analysis with moderator variables.")
 
   list("model" = model, "N" = length(SE), "y" = y, "SE" = SE, "labels" = labels,
        "data" = data, "model.frame" = mf)
