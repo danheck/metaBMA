@@ -25,7 +25,7 @@ character vector or the quoted or unquoted name of the variable in
 \item{data}{data frame containing the variables for effect size \code{y},
 standard error \code{SE}, \code{labels}, and moderators per study.}
 
-\item{d}{\code{prior} distribution on the average effect size \eqn{d}. The
+\item{d}{\code{prior} distribution on the average effect size \code{d}. The
 prior probability density function is defined via \code{\link{prior}}.}
 
 \item{rscale_contin}{scale parameter of the JZS prior for the continuous
@@ -39,7 +39,7 @@ moderators.}
 \item{logml}{how to estimate the log-marginal likelihood: either by numerical
 integration (\code{"integrate"}) or by bridge sampling using MCMC/Stan
 samples (\code{"stan"}). To obtain high precision with \code{logml="stan"},
-many MCMC samples are required (e.g., \code{iter=10000, warmup=1000}).}
+many MCMC samples are required (e.g., \code{logml_iter=10000, warmup=1000}).}
 
 \item{summarize}{how to estimate parameter summaries (mean, median, SD,
 etc.): Either by numerical integration (\code{summarize = "integrate"}) or
@@ -54,8 +54,13 @@ maximal precision (however, this might be slow).}
 \item{silent_stan}{whether to suppress the Stan progress bar.}
 
 \item{...}{further arguments passed to \code{rstan::sampling} (see
-\code{\link[rstan]{stanmodel-method-sampling}}). For instance:
-\code{warmup=500}, \code{chains=4}, \code{control=list(adapt_delta=.95)}).}
+\code{\link[rstan]{stanmodel-method-sampling}}). Relevant MCMC settings
+concern the number of warmup samples that are discarded
+(\code{warmup=500}), the total number of iterations per chain
+(\code{iter=2000}), the number of MCMC chains (\code{chains=4}), whether
+multiple cores should be used (\code{cores=4}), and control arguments that
+make the sampling in Stan more robust, for instance:
+\code{control=list(adapt_delta=.97)}.}
 }
 \description{
 Runs a Bayesian meta-analysis assuming that the mean effect \eqn{d} in each

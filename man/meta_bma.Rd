@@ -27,11 +27,11 @@ character vector or the quoted or unquoted name of the variable in
 \item{data}{data frame containing the variables for effect size \code{y},
 standard error \code{SE}, \code{labels}, and moderators per study.}
 
-\item{d}{\code{prior} distribution on the average effect size \eqn{d}. The
+\item{d}{\code{prior} distribution on the average effect size \code{d}. The
 prior probability density function is defined via \code{\link{prior}}.}
 
 \item{tau}{\code{prior} distribution on the between-study heterogeneity
-\eqn{\tau} (i.e., the standard deviation of the study effect sizes
+\code{tau} (i.e., the standard deviation of the study effect sizes
 \code{dstudy} in a random-effects meta-analysis. A (nonnegative) prior
 probability density function is defined via \code{\link{prior}}.}
 
@@ -51,7 +51,7 @@ and H1 to be equally likely: \code{prior = c(2,2,1,1)}.}
 \item{logml}{how to estimate the log-marginal likelihood: either by numerical
 integration (\code{"integrate"}) or by bridge sampling using MCMC/Stan
 samples (\code{"stan"}). To obtain high precision with \code{logml="stan"},
-many MCMC samples are required (e.g., \code{iter=10000, warmup=1000}).}
+many MCMC samples are required (e.g., \code{logml_iter=10000, warmup=1000}).}
 
 \item{summarize}{how to estimate parameter summaries (mean, median, SD,
 etc.): Either by numerical integration (\code{summarize = "integrate"}) or
@@ -63,16 +63,24 @@ based on MCMC/Stan samples (\code{summarize = "stan"}).}
 \code{\link[stats]{integrate}}. Use \code{rel.tol=.Machine$double.eps} for
 maximal precision (however, this might be slow).}
 
-\item{logml_iter}{number of iterations from the posterior of d and tau
-for computing the marginal likelihood for the random-effects model with bridge sampling.
-Note that the argument \code{iter=2000} controls the number of iterations
-for parameter estimation of the random effects.}
+\item{logml_iter}{number of iterations (per chain) from the posterior
+distribution of \code{d} and \code{tau}. The samples are used for computing
+the marginal likelihood of the random-effects model with bridge sampling
+(if \code{logml="stan"}) and for obtaining parameter estimates (if
+\code{summarize="stan"}). Note that the argument \code{iter=2000} controls
+the number of iterations for estimation of the random-effect parameters per
+study in random-effects meta-analysis.}
 
 \item{silent_stan}{whether to suppress the Stan progress bar.}
 
 \item{...}{further arguments passed to \code{rstan::sampling} (see
-\code{\link[rstan]{stanmodel-method-sampling}}). For instance:
-\code{warmup=500}, \code{chains=4}, \code{control=list(adapt_delta=.95)}).}
+\code{\link[rstan]{stanmodel-method-sampling}}). Relevant MCMC settings
+concern the number of warmup samples that are discarded
+(\code{warmup=500}), the total number of iterations per chain
+(\code{iter=2000}), the number of MCMC chains (\code{chains=4}), whether
+multiple cores should be used (\code{cores=4}), and control arguments that
+make the sampling in Stan more robust, for instance:
+\code{control=list(adapt_delta=.97)}.}
 }
 \description{
 Fits random- and fixed-effects meta-anayses and performs Bayesian model
@@ -82,15 +90,20 @@ averaging for H1 (d != 0) vs. H0 (d = 0).
 Bayesian model averaging for four meta-analysis models: Fixed- vs.
 random-effects and H0 (\eqn{d=0}) vs. H1 (e.g., \eqn{d>0}).
 
-By default, the log-marginal likelihood is computed by numerical
-integration. This is relatively fast and gives precise, reproducible results.
-However, for extreme priors or data, this might be robust. Hence, as an
-alternative, the log-marginal likelihood can be estimated using MCMC/Stan
-samples and bridge sampling.
 
-Note that the same two options are available to obtain summary statistics of
-the posterior distributions of the average effect size \eqn{d} and the
-heterogeneity parameter \eqn{tau}.
+By default, the log-marginal likelihood is computed by numerical integration
+(\code{logml="integrate"}). This is relatively fast and gives precise,
+reproducible results. However, for extreme priors or data (e.g., very small
+standard errors), numerical integration is not robust and might provide
+incorrect results. As an alternative, the log-marginal likelihood can be
+estimated using MCMC/Stan samples and bridge sampling (\code{logml="stan"}).
+
+To obtain posterior summary statistics for the average effect size \code{d}
+and the heterogeneity parameter \code{tau}, one can also choose between
+numerical integration (\code{summarize="integrate"}) or MCMC sampling in Stan
+(\code{summarize="stan"}). If any moderators are included in a model, both
+the marginal likelihood and posterior summary statistics can only be computed
+using Stan.
 }
 \examples{
 # Note: The following example optimizes speed (for CRAN checks).
