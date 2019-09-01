@@ -25,6 +25,9 @@
 bma <- function(meta, prior = 1, parameter = "d", summarize = "integrate", ci = .95,
                 rel.tol = .Machine$double.eps^0.5){
 
+  if (parameter == "tau")
+    stop("Model averaging for heterogeneity 'tau' currently not supported.")
+
   classes <- sapply(meta, class) %in% c("meta_fixed", "meta_random")
   if (!is.list(meta) || !all(classes))
     stop ("'meta' must be a list of meta-analysis models \n",
@@ -60,20 +63,22 @@ bma <- function(meta, prior = 1, parameter = "d", summarize = "integrate", ci = 
   # get posterior summary statistics
   summarize <- match.arg(summarize, c("stan", "integrate"))
   if (summarize == "integrate"){
-    res_bma$estimates <- rbind("averaged" = summary_integrate(res_bma$posterior_d,
-                                                              ci = ci, rel.tol = rel.tol),
-                               ests)
-  } else if (summarize == "stan"){
+    ests_avg <- summary_integrate(res_bma[[paste0("posterior_", parameter)]],
+                                  ci = ci, rel.tol = rel.tol)
+  } else {
     samples <- lapply(meta, function(m) extract(m$stanfit, parameter)[[parameter]])
     maxiter <- max(sapply(samples, length))
-    nn <- round(maxiter * incl$posterior)
+
+    sel_H1 <- paste0(names(meta), "_H1")
+    nn <- round(maxiter * incl$posterior[sel_H1])
     avg_samples <- unlist(mapply(sample, x = samples, size = nn,
                                  MoreArgs = list(replace = TRUE)))
-    res_bma$estimates <- rbind("averaged" = summary_samples(avg_samples), ests)
+    ests_avg <- summary_samples(avg_samples)
     # res_bma[[paste0("posterior_", parameter)]] <-
     #   posterior_logspline(avg_samples, parameter, meta[[1]][[paste0("prior_", parameter)]])
   }
 
+  res_bma$estimates <- rbind("averaged" = ests_avg, ests)
   res_bma$BF <- make_BF(res_bma$logml)
   res_bma
 }
