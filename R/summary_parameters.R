@@ -26,10 +26,10 @@ summary_meta <- function(meta, summarize = "integrate", ci = .95,
               "\n  (MCMC/Stan samples are missing)")
     } else {
       estimates <- summary_stanfit(meta$stanfit, ci = ci)
-      idx <- grep("alpha", rownames(estimates))
+      idx <- grep("beta", rownames(estimates))
       if (length(idx) > 0){
         X <- add_jzs(meta$data, meta$jzs)$X
-        rownames(estimates)[idx] <- paste0("alpha_", colnames(X))
+        rownames(estimates)[idx] <- paste0("beta_", colnames(X))
       }
     }
 

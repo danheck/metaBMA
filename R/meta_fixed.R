@@ -53,7 +53,7 @@ meta_fixed <- function(y, SE, labels, data,
   # not for fixed_jzs
   meta$posterior_d <- posterior(meta, "d", rel.tol = rel.tol)
   summ <- summary_meta(meta, summarize)
-  meta$estimates <- summ[c("d", grep("alpha", rownames(summ), value = TRUE)),,drop = FALSE]
+  meta$estimates <- summ[c("d", grep("beta", rownames(summ), value = TRUE)),,drop = FALSE]
 
   logml_fixedH0 <- NA
   # analytical/numerical integration: only without JZS moderator structure!

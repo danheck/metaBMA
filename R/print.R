@@ -21,7 +21,7 @@ print.meta_fixed <- function (x, digits = 3, ...){
   print(x$BF, digits = digits)
   print.est(x$estimates, what = " of fixed-effects model", digits = digits)
 
-  if (any(grepl("alpha", rownames(x$estimates))))
+  if (any(grepl("beta", rownames(x$estimates))))
     cat("  (Note: moderators in meta-regression are ",
         ifelse(x$jzs$centering, "", "NOT ") , "mean-centered.)\n", sep = "")
 }
@@ -40,7 +40,7 @@ print.meta_random <- function (x, digits = 3, ...){
   print(x$BF, digits = digits)
   print.est(x$estimates, what = " of random-effects model", digits = digits)
 
-  if (any(grepl("alpha", rownames(x$estimates))))
+  if (any(grepl("beta", rownames(x$estimates))))
     cat("  (Note: moderators in meta-regression are ",
         ifelse(x$jzs$centering, "", "NOT ") , "mean-centered.)\n", sep = "")
 }

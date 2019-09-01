@@ -50,7 +50,7 @@ posterior <- function (meta, parameter = "d", summarize = "integrate",
 
     prior <- meta[[paste0("prior_", parameter)]]
     if (is.null(dpost))
-      dpost <- posterior_logspline(meta$stanfit, parameter, prior)  # TODO: JZS alpha parameters!
+      dpost <- posterior_logspline(meta$stanfit, parameter, prior)  # TODO: JZS beta slope parameters!
     attr(dpost, "lower") <- attr(prior, "lower")
     attr(dpost, "upper") <- attr(prior, "upper")
     attr(dpost, "model") <- meta$model

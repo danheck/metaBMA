@@ -55,7 +55,7 @@ meta_random <- function(y, SE, labels, data,
     data_list2 <- data_list
     data_list2$model <- paste0(data_list$model, "_dstudy")
     jzs <- grepl("jzs", data_list2$model)
-    pars <-  c("d", "tau", "dstudy", c("alpha")[jzs])
+    pars <-  c("d", "tau", "dstudy", c("beta")[jzs])
     meta$stanfit_dstudy <- meta_stan(data_list2, d = d, tau = tau, jzs = meta$jzs,
                                      pars = pars, silent_stan = silent_stan, ...)
 
@@ -80,7 +80,7 @@ meta_random <- function(y, SE, labels, data,
   meta$posterior_d <- posterior(meta, "d", summarize, rel.tol = rel.tol)
   meta$posterior_tau <- posterior(meta, "tau", summarize, rel.tol = rel.tol)
   summ <- summary_meta(meta, summarize)
-  meta$estimates <- summ[c("d", "tau", grep("alpha", rownames(summ), value = TRUE)),,drop = FALSE]
+  meta$estimates <- summ[c("d", "tau", grep("beta", rownames(summ), value = TRUE)),,drop = FALSE]
 
   logml_randomH0 <- NA
   # analytical/numerical integration: only without JZS moderator structure!

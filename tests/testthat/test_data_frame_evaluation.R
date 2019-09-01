@@ -56,14 +56,14 @@ test_that("meta_fixed supports y as formula", {
 
 test_that("JZS prior is correctly defined via formula", {
   expect_warning(fit1 <- meta_fixed(yyy ~ xx, SE, study, d, iter = 1750, rel.tol = .01))
-  expect_identical(rownames(fit1$estimates), c("d", "alpha_xx"))
+  expect_identical(rownames(fit1$estimates), c("d", "beta_xx"))
 
   expect_warning(fit2 <- meta_fixed(yyy ~ cat, SE, study, d, iter = 1750, logml="s", summ="s", rel.tol = .01))
-  expect_identical(rownames(fit2$estimates), c("d", "alpha_cat1"))
+  expect_identical(rownames(fit2$estimates), c("d", "beta_cat1"))
 
   skip_on_cran()
   expect_warning(fit3 <- meta_fixed(yyy ~ xx + cat, SE, study, d, iter = 1750, logml="s", summ="s"))
-  expect_identical(rownames(fit3$estimates), c("d", "alpha_xx", "alpha_cat1"))
+  expect_identical(rownames(fit3$estimates), c("d", "beta_xx", "beta_cat1"))
 })
 
 

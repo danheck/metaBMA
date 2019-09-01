@@ -24,7 +24,7 @@ parameters {
 
 transformed parameters {
   vector[N] dstudy;
-  dstudy = d + X * alpha + tau * delta;
+  dstudy = d + X * beta + tau * delta;
 }
 
 model {
