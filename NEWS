@@ -2,6 +2,7 @@ metaBMA 0.6.2
 ===========
 
 - Moderator analysis: rename slope parameters "alpha" to "beta"
+- Bugfix for meta_bma(): Only use H0 models for averaging of "d" parameter
 
 
 
