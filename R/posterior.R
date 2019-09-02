@@ -6,23 +6,39 @@ posterior <- function (meta, parameter = "d", summarize = "integrate",
   if (class(meta) == "meta_bma"){
     if (parameter != "d")
       stop("bma currently. only working for parameter='d' ")
-    # average across posterior densities:
-    if (length(meta$posterior_models) != length(meta$posterior_d))
-      models <- grep("H1", names(meta$posterior_models),
-                     value  = TRUE, fixed = TRUE)
+
+    # labels for prior/posterior
+    prior_par <- paste0("prior_", parameter)
+    posterior_par <- paste0("posterior_", parameter)
+
+    # # select relevant models that have posterior for parameter [TODO: method for tau:random_H0/random_H1]
+    # if (parameter == "d"){
+    #   models <- sapply(meta, function(mm) parameter %in% grep(mm$model))
+    # } else if parameter == "tau"){
+    #   select_models <- sapply(meta, function(mm) parameter %in% rownames(mm$estimates))
+    # } else {
+    #   stop("The argument 'parameter' must be either 'd' or 'tau'.")
+    # }
+
+    # cope with the fact that H0/H1 models are represented differently internally:
+    if (length(meta$posterior_models) != length(meta[[posterior_par]]))
+      models <- grep("H1", names(meta$posterior_models), value  = TRUE, fixed = TRUE)
     else
       models <- seq_along(meta)
     weights <- meta$posterior_models[models]
     weights <- weights / sum(weights)
+
+    # average across posterior densities:
     dpost_bma <- function (d)
       sapply(d, function (dd){
-        sum(weights*sapply(meta$posterior_d, function(dp) dp(dd)))
+        sum(weights*sapply(meta[[posterior_par]], function(dp) dp(dd)))
       })
-    lb <- sapply(meta$prior_d, attr, which = "lower")
-    ub <- sapply(meta$prior_d, attr, which = "upper")
+    lb <- sapply(meta[[prior_par]], attr, which = "lower")
+    ub <- sapply(meta[[prior_par]], attr, which = "upper")
     attr(dpost_bma, "lower") <- min(lb)
     attr(dpost_bma, "upper") <- max(ub)
     attr(dpost_bma, "model") <- "bma"
+
     return(check_posterior(dpost_bma, meta, parameter, rel.tol))
   }
 

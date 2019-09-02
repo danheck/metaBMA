@@ -24,8 +24,8 @@ test_that("bma works for fitted meta_* objects", {
   expect_is(f1a$estimates, "matrix")
 
 
-  r1b <- meta_random(yyy ~ 1, SE, study, data = dat,
-                     logml = "stan", logml_iter = 1750, iter = 500)
+  suppressWarnings(r1b <- meta_random(yyy ~ 1, SE, study, data = dat,
+                                      logml = "stan", logml_iter = 1750, iter = 500))
   expect_is(r1b$logml, "numeric")
   expect_is(r1b$BF, "matrix")
   expect_is(r1b$estimates, "matrix")
@@ -41,8 +41,8 @@ test_that("bma works for fitted meta_* objects", {
 
 
   skip_on_cran()
-  r1a <- meta_random(yyy, SE, study, data = dat, summarize = "int",
-                     rel.tol = .Machine$double.eps^.1, iter = 100)
+  suppressWarnings(r1a <- meta_random(yyy, SE, study, data = dat, summarize = "int",
+                     rel.tol = .Machine$double.eps^.1, iter = 100))
   expect_silent(bb <- bma(list("a" = r1a, "b" = r1b), rel.tol = .Machine$double.eps^.1))
   postprob <- unname(bb$posterior_models[c(2,4)])
   expect_equal(postprob/sum(postprob), c(.5, .5), tolerance = .005)
