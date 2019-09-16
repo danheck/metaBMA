@@ -45,7 +45,7 @@ test_that("bma works for fitted meta_* objects", {
                      rel.tol = .Machine$double.eps^.1, iter = 100))
   expect_silent(bb <- bma(list("a" = r1a, "b" = r1b), rel.tol = .Machine$double.eps^.1))
   postprob <- unname(bb$posterior_models[c(2,4)])
-  expect_equal(postprob/sum(postprob), c(.5, .5), tolerance = .005)
+  expect_equal(postprob/sum(postprob), c(.5, .5), tolerance = .01)
   expect_equal(r1a$estimates[,1:7], r1b$estimates[,1:7], tolerance = .05)
 })
 
@@ -53,7 +53,7 @@ test_that("meta_bma gives identical results for stan/integrate", {
   skip_on_cran()
   set.seed(12352)
   mf_stan <- meta_bma(yyy, SE, study, dat, summarize = "stan", logml = "stan",
-                      logml_iter = 5000, iter = 5000)
+                      logml_iter = 5000, iter = 10000)
   mf_int  <- meta_bma(yyy, SE, study, dat, summarize = "int", logml = "int",iter = 100,
                       rel.tol = .05)
   expect_equal(mf_stan$estimates[,1:7], mf_int$estimates[,1:7], tolerance = .01)
