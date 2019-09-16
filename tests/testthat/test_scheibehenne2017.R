@@ -23,7 +23,7 @@ test_that("Scheibehenne (2017): model averaging for towels dataset works correct
   suppressWarnings(  # divergent transitions
     m_testing <- meta_bma(y = logOR, SE = SE, data = towels,
                           d = prior_d, tau = prior_tau,
-                          iter = 2000, logml_iter = 3000, rel.tol = .1, summ = "stan"))
+                          iter = 1500, logml_iter = 2000, rel.tol = .1, summ = "stan"))
 
   BF_fixed_random <- 2.450923
   BFplus0_random <- 4.055704
@@ -47,16 +47,16 @@ test_that("Scheibehenne (2017): model averaging for towels dataset works correct
   suppressWarnings(
     meta_est <- meta_bma(y = logOR, SE = SE, data = towels,
                          d = prior_d_unrestricted, tau = prior_tau,
-                         iter = 3000, logml_iter = 2000, rel.tol = .1, summ = "stan"))
+                         iter = 1500, logml_iter = 1000, rel.tol = .1, summ = "stan"))
 
-  expect_equal(meta_est$estimates["fixed", "mean"], m.fixed, tolerance = .005)
+  expect_equal(meta_est$estimates["fixed", "mean"], m.fixed, tolerance = .01)
   expect_equal(unname(meta_est$estimates["fixed", c("hpd95_lower", "hpd95_upper")]),
                hpd95.fixed, tolerance = .03)
-  expect_equal(meta_est$estimates["random", "mean"], m.rand, tolerance = .005)
+  expect_equal(meta_est$estimates["random", "mean"], m.rand, tolerance = .01)
   expect_equal(unname(meta_est$estimates["random", c("hpd95_lower", "hpd95_upper")]),
                hpd95.rand, tolerance = .03)
-  expect_equal(meta_est$estimates["averaged", "mean"], m.mixed, tolerance = .005)
+  expect_equal(meta_est$estimates["averaged", "mean"], m.mixed, tolerance = .01)
   expect_equal(unname(meta_est$estimates["averaged", c("hpd95_lower", "hpd95_upper")]),
-               hpd95.mixed, tolerance = .01)
+               hpd95.mixed, tolerance = .03)
 })
 
