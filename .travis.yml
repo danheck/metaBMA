@@ -7,17 +7,15 @@ r_check_args: '--ignore-vignettes'
 r_build_args: '--no-build-vignettes'
 
 addons:
-    apt:
-      sources:
-        - ubuntu-toolchain-r-test
-      packages:
-        - g++-7
+  apt:
+    packages:
+      - libudunits2-dev
+      - libgdal-dev
+      - libproj-dev
 
 env:
   - _R_CHECK_FORCE_SUGGESTS_=true
     _R_CHECK_CRAN_INCOMING_=true
-    CC="gcc-7"
-    CXX="g++-7"
 
 cache:
   - packages
@@ -71,22 +69,7 @@ matrix:
 before_install:
   - mkdir -p ~/.R
   - echo "CXX14FLAGS=-O3 -mtune=native -march=native -Wno-unused-variable -Wno-unused-function  -Wno-macro-redefined" >> ~/.R/Makevars
-  - echo "CXX14=g++ -std=c++1y -fPIC" >> ~/.R/Makevars
-
-script:
-  - |
-    R CMD build .
-    R CMD check metaBMA*tar.gz --as-cran --no-build-vignettes
-
-after_script:
-  - tar -ztvf metaBMA_*.tar.gz
-  - echo ${NOT_CRAN}
-
-after_success:
-  - travis_wait 14 tar -C .. -xf $PKG_TARBALL
-
-after_failure:
-  - cat metaBMA.Rcheck/00*
+  - echo "CXX14=g++ -std=c++1y -fext-numeric-literals -fPIC" >> ~/.R/Makevars
 
 notifications:
   email:
