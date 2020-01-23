@@ -116,10 +116,17 @@ meta_bma <- function(y, SE, labels, data,
                            summarize = summarize, ci = ci, rel.tol = rel.tol,
                            silent_stan = silent_stan, logml_iter = logml_iter, ...)
 
+  # random_H0 <- meta_random(y, SE, labels, data = dl, d = prior("0"), tau = tau, logml = logml,
+  #                          summarize = summarize, ci = ci, rel.tol = rel.tol,
+  #                          silent_stan = silent_stan, logml_iter = logml_iter, ...)
+
   # model averaging for:  d | H1
   meta <- list("fixed" = fixed_H1, "random" = random_H1)
   meta_bma <- bma(meta, prior = prior, parameter = "d",
                   summarize = summarize, ci = ci, rel.tol = rel.tol)
+
+  # bma(list(), prior = prior, parameter = "d",
+  #     summarize = "stan", ci = ci, rel.tol = rel.tol)
 
   # inclusion bayes factors etc.
   meta_bma$inclusion <- inclusion(meta_bma$logml, include = c(2, 4), prior = prior)
