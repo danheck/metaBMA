@@ -1,4 +1,5 @@
 language: r
+dist: trusty
 latex: true
 
 warnings_are_errors: TRUE
