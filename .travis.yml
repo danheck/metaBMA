@@ -13,11 +13,10 @@ addons:
         - g++-7
 
 env:
-  global:
-    - _R_CHECK_FORCE_SUGGESTS_=true
-    - _R_CHECK_CRAN_INCOMING_=true
-    - CC=gcc-7
-    - CXX=g++-7
+  - _R_CHECK_FORCE_SUGGESTS_=true
+    _R_CHECK_CRAN_INCOMING_=true
+    CC="gcc-7"
+    CXX="g++-7"
 
 cache:
   - packages
