@@ -1,13 +1,23 @@
 language: r
 latex: true
+
 warnings_are_errors: TRUE
 r_check_args: '--ignore-vignettes'
 r_build_args: '--no-build-vignettes'
+
+addons:
+    apt:
+      sources:
+        - ubuntu-toolchain-r-test
+      packages:
+        - g++-7
 
 env:
   global:
     - _R_CHECK_FORCE_SUGGESTS_=true
     - _R_CHECK_CRAN_INCOMING_=true
+    - CC=gcc-7
+    - CXX=g++-7
 
 cache:
   - packages
@@ -17,7 +27,7 @@ repos:
   CRAN: https://cloud.r-project.org
   ropensci: http://packages.ropensci.org
 
-jobs:
+matrix:
   include:
     - r: release
       r_binary_packages:
@@ -57,16 +67,6 @@ jobs:
         - rstantools
         - bridgesampling
         - BH
-
-addons:
-    apt:
-      sources:
-        - ubuntu-toolchain-r-test
-      packages:
-        - g++-7
-
-env:
-  - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
 
 before_install:
   - mkdir -p ~/.R
