@@ -4,8 +4,16 @@
 \alias{plot_forest}
 \title{Forest Plot for Meta-Analysis}
 \usage{
-plot_forest(meta, from, to, shrinked = "random", summary = c("mean",
-  "hpd"), mar = c(4.5, 12, 4, 0.3), cex.axis = 1, ...)
+plot_forest(
+  meta,
+  from,
+  to,
+  shrinked = "random",
+  summary = c("mean", "hpd"),
+  mar = c(4.5, 12, 4, 0.3),
+  cex.axis = 1,
+  ...
+)
 }
 \arguments{
 \item{meta}{fitted meta-analysis model}

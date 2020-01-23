@@ -4,12 +4,25 @@
 \alias{meta_bma}
 \title{Model Averaging for Meta-Analysis}
 \usage{
-meta_bma(y, SE, labels, data, d = prior("norm", c(mean = 0, sd = 0.3)),
+meta_bma(
+  y,
+  SE,
+  labels,
+  data,
+  d = prior("norm", c(mean = 0, sd = 0.3)),
   tau = prior("invgamma", c(shape = 1, scale = 0.15)),
-  rscale_contin = 1/2, rscale_discrete = sqrt(2)/2, centering = TRUE,
-  prior = c(1, 1, 1, 1), logml = "integrate", summarize = "stan",
-  ci = 0.95, rel.tol = .Machine$double.eps^0.3, logml_iter = 5000,
-  silent_stan = TRUE, ...)
+  rscale_contin = 1/2,
+  rscale_discrete = sqrt(2)/2,
+  centering = TRUE,
+  prior = c(1, 1, 1, 1),
+  logml = "integrate",
+  summarize = "stan",
+  ci = 0.95,
+  rel.tol = .Machine$double.eps^0.3,
+  logml_iter = 5000,
+  silent_stan = TRUE,
+  ...
+)
 }
 \arguments{
 \item{y}{effect size per study. Can be provided as (1) a numeric vector, (2)
