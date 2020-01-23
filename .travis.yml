@@ -58,12 +58,6 @@ jobs:
         - bridgesampling
         - BH
 
-addons:
-    apt:
-      sources:
-        - ubuntu-toolchain-r-test
-      packages:
-        - g++-7
 
 before_install:
   - mkdir -p ~/.R
