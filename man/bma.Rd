@@ -4,8 +4,14 @@
 \alias{bma}
 \title{Bayesian Model Averaging}
 \usage{
-bma(meta, prior = 1, parameter = "d", summarize = "integrate",
-  ci = 0.95, rel.tol = .Machine$double.eps^0.5)
+bma(
+  meta,
+  prior = 1,
+  parameter = "d",
+  summarize = "integrate",
+  ci = 0.95,
+  rel.tol = .Machine$double.eps^0.5
+)
 }
 \arguments{
 \item{meta}{list of meta-analysis models (fitted via

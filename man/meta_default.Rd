@@ -4,8 +4,7 @@
 \alias{meta_default}
 \title{Defaults for Model Averaging in Meta-Analysis}
 \usage{
-meta_default(y, SE, labels, data, field = "psychology", effect = "d",
-  ...)
+meta_default(y, SE, labels, data, field = "psychology", effect = "d", ...)
 }
 \arguments{
 \item{y}{effect size per study. Can be provided as (1) a numeric vector, (2)

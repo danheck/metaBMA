@@ -4,8 +4,14 @@
 \alias{prior}
 \title{Prior Distribution}
 \usage{
-prior(family, param, lower, upper, label = "d",
-  rel.tol = .Machine$double.eps^0.5)
+prior(
+  family,
+  param,
+  lower,
+  upper,
+  label = "d",
+  rel.tol = .Machine$double.eps^0.5
+)
 }
 \arguments{
 \item{family}{a character value defining the distribution family.}

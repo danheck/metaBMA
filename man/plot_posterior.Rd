@@ -4,8 +4,14 @@
 \alias{plot_posterior}
 \title{Plot Posterior Distribution}
 \usage{
-plot_posterior(meta, parameter = "d", from, to, summary = c("mean",
-  "hpd"), ...)
+plot_posterior(
+  meta,
+  parameter = "d",
+  from,
+  to,
+  summary = c("mean", "hpd"),
+  ...
+)
 }
 \arguments{
 \item{meta}{fitted meta-analysis model}
