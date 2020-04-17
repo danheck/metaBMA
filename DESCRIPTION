@@ -1,12 +1,12 @@
 Package: metaBMA
 Type: Package
-Date: 2019-09-01
+Date: 2020-04-17
 Title: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis
-Version: 0.6.2
-Authors@R: c(person("Daniel W.", "Heck", email="heck@uni-mannheim.de", role=c("aut","cre"),
+Version: 0.6.3
+Authors@R: c(person("Daniel W.", "Heck", email="dheck@uni-marburg.de", role=c("aut","cre"),
                     comment = c(ORCID = "0000-0002-6302-9252")),
-             person("Quentin F.", "Gronau", email="quentingronau@web.de", role = c("ctb")))
-Maintainer: Daniel W. Heck <heck@uni-mannheim.de>
+             person("Quentin F.", "Gronau", email="quentingronau@web.de", role = c("ctb")),
+             person("Eric-Jan", "Wagenmakers", email="ej.wagenmakers@gmail.com", role = c("ctb")))
 Description: Computes the posterior model probabilities for standard meta-analysis models 
     (null model vs. alternative model assuming either fixed- or random-effects, respectively).
     These posterior probabilities are used to estimate the overall mean effect size 
@@ -47,4 +47,4 @@ Encoding: UTF-8
 LazyData: true
 NeedsCompilation: yes
 SystemRequirements: GNU make
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
