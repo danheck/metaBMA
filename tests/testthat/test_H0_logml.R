@@ -34,8 +34,10 @@ test_that("meta_fixed: logml for H0 is correct", {
 test_that("meta_random: logml & estimates correct", {
   skip_on_cran()
 
+  suppressWarnings(
   f1 <- meta_random(yyy, SE, study, data = dat,
                     iter =100, logml_iter = 200, logml = "int", summ="int", rel.tol = .1)
+  )
   suppressWarnings( # few samples for bridgesampling
     f2 <- meta_random(yyy, SE, study, data = dat, logml = "stan", summ = "stan",
                       iter = 500, logml_iter = 500, rel.tol = 1))
@@ -55,11 +57,11 @@ test_that("Stan models 'random_dstudy' and 'random' are equivalent", {
   dl <- list(y = dat$yyy, SE = dat$SE, N = length(dat$SE))
 
   dl$model <- "random"
-  stanfit1 <- metaBMA:::meta_stan(dl, iter = 500)
+  suppressWarnings(stanfit1 <- metaBMA:::meta_stan(dl, iter = 500))
   bs1 <- bridgesampling:::bridge_sampler(stanfit1, silent = TRUE, use_neff = FALSE)
 
   dl$model <- "random_dstudy"
-  stanfit2 <- metaBMA:::meta_stan(dl, iter = 500)
+  suppressWarnings(stanfit2 <- metaBMA:::meta_stan(dl, iter = 500))
   bs2 <- bridgesampling:::bridge_sampler(stanfit2, silent = TRUE, use_neff = FALSE)
 
   expect_equal(bs1$logml, bs2$logml, tolerance = .1)
