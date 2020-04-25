@@ -47,5 +47,9 @@ https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started
 If you use metaBMA, please cite the software as follows:
 
 Heck, D. W., Gronau, Q. F., & Wagenmakers, E.-J. (2019). 
-metaBMA: Bayesian model averaging for random and fixed effects meta-analysis. 
-Retrieved from https://CRAN.R-project.org/package=metaBMA
+metaBMA: Bayesian model averaging for random and fixed effects meta-analysis. https://CRAN.R-project.org/package=metaBMA
+
+An introduction to Bayesian meta-analysis with model averaging is available at:
+
+Gronau, Q. F., Heck, D. W., Berkhout, S. W., Haaf, J. M., & Wagenmakers, E.-J. (2020). A primer on Bayesian model-averaged meta-analysis. https://psyarxiv.com/97qup
+
