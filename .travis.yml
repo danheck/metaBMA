@@ -27,7 +27,7 @@ repos:
 matrix:
   include:
     - r: release
-      r_binary_packages:
+      r_packages:
         - Rcpp
         - RcppEigen
         - mvtnorm
@@ -36,7 +36,6 @@ matrix:
         - LaplacesDemon
         - logspline
         - testthat
-      r_packages:
         - remotes
         - knitr
         - rmarkdown
@@ -46,7 +45,7 @@ matrix:
         - BH
         - devtools
     - r: devel
-      r_binary_packages:
+      r_packages:
         - Rcpp
         - RcppEigen
         - mvtnorm
@@ -55,7 +54,7 @@ matrix:
         - LaplacesDemon
         - logspline
         - testthat
-      r_packages:
+        - devtools
         - remotes
         - knitr
         - rmarkdown
@@ -63,7 +62,6 @@ matrix:
         - rstantools
         - bridgesampling
         - BH
-        - devtools
 
 before_install:
   - mkdir -p ~/.R
