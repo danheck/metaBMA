@@ -28,7 +28,6 @@ matrix:
   include:
     - r: release
       r_binary_packages:
-        - devtools
         - Rcpp
         - RcppEigen
         - mvtnorm
@@ -45,9 +44,9 @@ matrix:
         - rstantools
         - bridgesampling
         - BH
+        - devtools
     - r: devel
       r_binary_packages:
-        - devtools
         - Rcpp
         - RcppEigen
         - mvtnorm
@@ -64,6 +63,7 @@ matrix:
         - rstantools
         - bridgesampling
         - BH
+        - devtools
 
 before_install:
   - mkdir -p ~/.R
