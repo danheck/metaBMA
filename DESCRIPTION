@@ -1,6 +1,6 @@
 Package: metaBMA
 Type: Package
-Date: 2020-04-17
+Date: 2020-05-30
 Title: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis
 Version: 0.6.3
 Authors@R: c(person("Daniel W.", "Heck", email="dheck@uni-marburg.de", role=c("aut","cre"),

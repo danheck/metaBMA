@@ -1,3 +1,9 @@
+metaBMA 0.6.3
+===========
+
+* increased stability and precision of model-averaged posterior distributionand estimates (based on density approximations)
+
+
 metaBMA 0.6.2
 ===========
 
