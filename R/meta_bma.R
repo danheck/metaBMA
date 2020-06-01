@@ -5,6 +5,8 @@
 #'
 #' Bayesian model averaging for four meta-analysis models: Fixed- vs.
 #' random-effects and H0 (\eqn{d=0}) vs. H1 (e.g., \eqn{d>0}).
+#' For a primer on Bayesian model-averaged meta-analysis,
+#' see Gronau, Heck, Berkhout, Haaf, and Wagenmakers (2020).
 #'
 #' @param y effect size per study. Can be provided as (1) a numeric vector, (2)
 #'   the quoted or unquoted name of the variable in \code{data}, or (3) a
@@ -91,6 +93,7 @@
 #' plot_posterior(mb, "d")
 #' @seealso \link{meta_fixed}, \link{meta_random}
 #' @template ref_gronau2017
+#' @template ref_gronau2020
 #' @export
 meta_bma <- function(y, SE, labels, data,
                      d = prior("norm", c(mean = 0, sd = .3)),
