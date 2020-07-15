@@ -49,7 +49,8 @@ meta_random <- function(y, SE, labels, data,
                "estimates" = NULL)
   class(meta) <- "meta_random"
 
-  if (attr(d, "family") %in% priors_stan()){
+  if (attr(d, "family") %in% priors_stan() &&
+      attr(tau, "family") %in% priors_stan() ){
 
     # estimate random effects
     data_list2 <- data_list
