@@ -52,7 +52,7 @@ meta_fixed <- function(y, SE, labels, data,
 
   # not for fixed_jzs
   meta$posterior_d <- posterior(meta, "d", rel.tol = rel.tol)
-  summ <- summary_meta(meta, summarize)
+  summ <- summary_meta(meta, summarize, ci = ci, rel.tol = rel.tol)
   meta$estimates <- summ[c("d", grep("beta", rownames(summ), value = TRUE)),,drop = FALSE]
 
   logml_fixedH0 <- NA
