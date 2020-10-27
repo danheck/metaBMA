@@ -1,8 +1,8 @@
 Package: metaBMA
 Type: Package
-Date: 2020-10-26
+Date: 2020-10-27
 Title: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis
-Version: 0.6.4
+Version: 0.6.5
 Authors@R: c(person("Daniel W.", "Heck", email="dheck@uni-marburg.de", role=c("aut","cre"),
                     comment = c(ORCID = "0000-0002-6302-9252")),
              person("Quentin F.", "Gronau", email="quentingronau@web.de", role = c("ctb")),
@@ -34,7 +34,8 @@ Imports:
     bridgesampling
 Suggests: 
     testthat,
-    knitr
+    knitr,
+    rmarkdown
 LinkingTo: 
     BH (>= 1.69.0-1),
     Rcpp (>= 1.0.0),
