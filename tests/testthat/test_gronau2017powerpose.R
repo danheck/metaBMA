@@ -51,8 +51,8 @@ test_that("Gronau (2017): power pose analysis with informed t prior ", {
   priorTau <- prior("invgamma", c(1, .15), label = "tau")
 
   # conduct analyses
-  m_testing <- meta_bma(y = effectSize, SE = SE, d = priorEStesting, data = power_pose,
-                        tau = priorTau, iter = 100)
+  suppressWarnings(m_testing <- meta_bma(y = effectSize, SE = SE, d = priorEStesting,
+                                         data = power_pose, tau = priorTau, iter = 100))
   bf_reported <- c("d_10_fixed" = 191.751, "d_10_random" = 20.689)
   expect_equal(unname(unlist(m_testing$BF)[c(2,12)]), unname(bf_reported), tolerance = .00001)
   expect_equal(m_testing$inclusion$incl.BF, 71.373, tolerance = .001)
@@ -76,8 +76,8 @@ test_that("Gronau (2017): power pose analysis (only unfamiliar with default prio
   priorTau <- prior("invgamma", c(1, .15), label = "tau")
 
   # conduct analyses
-  m_testing <- meta_bma(y = effectSize, SE = SE, d = priorEStesting, data = power_pose_unfamiliar,
-                        tau = priorTau, iter = 100)
+  suppressWarnings(m_testing <- meta_bma(y = effectSize, SE = SE, d = priorEStesting,
+                                         data = power_pose_unfamiliar, tau = priorTau, iter = 100))
   bf_reported <- c("d_10_fixed" = 4.449, "d_10_random" = 1.640)
   expect_equal(unname(unlist(m_testing$BF)[c(2,12)]), unname(bf_reported), tolerance = .001)
   expect_equal(m_testing$inclusion$incl.BF, 3.139, tolerance = .001)
@@ -104,9 +104,9 @@ test_that("Gronau (2017): power pose analysis (only unfamiliar and informed t pr
   priorTau <- prior("invgamma", c(1, .15), label = "tau")
 
   # conduct analyses
-  m_testing <- meta_bma(y = effectSize, SE = SE, d = priorEStesting,
-                        data = power_pose_unfamiliar,
-                        tau = priorTau, iter = 100)
+  suppressWarnings(m_testing <- meta_bma(y = effectSize, SE = SE, d = priorEStesting,
+                                         data = power_pose_unfamiliar,
+                                         tau = priorTau, iter = 100))
   bf_reported <- c("d_10_fixed" = 6.846, "d_10_random" = 2.603)
   expect_equal(unname(unlist(m_testing$BF)[c(2,12)]), unname(bf_reported), tolerance = .0001)
   expect_equal(m_testing$inclusion$incl.BF, 4.868, tolerance = .001)

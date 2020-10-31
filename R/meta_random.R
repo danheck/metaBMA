@@ -49,7 +49,8 @@ meta_random <- function(y, SE, labels, data,
                "estimates" = NULL)
   class(meta) <- "meta_random"
 
-  if (attr(d, "family") %in% priors_stan()){
+  if (attr(d, "family") %in% priors_stan() &&
+      attr(tau, "family") %in% priors_stan() ){
 
     # estimate random effects
     data_list2 <- data_list
@@ -79,7 +80,7 @@ meta_random <- function(y, SE, labels, data,
 
   meta$posterior_d <- posterior(meta, "d", summarize, rel.tol = rel.tol)
   meta$posterior_tau <- posterior(meta, "tau", summarize, rel.tol = rel.tol)
-  summ <- summary_meta(meta, summarize)
+  summ <- summary_meta(meta, summarize, ci = ci, rel.tol = rel.tol)
   meta$estimates <- summ[c("d", "tau", grep("beta", rownames(summ), value = TRUE)),,drop = FALSE]
 
   logml_randomH0 <- NA

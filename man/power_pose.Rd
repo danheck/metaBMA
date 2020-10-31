@@ -5,7 +5,8 @@
 \alias{power_pose}
 \alias{power_pose_unfamiliar}
 \title{Data Set: Power Pose Effect}
-\format{A data frame with three variables:
+\format{
+A data frame with three variables:
 \describe{
   \item{\code{study}}{Authors of original study}
   \item{\code{n_high_power}}{number of participants in high-power condition}
@@ -20,7 +21,12 @@
   \item{\code{one_sided_p_value}}{one-sided p-value of two-sample t-test}
   \item{\code{effectSize}}{Cohen's d, the standardized effect size (high vs. low power)}
   \item{\code{SE}}{Standard error of Cohen's d}
-}}
+}
+
+Data frame with 6 rows and 13 variables
+
+An object of class \code{data.frame} with 6 rows and 13 columns.
+}
 \usage{
 power_pose
 

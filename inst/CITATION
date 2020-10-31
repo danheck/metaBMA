@@ -1,0 +1,13 @@
+bibentry("Manual",
+		title="metaBMA: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis",
+		author="Heck, D. W., Gronau, Q. F., & Wagenmakers, E.-J.",
+		year="2019",
+		url="https://CRAN.R-project.org/package=metaBMA ",
+
+		textVersion =
+		paste("Heck, D. W., Gronau, Q. F., & Wagenmakers, E.-J. (2019). ",
+				"metaBMA: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis. ",
+				"https://CRAN.R-project.org/package=metaBMA ",
+				sep=""),
+
+		mheader = "To cite metaBMA in publications use:")

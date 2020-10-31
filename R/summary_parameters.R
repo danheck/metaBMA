@@ -61,7 +61,7 @@ summary_stanfit <- function (stanfit, ci = .95){
   # stan summary: cbind(summ[,- c(2,7,8),drop = FALSE], hpd)[sel,,drop = FALSE]
   samples <- As.mcmc.list(stanfit)
   mcmc <- do.call("rbind", samples)
-  summ <- t(apply(mcmc, 2, summary_samples))
+  summ <- t(apply(mcmc, 2, summary_samples, ci = ci))
   sel <- rownames(summ) != "lp__" & !grepl("g[", rownames(summ), fixed = TRUE)
 
   # add convergence diagnostics

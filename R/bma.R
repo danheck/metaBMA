@@ -62,26 +62,43 @@ bma <- function(meta, prior = 1, parameter = "d", summarize = "integrate", ci = 
   summ_list <- lapply(meta[select_models], function(x) x$estimates[parameter,])
   ests <- do.call("rbind", summ_list)
 
+  # meaningful names for models in posterior summary table: (issue: may break compatibility with JASP)
+  # rownames(ests) <- paste0(substr(sapply(meta, class), 6, 99), "_H1.", names(meta))[select_models]
+
   # averaged posterior density: weighted average of densities
   summarize <- match.arg(summarize, c("stan", "integrate"))
-  if (summarize == "integrate"){
-    res_bma[[paste0("posterior_", parameter)]] <-
-      posterior(meta = res_bma, parameter = parameter, summarize = summarize, rel.tol = rel.tol)
-    ests_avg <- summary_integrate(res_bma[[paste0("posterior_", parameter)]],
-                                  ci = ci, rel.tol = rel.tol)
+  res_bma[[paste0("posterior_", parameter)]] <-
+    posterior(meta = res_bma, parameter = parameter, summarize = summarize, rel.tol = rel.tol)
+  ests_avg <- summary_integrate(res_bma[[paste0("posterior_", parameter)]],
+                                ci = ci, rel.tol = rel.tol)
 
-  } else {
-    samples <- lapply(meta[select_models], function(m) extract(m$stanfit, parameter)[[parameter]])
-    maxiter <- max(sapply(samples, length))
-
-    sel_H1 <- paste0(names(meta), "_H1")
-    nn <- round(maxiter * incl$posterior[sel_H1])
-    avg_samples <- unlist(mapply(sample, x = samples, size = nn,
-                                 MoreArgs = list(replace = TRUE)))
-    ests_avg <- summary_samples(avg_samples)
-    res_bma[[paste0("posterior_", parameter)]] <-
-      posterior_logspline(avg_samples, parameter, meta[[select_models[1]]][[paste0("prior_", parameter)]])
-  }
+  ################ NOT WORKING WELL: SAMPLING-BASED MODEL AVERAGING
+  ################ ----> averaged posterior may not be a convex combination of fixed-/random effects
+  # if (summarize == "integrate"){
+  # } else {
+  #   samples <- lapply(meta[select_models], function(m) extract(m$stanfit, parameter)[[parameter]])
+  #   maxiter <- sapply(samples, length)
+  #
+  #   sel_H1 <- paste0(names(meta), "_H1")
+  #   weights <- incl$posterior[sel_H1] / sum(incl$posterior[sel_H1])
+  #
+  #   # M = (fictional) total number of samples for weighted posterior
+  #   # M * weights = maxiter
+  #   M <- floor(min(maxiter / weights))
+  #   nn <- round(M * weights)
+  #
+  #   # nn <- round(maxiter * incl$posterior[sel_H1] / max(incl$posterior[sel_H1]))
+  #   avg_samples <- unlist(mapply(sample, x = samples, size = nn,
+  #                                MoreArgs = list(replace = FALSE)))
+  #   ests_avg <- summary_samples(avg_samples)
+  #   res_bma[[paste0("posterior_", parameter)]] <-
+  #     posterior_logspline(avg_samples, parameter, meta[[select_models[1]]][[paste0("prior_", parameter)]])
+  # }
+  #
+  # curve(posterior(meta = res_bma, parameter = parameter, summarize = summarize, rel.tol = rel.tol)(x), -.2, .2, lwd = 2)
+  # curve(res_bma[[paste0("posterior_", parameter)]] (x), add=T)
+  # curve(res_bma$meta$fixed$posterior_d(x), add=T, col=2)
+  # curve(res_bma$meta$random$posterior_d(x), add=T, col=4)
 
   res_bma$estimates <- rbind("averaged" = ests_avg, ests)
   res_bma$BF <- make_BF(res_bma$logml)

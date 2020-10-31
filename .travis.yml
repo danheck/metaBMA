@@ -5,20 +5,21 @@ warnings_are_errors: TRUE
 r_check_args: '--ignore-vignettes'
 r_build_args: '--no-build-vignettes'
 
+cache:
+  - packages
+  - ccache
+
 addons:
   apt:
     packages:
       - libudunits2-dev
       - libgdal-dev
       - libproj-dev
+      - libv8-dev
 
 env:
   - _R_CHECK_FORCE_SUGGESTS_=true
     _R_CHECK_CRAN_INCOMING_=true
-
-cache:
-  - packages
-  - ccache
 
 repos:
   CRAN: https://cloud.r-project.org
@@ -27,8 +28,7 @@ repos:
 matrix:
   include:
     - r: release
-      r_binary_packages:
-        - devtools
+      r_packages:
         - Rcpp
         - RcppEigen
         - mvtnorm
@@ -37,7 +37,6 @@ matrix:
         - LaplacesDemon
         - logspline
         - testthat
-      r_packages:
         - remotes
         - knitr
         - rmarkdown
@@ -45,9 +44,9 @@ matrix:
         - rstantools
         - bridgesampling
         - BH
-    - r: devel
-      r_binary_packages:
         - devtools
+    - r: devel
+      r_packages:
         - Rcpp
         - RcppEigen
         - mvtnorm
@@ -56,7 +55,7 @@ matrix:
         - LaplacesDemon
         - logspline
         - testthat
-      r_packages:
+        - devtools
         - remotes
         - knitr
         - rmarkdown

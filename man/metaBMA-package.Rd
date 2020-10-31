@@ -17,7 +17,8 @@ against random effects can be evaluated (i.e., whether \eqn{\tau = 0}). By
 using Bayesian model averaging, both tests can be performed by integrating
 over the other model. This allows to test whether an effect exists while
 accounting for uncertainty whether study heterogeneity exists (so-called
-inclusion Bayes factors).
+inclusion Bayes factors). For a primer on Bayesian model-averaged meta-analysis,
+see Gronau, Heck, Berkhout, Haaf, and Wagenmakers (2020).
 }
 \details{
 The most general functions in \code{metaBMA} is \code{\link{meta_bma}}, which
@@ -50,6 +51,8 @@ Research Foundation (grant GRK-2277: Statistical Modeling in Psychology).
 
 \references{
 Gronau, Q. F., Erp, S. V., Heck, D. W., Cesario, J., Jonas, K. J., & Wagenmakers, E.-J. (2017). A Bayesian model-averaged meta-analysis of the power pose effect with informed and default priors: the case of felt power. Comprehensive Results in Social Psychology, 2(1), 123-138. \url{https://doi.org/10.1080/23743603.2017.1326760}
+
+Gronau, Q. F., Heck, D. W., Berkhout, S. W., Haaf, J. M., & Wagenmakers, E.-J. (2020). A primer on Bayesian model-averaged meta-analysis. \url{https://doi.org/10.31234/osf.io/97qup}
 
 Heck, D. W., Gronau, Q. F., & Wagenmakers, E.-J. (2018).
     metaBMA: Bayesian model averaging for random and fixed effects meta-analysis.

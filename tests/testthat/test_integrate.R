@@ -3,9 +3,10 @@ library(testthat)
 library(rstan)
 
 data(towels)
-set.seed(12345)
 
 test_that("check old prior labels with logml='stan'/'integrate'", {
+
+  set.seed(12345)
 
   # check different ways of defining priors
   m1 <- meta_fixed(logOR, SE, study, towels, d = prior("t", c(0, .1, 1), lower=0), rel.tol = .01,
@@ -18,7 +19,7 @@ test_that("check old prior labels with logml='stan'/'integrate'", {
   mr1 <- meta_random(logOR, SE, study, towels, summarize = "int",rel.tol = .01,
                      d = prior("t", c(0, .1, 5), lower=0),
                      tau = prior("norm", c(0,.3), lower = 0))
-  mr2 <- meta_random(logOR, SE, study, towels, summarize = "stan", iter = 1000, logml_iter = 2000,
+  mr2 <- meta_random(logOR, SE, study, towels, summarize = "stan", iter = 1000, logml_iter = 2500,
                      d = prior("scaledt", c(0, .1, 5), lower=0),
                      tau = prior("halfnorm", .3), logml = "stan")
   expect_equal(mr1$estimates[,1:7], mr2$estimates[,1:7], tolerance = .02)
@@ -29,6 +30,9 @@ test_that("check old prior labels with logml='stan'/'integrate'", {
 
 
 test_that("extreme priors/misspecified models still provide correct results", {
+
+  set.seed(12345)
+
   mf <- meta_fixed(logOR, SE, study, towels, rel.tol = .01,
                    d = prior("norm", c(mean = 0.2, sd = .01)))
   expect_equal(mf$estimates[1:2], c(.2, .01), tolerance = .005)

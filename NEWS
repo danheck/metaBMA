@@ -1,3 +1,16 @@
+metaBMA 0.6.4
+===========
+
+* bugfix: argument "ci" for credibility intervals not working
+* reference added: Gronau et al. (2020)
+
+
+metaBMA 0.6.3
+===========
+
+* increased stability and precision of model-averaged posterior distribution and estimates (based on density approximations)
+
+
 metaBMA 0.6.2
 ===========
 

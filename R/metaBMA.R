@@ -11,7 +11,8 @@
 #' using Bayesian model averaging, both tests can be performed by integrating
 #' over the other model. This allows to test whether an effect exists while
 #' accounting for uncertainty whether study heterogeneity exists (so-called
-#' inclusion Bayes factors).
+#' inclusion Bayes factors). For a primer on Bayesian model-averaged meta-analysis,
+#' see Gronau, Heck, Berkhout, Haaf, and Wagenmakers (2020).
 #'
 #' The most general functions in \code{metaBMA} is \code{\link{meta_bma}}, which
 #' fits random- and fixed-effects models, compute the inclusion Bayes factor for
@@ -57,6 +58,7 @@
 #' @importFrom grDevices adjustcolor colors
 #'
 #' @template ref_gronau2017
+#' @template ref_gronau2020
 #' @template ref_heck2017
 "_PACKAGE"
 

@@ -54,6 +54,9 @@ meta_stan <- function (data_list,
   else
     fit <- do.call("sampling", args)
 
+  # check for random seed:
+  # tmp <- capture.output(fit <- sampling(object = args$object, data = args$data, pars =args$pars,  cores = 1,  seed=123,  iter=args$iter, warmup = args$warmup,    control = args$control, init = args$init));fit
+
   fit
 }
 
