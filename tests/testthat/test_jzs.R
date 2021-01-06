@@ -16,6 +16,8 @@ test_that("JZS works for continuous predictors", {
   expect_equal(rownames(fe_xx$estimates), c("d", "beta_xx"))  # posterior summary statistics for slope
   plot_posterior(fe_xx)
 
+  skip_on_cran()
+
   fe <- meta_fixed(yyy, SE, study, data = d, rel.tol = .01)
   expect_silent(bm <- bma(list("fixed_w" = fe_xx, "fixed_wo" = fe), summ="integrate"))
   expect_silent(plot_posterior(bm))
@@ -23,7 +25,6 @@ test_that("JZS works for continuous predictors", {
   expect_silent(bm <- inclusion(list("fixed" = fe_xx, "random" = fe), include = "H1"))
 
 
-  skip_on_cran()
   re_xx <- meta_random(yyy ~ xx, SE, study, data = d, logml= "s", summ = "s", iter = 1000)
   expect_true(re_xx$jzs$centering)
   expect_equal(rownames(re_xx$estimates), c("d", "tau", "beta_xx"))
@@ -42,6 +43,8 @@ test_that("JZS works for continuous predictors", {
 
 test_that("JZS works for discrete predictors", {
 
+  skip_on_cran()
+
   set.seed(1234)
   suppressWarnings({
     fe_xx <- meta_fixed(yyy ~ cat, SE, study, data = d, logml= "s", summ = "s", iter = 100)
@@ -59,6 +62,8 @@ test_that("JZS works for discrete predictors", {
 
 
 test_that("JZS works for continuous + discrete predictors", {
+
+  skip_on_cran()
 
   suppressWarnings(
     fe_both <- meta_fixed(yyy ~ cat + xx, SE, study, data = d, logml= "s",

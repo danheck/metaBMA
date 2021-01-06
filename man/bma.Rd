@@ -38,16 +38,15 @@ fixed-effects with different priors) based on the posterior model
 probability.
 }
 \examples{
-# Note: The following example optimizes speed (for CRAN checks).
-#       The settings are not suitable for actual data analysis!
-
+\donttest{
 # model averaging for fixed and random effects
 data(towels)
 fixed <- meta_fixed(logOR, SE, study, towels)
-random <- meta_random(logOR, SE, study, towels, rel.tol = .01, iter = 500)
+random <- meta_random(logOR, SE, study, towels)
 
 averaged <- bma(list("fixed" = fixed, "random" = random))
 averaged
 plot_posterior(averaged)
 plot_forest(averaged, mar = c(4.5,20,4,.3))
+}
 }

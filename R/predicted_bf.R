@@ -16,7 +16,6 @@ predicted_bf <- function (meta, SE, sample = 100, ...){
     stop ("Prediction only supported for models fitted via ?meta_bma")
 
   check_data_identical(meta$meta)
-  data_list <- meta$meta$data
   y <- meta$meta[[1]]$data$y
   SEs <- meta$meta[[1]]$data$SE
   labels <- meta$meta[[1]]$data$labels
@@ -35,15 +34,17 @@ predicted_bf <- function (meta, SE, sample = 100, ...){
   if (nn["fixed_H1"] > 0){
     ss.fixedH1 <- meta$meta$fixed$stanfit
     if (is.null(ss.fixedH1)){
-      ss.fixedH1 <- meta_stan(data_list, d = meta$meta[["fixed_H1"]]$prior_d, ...)
+      ss.fixedH1 <- meta_stan(data_list = meta$meta[[1]]$data,
+                              d = meta$meta[["fixed"]]$prior_d, ...)
     }
     param.fH1 <- sample(extract(ss.fixedH1, "d", FALSE), nn["fixed_H1"])
   }
 
   #-------------- Random H0
+  data_list <- meta$meta[["random"]]$data
   if (nn["random_H0"] > 0){
     ss.randomH0 <- meta_stan(data_list, d = prior("0"),
-                             tau = meta$meta[["random_H1"]]$prior_tau, ...)
+                             tau = meta$meta[["random"]]$prior_tau, ...)
     param.rH0 <- sample(extract(ss.randomH0, "tau", FALSE), nn["random_H0"])
   }
 
@@ -80,10 +81,10 @@ predicted_bf <- function (meta, SE, sample = 100, ...){
   #--------------  compute observed Bayes factors
   BF.observed <- matrix(y[2:nstudies], nstudies - 1, ncol(BF.predicted),
                         dimnames = list(labels[2:nstudies], colnames(BF.predicted)))
-  for(i in 1:nrow(BF.observed)){
+  for(i in 2:nstudies){
     tmp <- meta_bma(y[1:i], SEs[1:i], labels[1:i], d = d, tau = tau,
                     prior = meta$prior_models, ...)
-    BF.observed[i,2:ncol(BF.observed)] <- unlist(tmp$BF)
+    BF.observed[i-1,2:ncol(BF.observed)] <- unlist(tmp$BF)
   }
 
   meta_pred <- list("BF.observed" = BF.observed,

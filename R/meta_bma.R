@@ -80,17 +80,16 @@
 #' using Stan.
 #'
 #' @examples
-#' # Note: The following example optimizes speed (for CRAN checks).
-#' #       The settings are not suitable for actual data analysis!
-#'
+#' \donttest{
+#' ### Bayesian Model-Averaged Meta-Analysis (H1: d>0)
 #' data(towels)
 #' set.seed(123)
 #' mb <- meta_bma(logOR, SE, study, towels,
 #'                d = prior("norm", c(mean=0, sd=.3), lower=0),
-#'                tau = prior("invgamma", c(shape = 1, scale = 0.15)),
-#'                rel.tol = .1, iter=200, logml_iter = 200)
+#'                tau = prior("invgamma", c(shape = 1, scale = 0.15)))
 #' mb
 #' plot_posterior(mb, "d")
+#' }
 #' @seealso \link{meta_fixed}, \link{meta_random}
 #' @template ref_gronau2017
 #' @template ref_gronau2020

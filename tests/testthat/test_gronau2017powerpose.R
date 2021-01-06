@@ -18,6 +18,8 @@ test_that("Gronau (2017): power pose analysis (reported) are correct ", {
   expect_silent(
     priorTau <- prior("invgamma", c(1, .15), label = "tau"))
 
+  skip_on_cran()
+
   suppressWarnings(  #divergent transitions
     m_testing <- meta_bma(y = effectSize, SE = SE, d = priorEStesting, data = power_pose,
                           tau = priorTau, iter = 10, logml_iter = 2000, rel.tol = .1, summ = "stan")
@@ -28,7 +30,6 @@ test_that("Gronau (2017): power pose analysis (reported) are correct ", {
                unname(bf_reported), tolerance = .0001)
   expect_equal(m_testing$inclusion$incl.BF, 33.136, tolerance = .001)
 
-  skip_on_cran()
   m_estimation <- meta_bma(y = effectSize, SE = SE, data =power_pose, d = priorESestimation,
                            tau = priorTau, iter = 2000, rel.tol = .1,
                            logml_iter = 10, summarize = "int")

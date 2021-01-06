@@ -7,8 +7,8 @@
 #' @inheritParams meta_random
 #'
 #' @examples
+#' ### Bayesian Fixed-Effects Meta-Analysis (H1: d>0)
 #' data(towels)
-#' ### Bayesian Fixed-Effects Meta-Analysis (H1: d>0 Cauchy)
 #' mf <- meta_fixed(logOR, SE, study, data = towels,
 #'                  d = prior("norm", c(mean=0, sd=.3), lower=0))
 #' mf

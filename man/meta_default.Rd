@@ -65,16 +65,14 @@ Currently, the same priors are used when specifying \code{field = "medicine"}.
 Default prior distributions can be plotted using \code{\link{plot_default}}.
 }
 \examples{
-# Note: The following example optimizes speed (for CRAN checks).
-#       The settings are not suitable for actual data analysis!
-
+\donttest{
 data(towels)
 set.seed(123)
 md <- meta_default(logOR, SE, study, towels,
-                   field = "psychology", effect = "logOR",
-                   rel.tol=.01, iter=200)
+                   field = "psychology", effect = "logOR")
 md
 plot_forest(md)
+}
 }
 \references{
 Gronau, Q. F., Erp, S. V., Heck, D. W., Cesario, J., Jonas, K. J., & Wagenmakers, E.-J. (2017). A Bayesian model-averaged meta-analysis of the power pose effect with informed and default priors: the case of felt power. Comprehensive Results in Social Psychology, 2(1), 123-138. \url{https://doi.org/10.1080/23743603.2017.1326760}

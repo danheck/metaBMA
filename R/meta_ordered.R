@@ -35,17 +35,15 @@
 #' \code{iter=5000} per chain.
 #'
 #' @examples
-#' ### Bayesian Meta-Analysis with Order Constraints
-#' # Note: The following code optimizes speed (for CRAN checks).
-#' #       The settings are not suitable for actual data analysis!
-#'
+#' \donttest{
+#' ### Bayesian Meta-Analysis with Order Constraints (H1: d>0)
 #' data(towels)
 #' set.seed(123)
 #' mo <- meta_ordered(logOR, SE, study, towels,
-#'                    d = prior("norm", c(mean=0, sd=.3), lower=0),
-#'                    rel.tol=.1, iter=200, logml_iter = 200)
+#'                    d = prior("norm", c(mean=0, sd=.3), lower=0))
 #' mo
 #' plot_posterior(mo)
+#' }
 #' @seealso \link{meta_bma}, \link{meta_random}
 #' @template ref_haaf2019
 #' @export

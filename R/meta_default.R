@@ -42,16 +42,14 @@
 #'
 #'
 #' @examples
-#' # Note: The following example optimizes speed (for CRAN checks).
-#' #       The settings are not suitable for actual data analysis!
-#'
+#' \donttest{
 #' data(towels)
 #' set.seed(123)
 #' md <- meta_default(logOR, SE, study, towels,
-#'                    field = "psychology", effect = "logOR",
-#'                    rel.tol=.01, iter=200)
+#'                    field = "psychology", effect = "logOR")
 #' md
 #' plot_forest(md)
+#' }
 #' @seealso \code{\link{meta_bma}}, \code{\link{plot_default}}
 #' @template ref_gronau2017
 #' @export

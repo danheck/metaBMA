@@ -6,18 +6,16 @@
 #' @inheritParams meta_bma
 #'
 #' @examples
-#' ### Bayesian Random-Effects Meta-Analysis
-#' # Note: The following code optimizes speed (for CRAN checks).
-#' #       The settings are not suitable for actual data analysis!
-#'
+#' \donttest{
+#' ### Bayesian Random-Effects Meta-Analysis (H1: d>0)
 #' data(towels)
 #' set.seed(123)
 #' mr <- meta_random(logOR, SE, study, data = towels,
 #'                   d = prior("norm", c(mean=0, sd=.3), lower = 0),
-#'                   tau = prior("invgamma", c(shape = 1, scale = 0.15)),
-#'                   rel.tol=.1, iter=200, logml_iter = 200)
+#'                   tau = prior("invgamma", c(shape = 1, scale = 0.15)))
 #' mr
 #' plot_posterior(mr)
+#' }
 #' @export
 meta_random <- function(y, SE, labels, data,
                         d = prior("cauchy", c(location = 0, scale = 0.707)),

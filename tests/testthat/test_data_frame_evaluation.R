@@ -29,6 +29,7 @@ test_that("meta_fixed supports data as vector/variable names", {
 
 test_that("meta_bma supports data as vector/variable names", {
 
+  skip_on_cran()
   suppressWarnings({
     fit5  <- meta_bma(d$yyy, d$SE, d$study,    rel.tol = .01, iter = 10, logml_iter = 10, summ = "stan")
     fit7  <- meta_bma("yyy", "SE", "study", d, rel.tol = .01, iter = 10, logml_iter = 10, summ = "stan")
@@ -48,13 +49,16 @@ test_that("meta_bma supports data as vector/variable names", {
 
 
 test_that("meta_fixed supports y as formula", {
-  fit  <- meta_fixed(yyy, SE, data = d, study, rel.tol = .01)
-  fit2 <- meta_fixed(yyy ~ 1, SE, data = d, study, rel.tol = .01)
+  fit  <- meta_fixed(yyy, SE, data = d, study, rel.tol = .05)
+  fit2 <- meta_fixed(yyy ~ 1, SE, data = d, study, rel.tol = .05)
   expect_equal(fit$logml, fit2$logml)
 })
 
 
 test_that("JZS prior is correctly defined via formula", {
+
+  skip_on_cran()
+
   expect_warning(fit1 <- meta_fixed(yyy ~ xx, SE, study, d, iter = 10, rel.tol = .1))
   expect_identical(rownames(fit1$estimates), c("d", "beta_xx"))
 

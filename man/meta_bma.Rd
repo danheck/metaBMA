@@ -121,17 +121,16 @@ the marginal likelihood and posterior summary statistics can only be computed
 using Stan.
 }
 \examples{
-# Note: The following example optimizes speed (for CRAN checks).
-#       The settings are not suitable for actual data analysis!
-
+\donttest{
+### Bayesian Model-Averaged Meta-Analysis (H1: d>0)
 data(towels)
 set.seed(123)
 mb <- meta_bma(logOR, SE, study, towels,
                d = prior("norm", c(mean=0, sd=.3), lower=0),
-               tau = prior("invgamma", c(shape = 1, scale = 0.15)),
-               rel.tol = .1, iter=200, logml_iter = 200)
+               tau = prior("invgamma", c(shape = 1, scale = 0.15)))
 mb
 plot_posterior(mb, "d")
+}
 }
 \references{
 Gronau, Q. F., Erp, S. V., Heck, D. W., Cesario, J., Jonas, K. J., & Wagenmakers, E.-J. (2017). A Bayesian model-averaged meta-analysis of the power pose effect with informed and default priors: the case of felt power. Comprehensive Results in Social Psychology, 2(1), 123-138. \url{https://doi.org/10.1080/23743603.2017.1326760}
