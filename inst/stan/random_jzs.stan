@@ -1,7 +1,8 @@
-#include /auxiliary/license.stan
+#include /include/license.stan
 
 data {
 #include /auxiliary/data.stan
+#include /jzs/data.stan
 #include /prior/d_data.stan
 #include /prior/tau_data.stan
 }
@@ -9,6 +10,7 @@ data {
 transformed data{
   real d_const = 0;
   real tau_const = 0;
+#include /auxiliary/se_squared.stan
 #include /prior/d_trunc.stan
 #include /prior/tau_trunc.stan
 }
@@ -16,17 +18,12 @@ transformed data{
 parameters {
 #include /prior/d_param.stan
 #include /prior/tau_param.stan
-  vector[N] delta;
-}
-
-transformed parameters {
-  vector[N] dstudy;
-  dstudy = d + tau * delta;
+#include /jzs/param.stan
 }
 
 model {
 #include /prior/d_target.stan
 #include /prior/tau_target.stan
-  target += normal_lpdf(delta | 0, 1);
-  target += normal_lpdf(y | dstudy, SE);
+#include /jzs/target.stan
+  target += normal_lpdf(y | d + X * beta, sqrt(SE2 + tau^2));
 }

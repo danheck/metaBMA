@@ -124,7 +124,7 @@ data(towels)
 set.seed(123)
 mo <- meta_ordered(logOR, SE, study, towels,
                    d = prior("norm", c(mean=0, sd=.3), lower=0),
-                   rel.tol=.01, iter=1000)
+                   rel.tol=.1, iter=200, logml_iter = 200)
 mo
 plot_posterior(mo)
 }
