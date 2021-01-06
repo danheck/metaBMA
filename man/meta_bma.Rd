@@ -9,10 +9,10 @@ meta_bma(
   SE,
   labels,
   data,
-  d = prior("norm", c(mean = 0, sd = 0.3)),
+  d = prior("cauchy", c(location = 0, scale = 0.707)),
   tau = prior("invgamma", c(shape = 1, scale = 0.15)),
-  rscale_contin = 1/2,
-  rscale_discrete = sqrt(2)/2,
+  rscale_contin = 0.5,
+  rscale_discrete = 0.707,
   centering = TRUE,
   prior = c(1, 1, 1, 1),
   logml = "integrate",
@@ -129,7 +129,7 @@ set.seed(123)
 mb <- meta_bma(logOR, SE, study, towels,
                d = prior("norm", c(mean=0, sd=.3), lower=0),
                tau = prior("invgamma", c(shape = 1, scale = 0.15)),
-               rel.tol = .Machine$double.eps^.15, iter=1000)
+               rel.tol = .01, iter=500)
 mb
 plot_posterior(mb, "d")
 }

@@ -12,10 +12,13 @@
 #'   (i.e., the across-study standard deviation of population effect sizes).
 #'
 #' @examples
+#' # Note: The following example optimizes speed (for CRAN checks).
+#' #       The settings are not suitable for actual data analysis!
+#'
 #' # model averaging for fixed and random effects
 #' data(towels)
 #' fixed <- meta_fixed(logOR, SE, study, towels)
-#' random <- meta_random(logOR, SE, study, towels, iter = 1000)
+#' random <- meta_random(logOR, SE, study, towels, rel.tol = .01, iter = 500)
 #'
 #' averaged <- bma(list("fixed" = fixed, "random" = random))
 #' averaged

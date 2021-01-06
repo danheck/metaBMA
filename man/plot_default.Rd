@@ -7,13 +7,11 @@
 plot_default(field = "psychology", effect = "d", ...)
 }
 \arguments{
-\item{field}{either\code{"psychology"} or \code{"medicine"}
-(uses partial matching, so \code{"p"} and "\code{"m"} are sufficient)}
+\item{field}{either\code{"psychology"} or \code{"medicine"}}
 
-\item{effect}{the type of effect size: either
+\item{effect}{the type of effect size used in the meta-analysis: either
 Cohen's d (\code{"d"}),
-Pearson correlations (\code{"r"}),
-Fisher's z-transformed correlations (\code{"z"}),
+Fisher's z-transformed correlation (\code{"z"}),
 or log-odds ratios (\code{"logOR"}).}
 
 \item{...}{further arguments passed to \code{\link[graphics]{plot}} (e.g., \code{from}, \code{to})}
@@ -22,8 +20,7 @@ or log-odds ratios (\code{"logOR"}).}
 Plots default priors for the mean effect \eqn{d} and the standard deviation of effects \eqn{tau}.
 }
 \examples{
-plot_default("psychology", "ttest", 0, 2)
-plot_default("medicine", "logOR", 0, 2)
+plot_default(field = "psychology", effect = "d")
 }
 \seealso{
 \code{\link{meta_default}} for details on standard priors.

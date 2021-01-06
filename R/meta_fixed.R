@@ -16,11 +16,14 @@
 #' plot_forest(mf)
 #' @export
 meta_fixed <- function(y, SE, labels, data,
-                       d = prior("norm", c(mean = 0, sd = .3)),
-                       rscale_contin = 1/2, rscale_discrete = sqrt(2)/2,
+                       d = prior("cauchy", c(location = 0, scale = 0.707)),
+                       rscale_contin = 1/2, rscale_discrete = 0.707,
                        centering = TRUE,
                        logml = "integrate", summarize = "integrate", ci = .95,
                        rel.tol = .Machine$double.eps^.3, silent_stan = TRUE, ...){
+
+  if ("tau" %in% names(list(...)))
+    warning("The fixed-effects model assumes tau=0. Hence, a prior distribution cannot be specified.")
 
   logml <- match.arg(logml, c("integrate", "stan"))
   summarize <- match.arg(summarize, c("integrate", "stan"))

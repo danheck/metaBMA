@@ -18,9 +18,10 @@
 #' \itemize{
 #' \item \code{"norm"}: Normal distribution with \code{param = c(mean, sd)}
 #'     (see \code{\link[stats]{Normal}}).
-#' \item \code{"t"}: Student t distribution with \code{param = c(location, scale, nu)}
-#'     (see \code{\link[LaplacesDemon]{dist.Student.t}}).
-#'     Note that a Cauchy distribution is defined by setting the degrees of freedom \code{nu=1}.
+#' \item \code{"t"}: Student's t-distribution with \code{param = c(location, scale, nu)}
+#'     where \code{nu} are the degrees of freedom (see \code{\link[LaplacesDemon]{dist.Student.t}}).
+#' \item \code{"cauchy"}: Cauchy distribution with \code{param = c(location, scale)}.
+#'     The Cauchy distribution is a special case of the t-distribution with degrees of freedom \code{nu=1}.
 #' \item \code{"invgamma"}: Inverse gamma distribution with \code{param = c(shape, scale)}
 #'     (see \code{\link[LaplacesDemon]{dist.Inverse.Gamma}}).
 #' \item \code{"beta"}: (Scaled) beta distribution with \code{param = c(shape1, shape2)}
@@ -42,7 +43,7 @@
 #' plot(p1, -.1, 1)
 #'
 #' ### Half-Cauchy Distribution
-#' p2 <- prior("t", c(location = 0, scale = .3, nu = 1), lower = 0)
+#' p2 <- prior("cauchy", c(location = 0, scale = .3), lower = 0)
 #' plot(p2, -.5, 3)
 #'
 #' ### Custom Prior Distribution
@@ -71,9 +72,9 @@ prior <- function (family, param, lower, upper, label = "d",
   if (family == "scaledt"){
     family = "t"
   } else if (family == "cauchy"){
-    stopifnot(length(param) == 1, param > 0)
+    stopifnot(length(param) == 2, param[2] > 0)
     family = "t"
-    param = c(location = 0, scale = unname(param), nu = 1)
+    param = c(location = unname(param[1]), scale = unname(param[2]), nu = 1)
   } else if (family == "halfcauchy"){
     stopifnot(length(param) == 1, param > 0)
     family = "t"
