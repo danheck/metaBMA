@@ -17,8 +17,10 @@ test_that("meta_fixed: logml for H0 is correct", {
   expect_equal(postprob/sum(postprob), c(.5, .5))
 
   # logml with Stan
-  f2 <- meta_fixed(yyy, SE, study, data = dat, logml = "stan",
-                   iter = 1750, warmup = 200, rel.tol = .1)
+  suppressWarnings(
+    f2 <- meta_fixed(yyy, SE, study, data = dat, logml = "stan",
+                     iter = 1450, warmup = 200, rel.tol = .1)
+  )
   expect_equal(f1$logml, f2$logml, tolerance = .01)
   expect_equal(f1$BF, f1a$BF, tolerance = .1)
   expect_equal(metaBMA:::loglik_fixed_H0(f1$data),
@@ -26,8 +28,7 @@ test_that("meta_fixed: logml for H0 is correct", {
 
   # different loglik for JZS
   expect_warning(f3 <- meta_fixed(yyy ~ xx, SE, study, data = dat,   # warning: JZS
-                                  logml = "stan", iter = 3000, warmup = 500, rel.tol = .1))
-  expect_equal(f1$logml, f2$logml, tolerance = .01)
+                                  logml = "stan", iter = 1450, warmup = 200, rel.tol = .1))
   expect_true(f1$logml["fixed_H1"] > f3$logml["fixed_H1"] + 1)
 })
 
@@ -36,11 +37,12 @@ test_that("meta_random: logml & estimates correct", {
 
   suppressWarnings(
   f1 <- meta_random(yyy, SE, study, data = dat,
-                    iter =100, logml_iter = 200, logml = "int", summ="int", rel.tol = .1)
+                    iter =100, logml_iter = 100, logml = "int", summ="int", rel.tol = .1)
   )
-  suppressWarnings( # few samples for bridgesampling
+  # suppressWarnings( # few samples for bridgesampling
     f2 <- meta_random(yyy, SE, study, data = dat, logml = "stan", summ = "stan",
-                      iter = 500, logml_iter = 500, rel.tol = 1))
+                      iter = 500, logml_iter = 1450, warmup=200, rel.tol = 1)
+  # )
   expect_equal(f1$logml, f2$logml, tolerance = .001)
   expect_equal(f1$BF, f2$BF, tolerance = .1)
   expect_equal(f1$estimates[,1:7], f2$estimates[,1:7], tolerance = .03)

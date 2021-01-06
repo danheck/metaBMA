@@ -2,11 +2,12 @@ library(metaBMA)
 library(testthat)
 
 set.seed(123)
-priors <- c("norm", "t", "invgamma", "beta")
 params <- list("norm" = c(mean = 0, sd = .3),
                "t" = c(location = 0, scale = .3, nu = 1),
+               "cauchy" = c(location = 0, scale = 0.707),
                "invgamma" = c(shape = 1, scale = 1),
                "beta" = c(1, 2))
+priors <- names(params)
 
 test_that('prior returns vectorized function', {
 
