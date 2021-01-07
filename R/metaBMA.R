@@ -51,7 +51,7 @@
 #' @import bridgesampling
 #' @import graphics
 #'
-#' # avoid CRAN check NOTE:
+# avoid CRAN check NOTE regarding unused imports:
 #' @importFrom RcppParallel setThreadOptions
 #'
 #' @importFrom logspline logspline dlogspline
