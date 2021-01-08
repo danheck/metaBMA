@@ -85,9 +85,10 @@ model requires two prior distributions for both parameters:
 progres <- capture.output(  # suppress Stan progress for vignette
   mr <- meta_random(logOR, SE, study, towels,
                     d = prior("norm", c(mean=0, sd=.3), lower=0),
-                    tau = prior("t", c(location=0, scale=.3, nu=1), lower=0))
+                    tau = prior("t", c(location=0, scale=.3, nu=1), lower=0),
+                    iter = 1500, logml_iter = 2000, rel.tol = .1)
 )
-mr
+mr  
 
 # plot posterior distribution
 plot_posterior(mr, main = "Average effect size d")
@@ -105,7 +106,8 @@ mean effect $d$ (which accounts for uncertainty regarding study heterogeneity).
 ```{r, fig.height=4.5, fig.width=6}
 mb <- meta_bma(logOR, SE, study, towels,
                d = prior("norm", c(mean=0, sd=.3), lower=0),
-               tau = prior("t", c(location=0, scale=.3, nu=1), lower=0))
+               tau = prior("t", c(location=0, scale=.3, nu=1), lower=0),
+                    iter = 1500, logml_iter = 2000, rel.tol = .1)
 mb
 plot_posterior(mb, "d", -.1, 1.4)
 plot_forest(mb)
@@ -115,7 +117,7 @@ plot_forest(mb)
 
 ## Predicted Bayes Factor for New Study
 
-Often, it is of interest to judge how much additional evidence future studies can contribute to the present knowledge. Conditional on the outcome of the model averaging for meta-analysis, the function `predicted_bf()` samples new data sets from the posterior and performes a model selection for each replication. Thereby, a distribution of predicted Bayes factors is obtain that represents the expected evidence one expects when running a new study. The following example is not executed since it requires time-intensive computations:
+Often, it is of interest to judge how much additional evidence future studies can contribute to the present knowledge. Conditional on the outcome of the model averaging for meta-analysis, the function `predicted_bf()` samples new data sets from the posterior and performs model selection for each replication. Thereby, a distribution of predicted Bayes factors is obtain that represents the expected evidence one expects when running a new study. The following example is not executed since it requires time-intensive computations:
 
 ```{r, eval = FALSE, fig.height=4.5, fig.width=6}
 mp <- predicted_bf(mb, SE = .2, sample = 30)

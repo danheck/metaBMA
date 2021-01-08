@@ -26,6 +26,6 @@ data(towels)
 head(towels)
 }
 \references{
-Scheibehenne, B., Jamil, T., & Wagenmakers, E.-J. (2016). Bayesian Evidence Synthesis Can Reconcile Seemingly Inconsistent Results: The Case of Hotel Towel Reuse. Psychological Science, 27(7), 1043–1046. \url{https://doi.org/10.1177/0956797616644081}
+Scheibehenne, B., Jamil, T., & Wagenmakers, E.-J. (2016). Bayesian Evidence Synthesis Can Reconcile Seemingly Inconsistent Results: The Case of Hotel Towel Reuse. Psychological Science, 27, 1043–1046. \doi{10.1177/0956797616644081}
 }
 \keyword{datasets}

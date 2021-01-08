@@ -1,1 +1,1 @@
-#' @references Haaf, J. M., & Rouder, J. N. (in press). Some do and some don’t? Accounting for variability of individual difference structures. Psychonomic Bulletin & Review. doi: 10.3758/s13423-018-1522-x
+#' @references Haaf, J. M., & Rouder, J. N. (2018). Some do and some don’t? Accounting for variability of individual difference structures. Psychonomic Bulletin & Review, 26, 772–789. \doi{10.3758/s13423-018-1522-x}

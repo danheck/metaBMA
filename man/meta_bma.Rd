@@ -9,10 +9,10 @@ meta_bma(
   SE,
   labels,
   data,
-  d = prior("norm", c(mean = 0, sd = 0.3)),
+  d = prior("cauchy", c(location = 0, scale = 0.707)),
   tau = prior("invgamma", c(shape = 1, scale = 0.15)),
-  rscale_contin = 1/2,
-  rscale_discrete = sqrt(2)/2,
+  rscale_contin = 0.5,
+  rscale_discrete = 0.707,
   centering = TRUE,
   prior = c(1, 1, 1, 1),
   logml = "integrate",
@@ -121,22 +121,21 @@ the marginal likelihood and posterior summary statistics can only be computed
 using Stan.
 }
 \examples{
-# Note: The following example optimizes speed (for CRAN checks).
-#       The settings are not suitable for actual data analysis!
-
+\donttest{
+### Bayesian Model-Averaged Meta-Analysis (H1: d>0)
 data(towels)
 set.seed(123)
 mb <- meta_bma(logOR, SE, study, towels,
                d = prior("norm", c(mean=0, sd=.3), lower=0),
-               tau = prior("invgamma", c(shape = 1, scale = 0.15)),
-               rel.tol = .Machine$double.eps^.15, iter=1000)
+               tau = prior("invgamma", c(shape = 1, scale = 0.15)))
 mb
 plot_posterior(mb, "d")
 }
+}
 \references{
-Gronau, Q. F., Erp, S. V., Heck, D. W., Cesario, J., Jonas, K. J., & Wagenmakers, E.-J. (2017). A Bayesian model-averaged meta-analysis of the power pose effect with informed and default priors: the case of felt power. Comprehensive Results in Social Psychology, 2(1), 123-138. \url{https://doi.org/10.1080/23743603.2017.1326760}
+Gronau, Q. F., Erp, S. V., Heck, D. W., Cesario, J., Jonas, K. J., & Wagenmakers, E.-J. (2017). A Bayesian model-averaged meta-analysis of the power pose effect with informed and default priors: the case of felt power. Comprehensive Results in Social Psychology, 2(1), 123-138. \doi{10.1080/23743603.2017.1326760}
 
-Gronau, Q. F., Heck, D. W., Berkhout, S. W., Haaf, J. M., & Wagenmakers, E.-J. (2020). A primer on Bayesian model-averaged meta-analysis. \url{https://doi.org/10.31234/osf.io/97qup}
+Gronau, Q. F., Heck, D. W., Berkhout, S. W., Haaf, J. M., & Wagenmakers, E.-J. (2020). A primer on Bayesian model-averaged meta-analysis. \doi{10.31234/osf.io/97qup}
 }
 \seealso{
 \link{meta_fixed}, \link{meta_random}

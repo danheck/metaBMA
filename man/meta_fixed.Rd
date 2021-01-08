@@ -9,9 +9,9 @@ meta_fixed(
   SE,
   labels,
   data,
-  d = prior("norm", c(mean = 0, sd = 0.3)),
+  d = prior("cauchy", c(location = 0, scale = 0.707)),
   rscale_contin = 1/2,
-  rscale_discrete = sqrt(2)/2,
+  rscale_discrete = 0.707,
   centering = TRUE,
   logml = "integrate",
   summarize = "integrate",
@@ -79,8 +79,8 @@ Runs a Bayesian meta-analysis assuming that the mean effect \eqn{d} in each
 study is identical (i.e., a fixed-effects analysis).
 }
 \examples{
+### Bayesian Fixed-Effects Meta-Analysis (H1: d>0)
 data(towels)
-### Bayesian Fixed-Effects Meta-Analysis (H1: d>0 Cauchy)
 mf <- meta_fixed(logOR, SE, study, data = towels,
                  d = prior("norm", c(mean=0, sd=.3), lower=0))
 mf

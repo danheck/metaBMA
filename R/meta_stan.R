@@ -9,10 +9,10 @@
 #' @import rstan
 #' @importFrom utils capture.output
 meta_stan <- function (data_list,
-                       d = prior("norm", c(mean = 0, sd = .3)),
+                       d = prior("cauchy", c(location = 0, scale = 0.707)),
                        tau  = prior("invgamma", c(shape = 1, scale = .15)),
-                       jzs = list(rscale_contin = 1/2,
-                                  rscale_discrete = sqrt(2)/2,
+                       jzs = list(rscale_contin = 0.5,
+                                  rscale_discrete = 0.707,
                                   centering = TRUE),
                        ml_init = TRUE,
                        silent_stan = TRUE,

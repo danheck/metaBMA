@@ -116,20 +116,18 @@ approach, the default number of MCMC iterations for \code{meta_ordered} is
 \code{iter=5000} per chain.
 }
 \examples{
-### Bayesian Meta-Analysis with Order Constraints
-# Note: The following code optimizes speed (for CRAN checks).
-#       The settings are not suitable for actual data analysis!
-
+\donttest{
+### Bayesian Meta-Analysis with Order Constraints (H1: d>0)
 data(towels)
 set.seed(123)
 mo <- meta_ordered(logOR, SE, study, towels,
-                   d = prior("norm", c(mean=0, sd=.3), lower=0),
-                   rel.tol=.01, iter=1000)
+                   d = prior("norm", c(mean=0, sd=.3), lower=0))
 mo
 plot_posterior(mo)
 }
+}
 \references{
-Haaf, J. M., & Rouder, J. N. (in press). Some do and some don’t? Accounting for variability of individual difference structures. Psychonomic Bulletin & Review. doi: 10.3758/s13423-018-1522-x
+Haaf, J. M., & Rouder, J. N. (2018). Some do and some don’t? Accounting for variability of individual difference structures. Psychonomic Bulletin & Review, 26, 772–789. \doi{10.3758/s13423-018-1522-x}
 }
 \seealso{
 \link{meta_bma}, \link{meta_random}

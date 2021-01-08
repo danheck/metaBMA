@@ -36,10 +36,10 @@ plot_posterior(mf)
 Strack, F., Martin, L. L., & Stepper, S. (1988). Inhibiting and facilitating
 conditions of the human smile: A nonobtrusive test of the facial feedback hypothesis.
 Journal of Personality and Social Psychology, 54, 768–777.
-\url{https://doi.org/10.1037/0022-3514.54.5.768}
+\doi{10.1037/0022-3514.54.5.768}
 
 Wagenmakers, E.-J., Beek, T., Dijkhoff, L., Gronau, Q. F., Acosta, A., Adams, R. B.,
 ... Zwaan, R. A. (2016). Registered replication report: Strack, Martin, & Stepper (1988).
-Perspectives on Psychological Science, 11, 917-928. \url{https://doi.org/10.1177/1745691616674458}
+Perspectives on Psychological Science, 11, 917-928. \doi{10.1177/1745691616674458}
 }
 \keyword{datasets}

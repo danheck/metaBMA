@@ -1,8 +1,8 @@
 Package: metaBMA
 Type: Package
-Date: 2020-10-27
+Date: 2021-01-07
 Title: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis
-Version: 0.6.5
+Version: 0.6.6
 Authors@R: c(person("Daniel W.", "Heck", email="dheck@uni-marburg.de", role=c("aut","cre"),
                     comment = c(ORCID = "0000-0002-6302-9252")),
              person("Quentin F.", "Gronau", email="quentingronau@web.de", role = c("ctb")),
@@ -25,21 +25,23 @@ Depends:
     Rcpp (>= 1.0.0),
     methods
 Imports:
-    mvtnorm,
-    logspline,
+    bridgesampling,
     coda,
     LaplacesDemon,
+    logspline,
+    mvtnorm,
+    RcppParallel (>= 5.0.1),
     rstan (>= 2.18.1),
-    rstantools (>= 1.5.1),
-    bridgesampling
+    rstantools (>= 2.1.1)
 Suggests: 
     testthat,
     knitr,
     rmarkdown
 LinkingTo: 
-    BH (>= 1.69.0-1),
+    BH (>= 1.66.0),
     Rcpp (>= 1.0.0),
-    RcppEigen (>= 0.3.3.5.0),
+    RcppEigen (>= 0.3.3.3.0),
+    RcppParallel (>= 5.0.1),
     rstan (>= 2.18.1),
     StanHeaders (>= 2.18.0)
 VignetteBuilder: knitr
@@ -50,3 +52,4 @@ LazyData: true
 NeedsCompilation: yes
 SystemRequirements: GNU make
 RoxygenNote: 7.1.1
+Biarch: true

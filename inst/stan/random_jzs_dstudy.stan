@@ -1,4 +1,4 @@
-#include /auxiliary/license.stan
+#include /include/license.stan
 
 data {
 #include /auxiliary/data.stan

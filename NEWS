@@ -1,3 +1,12 @@
+metaBMA 0.6.6
+===========
+
+* Upgrade to new rstantools folder structure
+* New default prior for effect size: Cauchy distribution with scale=0.707 instead of normal distribution with scale=0.3
+* New defaults in meta_default() wrapper function
+* Faster CRAN checks and tests
+
+
 metaBMA 0.6.4
 ===========
 

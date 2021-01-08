@@ -16,6 +16,7 @@ addons:
       - libgdal-dev
       - libproj-dev
       - libv8-dev
+      - libgit2-dev
 
 env:
   - _R_CHECK_FORCE_SUGGESTS_=true

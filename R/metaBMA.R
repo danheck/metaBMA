@@ -51,6 +51,9 @@
 #' @import bridgesampling
 #' @import graphics
 #'
+# avoid CRAN check NOTE regarding unused imports:
+#' @importFrom RcppParallel setThreadOptions
+#'
 #' @importFrom logspline logspline dlogspline
 #' @importFrom mvtnorm rmvnorm dmvnorm
 #' @importFrom coda spectrum0.ar HPDinterval as.mcmc varnames mcmc

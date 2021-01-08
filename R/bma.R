@@ -12,15 +12,17 @@
 #'   (i.e., the across-study standard deviation of population effect sizes).
 #'
 #' @examples
+#' \donttest{
 #' # model averaging for fixed and random effects
 #' data(towels)
 #' fixed <- meta_fixed(logOR, SE, study, towels)
-#' random <- meta_random(logOR, SE, study, towels, iter = 1000)
+#' random <- meta_random(logOR, SE, study, towels)
 #'
 #' averaged <- bma(list("fixed" = fixed, "random" = random))
 #' averaged
 #' plot_posterior(averaged)
 #' plot_forest(averaged, mar = c(4.5,20,4,.3))
+#' }
 #' @export
 bma <- function(meta, prior = 1, parameter = "d", summarize = "integrate", ci = .95,
                 rel.tol = .Machine$double.eps^0.5){

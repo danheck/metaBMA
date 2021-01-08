@@ -25,15 +25,15 @@ test_that("bma works for fitted meta_* objects", {
 
 
   suppressWarnings(r1b <- meta_random(yyy ~ 1, SE, study, data = dat,
-                                      logml = "stan", logml_iter = 1750, iter = 500))
+                                      logml = "stan", logml_iter = 1500, iter = 100))
   expect_is(r1b$logml, "numeric")
   expect_is(r1b$BF, "matrix")
   expect_is(r1b$estimates, "matrix")
 
   expect_silent(bb <- bma(list("a" = f1a, "b" = f1b, "d" = r1b),
-                          rel.tol = .Machine$double.eps^.1))
+                          rel.tol = .01))
   mean_avg <- sum(bb$posterior_models * bb$estimates[-1,"mean"])
-  expect_equal(mean_avg, bb$estimates["averaged","mean"], tolerance = .005)
+  expect_equal(mean_avg, bb$estimates["averaged","mean"], tolerance = .01)
 
   expect_is(bb$logml, "numeric")
   expect_is(bb$BF, "matrix")
@@ -43,12 +43,13 @@ test_that("bma works for fitted meta_* objects", {
   skip_on_cran()
   suppressWarnings(r1a <- meta_random(yyy, SE, study, data = dat,
                                       summarize = "int",
-                                      rel.tol = .Machine$double.eps^.1, iter = 100))
+                                      rel.tol = .01, iter = 100))
   expect_silent(bb <- bma(list("a" = r1a, "b" = r1b), rel.tol = .Machine$double.eps^.1))
   postprob <- unname(bb$posterior_models[c(2,4)])
   expect_equal(postprob/sum(postprob), c(.5, .5), tolerance = .01)
   expect_equal(r1a$estimates[,1:7], r1b$estimates[,1:7], tolerance = .05)
 })
+
 
 test_that("meta_bma gives identical results for stan/integrate", {
   skip_on_cran()

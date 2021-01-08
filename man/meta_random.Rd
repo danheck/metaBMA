@@ -9,10 +9,10 @@ meta_random(
   SE,
   labels,
   data,
-  d = prior("norm", c(mean = 0, sd = 0.3)),
+  d = prior("cauchy", c(location = 0, scale = 0.707)),
   tau = prior("invgamma", c(shape = 1, scale = 0.15)),
-  rscale_contin = 1/2,
-  rscale_discrete = sqrt(2)/2,
+  rscale_contin = 0.5,
+  rscale_discrete = 0.707,
   centering = TRUE,
   logml = "integrate",
   summarize = "stan",
@@ -94,16 +94,14 @@ Bayesian meta-analysis assuming that the effect size \eqn{d} varies across
 studies with standard deviation \eqn{\tau} (i.e., a random-effects model).
 }
 \examples{
-### Bayesian Random-Effects Meta-Analysis
-# Note: The following code optimizes speed (for CRAN checks).
-#       The settings are not suitable for actual data analysis!
-
+\donttest{
+### Bayesian Random-Effects Meta-Analysis (H1: d>0)
 data(towels)
 set.seed(123)
 mr <- meta_random(logOR, SE, study, data = towels,
                   d = prior("norm", c(mean=0, sd=.3), lower = 0),
-                  tau = prior("invgamma", c(shape = 1, scale = 0.15)),
-                  rel.tol=.Machine$double.eps^.15, iter=1000)
+                  tau = prior("invgamma", c(shape = 1, scale = 0.15)))
 mr
 plot_posterior(mr)
+}
 }
