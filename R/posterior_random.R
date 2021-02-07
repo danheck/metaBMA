@@ -1,21 +1,25 @@
 
 ### random-effects: marginal posterior of both
 post_random <- function(tau, d = 0, data, prior_d, prior_tau, log = FALSE,
-                        rel.tol = .Machine$double.eps^0.5){
+                        rel.tol = .Machine$double.eps^0.5) {
 
   ### priors
   prior <- prior_tau(tau, log = TRUE)
 
-  if (attr(prior_d, "family") != "0"){
+  if (attr(prior_d, "family") != "0") {
     prior <- prior + prior_d(d, log = TRUE)
-  }else{
+  } else {
     d <- 0
   }
 
   ### loglikelihood
   pars <- cbind(d, tau)
-  ll <- function(x) sum(dnorm(data$y, mean = x[1],
-                              sd = sqrt(data$SE^2 + x[2]^2), log = TRUE))
+  ll <- function(x) {
+    sum(dnorm(data$y,
+      mean = x[1],
+      sd = sqrt(data$SE^2 + x[2]^2), log = TRUE
+    ))
+  }
   loglik <- apply(pars, 1, ll)
 
   post <- prior + loglik
@@ -26,31 +30,34 @@ post_random <- function(tau, d = 0, data, prior_d, prior_tau, log = FALSE,
 ################################## integration over 1 parameter ######
 
 post_random_d <- function(d, data, prior_d, prior_tau, log = FALSE,
-                          rel.tol = .Machine$double.eps^0.5){
-
+                          rel.tol = .Machine$double.eps^0.5) {
   bounds <- bounds_prior(prior_tau)
   # scale <- integrate(post_random, d = d[1], data = data, bounds[1], bounds[2],
   #                    rel.tol = rel.tol)$value
-  func <- function(d)
+  func <- function(d) {
     integrate(function(x) post_random(x, d = d, data = data, prior_d = prior_d, prior_tau = prior_tau),
-              bounds[1], bounds[2], rel.tol = rel.tol)$value
+      bounds[1], bounds[2],
+      rel.tol = rel.tol
+    )$value
+  }
 
   sapply(d, func) #* scale
 }
 
 
 post_random_tau <- function(tau, data, prior_d, prior_tau, log = FALSE,
-                            rel.tol = .Machine$double.eps^0.5){
-
-  if (attr(prior_d, "family") != "0"){
+                            rel.tol = .Machine$double.eps^0.5) {
+  if (attr(prior_d, "family") != "0") {
     bounds <- bounds_prior(prior_d)
     # scale <- integrate( function(x) post_random(tau = tau[1], d = x, data = data),
     #                     lower = bounds[1],  upper = bounds[2],
     #                     rel.tol = rel.tol)$value
-    func <- function (tau)
-      integrate( function(x) post_random(tau = tau, d = x, data = data, prior_d, prior_tau),
-                 lower = bounds[1],  upper = bounds[2],
-                 rel.tol = rel.tol)$value
+    func <- function(tau) {
+      integrate(function(x) post_random(tau = tau, d = x, data = data, prior_d, prior_tau),
+        lower = bounds[1],  upper = bounds[2],
+        rel.tol = rel.tol
+      )$value
+    }
   } else {
     func <- function(tau) post_random(tau = tau, d = 0, data = data, prior_d, prior_tau)
   }
@@ -62,26 +69,35 @@ post_random_tau <- function(tau, data, prior_d, prior_tau, log = FALSE,
 
 
 post_random_theta <- function(theta, idx, data, prior_d, prior_tau, log = FALSE,
-                              rel.tol = .Machine$double.eps^0.5){
-
+                              rel.tol = .Machine$double.eps^0.5) {
   bd <- bounds_prior(prior_d)
   bt <- bounds_prior(prior_tau)
 
-  f.d.tau <- function(d, theta, tau)
-    sapply(d, function(dd)
+  f.d.tau <- function(d, theta, tau) {
+    sapply(d, function(dd) {
       dnorm(theta,
-            mean = (1/tau^2*dd + 1/data$SE[idx]^2 * data$y[idx])/(1/tau^2 + 1/data$SE[idx]^2),
-            sd = 1/sqrt(1/tau^2 + 1/data$SE[idx]^2)) *
+        mean = (1 / tau^2 * dd + 1 / data$SE[idx]^2 * data$y[idx]) / (1 / tau^2 + 1 / data$SE[idx]^2),
+        sd = 1 / sqrt(1 / tau^2 + 1 / data$SE[idx]^2)
+      ) *
         prior_d(dd) *
-        prior_tau(1/tau^2))  ## prior_tau(tau) ??? ### CHECK!!!
+        prior_tau(1 / tau^2)
+    })
+  } ## prior_tau(tau) ??? ### CHECK!!!
 
-  f.tau <- function(tau, theta)
-    sapply(tau, function(tt)
-      integrate(f.d.tau, bd[1], bd[2], theta = theta, tau = tt,
-                rel.tol = rel.tol)$value)
-  post <- sapply(theta, function(tt)
-    integrate(f.tau, bt[1], bt[2], theta = tt,
-              rel.tol = rel.tol)$value)
+  f.tau <- function(tau, theta) {
+    sapply(tau, function(tt) {
+      integrate(f.d.tau, bd[1], bd[2],
+        theta = theta, tau = tt,
+        rel.tol = rel.tol
+      )$value
+    })
+  }
+  post <- sapply(theta, function(tt) {
+    integrate(f.tau, bt[1], bt[2],
+      theta = tt,
+      rel.tol = rel.tol
+    )$value
+  })
 
   # f.tau.d <- function(tau, theta, d)
   #   sapply(tau, function(tt)

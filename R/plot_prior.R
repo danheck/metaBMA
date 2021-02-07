@@ -8,7 +8,7 @@
 #' @param ... further arguments passed to \code{\link[graphics]{plot}}
 #'
 #' @examples
-#' p1 <- prior("t", c(location=0, scale=0.707, nu=1), 0, 3)
+#' p1 <- prior("t", c(location = 0, scale = 0.707, nu = 1), 0, 3)
 #' plot(p1, 0, 2)
 #'
 #' # define custom prior pdf up to a constant:
@@ -16,11 +16,11 @@
 #' plot(p2)
 #' @method plot prior
 #' @export
-plot.prior <- function(x, from, to, ...){
+plot.prior <- function(x, from, to, ...) {
   prior <- x
 
-  if (missing (from)) from <- -Inf
-  if (missing (to)) to <- Inf
+  if (missing(from)) from <- -Inf
+  if (missing(to)) to <- Inf
   from <- max(from, attr(prior, "lower"))
   to <- min(to, attr(prior, "upper"))
   if (from == -Inf) from <- -1
@@ -33,10 +33,13 @@ plot.prior <- function(x, from, to, ...){
   xticks <- pretty(c(from, to))
   Parameter <- 0
   Density <- -100
-  plot(Parameter, Density, yaxs="i",main = describe_prior(x),
-       ylim =  range(yticks), xlim = range(xticks), xaxs="i",
-       las = 1, bty = "n",  ...)
+  plot(Parameter, Density,
+    yaxs = "i", main = describe_prior(x),
+    ylim = range(yticks), xlim = range(xticks), xaxs = "i",
+    las = 1, bty = "n", ...
+  )
   polygon(c(xx, rev(xx)), c(dpr, rep(0, 401)),
-          border = NA, col=adjustcolor("darkgray", alpha.f = .2))
+    border = NA, col = adjustcolor("darkgray", alpha.f = .2)
+  )
   lines(xx, dpr, col = "darkgray", lty = 1, lwd = 2)
 }
