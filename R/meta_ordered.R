@@ -1,7 +1,7 @@
 #' Meta-Analysis with Order-Constrained Study Effects
 #'
 #' Computes the Bayes factor for the hypothesis that the true study effects in a
-#' random-effects meta-anaysis are all positive or negative.
+#' random-effects meta-analysis are all positive or negative.
 #'
 #' @inheritParams meta_bma
 #' @param prior prior probabilities over models (possibly unnormalized) in the

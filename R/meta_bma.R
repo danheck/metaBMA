@@ -1,6 +1,6 @@
 #' Model Averaging for Meta-Analysis
 #'
-#' Fits random- and fixed-effects meta-anayses and performs Bayesian model
+#' Fits random- and fixed-effects meta-analyses and performs Bayesian model
 #' averaging for H1 (d != 0) vs. H0 (d = 0).
 #'
 #' Bayesian model averaging for four meta-analysis models: Fixed- vs.

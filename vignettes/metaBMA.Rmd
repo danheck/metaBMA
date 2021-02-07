@@ -22,13 +22,13 @@ evidence for or against an effect (i.e., whether $d = 0$) and the evidence for
 or against random effects can be evaluated (i.e., whether $\tau = 0$). By using
 Bayesian model averaging (i.e., inclusion Bayes factors), both types of tests
 can be performed by marginalizing over the other question. Most importantly,
-this allows to test whether an effect exists while accoungting for uncertainty
+this allows to test whether an effect exists while accounting for uncertainty
 whether study heterogeneity exists or not.
 
 
 ## Defining and Plotting Priors
 
-To fit a meta-analysis model, prior distributins on the average effect $d$ and
+To fit a meta-analysis model, prior distributions on the average effect $d$ and
 the heterogeneity $\tau$ are required. The package `metaBMA` leaves the user the
 freedom to choose from several predefined distributions or even define an owen
 prior density function. The function `prior` facilitates the construction and
