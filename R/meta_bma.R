@@ -85,8 +85,9 @@
 #' data(towels)
 #' set.seed(123)
 #' mb <- meta_bma(logOR, SE, study, towels,
-#'                d = prior("norm", c(mean=0, sd=.3), lower=0),
-#'                tau = prior("invgamma", c(shape = 1, scale = 0.15)))
+#'   d = prior("norm", c(mean = 0, sd = .3), lower = 0),
+#'   tau = prior("invgamma", c(shape = 1, scale = 0.15))
+#' )
 #' mb
 #' plot_posterior(mb, "d")
 #' }
@@ -96,27 +97,32 @@
 #' @export
 meta_bma <- function(y, SE, labels, data,
                      d = prior("cauchy", c(location = 0, scale = 0.707)),
-                     tau  = prior("invgamma", c(shape = 1, scale = 0.15)),
+                     tau = prior("invgamma", c(shape = 1, scale = 0.15)),
                      rscale_contin = 0.5, rscale_discrete = 0.707,
-                     centering = TRUE, prior = c(1,1,1,1),
+                     centering = TRUE, prior = c(1, 1, 1, 1),
                      logml = "integrate", summarize = "stan", ci = .95,
                      rel.tol = .Machine$double.eps^.3,
-                     logml_iter = 5000, silent_stan = TRUE, ...){
+                     logml_iter = 5000, silent_stan = TRUE, ...) {
+  check_deprecated(list(...)) # error: backwards compatibility
 
-  check_deprecated(list(...))  # error: backwards compatibility
-
-  dl <- data_list(model = "random", y = y, SE = SE, labels = labels, data = data,
-                  args = as.list(match.call())[-1])
+  dl <- data_list(
+    model = "random", y = y, SE = SE, labels = labels, data = data,
+    args = as.list(match.call())[-1]
+  )
 
   # cat(format(Sys.time()), "--- Fit fixed-effects meta-analysis\n")
-  fixed_H1 <- meta_fixed(y, SE, labels, data = dl, d = d, logml = logml,
-                         summarize = summarize, ci = ci, rel.tol = rel.tol,
-                         silent_stan = silent_stan, ...)
+  fixed_H1 <- meta_fixed(y, SE, labels,
+    data = dl, d = d, logml = logml,
+    summarize = summarize, ci = ci, rel.tol = rel.tol,
+    silent_stan = silent_stan, ...
+  )
 
   # cat(format(Sys.time()), "--- Fit random-effects meta-analysis\n")
-  random_H1 <- meta_random(y, SE, labels, data = dl, d = d, tau = tau, logml = logml,
-                           summarize = summarize, ci = ci, rel.tol = rel.tol,
-                           silent_stan = silent_stan, logml_iter = logml_iter, ...)
+  random_H1 <- meta_random(y, SE, labels,
+    data = dl, d = d, tau = tau, logml = logml,
+    summarize = summarize, ci = ci, rel.tol = rel.tol,
+    silent_stan = silent_stan, logml_iter = logml_iter, ...
+  )
 
   # random_H0 <- meta_random(y, SE, labels, data = dl, d = prior("0"), tau = tau, logml = logml,
   #                          summarize = summarize, ci = ci, rel.tol = rel.tol,
@@ -124,18 +130,18 @@ meta_bma <- function(y, SE, labels, data,
 
   # model averaging for:  d | H1
   meta <- list("fixed" = fixed_H1, "random" = random_H1)
-  meta_bma <- bma(meta, prior = prior, parameter = "d",
-                  summarize = summarize, ci = ci, rel.tol = rel.tol)
+  meta_bma <- bma(meta,
+    prior = prior, parameter = "d",
+    summarize = summarize, ci = ci, rel.tol = rel.tol
+  )
 
   # bma(list(), prior = prior, parameter = "d",
   #     summarize = "stan", ci = ci, rel.tol = rel.tol)
 
   # inclusion bayes factors etc.
   meta_bma$inclusion <- inclusion(meta_bma$logml, include = c(2, 4), prior = prior)
-  meta_bma$prior_models <- prior/sum(prior)
+  meta_bma$prior_models <- prior / sum(prior)
   meta_bma$posterior_models <- meta_bma$inclusion$posterior
   meta_bma$BF <- make_BF(meta_bma$logml)
   meta_bma
 }
-
-

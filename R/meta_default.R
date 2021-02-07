@@ -46,7 +46,8 @@
 #' data(towels)
 #' set.seed(123)
 #' md <- meta_default(logOR, SE, study, towels,
-#'                    field = "psychology", effect = "logOR")
+#'   field = "psychology", effect = "logOR"
+#' )
 #' md
 #' plot_forest(md)
 #' }
@@ -54,69 +55,77 @@
 #' @template ref_gronau2017
 #' @export
 meta_default <- function(y, SE, labels, data,
-                         field = "psychology", effect = "d", ...){
-
+                         field = "psychology", effect = "d", ...) {
   def <- get_default(field, effect)
-  dl <- data_list("random", y = y, SE = SE, labels = labels, data = data,
-                  args = as.list(match.call()))
-  res <- meta_bma(y = "y", SE = "SE", labels = "labels", data = dl,
-                  d = def$d, tau = def$tau,
-                  ...)
+  dl <- data_list("random",
+    y = y, SE = SE, labels = labels, data = data,
+    args = as.list(match.call())
+  )
+  res <- meta_bma(
+    y = "y", SE = "SE", labels = "labels", data = dl,
+    d = def$d, tau = def$tau,
+    ...
+  )
   res$default <- c("field" = field, "effect" = effect)
   res
 }
 
 
-get_default <- function (field, effect){
+get_default <- function(field, effect) {
   field <- match.arg(field, c("psychology", "medicine"))
   effect <- match.arg(effect, c("d", "z", "logOR", "ttest", "corr"))
 
-  if (effect %in% c("ttest", "corr")){
-    stop("The options effect='ttest' and effect='corr' are deprecated for metaBMA (>0.3.9).\n",
-         "The option effect='r' is deprecated for metaBMA (>=0.6.6)",
-         "\n  The type of effect size must be one of the following:",
-         "\n    effect=c('d', 'z', 'logOR')",
-         "\n  (see ?meta_default)")
+  if (effect %in% c("ttest", "corr")) {
+    stop(
+      "The options effect='ttest' and effect='corr' are deprecated for metaBMA (>0.3.9).\n",
+      "The option effect='r' is deprecated for metaBMA (>=0.6.6)",
+      "\n  The type of effect size must be one of the following:",
+      "\n    effect=c('d', 'z', 'logOR')",
+      "\n  (see ?meta_default)"
+    )
     # effect <- ifelse(effect == "ttest", "d", "z")
   }
 
   switch(field,
-         #################################### PSYCHOLOGY
-         "psychology" = {
-           switch(effect,
-                  "d" = {
-                    d <- prior("cauchy", c(location = 0, scale = 0.707))
-                    tau  <- prior("invgamma", c(shape = 1, scale = 0.15))
-                  },
-                  "z" = {
-                    d <- prior("cauchy", c(location = 0, scale = 0.3535))
-                    tau  <- prior("invgamma", c(shape = 1, scale = 0.075))
-                  },
-                  "logOR" = {
-                    d <- prior("cauchy", c(location = 0, scale = 1.414))
-                    tau  <- prior("invgamma", c(shape = 1, scale = 0.3))
-                  },
-                  stop("'effect' not supported."))
-         },
+    #################################### PSYCHOLOGY
+    "psychology" = {
+      switch(effect,
+        "d" = {
+          d <- prior("cauchy", c(location = 0, scale = 0.707))
+          tau <- prior("invgamma", c(shape = 1, scale = 0.15))
+        },
+        "z" = {
+          d <- prior("cauchy", c(location = 0, scale = 0.3535))
+          tau <- prior("invgamma", c(shape = 1, scale = 0.075))
+        },
+        "logOR" = {
+          d <- prior("cauchy", c(location = 0, scale = 1.414))
+          tau <- prior("invgamma", c(shape = 1, scale = 0.3))
+        },
+        stop("'effect' not supported.")
+      )
+    },
 
-         #################################### MEDICINE
-         "medicine" = {
-           switch(effect,
-                  "d" = {
-                    d <- prior("cauchy", c(location = 0, scale = 0.707))
-                    tau  <- prior("invgamma", c(shape = 1, scale = 0.15))
-                  },
-                  "z" = {
-                    d <- prior("cauchy", c(location = 0, scale = 0.3535))
-                    tau  <- prior("invgamma", c(shape = 1, scale = 0.075))
-                  },
-                  "logOR" = {
-                    d <- prior("cauchy", c(location = 0, scale = 1.414))
-                    tau  <- prior("invgamma", c(shape = 1, scale = 0.3))
-                  },
-                  stop("'effect' not supported."))
-         },
-         stop("'field' not supported."))
+    #################################### MEDICINE
+    "medicine" = {
+      switch(effect,
+        "d" = {
+          d <- prior("cauchy", c(location = 0, scale = 0.707))
+          tau <- prior("invgamma", c(shape = 1, scale = 0.15))
+        },
+        "z" = {
+          d <- prior("cauchy", c(location = 0, scale = 0.3535))
+          tau <- prior("invgamma", c(shape = 1, scale = 0.075))
+        },
+        "logOR" = {
+          d <- prior("cauchy", c(location = 0, scale = 1.414))
+          tau <- prior("invgamma", c(shape = 1, scale = 0.3))
+        },
+        stop("'effect' not supported.")
+      )
+    },
+    stop("'field' not supported.")
+  )
 
   list("d" = d, "tau" = tau)
 }
@@ -131,9 +140,9 @@ get_default <- function (field, effect){
 #' plot_default(field = "psychology", effect = "d")
 #' @seealso \code{\link{meta_default}} for details on standard priors.
 #' @export
-plot_default <- function(field = "psychology", effect = "d", ...){
+plot_default <- function(field = "psychology", effect = "d", ...) {
   mfrow <- par()$mfrow
-  par(mfrow = c(1,2))
+  par(mfrow = c(1, 2))
   def <- get_default(field, effect)
   plot(def$d, xlab = "Average effect (d)", ...)
   plot(def$tau, xlab = "Across-study standard deviation (tau)", ...)

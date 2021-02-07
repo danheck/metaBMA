@@ -37,9 +37,9 @@
 #'
 #' @examples
 #' ### Half-Normal Distribution
-#' p1 <- prior("norm", c(mean=0, sd=.3), lower = 0)
+#' p1 <- prior("norm", c(mean = 0, sd = .3), lower = 0)
 #' p1
-#' p1(c(-1,1,3))
+#' p1(c(-1, 1, 3))
 #' plot(p1, -.1, 1)
 #'
 #' ### Half-Cauchy Distribution
@@ -49,126 +49,145 @@
 #' ### Custom Prior Distribution
 #' p3 <- prior("custom", function(x) x^2, 0, 1)
 #' plot(p3, -.1, 1.2)
-#'
-# ' Note: do not import LaplacesDemon::dinvgamma  => redefine: dinvgamma(0)=0
 #' @importFrom LaplacesDemon rinvgamma dst pst rst
 #' @importFrom stats dbeta pbeta rbeta
 #' @export
-prior <- function (family, param, lower, upper, label = "d",
-                   rel.tol = .Machine$double.eps^.5){
-
-  if (any(class(family) == "prior")){
+prior <- function(family, param, lower, upper, label = "d",
+                  rel.tol = .Machine$double.eps^.5) {
+  if (any(class(family) == "prior")) {
     attr(family, "label") <- label
     return(check_prior(family))
   }
 
-  if (!is.character(family) || length(family) != 1)
-    stop ("The prior must be defined by a character value. See ?metaBMA::prior")
+  if (!is.character(family) || length(family) != 1) {
+    stop("The prior must be defined by a character value. See ?metaBMA::prior")
+  }
 
-  family <- match.arg(family, c("norm", "t", "beta", "invgamma", "0", "custom",
-                                "scaledt", "cauchy", "halfcauchy", "halfnorm"))
+  family <- match.arg(family, c(
+    "norm", "t", "beta", "invgamma", "0", "custom",
+    "scaledt", "cauchy", "halfcauchy", "halfnorm"
+  ))
 
   # compatibility with old (non-Stan) metaBMA version
-  if (family == "scaledt"){
-    family = "t"
-  } else if (family == "cauchy"){
+  if (family == "scaledt") {
+    family <- "t"
+  } else if (family == "cauchy") {
     stopifnot(length(param) == 2, param[2] > 0)
-    family = "t"
-    param = c(location = unname(param[1]), scale = unname(param[2]), nu = 1)
-  } else if (family == "halfcauchy"){
+    family <- "t"
+    param <- c(location = unname(param[1]), scale = unname(param[2]), nu = 1)
+  } else if (family == "halfcauchy") {
     stopifnot(length(param) == 1, param > 0)
-    family = "t"
-    param = c(location = 0, scale = unname(param), nu = 1)
-    lower = 0
-  } else if (family == "halfnorm"){
+    family <- "t"
+    param <- c(location = 0, scale = unname(param), nu = 1)
+    lower <- 0
+  } else if (family == "halfnorm") {
     stopifnot(length(param) == 1, param > 0)
-    family = "norm"
-    param = c(mean = 0, sd = unname(param))
-    lower = 0
+    family <- "norm"
+    param <- c(mean = 0, sd = unname(param))
+    lower <- 0
   }
 
   # family-specific constraints on "param"
-  if(family == "norm"){
+  if (family == "norm") {
     stopifnot(length(param) == 2, param[2] > 0)
-  } else if (family == "t"){
-    stopifnot(length(param) == 3, param[2] > 0, param[3] > 0,
-              param[3] == round(param[3]))
-  } else if (family == "invgamma"){
+  } else if (family == "t") {
+    stopifnot(
+      length(param) == 3, param[2] > 0, param[3] > 0,
+      param[3] == round(param[3])
+    )
+  } else if (family == "invgamma") {
     stopifnot(length(param) == 2, all(param > 0))
-    if (!missing(lower) && lower < 0){
+    if (!missing(lower) && lower < 0) {
       warning('Lower truncation boundary for prior("invgamma", ...) is set to lower=0')
       lower <- 0
     }
-  } else if (family == "beta"){
+  } else if (family == "beta") {
     stopifnot(length(param) == 2, all(param > 0))
-  } else if (family == "0"){
+  } else if (family == "0") {
     param <- vector("numeric", 0)
-
   }
 
   # custom probability density: needs normalization
-  if (family == "custom"){
+  if (family == "custom") {
     stopifnot(is.function(param))
     if (missing(lower) || missing(upper) ||
-        !is.numeric(lower) || !is.numeric(upper) ||
-        is.na(lower) || is.na(upper) ||
-        length(lower) != 1 || length(upper) != 1 ||
-        lower > upper)
+      !is.numeric(lower) || !is.numeric(upper) ||
+      is.na(lower) || is.na(upper) ||
+      length(lower) != 1 || length(upper) != 1 ||
+      lower > upper) {
       stop("'lower' and 'upper' must be specified (e.g., lower = 0, upper = Inf)")
+    }
     dx <- param(seq(max(lower, -100), min(upper, 100), length.out = 11))
-    if (length(dx) != 11 || any(is.na(dx) | dx < 0))
-      stop ("'param' must be a vectorized, nonnegative density function. See ?metaBMA::prior")
+    if (length(dx) != 11 || any(is.na(dx) | dx < 0)) {
+      stop("'param' must be a vectorized, nonnegative density function. See ?metaBMA::prior")
+    }
 
     tryCatch(const <- integrate(param, lower, upper, rel.tol = rel.tol)$value,
-             error = function(e) stop ("Density must be integrable. See ?metaBMA::prior"))
-    dprior <- function (x, log = FALSE){
-      dx <- ifelse(x >= lower & x <= upper, param(x)/const, 0)
-      if(log) dx <- log(dx)
+      error = function(e) stop("Density must be integrable. See ?metaBMA::prior")
+    )
+    dprior <- function(x, log = FALSE) {
+      dx <- ifelse(x >= lower & x <= upper, param(x) / const, 0)
+      if (log) dx <- log(dx)
       dx
     }
 
     # available priors
   } else {
-    if (missing(lower) && missing(upper)){
+    if (missing(lower) && missing(upper)) {
       lower <- default_lower(family)
       upper <- default_upper(family)
       dprior <- switch(family,
-                       "norm" = function(x, log = FALSE){
-                         dnorm(x, mean = param[1], sd = param[2], log = log)},
-                       "t" = function(x, log = FALSE){
-                         dst(x, mu = param[1], sigma = param[2], nu = param[3], log = log)},
-                       "invgamma" = function(x, log = FALSE){
-                         dinvgamma(x, shape = param[1], scale = param[2], log = log)},
-                       "beta" = function(x, log = FALSE){
-                         dbeta(x, shape1 = param[1], shape2 = param[2], log = log)},
-                       "0" = function(x){
-                         dx <- ifelse(x == 0, 1, 0)
-                         ifelse(log, log(dx), dx)
-                       },
-                       stop("Prior distribution 'family' not supported."))
+        "norm" = function(x, log = FALSE) {
+          dnorm(x, mean = param[1], sd = param[2], log = log)
+        },
+        "t" = function(x, log = FALSE) {
+          dst(x, mu = param[1], sigma = param[2], nu = param[3], log = log)
+        },
+        "invgamma" = function(x, log = FALSE) {
+          dinvgamma(x, shape = param[1], scale = param[2], log = log)
+        },
+        "beta" = function(x, log = FALSE) {
+          dbeta(x, shape1 = param[1], shape2 = param[2], log = log)
+        },
+        "0" = function(x) {
+          dx <- ifelse(x == 0, 1, 0)
+          ifelse(log, log(dx), dx)
+        },
+        stop("Prior distribution 'family' not supported.")
+      )
     } else {
       if (missing(lower)) lower <- default_lower(family)
       if (missing(upper)) upper <- default_upper(family)
       dprior <- switch(family,
-                       "norm" = function (x, log = FALSE)
-                         dtrunc(x, "norm", lower, upper, log=log,
-                                mean = param[1], sd = param[2]),
-                       "t" = function (x, log = FALSE)
-                         dtrunc(x, "st", lower, upper, log=log,
-                                mu = param[1], sigma = param[2], nu = param[3]),
-                       "invgamma"  = function (x, log = FALSE)
-                         dtrunc(x, "invgamma", lower, upper, log = log,
-                                shape=param[1], scale=param[2]),
-                       "beta" = function (x, log = FALSE){
-                         diff <- upper - lower
-                         dx <- dbeta((x - lower)/diff, param[1], param[2], log = log)
-                         ifelse(rep(log, length(x)), dx - log(diff) , dx / diff)
-                       },
-                       "0" = function (x, log = FALSE){
-                         dx <- ifelse(x == 0, 1, 0)
-                         ifelse(log, log(dx), dx)
-                       },
-                       stop("Prior distribution 'family' not supported."))
+        "norm" = function(x, log = FALSE) {
+          dtrunc(x, "norm", lower, upper,
+            log = log,
+            mean = param[1], sd = param[2]
+          )
+        },
+        "t" = function(x, log = FALSE) {
+          dtrunc(x, "st", lower, upper,
+            log = log,
+            mu = param[1], sigma = param[2], nu = param[3]
+          )
+        },
+        "invgamma" = function(x, log = FALSE) {
+          dtrunc(x, "invgamma", lower, upper,
+            log = log,
+            shape = param[1], scale = param[2]
+          )
+        },
+        "beta" = function(x, log = FALSE) {
+          diff <- upper - lower
+          dx <- dbeta((x - lower) / diff, param[1], param[2], log = log)
+          ifelse(rep(log, length(x)), dx - log(diff), dx / diff)
+        },
+        "0" = function(x, log = FALSE) {
+          dx <- ifelse(x == 0, 1, 0)
+          ifelse(log, log(dx), dx)
+        },
+        stop("Prior distribution 'family' not supported.")
+      )
     }
   }
 
@@ -182,14 +201,16 @@ prior <- function (family, param, lower, upper, label = "d",
 }
 
 # list of available priors:
-priors <- function()
+priors <- function() {
   c("norm", "t", "beta", "invgamma", "0", "custom")
+}
 
 # list of priors implemented in stan:
-priors_stan <- function()
-  c("norm", "t", "beta", "invgamma", "0")   # for "0" => extra model file d=0
+priors_stan <- function() {
+  c("norm", "t", "beta", "invgamma", "0")
+} # for "0" => extra model file d=0
 
-dtrunc <- function (x, family, lower = -Inf, upper = Inf, log = FALSE, ...){
+dtrunc <- function(x, family, lower = -Inf, upper = Inf, log = FALSE, ...) {
   stopifnot(lower < upper)
   support <- x >= lower & x <= upper
   dens <- rep(ifelse(log, -Inf, 0), length(x))
@@ -199,15 +220,15 @@ dtrunc <- function (x, family, lower = -Inf, upper = Inf, log = FALSE, ...){
     dens[support] <- g(x[support], log = TRUE, ...) - log(G(upper, ...) - G(lower, ...))
   }
   else {
-    dens[support] <- g(x[support], ...)/(G(upper, ...) - G(lower, ...))
+    dens[support] <- g(x[support], ...) / (G(upper, ...) - G(lower, ...))
   }
   dens
 }
 
-rtrunc <- function (n, family, lower = -Inf, upper = Inf, ...){
+rtrunc <- function(n, family, lower = -Inf, upper = Inf, ...) {
   stopifnot(lower < upper)
 
-  if (lower == -Inf && upper == Inf){
+  if (lower == -Inf && upper == Inf) {
     rng <- get(paste0("r", family), mode = "function")
     return(rng(n, ...))
   }
@@ -221,21 +242,24 @@ rtrunc <- function (n, family, lower = -Inf, upper = Inf, ...){
 
 
 #' @importFrom stats pgamma dgamma
-dinvgamma <- function(x, shape=1, scale=1, log=FALSE)
+dinvgamma <- function(x, shape = 1, scale = 1, log = FALSE) {
   ifelse(x == 0, 0, LaplacesDemon::dinvgamma(x, shape, scale, log))
+}
 
-pinvgamma <- function(q, shape = 1, scale = 1, lower.tail = TRUE, log.p = FALSE){
+pinvgamma <- function(q, shape = 1, scale = 1, lower.tail = TRUE, log.p = FALSE) {
   # p <- rep(0, length(q))
   # wikipedia:
   # pinvgamma = upper_inv_gamma(shape, scale/x) / gamma(shape)
   # and:
   # upper_inv_gamma(a, x) = pgamma(x, a, lower = FALSE) * gamma(a)
-  pgamma(scale/q, shape, lower.tail = !lower.tail, log.p = log.p)
+  pgamma(scale / q, shape, lower.tail = !lower.tail, log.p = log.p)
 }
 
-qinvgamma <- function(p, shape = 1, scale = 1, lower.tail = TRUE, log.p = FALSE){
-  1 / qgamma(p = p, shape = shape, scale = 1/scale,
-             lower.tail = !lower.tail, log.p = log.p)
+qinvgamma <- function(p, shape = 1, scale = 1, lower.tail = TRUE, log.p = FALSE) {
+  1 / qgamma(
+    p = p, shape = shape, scale = 1 / scale,
+    lower.tail = !lower.tail, log.p = log.p
+  )
 }
 # u <- runif(100)
 # u - pinvgamma(qinvgamma(u, shape = 3.5, scale = .34), shape = 3.5, scale = .34)

@@ -2,19 +2,20 @@ library(metaBMA)
 library(testthat)
 
 set.seed(123)
-params <- list("norm" = c(mean = 0, sd = .3),
-               "t" = c(location = 0, scale = .3, nu = 1),
-               "cauchy" = c(location = 0, scale = 0.707),
-               "invgamma" = c(shape = 1, scale = 1),
-               "beta" = c(1, 2))
+params <- list(
+  "norm" = c(mean = 0, sd = .3),
+  "t" = c(location = 0, scale = .3, nu = 1),
+  "cauchy" = c(location = 0, scale = 0.707),
+  "invgamma" = c(shape = 1, scale = 1),
+  "beta" = c(1, 2)
+)
 priors <- names(params)
 
-test_that('prior returns vectorized function', {
-
-  for(i in seq_along(priors)){
-    for (lower in c(-Inf, 0)){
-      for (upper in c(1, Inf)){
-        if (! (priors[i] == "beta" & (lower==-Inf || upper == Inf))){
+test_that("prior returns vectorized function", {
+  for (i in seq_along(priors)) {
+    for (lower in c(-Inf, 0)) {
+      for (upper in c(1, Inf)) {
+        if (!(priors[i] == "beta" & (lower == -Inf || upper == Inf))) {
           # suppress warning for inverse gamma: lower truncation must be 0 (automatically adjusted)
           suppressWarnings(pp <- prior(priors[i], params[[i]], lower = lower, upper = upper))
           plot(pp)
@@ -25,8 +26,10 @@ test_that('prior returns vectorized function', {
 
           expect_equal(pp(1:3, log = TRUE), log(pp(1:3)))
           aa <- attributes(pp)
-          expect_true(all(c("family", "param", "label",
-                            "lower", "upper") %in% names(aa)))
+          expect_true(all(c(
+            "family", "param", "label",
+            "lower", "upper"
+          ) %in% names(aa)))
           expect_is(aa$lower, "numeric")
           expect_is(aa$upper, "numeric")
           expect_lt(aa$lower, aa$upper)
@@ -38,11 +41,10 @@ test_that('prior returns vectorized function', {
       }
     }
   }
-
 })
 
 
-test_that('prior crashes for non-vectorized/negative functions', {
+test_that("prior crashes for non-vectorized/negative functions", {
 
   # wrong number of arguments
   expect_error(prior("norm", c(0), "xx"))
@@ -51,15 +53,14 @@ test_that('prior crashes for non-vectorized/negative functions', {
   expect_error(prior("custom", 1, "xx"))
   expect_error(prior("custom", function(x) x, "xx"))
   expect_error(prior("custom", function(x) -dunif(x), "xx"))
-
 })
 
 
-test_that('expected value in truncnorm_mean() is correct', {
-  x <- metaBMA:::rtrunc(5e5, "norm", 0, Inf, mean=.14, sd=.5)
+test_that("expected value in truncnorm_mean() is correct", {
+  x <- metaBMA:::rtrunc(5e5, "norm", 0, Inf, mean = .14, sd = .5)
   expect_silent(avg <- metaBMA:::truncnorm_mean(.14, .5, 0, Inf))
   expect_equal(mean(x), avg, tolerance = .001)
-  expect_length(metaBMA:::truncnorm_mean(0:1, c(.3,.4), 0, 4), 2)
+  expect_length(metaBMA:::truncnorm_mean(0:1, c(.3, .4), 0, 4), 2)
 })
 
 
