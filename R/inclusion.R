@@ -23,79 +23,90 @@
 #' # Model 2: x ~ Normal(.2, 1)
 #' logm2 <- sum(dnorm(x, mean = .2, log = TRUE))
 #' # Model 3: x ~ Student-t(df=2)
-#' logm3 <- sum(dt(x, df=2, log = TRUE))
+#' logm3 <- sum(dt(x, df = 2, log = TRUE))
 #'
 #' # BF: Correct (Model 1) vs. misspecified (2 & 3)
 #' inclusion(c(logm1, logm2, logm3), include = 1)
 #' @export
-inclusion <- function(logml, include = 1, prior = 1){
-
-  if (is.list(logml))
+inclusion <- function(logml, include = 1, prior = 1) {
+  if (is.list(logml)) {
     logml <- unlist(lapply(logml, "[[", "logml"))
+  }
 
-  if (missing(prior) || length(prior) == 1)
+  if (missing(prior) || length(prior) == 1) {
     prior <- rep(prior, length(logml))
-  if (!is.numeric(prior) || any(prior<0))
-    stop ("'prior' must contain nonnegative values!")
-  if (length(logml) != length(prior))
-    stop ("'logml' and 'prior' must be of identical length.")
+  }
+  if (!is.numeric(prior) || any(prior < 0)) {
+    stop("'prior' must contain nonnegative values!")
+  }
+  if (length(logml) != length(prior)) {
+    stop("'logml' and 'prior' must be of identical length.")
+  }
 
-  prior <- prior/sum(prior)
+  prior <- prior / sum(prior)
 
-  denom <- sum(exp(logml)*prior)
-  posterior <- exp(logml)*prior / denom
+  denom <- sum(exp(logml) * prior)
+  posterior <- exp(logml) * prior / denom
 
   # include models by model name (e.g., include = "H1")
-  if (is.character(include))
+  if (is.character(include)) {
     include <- grep(include, names(logml))
+  }
 
   post.incl <- sum(posterior[include])
   prior_incl <- sum(prior[include])
 
   # model-averaged Bayes factor in favor of effect
-  BF.incl <- post.incl/(1 - post.incl)/(prior_incl/(1 - prior_incl))
+  BF.incl <- post.incl / (1 - post.incl) / (prior_incl / (1 - prior_incl))
 
-  res <- list("prior" = prior,
-              "posterior" = posterior,
-              "incl.prior" = sum(prior[include]),
-              "incl.posterior" = post.incl,
-              "incl.BF" = BF.incl,
-              "include" = include)
+  res <- list(
+    "prior" = prior,
+    "posterior" = posterior,
+    "incl.prior" = sum(prior[include]),
+    "incl.posterior" = post.incl,
+    "incl.BF" = BF.incl,
+    "include" = include
+  )
 
   class(res) <- "inclusion"
-  return (res)
+  return(res)
 }
 
-make_BF <- function(logml){
+make_BF <- function(logml) {
   BF <- exp(outer(logml, logml, "-"))
   names(dimnames(BF)) <- c("(numerator)", "(denominator)")
   BF
 }
 
 #' @export
-print.inclusion <- function(x, digits = 3, ...){
-
+print.inclusion <- function(x, digits = 3, ...) {
   nn <- names(x$prior)
-  if(!is.null(attr(x$posterior, "names")))
+  if (!is.null(attr(x$posterior, "names"))) {
     nn <- attr(x$posterior, "names")
-  if (is.null(nn))
+  }
+  if (is.null(nn)) {
     nn <- paste("Model", seq_along(x$prior))
+  }
 
-  tab <- data.frame("Model" = nn,
-                    "Prior" = x$prior,
-                    "Posterior" = x$posterior,
-                    "included" = ifelse(seq_along(nn) %in% x$include, "x", ""))
+  tab <- data.frame(
+    "Model" = nn,
+    "Prior" = x$prior,
+    "Posterior" = x$posterior,
+    "included" = ifelse(seq_along(nn) %in% x$include, "x", "")
+  )
   rownames(tab) <- NULL
 
   cat("### Inclusion Bayes factor ###\n")
   print(tab, digits = digits)
 
-      # " ", paste(nn, collapse = ","), "\n",
-      # "  Prior probabilities:", x$prior, "\n",
-      # "  Posterior probabilities:", x$posterior, "\n\n",
-      # "  Set of included models:",
-      # paste(x$include,collapse = ","), "vs.",
-      # paste(setdiff(1:length(x$prior), x$include), collapse = ","), "\n",
-  cat("\n  Inclusion posterior probability:", round(x$incl.posterior, digits),
-      "\n  Inclusion Bayes factor:", round(x$incl.BF, digits))
+  # " ", paste(nn, collapse = ","), "\n",
+  # "  Prior probabilities:", x$prior, "\n",
+  # "  Posterior probabilities:", x$posterior, "\n\n",
+  # "  Set of included models:",
+  # paste(x$include,collapse = ","), "vs.",
+  # paste(setdiff(1:length(x$prior), x$include), collapse = ","), "\n",
+  cat(
+    "\n  Inclusion posterior probability:", round(x$incl.posterior, digits),
+    "\n  Inclusion Bayes factor:", round(x$incl.BF, digits)
+  )
 }

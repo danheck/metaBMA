@@ -64,5 +64,3 @@
 #' @template ref_gronau2020
 #' @template ref_heck2017
 "_PACKAGE"
-
-

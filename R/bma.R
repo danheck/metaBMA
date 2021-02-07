@@ -21,22 +21,27 @@
 #' averaged <- bma(list("fixed" = fixed, "random" = random))
 #' averaged
 #' plot_posterior(averaged)
-#' plot_forest(averaged, mar = c(4.5,20,4,.3))
+#' plot_forest(averaged, mar = c(4.5, 20, 4, .3))
 #' }
 #' @export
 bma <- function(meta, prior = 1, parameter = "d", summarize = "integrate", ci = .95,
-                rel.tol = .Machine$double.eps^0.5){
+                rel.tol = .Machine$double.eps^0.5) {
 
   # stopifnot(parameter %in% c("d", "tau"))
-  if (parameter == "tau")
+  if (parameter == "tau") {
     stop("Model averaging for heterogeneity 'tau' currently not supported.")
+  }
 
   classes <- sapply(meta, class) %in% c("meta_fixed", "meta_random")
-  if (!is.list(meta) || !all(classes))
-    stop ("'meta' must be a list of meta-analysis models \n",
-          "       (fitted with meta_fixed and meta_random).")
-  if (is.null(names(meta)))
+  if (!is.list(meta) || !all(classes)) {
+    stop(
+      "'meta' must be a list of meta-analysis models \n",
+      "       (fitted with meta_fixed and meta_random)."
+    )
+  }
+  if (is.null(names(meta))) {
     names(meta) <- paste0("meta", seq_along(meta))
+  }
   check_data_identical(meta)
 
   # select models that contain parameter of interest
@@ -46,22 +51,26 @@ bma <- function(meta, prior = 1, parameter = "d", summarize = "integrate", ci = 
   sel.prior <- paste0("prior_", parameter)
   sel.post <- paste0("posterior_", parameter)
   logml <- unlist(lapply(meta, "[[", "logml"))
-  names(logml) <- gsub("random.random", "random",
-                       gsub("fixed.fixed", "fixed", names(logml)))
+  names(logml) <- gsub(
+    "random.random", "random",
+    gsub("fixed.fixed", "fixed", names(logml))
+  )
 
   # get model prior/posterior probabilities (inclusion BF not used):
   incl <- inclusion(logml, prior = prior)
-  res_bma <- list("meta" = meta,
-                  "logml" = logml,
-                  "prior_models" = incl$prior,
-                  "posterior_models" = incl$posterior,
-                  "prior_d" = lapply(meta, function(x) x[[sel.prior]]),
-                  "posterior_d" = lapply(meta, function(x) x[[sel.post]]),
-                  "estimates" = NULL)
+  res_bma <- list(
+    "meta" = meta,
+    "logml" = logml,
+    "prior_models" = incl$prior,
+    "posterior_models" = incl$posterior,
+    "prior_d" = lapply(meta, function(x) x[[sel.prior]]),
+    "posterior_d" = lapply(meta, function(x) x[[sel.post]]),
+    "estimates" = NULL
+  )
   class(res_bma) <- "meta_bma"
 
   # BMA: weighted posterior of effects
-  summ_list <- lapply(meta[select_models], function(x) x$estimates[parameter,])
+  summ_list <- lapply(meta[select_models], function(x) x$estimates[parameter, ])
   ests <- do.call("rbind", summ_list)
 
   # meaningful names for models in posterior summary table: (issue: may break compatibility with JASP)
@@ -72,7 +81,8 @@ bma <- function(meta, prior = 1, parameter = "d", summarize = "integrate", ci = 
   res_bma[[paste0("posterior_", parameter)]] <-
     posterior(meta = res_bma, parameter = parameter, summarize = summarize, rel.tol = rel.tol)
   ests_avg <- summary_integrate(res_bma[[paste0("posterior_", parameter)]],
-                                ci = ci, rel.tol = rel.tol)
+    ci = ci, rel.tol = rel.tol
+  )
 
   ################ NOT WORKING WELL: SAMPLING-BASED MODEL AVERAGING
   ################ ----> averaged posterior may not be a convex combination of fixed-/random effects
