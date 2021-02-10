@@ -90,7 +90,7 @@ make the sampling in Stan more robust, for instance:
 }
 \description{
 Computes the Bayes factor for the hypothesis that the true study effects in a
-random-effects meta-anaysis are all positive or negative.
+random-effects meta-analysis are all positive or negative.
 }
 \details{
 Usually, in random-effects meta-analysis,the study-specific random-effects

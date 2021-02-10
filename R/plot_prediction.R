@@ -1,6 +1,6 @@
 #' Plot Predicted Bayes Factors
 #'
-#' @param x an objct of the class \code{"prediction"} which contains observed
+#' @param x an object of the class \code{"prediction"} which contains observed
 #'     and predicted Bayes factors
 #' @param which a character value defining which Bayes factor to plot
 #'     (one of "d_10_fixed", "d_10_random", "d_10_averaged",

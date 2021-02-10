@@ -7,7 +7,7 @@
 \method{plot}{meta_pred}(x, which = "d_10_averaged", scale = "BF", ...)
 }
 \arguments{
-\item{x}{an objct of the class \code{"prediction"} which contains observed
+\item{x}{an object of the class \code{"prediction"} which contains observed
 and predicted Bayes factors}
 
 \item{which}{a character value defining which Bayes factor to plot
