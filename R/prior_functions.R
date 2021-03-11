@@ -11,8 +11,9 @@ describe_prior <- function(prior, digits = 3) {
   labels <- switch(family,
     "norm" = paste0("mean=", param[1], ", sd=", param[2]),
     "t" = paste0("location=", param[1], ", scale=", param[2], ", nu=", param[3]),
-    "invgamma" =  paste0("shape=", param[1], ", scale=", param[2]),
     "beta" =  paste0("shape1=", param[1], ", shape2=", param[2]),
+    "invgamma" =  paste0("shape=", param[1], ", scale=", param[2]),
+    "gamma" =  paste0("shape=", param[1], ", rate=", param[2]),
     "0" = paste0("H0: ", attr(prior, "label"), " = 0) "),
     "custom" = paste0("user-specified function"),
     stop("Distribution not supported.")
@@ -59,30 +60,38 @@ rprior <- function(n, prior) {
   truncated <- lower != default_lower(attr(prior, "family")) ||
     upper != default_upper(attr(prior, "family"))
 
+  # random number generation with truncation:
   if (truncated) {
-    x <- switch(attr(prior, "family"),
-      "norm" = LaplacesDemon::rtrunc(n,
-        spec = "norm", lower, upper,
-        mean = param[1], sd = param[2]
-      ),
-      "t" = LaplacesDemon::rtrunc(n, "st", lower, upper,
-        mu = param[1], sigma = param[2], nu = param[3]
-      ),
-      # custom function for inverse gamma:
+    x <- switch(
+      EXPR = attr(prior, "family"),
+      "norm" = LaplacesDemon::rtrunc(n, spec = "norm", lower, upper,
+                                     mean = param[1], sd = param[2]),
+      "t" = LaplacesDemon::rtrunc(n, spec = "st", lower, upper,
+                                  mu = param[1], sigma = param[2], nu = param[3]),
+      "gamma" = LaplacesDemon::rtrunc(n, spec = "gamma", lower, upper,
+                                      shape = param[1], rate = param[2]),
+
+      # custom function "rtrunc" for inverse gamma (not LaplacesDemon!)
       "invgamma" = rtrunc(n, "invgamma", lower, upper,
-        shape = param[1], scale = param[2]
+                          shape = param[1], scale = param[2]
       ),
+
+      # scaled beta:
       "beta" = lower + (upper - lower) * rbeta(n, param[1], param[2]),
       "0" = rep(0, n),
       "custom" = stop("Custom prior not supported."),
       stop("Distribution not supported.")
     )
+
+    # random number generation without truncation:
   } else {
-    x <- switch(attr(prior, "family"),
+    x <- switch(
+      EXPR = attr(prior, "family"),
       "norm" = rnorm(n, mean = param[1], sd = param[2]),
       "t" = rst(n, mu = param[1], sigma = param[2], nu = param[3]),
-      "invgamma" = LaplacesDemon::rinvgamma(n, shape = param[1], scale = param[2]),
       "beta" = rbeta(n, param[1], param[2]),
+      "invgamma" = LaplacesDemon::rinvgamma(n, shape = param[1], scale = param[2]),
+      "gamma" = rgamma(n, shape = param[1], rate = param[2]),
       "0" = rep(0, n),
       "custom" = stop("Custom prior not supported."),
       stop("Distribution not supported.")

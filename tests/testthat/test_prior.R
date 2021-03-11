@@ -5,9 +5,10 @@ set.seed(123)
 params <- list(
   "norm" = c(mean = 0, sd = .3),
   "t" = c(location = 0, scale = .3, nu = 1),
-  "cauchy" = c(location = 0, scale = 0.707),
+  "beta" = c(1, 2),
   "invgamma" = c(shape = 1, scale = 1),
-  "beta" = c(1, 2)
+  "gamma" = c(shape = 1, rate = 1),
+  "cauchy" = c(location = 0, scale = 0.707)
 )
 priors <- names(params)
 

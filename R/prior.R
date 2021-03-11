@@ -22,6 +22,8 @@
 #'     where \code{nu} are the degrees of freedom (see \code{\link[LaplacesDemon]{dist.Student.t}}).
 #' \item \code{"cauchy"}: Cauchy distribution with \code{param = c(location, scale)}.
 #'     The Cauchy distribution is a special case of the t-distribution with degrees of freedom \code{nu=1}.
+#' \item \code{"gamma"}: Gamma distribution with \code{param = c(shape, rate)}
+#'     with rate parameter equal to the inverse scale (see \code{\link[stats]{GammaDist}}).
 #' \item \code{"invgamma"}: Inverse gamma distribution with \code{param = c(shape, scale)}
 #'     (see \code{\link[LaplacesDemon]{dist.Inverse.Gamma}}).
 #' \item \code{"beta"}: (Scaled) beta distribution with \code{param = c(shape1, shape2)}
@@ -50,7 +52,7 @@
 #' p3 <- prior("custom", function(x) x^2, 0, 1)
 #' plot(p3, -.1, 1.2)
 #' @importFrom LaplacesDemon rinvgamma dst pst rst
-#' @importFrom stats dbeta pbeta rbeta
+#' @importFrom stats dbeta pbeta rbeta dgamma pgamma rgamma
 #' @export
 prior <- function(family, param, lower, upper, label = "d",
                   rel.tol = .Machine$double.eps^.5) {
@@ -64,7 +66,7 @@ prior <- function(family, param, lower, upper, label = "d",
   }
 
   family <- match.arg(family, c(
-    "norm", "t", "beta", "invgamma", "0", "custom",
+    "norm", "t", "beta", "invgamma", "gamma", "0", "custom",
     "scaledt", "cauchy", "halfcauchy", "halfnorm"
   ))
 
@@ -95,10 +97,11 @@ prior <- function(family, param, lower, upper, label = "d",
       length(param) == 3, param[2] > 0, param[3] > 0,
       param[3] == round(param[3])
     )
-  } else if (family == "invgamma") {
+  } else if (family == "invgamma" || family == "gamma") {
     stopifnot(length(param) == 2, all(param > 0))
     if (!missing(lower) && lower < 0) {
-      warning('Lower truncation boundary for prior("invgamma", ...) is set to lower=0')
+      warning('Lower truncation boundary for prior("',
+              family, '", ...) is set to lower=0')
       lower <- 0
     }
   } else if (family == "beta") {
@@ -143,11 +146,14 @@ prior <- function(family, param, lower, upper, label = "d",
         "t" = function(x, log = FALSE) {
           dst(x, mu = param[1], sigma = param[2], nu = param[3], log = log)
         },
+        "beta" = function(x, log = FALSE) {
+          dbeta(x, shape1 = param[1], shape2 = param[2], log = log)
+        },
         "invgamma" = function(x, log = FALSE) {
           dinvgamma(x, shape = param[1], scale = param[2], log = log)
         },
-        "beta" = function(x, log = FALSE) {
-          dbeta(x, shape1 = param[1], shape2 = param[2], log = log)
+        "gamma" = function(x, log = FALSE) {
+          dgamma(x, shape = param[1], rate = param[2], log = log)
         },
         "0" = function(x) {
           dx <- ifelse(x == 0, 1, 0)
@@ -158,29 +164,28 @@ prior <- function(family, param, lower, upper, label = "d",
     } else {
       if (missing(lower)) lower <- default_lower(family)
       if (missing(upper)) upper <- default_upper(family)
-      dprior <- switch(family,
+      dprior <- switch(
+        EXPR = family,
         "norm" = function(x, log = FALSE) {
-          dtrunc(x, "norm", lower, upper,
-            log = log,
-            mean = param[1], sd = param[2]
-          )
+          dtrunc(x, "norm", lower, upper, log = log,
+                 mean = param[1], sd = param[2])
         },
         "t" = function(x, log = FALSE) {
-          dtrunc(x, "st", lower, upper,
-            log = log,
-            mu = param[1], sigma = param[2], nu = param[3]
-          )
-        },
-        "invgamma" = function(x, log = FALSE) {
-          dtrunc(x, "invgamma", lower, upper,
-            log = log,
-            shape = param[1], scale = param[2]
-          )
+          dtrunc(x, "st", lower, upper, log = log,
+                 mu = param[1], sigma = param[2], nu = param[3])
         },
         "beta" = function(x, log = FALSE) {
           diff <- upper - lower
           dx <- dbeta((x - lower) / diff, param[1], param[2], log = log)
           ifelse(rep(log, length(x)), dx - log(diff), dx / diff)
+        },
+        "invgamma" = function(x, log = FALSE) {
+          dtrunc(x, "invgamma", lower, upper, log = log,
+                 shape = param[1], scale = param[2])
+        },
+        "gamma" = function(x, log = FALSE) {
+          dtrunc(x, "gamma", lower, upper, log = log,
+                 shape = param[1], rate = param[2])
         },
         "0" = function(x, log = FALSE) {
           dx <- ifelse(x == 0, 1, 0)
@@ -202,12 +207,12 @@ prior <- function(family, param, lower, upper, label = "d",
 
 # list of available priors:
 priors <- function() {
-  c("norm", "t", "beta", "invgamma", "0", "custom")
+  c("norm", "t", "beta", "invgamma", "gamma", "0", "custom")
 }
 
 # list of priors implemented in stan:
 priors_stan <- function() {
-  c("norm", "t", "beta", "invgamma", "0")
+  c("norm", "t", "beta", "invgamma", "gamma", "0")
 } # for "0" => extra model file d=0
 
 dtrunc <- function(x, family, lower = -Inf, upper = Inf, log = FALSE, ...) {
@@ -243,7 +248,9 @@ rtrunc <- function(n, family, lower = -Inf, upper = Inf, ...) {
 
 #' @importFrom stats pgamma dgamma
 dinvgamma <- function(x, shape = 1, scale = 1, log = FALSE) {
-  ifelse(x == 0, 0, LaplacesDemon::dinvgamma(x, shape, scale, log))
+  ifelse(x == 0,
+         0,
+         LaplacesDemon::dinvgamma(x, shape = shape, scale = scale, log = log))
 }
 
 pinvgamma <- function(q, shape = 1, scale = 1, lower.tail = TRUE, log.p = FALSE) {
