@@ -96,7 +96,7 @@ make the sampling in Stan more robust, for instance:
 \code{control=list(adapt_delta=.97)}.}
 }
 \description{
-Fits random- and fixed-effects meta-anayses and performs Bayesian model
+Fits random- and fixed-effects meta-analyses and performs Bayesian model
 averaging for H1 (d != 0) vs. H0 (d = 0).
 }
 \details{
