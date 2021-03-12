@@ -1,6 +1,6 @@
 Package: metaBMA
 Type: Package
-Date: 2021-02-07
+Date: 2021-03-12
 Title: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis
 Version: 0.6.7
 Authors@R: c(person(given = "Daniel W.",  

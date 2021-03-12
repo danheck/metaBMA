@@ -33,7 +33,7 @@ logm1 <- sum(dnorm(x, log = TRUE))
 # Model 2: x ~ Normal(.2, 1)
 logm2 <- sum(dnorm(x, mean = .2, log = TRUE))
 # Model 3: x ~ Student-t(df=2)
-logm3 <- sum(dt(x, df=2, log = TRUE))
+logm3 <- sum(dt(x, df = 2, log = TRUE))
 
 # BF: Correct (Model 1) vs. misspecified (2 & 3)
 inclusion(c(logm1, logm2, logm3), include = 1)

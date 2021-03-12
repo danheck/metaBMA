@@ -47,6 +47,6 @@ random <- meta_random(logOR, SE, study, towels)
 averaged <- bma(list("fixed" = fixed, "random" = random))
 averaged
 plot_posterior(averaged)
-plot_forest(averaged, mar = c(4.5,20,4,.3))
+plot_forest(averaged, mar = c(4.5, 20, 4, .3))
 }
 }

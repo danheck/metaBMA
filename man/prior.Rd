@@ -46,6 +46,8 @@ The following prior distributions are currently implemented:
     where \code{nu} are the degrees of freedom (see \code{\link[LaplacesDemon]{dist.Student.t}}).
 \item \code{"cauchy"}: Cauchy distribution with \code{param = c(location, scale)}.
     The Cauchy distribution is a special case of the t-distribution with degrees of freedom \code{nu=1}.
+\item \code{"gamma"}: Gamma distribution with \code{param = c(shape, rate)}
+    with rate parameter equal to the inverse scale (see \code{\link[stats]{GammaDist}}).
 \item \code{"invgamma"}: Inverse gamma distribution with \code{param = c(shape, scale)}
     (see \code{\link[LaplacesDemon]{dist.Inverse.Gamma}}).
 \item \code{"beta"}: (Scaled) beta distribution with \code{param = c(shape1, shape2)}
@@ -58,9 +60,9 @@ The following prior distributions are currently implemented:
 }
 \examples{
 ### Half-Normal Distribution
-p1 <- prior("norm", c(mean=0, sd=.3), lower = 0)
+p1 <- prior("norm", c(mean = 0, sd = .3), lower = 0)
 p1
-p1(c(-1,1,3))
+p1(c(-1, 1, 3))
 plot(p1, -.1, 1)
 
 ### Half-Cauchy Distribution
@@ -70,5 +72,4 @@ plot(p2, -.5, 3)
 ### Custom Prior Distribution
 p3 <- prior("custom", function(x) x^2, 0, 1)
 plot(p3, -.1, 1.2)
-
 }

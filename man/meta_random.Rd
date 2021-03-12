@@ -98,9 +98,11 @@ studies with standard deviation \eqn{\tau} (i.e., a random-effects model).
 ### Bayesian Random-Effects Meta-Analysis (H1: d>0)
 data(towels)
 set.seed(123)
-mr <- meta_random(logOR, SE, study, data = towels,
-                  d = prior("norm", c(mean=0, sd=.3), lower = 0),
-                  tau = prior("invgamma", c(shape = 1, scale = 0.15)))
+mr <- meta_random(logOR, SE, study,
+  data = towels,
+  d = prior("norm", c(mean = 0, sd = .3), lower = 0),
+  tau = prior("invgamma", c(shape = 1, scale = 0.15))
+)
 mr
 plot_posterior(mr)
 }

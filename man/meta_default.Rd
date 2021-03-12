@@ -69,7 +69,8 @@ Default prior distributions can be plotted using \code{\link{plot_default}}.
 data(towels)
 set.seed(123)
 md <- meta_default(logOR, SE, study, towels,
-                   field = "psychology", effect = "logOR")
+  field = "psychology", effect = "logOR"
+)
 md
 plot_forest(md)
 }
