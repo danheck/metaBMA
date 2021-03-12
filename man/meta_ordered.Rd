@@ -121,7 +121,8 @@ approach, the default number of MCMC iterations for \code{meta_ordered} is
 data(towels)
 set.seed(123)
 mo <- meta_ordered(logOR, SE, study, towels,
-                   d = prior("norm", c(mean=0, sd=.3), lower=0))
+  d = prior("norm", c(mean = 0, sd = .3), lower = 0)
+)
 mo
 plot_posterior(mo)
 }

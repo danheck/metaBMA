@@ -81,8 +81,10 @@ study is identical (i.e., a fixed-effects analysis).
 \examples{
 ### Bayesian Fixed-Effects Meta-Analysis (H1: d>0)
 data(towels)
-mf <- meta_fixed(logOR, SE, study, data = towels,
-                 d = prior("norm", c(mean=0, sd=.3), lower=0))
+mf <- meta_fixed(logOR, SE, study,
+  data = towels,
+  d = prior("norm", c(mean = 0, sd = .3), lower = 0)
+)
 mf
 plot_posterior(mf)
 plot_forest(mf)

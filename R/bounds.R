@@ -2,8 +2,9 @@ default_lower <- function(family) {
   switch(family,
     "norm" = -Inf,
     "t" = -Inf,
-    "invgamma" = 0,
     "beta" = 0,
+    "invgamma" = 0,
+    "gamma" = 0,
     "0" = 0,
     "custom" = stop("'lower' needs to be defined for 'custom' priors."),
     NA
@@ -13,8 +14,9 @@ default_upper <- function(family) {
   switch(family,
     "norm" = Inf,
     "t" = Inf,
-    "invgamma" = Inf,
     "beta" = 1,
+    "invgamma" = Inf,
+    "gamma" = Inf,
     "0" = 0,
     "custom" = stop("'upper' needs to be defined for 'custom' priors."),
     NA

@@ -7,4 +7,7 @@ if (tau_family == 1){
   target += beta_lpdf((tau - tau_bnd[1]) / (tau_bnd[2] - tau_bnd[1]) | tau_param[1], tau_param[2]);
 } else if (tau_family == 4) {
   target += inv_gamma_lpdf(tau  | tau_param[1], tau_param[2]);
+} else if (tau_family == 5) {
+  target += gamma_lpdf(tau  | tau_param[1], tau_param[2]);
 }
+

@@ -2,8 +2,9 @@ prior_pars <- function(prior) {
   par_labels <- switch(attr(prior, "family"),
     "norm" = c("mean", "sd"),
     "t" = c("location", "scale", "nu"),
-    "invgamma" = c("shape", "scale"),
     "beta" = c("shape1", "shape2"),
+    "invgamma" = c("shape", "scale"),
+    "gamma" = c("shape", "rate"),
     "0" = vector("numeric", 0),
     "custom" = names(attr(prior, "param"))
   )
@@ -34,7 +35,7 @@ check_prior <- function(prior, lower = -Inf, upper = Inf) {
     if (attr(prior, "family") != "0") {
       stopifnot(attr(prior, "param")[2] >= 0)
     }
-    if (attr(prior, "family") %in% c("ingamma", "beta")) {
+    if (attr(prior, "family") %in% c("beta", "invgamma", "gamma")) {
       stopifnot(attr(prior, "param")[1] >= 0)
     }
     if (attr(prior, "family") == "t") {
