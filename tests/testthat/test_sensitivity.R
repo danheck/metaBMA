@@ -6,7 +6,7 @@ set.seed(123)
 test_that("meta_sensitivity() expected results", {
 
   expect_silent(sens <- meta_sensitivity(
-    logOR, SE, towels, study,
+    logOR, SE, study, towels,
     d_list = list(prior("cauchy", c(0, .707)),
                   prior("norm", c(.5, .3))),
     tau_list = list(prior("invgamma", c(1, 0.15), label = "tau"),
@@ -21,7 +21,7 @@ test_that("meta_sensitivity() expected results", {
 
   skip_on_cran()
   sens <- meta_sensitivity(
-    logOR, SE, towels, study,
+    logOR, SE, study, towels,
     d_list = list(prior("cauchy", c(0, .707)),
                   prior("norm", c(.5, .3))),
     tau_list = list(prior("invgamma", c(1, 0.15), label = "tau"),
@@ -34,7 +34,7 @@ test_that("meta_sensitivity() expected results", {
 
   skip_on_cran()
   sens <- meta_sensitivity(
-    logOR, SE, towels, study,
+    logOR, SE, study, towels,
     d_list = list(prior("cauchy", c(0, .707)),
                   prior("norm", c(.5, .3))),
     tau_list = list(prior("invgamma", c(1, 0.15), label = "tau"),

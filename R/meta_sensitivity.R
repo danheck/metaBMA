@@ -27,8 +27,9 @@
 #'
 #' @examples
 #' \donttest{
+#' data(towels)
 #' sensitivity <- meta_sensitivity(
-#'   logOR, SE, towels, study,
+#'   y = logOR, SE = SE, labels = study, data = towels,
 #'   d_list = list(prior("cauchy", c(0, .707)),
 #'                 prior("norm", c(0, .5)),
 #'                 prior("norm", c(.5, .3))),
@@ -49,7 +50,7 @@
 #'
 #' @seealso [plot.meta_sensitivity()]
 #' @export
-meta_sensitivity <- function(y, SE, data, labels,
+meta_sensitivity <- function(y, SE, labels, data,
                              d_list,
                              tau_list,
                              analysis = "bma",
@@ -92,20 +93,24 @@ meta_sensitivity <- function(y, SE, data, labels,
     }
   }
 
+  # lazy evaluation
+  dl <- data_list(model = "random", y = y, SE = SE, labels = labels, data = data,
+                  args = as.list(match.call())[-1])[-1]
+
   # fit meta-analysis with different priors:
   fits <- list()
   for (i in seq_along(d_list2)){
     if (analysis == "fixed"){
-      fits[[i]] <- meta_fixed(y = logOR, SE = SE, labels = labels, data = data,
+      fits[[i]] <- meta_fixed(y = y, SE = SE, labels = labels, data = dl,
                               d = d_list2[[i]], ...)
 
     } else if (analysis == "random"){
-      fits[[i]] <- meta_random(y = y, SE = SE, labels = labels, data = data,
+      fits[[i]] <- meta_random(y = y, SE = SE, labels = labels, data = dl,
                                d = d_list2[[i]],
                                tau = tau_list2[[i]], ...)
 
     } else if (analysis == "bma"){
-      fits[[i]] <- meta_bma(y = y, SE = SE, labels = labels, data = data,
+      fits[[i]] <- meta_bma(y = y, SE = SE, labels = labels, data = dl,
                             d = d_list2[[i]],
                             tau = tau_list2[[i]], ...)
     }
