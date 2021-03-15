@@ -1,9 +1,11 @@
 metaBMA 0.6.7
 ===========
 
-* transformation of effect sizes: transform_es()
+* Transformation of effect sizes via transform_es()
+* Sensitivity analysis via meta_sensitivity()
 * New prior family: gamma distribution
-* Scale of the default prior for log odds ratio in meta_default() changed to the factor: pi/sqrt(3) = 1.81 instead of a factor of 2 (thanks to Frantisek Bartos)
+* Scale of default prior for log odds ratio in meta_default() changed using the
+  scaling factor pi/sqrt(3) = 1.81 instead of 2.00 (thanks to Frantisek Bartos)
 
 
 metaBMA 0.6.6
