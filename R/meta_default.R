@@ -16,8 +16,11 @@
 #' @details
 #' The prior distribution depends on the scale of the effect size that is used in
 #' the meta-analysis (Cohen's d, Fisher's z, or log odds ratio). To ensure that
-#' the results are comparable when transforming between different effect sizes,
-#' it is necessary to adjust the scale of the prior distributions.
+#' the results are comparable when transforming between different effect sizes
+#' (e.g., using the function \code{\link{transform_es}}), it is necessary to
+#' adjust the prior distributions. The present adjustments merely use a linear
+#' re-scaling of the priors to achieve approximately invariant results when
+#' using different types of effect sizes.
 #'
 #' \itemize{
 #' \item The distribution of Fisher's z is approximately half as wide as the
@@ -54,7 +57,8 @@
 #' md
 #' plot_forest(md)
 #' }
-#' @seealso \code{\link{meta_bma}}, \code{\link{plot_default}}
+#'
+#' @seealso \code{\link{meta_bma}}, \code{\link{plot_default}}, \code{\link{transform_es}}
 #' @template ref_gronau2017
 #' @export
 meta_default <- function(y, SE, labels, data,

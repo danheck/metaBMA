@@ -55,8 +55,8 @@ Gronau, Q. F., Erp, S. V., Heck, D. W., Cesario, J., Jonas, K. J., & Wagenmakers
 Gronau, Q. F., Heck, D. W., Berkhout, S. W., Haaf, J. M., & Wagenmakers, E.-J. (2020). A primer on Bayesian model-averaged meta-analysis. \doi{10.31234/osf.io/97qup}
 
 Heck, D. W., Gronau, Q. F., & Wagenmakers, E.-J. (2019).
-    metaBMA: Bayesian model averaging for random and fixed effects meta-analysis.
-    \url{https://CRAN.R-project.org/package=metaBMA}
+metaBMA: Bayesian model averaging for random and fixed effects meta-analysis.
+\url{https://CRAN.R-project.org/package=metaBMA}
 }
 \seealso{
 Useful links:

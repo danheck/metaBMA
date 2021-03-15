@@ -42,7 +42,11 @@ transform_es(y = 0.50, SE = 0.20, from = "d", to = "logOR")
 
 # towels data set:
 transform_es(y = towels$logOR, SE = towels$SE, from = "logOR", to = "d")
+
 }
 \references{
 Borenstein, M., Hedges, L. V., Higgins, J. P. T., & Rothstein, H. R. (2009). Converting among effect sizes. In Introduction to Meta-Analysis (pp. 45–49). John Wiley & Sons, Ltd. \doi{10.1002/9780470743386.ch7}
+}
+\seealso{
+\code{\link{meta_default}}
 }

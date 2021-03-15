@@ -7,9 +7,9 @@
 \format{
 A data frame with three variables:
 \describe{
-  \item{\code{study}}{Authors of original study (see Scheibehenne et. al, 2016)}
-  \item{\code{logOR}}{Measure of effect size: log-odds ratio of towel reuse (descriptive-social-norm vs. control)}
-  \item{\code{SE}}{Measure of precision: standard error of log-odds ratio per study}
+\item{\code{study}}{Authors of original study (see Scheibehenne et. al, 2016)}
+\item{\code{logOR}}{Measure of effect size: log-odds ratio of towel reuse (descriptive-social-norm vs. control)}
+\item{\code{SE}}{Measure of precision: standard error of log-odds ratio per study}
 }
 }
 \usage{

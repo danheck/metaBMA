@@ -33,6 +33,8 @@
 #'
 #' # towels data set:
 #' transform_es(y = towels$logOR, SE = towels$SE, from = "logOR", to = "d")
+#'
+#' @seealso \code{\link{meta_default}}
 #' @export
 transform_es <- function(y, SE, from, to){
 
