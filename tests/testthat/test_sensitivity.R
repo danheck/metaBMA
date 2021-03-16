@@ -24,9 +24,10 @@ test_that("meta_sensitivity() expected results", {
     logOR, SE, study, towels,
     d_list = list(prior("cauchy", c(0, .707)),
                   prior("norm", c(.5, .3))),
-    tau_list = list(prior("invgamma", c(1, 0.15), label = "tau"),
+    tau_list = list(prior("cauchy", c(0,.5), lower = 0, label = "tau"),
                     prior("gamma", c(1.5, 3), label = "tau")),
-    analysis = "random", combine_priors = "matched")
+    analysis = "random", combine_priors = "matched",
+    control = list(adapt_delta = .99))
   expect_length(sens, 2)
   expect_type(sens, "list")
   expect_output(print(sens))
@@ -37,13 +38,17 @@ test_that("meta_sensitivity() expected results", {
     logOR, SE, study, towels,
     d_list = list(prior("cauchy", c(0, .707)),
                   prior("norm", c(.5, .3))),
-    tau_list = list(prior("invgamma", c(1, 0.15), label = "tau"),
-                    prior("gamma", c(1.5, 3), label = "tau")),
-    analysis = "bma", combine_priors = "crossed")
+    tau_list = list(prior("cauchy", c(0,.5), lower = 0, label = "tau"),
+                    prior("gamma", c(1.1, 3), label = "tau")),
+    analysis = "bma", combine_priors = "crossed",
+    control = list(adapt_delta = .98))
   expect_length(sens, 2*2)
   expect_type(sens, "list")
   expect_output(print(sens))
-  expect_silent(plot(sens, parameter = "tau"))
+  expect_output(plot(sens, parameter = "d"))
+  expect_output(plot(sens, distr = "prior", parameter = "d"))
+  expect_warning(plot(sens, parameter = "tau"))
+  expect_warning(plot(sens, distr = "prior", parameter = "tau"))
 
 
 })

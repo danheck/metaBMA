@@ -7,8 +7,8 @@
 meta_sensitivity(
   y,
   SE,
-  data,
   labels,
+  data,
   d_list,
   tau_list,
   analysis = "bma",
@@ -25,12 +25,12 @@ variables.}
 \item{SE}{standard error of effect size for each study. Can be a numeric
 vector or the quoted or unquoted name of the variable in \code{data}}
 
-\item{data}{data frame containing the variables for effect size \code{y},
-standard error \code{SE}, \code{labels}, and moderators per study.}
-
 \item{labels}{optional: character values with study labels. Can be a
 character vector or the quoted or unquoted name of the variable in
 \code{data}}
+
+\item{data}{data frame containing the variables for effect size \code{y},
+standard error \code{SE}, \code{labels}, and moderators per study.}
 
 \item{d_list}{a \code{list} of prior distributions specified via \code{\link[=prior]{prior()}}
 for the overall effect size (mean) across studies}
@@ -65,8 +65,9 @@ heterogeneity of effect sizes across studies).
 }
 \examples{
 \donttest{
+data(towels)
 sensitivity <- meta_sensitivity(
-  logOR, SE, towels, study,
+  y = logOR, SE = SE, labels = study, data = towels,
   d_list = list(prior("cauchy", c(0, .707)),
                 prior("norm", c(0, .5)),
                 prior("norm", c(.5, .3))),
