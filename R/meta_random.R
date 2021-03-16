@@ -26,6 +26,7 @@ meta_random <- function(y, SE, labels, data,
                         logml = "integrate", summarize = "stan", ci = .95,
                         rel.tol = .Machine$double.eps^.3,
                         logml_iter = 5000, silent_stan = TRUE, ...) {
+
   check_deprecated(list(...)) # error: backwards compatibility
   logml <- match.arg(logml, c("integrate", "stan"))
   summarize <- match.arg(summarize, c("integrate", "stan"))

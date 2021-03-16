@@ -42,8 +42,9 @@ describe_prior <- function(prior, digits = 3) {
 
 
 #' @export
-print.prior <- function(x, ...) {
-  cat("Prior density function (class='prior'):", describe_prior(x), "\n")
+print.prior <- function(x, digits = 3, ...) {
+  cat("Prior density function (class='prior'):",
+      describe_prior(x, digits = digits), "\n")
 }
 
 

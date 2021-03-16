@@ -7,9 +7,9 @@
 \format{
 A data frame with three variables:
 \describe{
-  \item{\code{study}}{Authors of original study (see Wagenmakers et. al, 2016)}
-  \item{\code{d}}{Measure of effect size: Cohen's d (difference between smile vs. pout condition)}
-  \item{\code{SE}}{Measure of precision: standard error of Cohen's d}
+\item{\code{study}}{Authors of original study (see Wagenmakers et. al, 2016)}
+\item{\code{d}}{Measure of effect size: Cohen's d (difference between smile vs. pout condition)}
+\item{\code{SE}}{Measure of precision: standard error of Cohen's d}
 }
 }
 \usage{

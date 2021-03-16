@@ -27,7 +27,7 @@ standard error \code{SE}, \code{labels}, and moderators per study.}
 \item{effect}{the type of effect size used in the meta-analysis: either
 Cohen's d (\code{"d"}),
 Fisher's z-transformed correlation (\code{"z"}),
-or log-odds ratios (\code{"logOR"}).}
+or log odds ratios (\code{"logOR"}).}
 
 \item{...}{further arguments passed to \code{\link{meta_bma}}}
 }
@@ -40,24 +40,29 @@ Moreover, scale adjustments were implemented when using Fisher's z or log odds-r
 \details{
 The prior distribution depends on the scale of the effect size that is used in
 the meta-analysis (Cohen's d, Fisher's z, or log odds ratio). To ensure that
-the results are comparable when transforming between different effect sizes,
-it is necessary to adjust the scale of the prior distributions.
+the results are comparable when transforming between different effect sizes
+(e.g., using the function \code{\link{transform_es}}), it is necessary to
+adjust the prior distributions. The present adjustments merely use a linear
+re-scaling of the priors to achieve approximately invariant results when
+using different types of effect sizes.
+
 \itemize{
 \item The distribution of Fisher's z is approximately half as wide as the
 distribution of Cohen's d and hence the prior scale parameter is divided by two.
-\item The distribution of the log odds ratio is approximately twice as wide as the
-distribution of Cohen's d and hence the prior scale parameter is doubled.
+\item The distribution of the log odds ratio is approximately
+\code{pi / sqrt(3) = 1.81} times as wide as the distribution of Cohen's d.
+Hence, the prior scale parameter is doubled by this factor.
 }
 
-For \code{field = "psychology"}, the following defaults are used:
+For \code{field = "psychology"}, this results in the following defaults:
 \itemize{
-\item \code{effect = "d"}: Cauchy distribution with scale=0.707 on the overall
-    effect size (parameter d) and inverse gamma distribution with shape=1 and
-    scale=.15 on the standard deviation of effect sizes across studies (parameter tau).
-\item \code{effect = "z"}: Cauchy distribution with scale=0.3535 on d and
-    inverse gamma with shape=1 and scale=.075 on tau.
-\item \code{effect = "logOR"}: Cauchy distribution with scale=1.414 on d and
-    inverse gamma with shape=1 and scale=0.3 on tau.
+\item \code{effect = "d"} (Cohen's d): Cauchy distribution with scale=0.707 on the overall
+effect size (parameter d) and inverse gamma distribution with shape=1 and
+scale=0.15 on the standard deviation of effect sizes across studies (parameter tau).
+\item \code{effect = "z"} (Fisher's z): Cauchy distribution with scale=0.354 on d and
+inverse gamma with shape=1 and scale=0.075 on tau.
+\item \code{effect = "logOR"} (log odds ratio): Cauchy distribution with scale=1.283 on d and
+inverse gamma with shape=1 and scale=0.272 on tau.
 }
 
 Currently, the same priors are used when specifying \code{field = "medicine"}.
@@ -74,10 +79,13 @@ md <- meta_default(logOR, SE, study, towels,
 md
 plot_forest(md)
 }
+
 }
 \references{
+Borenstein, M., Hedges, L. V., Higgins, J. P. T., & Rothstein, H. R. (2009). Converting among effect sizes. In Introduction to Meta-Analysis (pp. 45–49). John Wiley & Sons, Ltd. \doi{10.1002/9780470743386.ch7}
+
 Gronau, Q. F., Erp, S. V., Heck, D. W., Cesario, J., Jonas, K. J., & Wagenmakers, E.-J. (2017). A Bayesian model-averaged meta-analysis of the power pose effect with informed and default priors: the case of felt power. Comprehensive Results in Social Psychology, 2(1), 123-138. \doi{10.1080/23743603.2017.1326760}
 }
 \seealso{
-\code{\link{meta_bma}}, \code{\link{plot_default}}
+\code{\link{meta_bma}}, \code{\link{plot_default}}, \code{\link{transform_es}}
 }

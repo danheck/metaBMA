@@ -7,8 +7,8 @@
 #' @param param numeric parameters for the distribution. See details for the definition
 #'     of the parameters of each family.
 #' @param lower lower boundary for truncatation of prior density.
-#'     If  \code{family="beta"}, the interval [0,1] is rescaled to the interval [lower,upper].
-#'     Must be specified if \code{family = "custom"}.
+#'     If  `family="beta"`, the interval `[0,1]` is rescaled to the interval `[lower,upper]`.
+#'     Must be specified if `family = "custom"`.
 #' @param upper See \code{lower}.
 #' @param label optional: parameter label.
 #' @param rel.tol relative tolerance used for integrating the density of \code{family="custom"}.

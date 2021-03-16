@@ -12,7 +12,7 @@ plot_default(field = "psychology", effect = "d", ...)
 \item{effect}{the type of effect size used in the meta-analysis: either
 Cohen's d (\code{"d"}),
 Fisher's z-transformed correlation (\code{"z"}),
-or log-odds ratios (\code{"logOR"}).}
+or log odds ratios (\code{"logOR"}).}
 
 \item{...}{further arguments passed to \code{\link[graphics]{plot}} (e.g., \code{from}, \code{to})}
 }

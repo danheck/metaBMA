@@ -20,7 +20,7 @@ prior(
 of the parameters of each family.}
 
 \item{lower}{lower boundary for truncatation of prior density.
-If  \code{family="beta"}, the interval [0,1] is rescaled to the interval [lower,upper].
+If  \code{family="beta"}, the interval \verb{[0,1]} is rescaled to the interval \verb{[lower,upper]}.
 Must be specified if \code{family = "custom"}.}
 
 \item{upper}{See \code{lower}.}
@@ -31,7 +31,7 @@ Must be specified if \code{family = "custom"}.}
 }
 \value{
 an object of the class \code{prior}: a density function with the arguments
-    \code{x} (parameter values) and \code{log} (whether to return density or log-density).
+\code{x} (parameter values) and \code{log} (whether to return density or log-density).
 }
 \description{
 Defines a prior distribution/probability density function for the
@@ -41,21 +41,21 @@ average effect size \eqn{d} or for the heterogeneity of effect sizes \eqn{\tau}.
 The following prior distributions are currently implemented:
 \itemize{
 \item \code{"norm"}: Normal distribution with \code{param = c(mean, sd)}
-    (see \code{\link[stats]{Normal}}).
+(see \code{\link[stats]{Normal}}).
 \item \code{"t"}: Student's t-distribution with \code{param = c(location, scale, nu)}
-    where \code{nu} are the degrees of freedom (see \code{\link[LaplacesDemon]{dist.Student.t}}).
+where \code{nu} are the degrees of freedom (see \code{\link[LaplacesDemon]{dist.Student.t}}).
 \item \code{"cauchy"}: Cauchy distribution with \code{param = c(location, scale)}.
-    The Cauchy distribution is a special case of the t-distribution with degrees of freedom \code{nu=1}.
+The Cauchy distribution is a special case of the t-distribution with degrees of freedom \code{nu=1}.
 \item \code{"gamma"}: Gamma distribution with \code{param = c(shape, rate)}
-    with rate parameter equal to the inverse scale (see \code{\link[stats]{GammaDist}}).
+with rate parameter equal to the inverse scale (see \code{\link[stats]{GammaDist}}).
 \item \code{"invgamma"}: Inverse gamma distribution with \code{param = c(shape, scale)}
-    (see \code{\link[LaplacesDemon]{dist.Inverse.Gamma}}).
+(see \code{\link[LaplacesDemon]{dist.Inverse.Gamma}}).
 \item \code{"beta"}: (Scaled) beta distribution with \code{param = c(shape1, shape2)}
-    (see \code{\link[stats]{Beta}}).
+(see \code{\link[stats]{Beta}}).
 \item \code{"custom"}: User-specified prior density function defined by \code{param}
-    (see examples; the density must be nonnegative and vectorized, but is normalized
-    internally). Integration is performed from (-Inf, Inf), which requires that the
-    function returns zeros (and not NAs) for values not in the support of the distribution.
+(see examples; the density must be nonnegative and vectorized, but is normalized
+internally). Integration is performed from (-Inf, Inf), which requires that the
+function returns zeros (and not NAs) for values not in the support of the distribution.
 }
 }
 \examples{

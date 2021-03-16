@@ -105,7 +105,6 @@ random-effects and H0 (\eqn{d=0}) vs. H1 (e.g., \eqn{d>0}).
 For a primer on Bayesian model-averaged meta-analysis,
 see Gronau, Heck, Berkhout, Haaf, and Wagenmakers (2020).
 
-
 By default, the log-marginal likelihood is computed by numerical integration
 (\code{logml="integrate"}). This is relatively fast and gives precise,
 reproducible results. However, for extreme priors or data (e.g., very small

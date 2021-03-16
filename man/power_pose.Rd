@@ -8,19 +8,19 @@
 \format{
 A data frame with three variables:
 \describe{
-  \item{\code{study}}{Authors of original study}
-  \item{\code{n_high_power}}{number of participants in high-power condition}
-  \item{\code{n_low_power}}{number of participants in low-power condition}
-  \item{\code{mean_high_power}}{mean rating in high-power condition on a 5-point Likert scale}
-  \item{\code{mean_low_power}}{mean rating in low-power condition on a 5-point Likert scale}
-  \item{\code{sd_high_power}}{standard deviation of ratings in high-power condition}
-  \item{\code{sd_low_power}}{standard deviation of ratings in low-power condition}
-  \item{\code{t_value}}{t-value for two-sample t-test}
-  \item{\code{df}}{degrees of freedom for two-sample t-test}
-  \item{\code{two_sided_p_value}}{two-sided p-value of two-sample t-test}
-  \item{\code{one_sided_p_value}}{one-sided p-value of two-sample t-test}
-  \item{\code{effectSize}}{Cohen's d, the standardized effect size (high vs. low power)}
-  \item{\code{SE}}{Standard error of Cohen's d}
+\item{\code{study}}{Authors of original study}
+\item{\code{n_high_power}}{number of participants in high-power condition}
+\item{\code{n_low_power}}{number of participants in low-power condition}
+\item{\code{mean_high_power}}{mean rating in high-power condition on a 5-point Likert scale}
+\item{\code{mean_low_power}}{mean rating in low-power condition on a 5-point Likert scale}
+\item{\code{sd_high_power}}{standard deviation of ratings in high-power condition}
+\item{\code{sd_low_power}}{standard deviation of ratings in low-power condition}
+\item{\code{t_value}}{t-value for two-sample t-test}
+\item{\code{df}}{degrees of freedom for two-sample t-test}
+\item{\code{two_sided_p_value}}{two-sided p-value of two-sample t-test}
+\item{\code{one_sided_p_value}}{one-sided p-value of two-sample t-test}
+\item{\code{effectSize}}{Cohen's d, the standardized effect size (high vs. low power)}
+\item{\code{SE}}{Standard error of Cohen's d}
 }
 
 Data frame with 6 rows and 13 variables

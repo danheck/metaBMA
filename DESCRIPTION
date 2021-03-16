@@ -69,3 +69,4 @@ SystemRequirements: GNU make
 Biarch: true
 Language: en-US
 RoxygenNote: 7.1.1
+Roxygen: list(markdown = TRUE)
