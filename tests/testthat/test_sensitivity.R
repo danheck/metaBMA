@@ -20,35 +20,33 @@ test_that("meta_sensitivity() expected results", {
 
 
   skip_on_cran()
-  sens <- meta_sensitivity(
+  suppressWarnings(sens <- meta_sensitivity(
     logOR, SE, study, towels,
     d_list = list(prior("cauchy", c(0, .707)),
                   prior("norm", c(.5, .3))),
     tau_list = list(prior("cauchy", c(0,.5), lower = 0, label = "tau"),
                     prior("gamma", c(1.5, 3), label = "tau")),
-    analysis = "random", combine_priors = "matched",
-    control = list(adapt_delta = .99))
+    analysis = "random", combine_priors = "matched"))
   expect_length(sens, 2)
   expect_type(sens, "list")
   expect_output(print(sens))
 
 
   skip_on_cran()
-  sens <- meta_sensitivity(
+  suppressWarnings(sens <- meta_sensitivity(
     logOR, SE, study, towels,
     d_list = list(prior("cauchy", c(0, .707)),
                   prior("norm", c(.5, .3))),
     tau_list = list(prior("cauchy", c(0,.5), lower = 0, label = "tau"),
                     prior("gamma", c(1.1, 3), label = "tau")),
-    analysis = "bma", combine_priors = "crossed",
-    control = list(adapt_delta = .98))
+    analysis = "bma", combine_priors = "crossed"))
   expect_length(sens, 2*2)
   expect_type(sens, "list")
   expect_output(print(sens))
   expect_output(plot(sens, parameter = "d"))
   expect_output(plot(sens, distr = "prior", parameter = "d"))
-  expect_warning(plot(sens, parameter = "tau"))
-  expect_warning(plot(sens, distr = "prior", parameter = "tau"))
+  expect_warning(plot(sens, parameter = "tau", legend = FALSE))
+  expect_warning(plot(sens, distr = "prior", parameter = "tau", legend = FALSE))
 
 
 })
