@@ -42,6 +42,9 @@ test_that("Scheibehenne (2017): model averaging for towels dataset works correct
   expect_equal(m_testing$BF["fixed_H1", "fixed_H0"], BFplus0_fixed, tolerance = .01)
   expect_equal(m_testing$inclusion$incl.BF, BFincl, tolerance = .01)
 
+
+  skip_on_cran()
+
   ############ ESTIMATION
 
   m.fixed <- 0.2116763

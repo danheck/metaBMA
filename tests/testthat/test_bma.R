@@ -25,6 +25,7 @@ test_that("bma works for fitted meta_* objects", {
   expect_is(f1a$BF, "matrix")
   expect_is(f1a$estimates, "matrix")
 
+  skip_on_cran()
 
   suppressWarnings(r1b <- meta_random(yyy ~ 1, SE, study,
     data = dat,
@@ -45,7 +46,6 @@ test_that("bma works for fitted meta_* objects", {
   expect_is(bb$estimates, "matrix")
 
 
-  skip_on_cran()
   suppressWarnings(r1a <- meta_random(yyy, SE, study,
     data = dat,
     summarize = "int",
@@ -59,7 +59,9 @@ test_that("bma works for fitted meta_* objects", {
 
 
 test_that("meta_bma gives identical results for stan/integrate", {
+
   skip_on_cran()
+
   set.seed(12352)
   mf_stan <- meta_bma(yyy, SE, study, dat,
     summarize = "stan", logml = "stan",
@@ -84,6 +86,9 @@ test_that("meta_bma gives identical results for stan/integrate", {
 
 
 test_that("inclusion() works correctly", {
+
+  skip_on_cran()
+
   expect_silent(f1a <- meta_fixed(yyy, SE, study, data = dat, chains = 1, rel.tol = .01))
   expect_silent(f1b <- meta_fixed(yyy ~ 1, SE, study,
     data = dat, iter = 1750,
