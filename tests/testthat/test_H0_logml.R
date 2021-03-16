@@ -29,6 +29,8 @@ test_that("meta_fixed: logml for H0 is correct", {
     tolerance = .01
   )
 
+  skip_on_cran()
+
   # different loglik for JZS
   expect_warning(f3 <- meta_fixed(yyy ~ xx, SE, study,
     data = dat, # warning: JZS
@@ -37,7 +39,9 @@ test_that("meta_fixed: logml for H0 is correct", {
   expect_true(f1$logml["fixed_H1"] > f3$logml["fixed_H1"] + 1)
 })
 
+
 test_that("meta_random: logml & estimates correct", {
+
   skip_on_cran()
 
   suppressWarnings(
