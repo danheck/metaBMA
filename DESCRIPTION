@@ -60,7 +60,7 @@ LinkingTo:
     rstan (>= 2.18.1),
     StanHeaders (>= 2.18.0)
 VignetteBuilder: knitr
-URL: https://github.com/danheck/metaBMA
+URL: https://github.com/danheck/metaBMA, https://danheck.github.io/metaBMA/
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
