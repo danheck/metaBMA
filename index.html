@@ -87,15 +87,13 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#metabma" class="anchor"></a>metaBMA</h1></div>
 <p>Fixed-effects meta-analyses assume that the effect size d is identical in all studies. In contrast, random-effects meta-analyses assume that effects vary according to a normal distribution with mean d and standard deviation tau. Both models can be compared in a Bayesian framework by assuming specific prior distribution for d and tau. Given the posterior model probabilities, the evidence for or against an effect (i.e., whether d = 0) and the evidence for or against random effects can be evaluated (i.e., whether tau = 0). By using Bayesian model averaging (i.e., inclusion Bayes factors), both types of tests can be performed by marginalizing over the other question. Most importantly, this allows to test whether an effect exists while accoungting for uncertainty whether study heterogeneity exists or not.</p>
-<p>The most general functions in <code>metaBMA</code> are <code>meta_bma</code> and <code>meta_default</code>, which fit random- and fixed-effects models, compute the inclusion Bayes factor for the presence of an effect and the averaged posterior distribution of the mean effect d (which accounts for uncertainty regarding study heterogeneity).</p>
-<p>Moreover, <code>meta_fixed</code> and <code>meta_random</code> fit a single meta-analysis models. The model-specific posteriors for d can be averaged by <code>bma</code> and inclusion Bayes factors be computed by <code>inclusion</code>. Finally, the function <code>prior</code> facilitates the construction and visual inspection of prior distributions.</p>
 <div id="installing-metabma" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installing-metabma" class="anchor"></a>Installing metaBMA</h2>
 <p>To install the latest stable release of <code>metaBMA</code> from CRAN, run:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"metaBMA"</span><span class="op">)</span></code></pre></div>
-<p>Alternatively, the latest developer version of <code>metaBMA</code> can be installed from GitHub via:</p>
+<p>The latest developer version of <code>metaBMA</code> can be installed from GitHub via:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">### install dependencies if necessary:</span>
 <span class="co"># install.packages(c("rstan", "rstantools", "bridgesampling",</span>
@@ -107,10 +105,18 @@
 <span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"danheck/metaBMA"</span>, ref <span class="op">=</span> <span class="st">"dev"</span><span class="op">)</span></code></pre></div>
 <p>Note that <code>metaBMA</code> requires the software <a href="http://mc-stan.org/">Stan</a>. In case of issues with using Stan, information how to install the R package <code>rstan</code> is available here: <a href="https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started" class="uri">https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started</a></p>
 </div>
-<div id="citation" class="section level2">
+<div id="getting-started" class="section level2">
 <h2 class="hasAnchor">
-<a href="#citation" class="anchor"></a>Citation</h2>
-<p>If you use metaBMA, please cite the software as follows:</p>
+<a href="#getting-started" class="anchor"></a>Getting Started</h2>
+<p>The most general functions in <code>metaBMA</code> are <code>meta_bma</code> and <code>meta_default</code>, which fit random- and fixed-effects models, compute the inclusion Bayes factor for the presence of an effect and the averaged posterior distribution of the mean effect d (which accounts for uncertainty regarding study heterogeneity).</p>
+<p>Moreover, <code><a href="reference/meta_fixed.html">meta_fixed()</a></code> and <code><a href="reference/meta_random.html">meta_random()</a></code> fit standard meta-analysis models with fixed-effects and random-effects, respectively. The model-specific posteriors for the parameter d can be averaged with <code><a href="reference/bma.html">bma()</a></code> and inclusion Bayes factors be computed with <code><a href="reference/inclusion.html">inclusion()</a></code>.</p>
+<p>The function <code><a href="reference/prior.html">prior()</a></code> facilitates the construction and visual inspection of prior distributions. Sensitivity analysis can be performed with the function <code><a href="reference/meta_sensitivity.html">meta_sensitivity()</a></code>.</p>
+<p>For an overview, see: <a href="https://danheck.github.io/metaBMA/" class="uri">https://danheck.github.io/metaBMA/</a></p>
+</div>
+<div id="references" class="section level2">
+<h2 class="hasAnchor">
+<a href="#references" class="anchor"></a>References</h2>
+<p>If you use <code>metaBMA</code>, please cite the software as follows:</p>
 <p>Heck, D. W., Gronau, Q. F., &amp; Wagenmakers, E.-J. (2019). metaBMA: Bayesian model averaging for random and fixed effects meta-analysis. <a href="https://CRAN.R-project.org/package=metaBMA" class="uri">https://CRAN.R-project.org/package=metaBMA</a></p>
 <p>An introduction to Bayesian meta-analysis with model averaging is available at:</p>
 <p>Gronau, Q. F., Heck, D. W., Berkhout, S. W., Haaf, J. M., &amp; Wagenmakers, E.-J. (2020). A primer on Bayesian model-averaged meta-analysis. <a href="https://psyarxiv.com/97qup" class="uri">https://psyarxiv.com/97qup</a></p>
