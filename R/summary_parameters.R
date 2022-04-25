@@ -78,7 +78,7 @@ summary_stanfit <- function(stanfit, ci = .95) {
 
 summary_integrate <- function(density, lb = NULL, ub = NULL, ci = .95,
                               rel.tol = .Machine$double.eps^0.8) {
-  if (class(density) %in% c("prior", "posterior")) {
+  if (inherits(density, c("prior", "posterior"))) {
     lb <- attr(density, "lower")
     ub <- attr(density, "upper")
   }

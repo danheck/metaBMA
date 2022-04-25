@@ -27,7 +27,7 @@ bounds_prior <- function(prior) {
   c(attr(prior, "lower"), attr(prior, "upper"))
 }
 
-# bounds_prior <- function (family, param, lower = -Inf, upper = Inf, label = "d"){
+# bounds_prior <- function (family, param, lower = -Inf, upper = Inf, label = "d") {
 #   stopifnot(length(lower) == 1)
 #   stopifnot(length(upper) == 1)
 #   stopifnot(lower <= upper)
@@ -35,7 +35,7 @@ bounds_prior <- function(prior) {
 #   if (is.null(family))
 #     return (NULL)
 #
-#   if (class(family) == "prior"){
+#   if (inherits(family, "prior")) {
 #     family <- attr(family, "family")
 #     param <- attr(family, "param")
 #     lower <- attr(family, "lower")

@@ -14,7 +14,7 @@ prior_pars <- function(prior) {
 check_prior <- function(prior, lower = -Inf, upper = Inf) {
   attr(prior, "family") <- match.arg(attr(prior, "family"), priors())
 
-  stopifnot(class(prior) == "prior")
+  stopifnot(inherits(prior, "prior"))
   stopifnot(attr(prior, "label") %in% c("d", "tau"))
   stopifnot(attr(prior, "lower") >= lower) # nonnegative parameters (tau)
   stopifnot(attr(prior, "upper") <= upper) # nonnegative parameters (tau)
@@ -103,7 +103,7 @@ identical_prior <- function(prior_list) {
   }
 }
 
-# identical.prior <- function(x, y, ...){
+# identical.prior <- function(x, y, ...) {
 #   identical(attr(x, "family"), attr(y, "family")) &&
 #     identical(attr(x, "param"), attr(y, "family")) &&
 #     identical(attr(x, "family"), attr(y, "family")) &&

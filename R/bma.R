@@ -86,7 +86,7 @@ bma <- function(meta, prior = 1, parameter = "d", summarize = "integrate", ci = 
 
   ################ NOT WORKING WELL: SAMPLING-BASED MODEL AVERAGING
   ################ ----> averaged posterior may not be a convex combination of fixed-/random effects
-  # if (summarize == "integrate"){
+  # if (summarize == "integrate") {
   # } else {
   #   samples <- lapply(meta[select_models], function(m) extract(m$stanfit, parameter)[[parameter]])
   #   maxiter <- sapply(samples, length)

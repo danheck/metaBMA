@@ -1,8 +1,8 @@
 Package: metaBMA
 Type: Package
-Date: 2021-03-12
+Date: 2022-04-25
 Title: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis
-Version: 0.6.7
+Version: 0.6.8
 Authors@R: c(person(given = "Daniel W.",  
                     family = "Heck", 
                     email="dheck@uni-marburg.de", 
@@ -35,7 +35,7 @@ Description: Computes the posterior model probabilities for standard meta-analys
     with and without moderators. For a primer on Bayesian model-averaged meta-analysis, 
     see Gronau, Heck, Berkhout, Haaf, & Wagenmakers (2020, <doi:10.31234/osf.io/97qup>).
 Depends:
-    R (>= 3.4.0),
+    R (>= 4.0.0),
     Rcpp (>= 1.0.0),
     methods
 Imports:
@@ -68,5 +68,5 @@ NeedsCompilation: yes
 SystemRequirements: GNU make
 Biarch: true
 Language: en-US
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)

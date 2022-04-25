@@ -55,23 +55,23 @@ meta_sensitivity <- function(y, SE, labels, data,
                              tau_list,
                              analysis = "bma",
                              combine_priors = "crossed",
-                             ...){
+                             ...) {
 
   analysis <- match.arg(analysis, c("fixed", "random", "bma"))
 
   # check priors:
-  stopifnot(class(d_list) == "list", length(d_list) >= 1)
-  if(!all(sapply(d_list, class) == "prior"))
+  stopifnot(inherits(d_list, "list"), length(d_list) >= 1)
+  if (!all(sapply(d_list, class) == "prior"))
     stop("The argument d_list must provide a list of prior distributions",
          "\nspecified via the function ?metaBMA::prior")
 
   d_list2 <- d_list
 
   # prior on "tau" only relevant for random/bma analysis
-  if (analysis != "fixed"){
+  if (analysis != "fixed") {
 
-    stopifnot(class(tau_list) == "list",  length(tau_list) >= 1)
-    if(!all(sapply(tau_list, class) == "prior"))
+    stopifnot(inherits(tau_list, "list"),  length(tau_list) >= 1)
+    if (!all(sapply(tau_list, class) == "prior"))
       stop("The argument tau_list must provide a list of prior distributions",
            "\nspecified via the function ?metaBMA::prior")
 
@@ -81,10 +81,10 @@ meta_sensitivity <- function(y, SE, labels, data,
       stopifnot(length(d_list) == length(tau_list))
 
     tau_list2 <- tau_list
-    if (combine_priors == "crossed"){
+    if (combine_priors == "crossed") {
       cnt <- 0
-      for (i in seq_along(d_list)){
-        for(j in seq_along(tau_list)){
+      for (i in seq_along(d_list)) {
+        for(j in seq_along(tau_list)) {
           cnt <- cnt + 1
           d_list2[[cnt]] <- d_list[[i]]
           tau_list2[[cnt]] <- tau_list[[j]]
@@ -99,17 +99,17 @@ meta_sensitivity <- function(y, SE, labels, data,
 
   # fit meta-analysis with different priors:
   fits <- list()
-  for (i in seq_along(d_list2)){
-    if (analysis == "fixed"){
+  for (i in seq_along(d_list2)) {
+    if (analysis == "fixed") {
       fits[[i]] <- meta_fixed(y = y, SE = SE, labels = labels, data = dl,
                               d = d_list2[[i]], ...)
 
-    } else if (analysis == "random"){
+    } else if (analysis == "random") {
       fits[[i]] <- meta_random(y = y, SE = SE, labels = labels, data = dl,
                                d = d_list2[[i]],
                                tau = tau_list2[[i]], ...)
 
-    } else if (analysis == "bma"){
+    } else if (analysis == "bma") {
       fits[[i]] <- meta_bma(y = y, SE = SE, labels = labels, data = dl,
                             d = d_list2[[i]],
                             tau = tau_list2[[i]], ...)
@@ -121,24 +121,24 @@ meta_sensitivity <- function(y, SE, labels, data,
 }
 
 
-print_priors <- function(prior_list, digits = 3){
+print_priors <- function(prior_list, digits = 3) {
 
-  if (class(prior_list[[1]]) == "meta_bma"){
+  if (inherits(prior_list[[1]], "meta_bma")) {
     prior_d   <- sapply(prior_list, function(x) describe_prior(x$meta$random$prior_d))
     prior_tau <- sapply(prior_list, function(x) describe_prior(x$meta$random$prior_tau))
 
-  } else if (class(prior_list[[1]]) == "meta_random"){
+  } else if (inherits(prior_list[[1]], "meta_random")) {
     prior_d   <- sapply(prior_list, function(x) describe_prior(x$prior_d))
     prior_tau <- sapply(prior_list, function(x) describe_prior(x$prior_tau))
 
-  } else if (class(prior_list[[1]]) == "meta_fixed"){
+  } else if (inherits(prior_list[[1]], "meta_fixed")) {
     prior_d <- sapply(prior_list, function(x) describe_prior(x$prior_d))
   }
 
   cat("Prior distributions on d (= overall effect size):\n\n")
   print(prior_d, digits = digits)
 
-  if (class(prior_list[[1]]) != "meta_fixed"){
+  if (!inherits(prior_list[[1]], "meta_fixed")) {
     cat("\nPrior distributions on tau (= SD of effect sizes):\n\n")
     print(prior_tau, digits = digits)
   }
@@ -146,7 +146,7 @@ print_priors <- function(prior_list, digits = 3){
 }
 
 #' @export
-print.meta_sensitivity <- function(x, digits = 3, ...){
+print.meta_sensitivity <- function(x, digits = 3, ...) {
 
 
   cat("### Sensitivity analysis for Bayesian meta-analysis ###\n\n")
@@ -157,7 +157,7 @@ print.meta_sensitivity <- function(x, digits = 3, ...){
   cat("\nParameter estimates:\n\n")
 
   estimates <- list()
-  for (i in seq_along(x)){
+  for (i in seq_along(x)) {
     estimates[[i]] <- cbind("prior" = i, x[[i]]$estimates)
   }
   X <- do.call("rbind", estimates)
@@ -169,7 +169,7 @@ print.meta_sensitivity <- function(x, digits = 3, ...){
   cat("\nPosterior model probabilities:\n\n")
 
   postprob <- list()
-  for (i in seq_along(x)){
+  for (i in seq_along(x)) {
     postprob[[i]] <- x[[i]]$posterior_models
   }
   X2 <- do.call("rbind", postprob)
@@ -204,7 +204,7 @@ plot.meta_sensitivity <- function(x,
                                   to,
                                   n = 101,
                                   legend = TRUE,
-                                  ...){
+                                  ...) {
 
   parameter <- match.arg(parameter, c("d", "tau"))
   distribution <- match.arg(distribution, c("prior", "posterior"))
@@ -219,10 +219,10 @@ plot.meta_sensitivity <- function(x,
   ### get densities
 
   dens_list <- list()
-  for (i in seq_along(x)){
+  for (i in seq_along(x)) {
     dens_list[[i]] <- x[[i]][[dens_label]]
 
-    if (class(x[[i]]) == "meta_bma" && parameter == "tau"){
+    if (inherits(x[[i]], "meta_bma") && parameter == "tau") {
       if (i ==1)
         warning("Model-averaged posterior of parameter tau currently not supported.\n",
                 "Showing the posterior of the random effects meta-analyses instead.")
@@ -231,7 +231,7 @@ plot.meta_sensitivity <- function(x,
     }
 
     # for meta_bma: list of densities
-    if (class(dens_list[[i]]) == "list")
+    if (inherits(dens_list[[i]], "list"))
       dens_list[[i]] <- dens_list[[i]][[1]]
   }
 
@@ -254,12 +254,12 @@ plot.meta_sensitivity <- function(x,
        main = paste("Sensitivity:", Distribution),
        las = 1) #, ...)
   abline(v = 0, col = "gray50")
-  for(i in 2:length(x)){
+  for(i in 2:length(x)) {
     curve(dens_list[[i]](x), add = TRUE, col = i, lty = 1 + ((i-1) %% 5))
   }
 
   stopifnot(is.logical(legend))
-  if (legend){
+  if (legend) {
     legend("topright",
            title = "Prior",
            legend = seq_along(x),
