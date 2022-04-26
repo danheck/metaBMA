@@ -56,7 +56,7 @@
 #' @export
 prior <- function(family, param, lower, upper, label = "d",
                   rel.tol = .Machine$double.eps^.5) {
-  if (any(class(family) == "prior")) {
+  if (inherits(family, "prior")) {
     attr(family, "label") <- label
     return(check_prior(family))
   }

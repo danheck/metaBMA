@@ -37,8 +37,9 @@ plot_posterior.default <- function(meta, parameter = "d", from, to,
   dpost <- meta[[paste0("posterior_", parameter)]]
   xlab <- ifelse(parameter == "tau",
     "Heterogeneity of Effects",
-    ifelse(class(meta) == "meta_random",
-      "Random-Effects Mean", "Fixed-Effects Mean"
+    ifelse(inherits(meta, "meta_random"),
+      "Random-Effects Mean",
+      "Fixed-Effects Mean"
     )
   )
 

@@ -1,5 +1,5 @@
 describe_prior <- function(prior, digits = 3) {
-  if (is.null(prior) || class(prior) != "prior") {
+  if (is.null(prior) || !inherits(prior, "prior")) {
     return(NULL)
   }
 
@@ -124,13 +124,13 @@ log_diff_exp <- function(logx1, logx2) {
 #
 # xx <- seq(max(lb, 0), min(ub, 3), length.out = 201)
 # cnt <- 1
-# while (px(xx[1]) > .002){
+# while (px(xx[1]) > .002) {
 #   cnt <- cnt + 1
 #   newx <- seq(min(xx)-1, min(xx), length.out = 41)
 #   xx <- c(newx, xx)
 # }
 # cnt <- 1
-# while (px(max(xx)) < .998){
+# while (px(max(xx)) < .998) {
 #   cnt <- cnt + 1
 #   newx <- seq(from = max(xx), to = max(xx)+1, length.out = 41)
 #   xx <- c(xx, newx)
@@ -138,7 +138,7 @@ log_diff_exp <- function(logx1, logx2) {
 # dx <- prior(xx)
 # px <- cumsum(dx)
 # qdens <- splinefun(px, xx)
-# length.interval <- function (start){
+# length.interval <- function (start) {
 #   qdens(start+ci)-qdens(start)
 # }
 # oo <- optim((1-ci)/2, length.interval, method = "L-BFGS-B",

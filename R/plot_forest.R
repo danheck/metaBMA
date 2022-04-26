@@ -92,9 +92,9 @@ plot_forest.default <- function(meta, from, to, shrinked = "random",
   upper <- meta$data$y + qnorm((ci + 1) / 2) * meta$data$SE
 
   stanfit_dstudy <- ss <- NULL
-  if (class(meta) == "meta_bma") {
+  if (inherits(meta, "meta_bma")) {
     stanfit_dstudy <- meta$meta[[shrinked]]$stanfit_dstudy
-  } else if (class(meta) == "meta_random" && shrinked != "") {
+  } else if (inherits(meta, "meta_random") && shrinked != "") {
     stanfit_dstudy <- meta$stanfit_dstudy
   }
   if (!is.null(stanfit_dstudy)) {

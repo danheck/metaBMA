@@ -8,7 +8,7 @@ posterior_logspline <- function(stanfit, parameter, prior) {
     )
   }
 
-  if (class(stanfit) == "stanfit") {
+  if (inherits(stanfit, "stanfit")) {
     ss <- extract(stanfit, parameter)[[parameter]]
   } else {
     ss <- stanfit

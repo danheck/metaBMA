@@ -2,7 +2,7 @@
 # construct posterior density function
 posterior <- function(meta, parameter = "d", summarize = "integrate",
                       rel.tol = .Machine$double.eps^0.5) {
-  if (class(meta) == "meta_bma") {
+  if (inherits(meta, "meta_bma")) {
     if (parameter != "d") {
       stop("bma currently. only working for parameter='d' ")
     }
@@ -12,9 +12,9 @@ posterior <- function(meta, parameter = "d", summarize = "integrate",
     posterior_par <- paste0("posterior_", parameter)
 
     # # select relevant models that have posterior for parameter [TODO: method for tau:random_H0/random_H1]
-    # if (parameter == "d"){
+    # if (parameter == "d") {
     #   models <- sapply(meta, function(mm) parameter %in% grep(mm$model))
-    # } else if parameter == "tau"){
+    # } else if parameter == "tau") {
     #   select_models <- sapply(meta, function(mm) parameter %in% rownames(mm$estimates))
     # } else {
     #   stop("The argument 'parameter' must be either 'd' or 'tau'.")
