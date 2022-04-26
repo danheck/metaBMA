@@ -1,7 +1,7 @@
 pandoc: 2.7.3
-pkgdown: 1.6.1
+pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
   metaBMA: metaBMA.html
-last_built: 2021-03-17T12:49Z
+last_built: 2022-04-26T10:48Z
 
