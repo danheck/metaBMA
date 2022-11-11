@@ -57,14 +57,14 @@ probability.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">bma</span><span class="op">(</span>
-  <span class="va">meta</span>,
-  prior <span class="op">=</span> <span class="fl">1</span>,
-  parameter <span class="op">=</span> <span class="st">"d"</span>,
-  summarize <span class="op">=</span> <span class="st">"integrate"</span>,
-  ci <span class="op">=</span> <span class="fl">0.95</span>,
-  rel.tol <span class="op">=</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span><span class="op">^</span><span class="fl">0.5</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bma</span><span class="op">(</span></span>
+<span>  <span class="va">meta</span>,</span>
+<span>  prior <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  parameter <span class="op">=</span> <span class="st">"d"</span>,</span>
+<span>  summarize <span class="op">=</span> <span class="st">"integrate"</span>,</span>
+<span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  rel.tol <span class="op">=</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span><span class="op">^</span><span class="fl">0.5</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -72,37 +72,44 @@ probability.</p>
     <dl><dt>meta</dt>
 <dd><p>list of meta-analysis models (fitted via
 <code><a href="meta_random.html">meta_random</a></code> or <code><a href="meta_fixed.html">meta_fixed</a></code>)</p></dd>
+
+
 <dt>prior</dt>
 <dd><p>prior probabilities over models (possibly unnormalized). For instance, if the first model is as likely as models 2, 3 and 4 together: <code>prior = c(3,1,1,1)</code>. The default is a discrete uniform distribution over models.</p></dd>
+
+
 <dt>parameter</dt>
 <dd><p>either the mean effect <code>"d"</code> or the heterogeneity <code>"tau"</code>
 (i.e., the across-study standard deviation of population effect sizes).</p></dd>
+
+
 <dt>summarize</dt>
 <dd><p>how to estimate parameter summaries (mean, median, SD,
 etc.): Either by numerical integration (<code>summarize = "integrate"</code>) or
 based on MCMC/Stan samples (<code>summarize = "stan"</code>).</p></dd>
+
+
 <dt>ci</dt>
 <dd><p>probability for the credibility/highest-density intervals.</p></dd>
+
+
 <dt>rel.tol</dt>
 <dd><p>relative tolerance used for numerical integration using
 <code><a href="https://rdrr.io/r/stats/integrate.html" class="external-link">integrate</a></code>. Use <code>rel.tol=.Machine$double.eps</code> for
 maximal precision (however, this might be slow).</p></dd>
+
 </dl></div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="co"># model averaging for fixed and random effects</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">towels</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">fixed</span> <span class="op">&lt;-</span> <span class="fu"><a href="meta_fixed.html">meta_fixed</a></span><span class="op">(</span><span class="va">logOR</span>, <span class="va">SE</span>, <span class="va">study</span>, <span class="va">towels</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">random</span> <span class="op">&lt;-</span> <span class="fu"><a href="meta_random.html">meta_random</a></span><span class="op">(</span><span class="va">logOR</span>, <span class="va">SE</span>, <span class="va">study</span>, <span class="va">towels</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There were 1 divergent transitions after warmup. See</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> to find out why this is a problem and how to eliminate them.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Examine the pairs() plot to diagnose sampling problems</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">averaged</span> <span class="op">&lt;-</span> <span class="fu">bma</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"fixed"</span> <span class="op">=</span> <span class="va">fixed</span>, <span class="st">"random"</span> <span class="op">=</span> <span class="va">random</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">averaged</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># model averaging for fixed and random effects</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">towels</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fixed</span> <span class="op">&lt;-</span> <span class="fu"><a href="meta_fixed.html">meta_fixed</a></span><span class="op">(</span><span class="va">logOR</span>, <span class="va">SE</span>, <span class="va">study</span>, <span class="va">towels</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">random</span> <span class="op">&lt;-</span> <span class="fu"><a href="meta_random.html">meta_random</a></span><span class="op">(</span><span class="va">logOR</span>, <span class="va">SE</span>, <span class="va">study</span>, <span class="va">towels</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">averaged</span> <span class="op">&lt;-</span> <span class="fu">bma</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"fixed"</span> <span class="op">=</span> <span class="va">fixed</span>, <span class="st">"random"</span> <span class="op">=</span> <span class="va">random</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">averaged</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ### Meta-Analysis with Bayesian Model Averaging ###</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Fixed H0:  d = 0 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Fixed H1:  d ~ 't' (location=0, scale=0.707, nu=1) with support on the interval [-Inf,Inf]. </span>
@@ -127,15 +134,15 @@ maximal precision (however, this might be slow).</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> random_H1  0.25    0.2007 -4.81</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> # Posterior summary statistics of average effect size:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           mean    sd   2.5%   50% 97.5% hpd95_lower hpd95_upper  n_eff Rhat</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> averaged 0.214 0.089  0.033 0.216 0.380       0.040       0.385     NA   NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> fixed    0.221 0.078  0.068 0.221 0.375       0.066       0.373     NA   NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> random   0.196 0.107 -0.035 0.201 0.393      -0.018       0.406 4030.7    1</span>
-<span class="r-in"><span class="fu"><a href="plot_posterior.html">plot_posterior</a></span><span class="op">(</span><span class="va">averaged</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           mean    sd   2.5%   50% 97.5% hpd95_lower hpd95_upper  n_eff  Rhat</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> averaged 0.214 0.090  0.033 0.216 0.380       0.040       0.386     NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> fixed    0.221 0.078  0.068 0.221 0.375       0.066       0.373     NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> random   0.196 0.111 -0.040 0.202 0.394      -0.011       0.421 3628.6 1.001</span>
+<span class="r-in"><span><span class="fu"><a href="plot_posterior.html">plot_posterior</a></span><span class="op">(</span><span class="va">averaged</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="bma-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="fu"><a href="plot_forest.html">plot_forest</a></span><span class="op">(</span><span class="va">averaged</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4.5</span>, <span class="fl">20</span>, <span class="fl">4</span>, <span class="fl">.3</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="plot_forest.html">plot_forest</a></span><span class="op">(</span><span class="va">averaged</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4.5</span>, <span class="fl">20</span>, <span class="fl">4</span>, <span class="fl">.3</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="bma-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="co"># }</span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -150,7 +157,7 @@ maximal precision (however, this might be slow).</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

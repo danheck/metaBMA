@@ -55,7 +55,7 @@ facial feedback hypothesis (Strack, Martin, &amp; Stepper, 1988).</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="va">facial_feedback</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="va">facial_feedback</span></span></code></pre></div>
     </div>
 
     <div id="format">
@@ -91,8 +91,8 @@ Perspectives on Psychological Science, 11, 917-928. <a href="https://doi.org/10.
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">facial_feedback</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">facial_feedback</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">facial_feedback</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">facial_feedback</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     study           d        SE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  Albohn  0.08653675 0.1698270</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  Allard  0.09400435 0.1802856</span>
@@ -100,8 +100,8 @@ Perspectives on Psychological Science, 11, 917-928. <a href="https://doi.org/10.
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  Bulnes  0.08627924 0.1991098</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5 Capaldi -0.07138790 0.1849657</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 Chasten -0.03595617 0.2063009</span>
-<span class="r-in"><span class="va">mf</span> <span class="op">&lt;-</span> <span class="fu"><a href="meta_fixed.html">meta_fixed</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">SE</span>, <span class="va">study</span>, <span class="va">facial_feedback</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">mf</span></span>
+<span class="r-in"><span><span class="va">mf</span> <span class="op">&lt;-</span> <span class="fu"><a href="meta_fixed.html">meta_fixed</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">SE</span>, <span class="va">study</span>, <span class="va">facial_feedback</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mf</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ### Bayesian Fixed-Effects Meta-Analysis ### </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Prior on d:    't' (location=0, scale=0.707, nu=1) with support on the interval [-Inf,Inf]. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -114,7 +114,7 @@ Perspectives on Psychological Science, 11, 917-928. <a href="https://doi.org/10.
 <span class="r-out co"><span class="r-pr">#&gt;</span> # Posterior summary statistics of fixed-effects model:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    mean    sd   2.5%   50% 97.5% hpd95_lower hpd95_upper n_eff Rhat</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> d 0.014 0.046 -0.076 0.014 0.104      -0.077       0.103    NA   NA</span>
-<span class="r-in"><span class="fu"><a href="plot_posterior.html">plot_posterior</a></span><span class="op">(</span><span class="va">mf</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="plot_posterior.html">plot_posterior</a></span><span class="op">(</span><span class="va">mf</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="facial_feedback-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
@@ -130,7 +130,7 @@ Perspectives on Psychological Science, 11, 917-928. <a href="https://doi.org/10.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

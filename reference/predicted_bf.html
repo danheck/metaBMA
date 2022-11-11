@@ -57,20 +57,27 @@ current evidence.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">predicted_bf</span><span class="op">(</span><span class="va">meta</span>, <span class="va">SE</span>, sample <span class="op">=</span> <span class="fl">100</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">predicted_bf</span><span class="op">(</span><span class="va">meta</span>, <span class="va">SE</span>, sample <span class="op">=</span> <span class="fl">100</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>meta</dt>
 <dd><p>model-averaged meta-analysis (fitted with <code><a href="meta_bma.html">meta_bma</a></code>).</p></dd>
+
+
 <dt>SE</dt>
 <dd><p>a scalar: the expected standard error of future study.
 For instance, SE = 1/sqrt(N) for standardized effect sizes and N = sample size)</p></dd>
+
+
 <dt>sample</dt>
 <dd><p>number of simulated Bayes factors</p></dd>
+
+
 <dt>...</dt>
 <dd><p>further arguments passed to rstan::sampling to draw posterior samples for d and tau.</p></dd>
+
 </dl></div>
 
   </div>
@@ -85,7 +92,7 @@ For instance, SE = 1/sqrt(N) for standardized effect sizes and N = sample size)<
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

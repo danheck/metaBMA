@@ -55,23 +55,23 @@ random-effects meta-analysis are all positive or negative.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">meta_ordered</span><span class="op">(</span>
-  <span class="va">y</span>,
-  <span class="va">SE</span>,
-  <span class="va">labels</span>,
-  <span class="va">data</span>,
-  d <span class="op">=</span> <span class="fu"><a href="prior.html">prior</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span>, lower <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>,
-  tau <span class="op">=</span> <span class="fu"><a href="prior.html">prior</a></span><span class="op">(</span><span class="st">"invgamma"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">1</span>, scale <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span><span class="op">)</span>,
-  prior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,
-  logml <span class="op">=</span> <span class="st">"integrate"</span>,
-  summarize <span class="op">=</span> <span class="st">"stan"</span>,
-  ci <span class="op">=</span> <span class="fl">0.95</span>,
-  rel.tol <span class="op">=</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span><span class="op">^</span><span class="fl">0.3</span>,
-  logml_iter <span class="op">=</span> <span class="fl">5000</span>,
-  iter <span class="op">=</span> <span class="fl">5000</span>,
-  silent_stan <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">meta_ordered</span><span class="op">(</span></span>
+<span>  <span class="va">y</span>,</span>
+<span>  <span class="va">SE</span>,</span>
+<span>  <span class="va">labels</span>,</span>
+<span>  <span class="va">data</span>,</span>
+<span>  d <span class="op">=</span> <span class="fu"><a href="prior.html">prior</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span>, lower <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>,</span>
+<span>  tau <span class="op">=</span> <span class="fu"><a href="prior.html">prior</a></span><span class="op">(</span><span class="st">"invgamma"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">1</span>, scale <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  prior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  logml <span class="op">=</span> <span class="st">"integrate"</span>,</span>
+<span>  summarize <span class="op">=</span> <span class="st">"stan"</span>,</span>
+<span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  rel.tol <span class="op">=</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span><span class="op">^</span><span class="fl">0.3</span>,</span>
+<span>  logml_iter <span class="op">=</span> <span class="fl">5000</span>,</span>
+<span>  iter <span class="op">=</span> <span class="fl">5000</span>,</span>
+<span>  silent_stan <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -81,43 +81,65 @@ random-effects meta-analysis are all positive or negative.</p>
 the quoted or unquoted name of the variable in <code>data</code>, or (3) a
 <code><a href="https://rdrr.io/r/stats/formula.html" class="external-link">formula</a></code> to include discrete or continuous moderator
 variables.</p></dd>
+
+
 <dt>SE</dt>
 <dd><p>standard error of effect size for each study. Can be a numeric
 vector or the quoted or unquoted name of the variable in <code>data</code></p></dd>
+
+
 <dt>labels</dt>
 <dd><p>optional: character values with study labels. Can be a
 character vector or the quoted or unquoted name of the variable in
 <code>data</code></p></dd>
+
+
 <dt>data</dt>
 <dd><p>data frame containing the variables for effect size <code>y</code>,
 standard error <code>SE</code>, <code>labels</code>, and moderators per study.</p></dd>
+
+
 <dt>d</dt>
 <dd><p><code>prior</code> distribution on the average effect size <code>d</code>. The
 prior probability density function is defined via <code><a href="prior.html">prior</a></code>.</p></dd>
+
+
 <dt>tau</dt>
 <dd><p><code>prior</code> distribution on the between-study heterogeneity
 <code>tau</code> (i.e., the standard deviation of the study effect sizes
 <code>dstudy</code> in a random-effects meta-analysis. A (nonnegative) prior
 probability density function is defined via <code><a href="prior.html">prior</a></code>.</p></dd>
+
+
 <dt>prior</dt>
 <dd><p>prior probabilities over models (possibly unnormalized) in the
 order <code>c(fixed_H0, fixed_H1, ordered_H1, random_H1)</code>. Note that the
 model <code>random_H0</code> is not included in the comparison.</p></dd>
+
+
 <dt>logml</dt>
 <dd><p>how to estimate the log-marginal likelihood: either by numerical
 integration (<code>"integrate"</code>) or by bridge sampling using MCMC/Stan
 samples (<code>"stan"</code>). To obtain high precision with <code>logml="stan"</code>,
 many MCMC samples are required (e.g., <code>logml_iter=10000, warmup=1000</code>).</p></dd>
+
+
 <dt>summarize</dt>
 <dd><p>how to estimate parameter summaries (mean, median, SD,
 etc.): Either by numerical integration (<code>summarize = "integrate"</code>) or
 based on MCMC/Stan samples (<code>summarize = "stan"</code>).</p></dd>
+
+
 <dt>ci</dt>
 <dd><p>probability for the credibility/highest-density intervals.</p></dd>
+
+
 <dt>rel.tol</dt>
 <dd><p>relative tolerance used for numerical integration using
 <code><a href="https://rdrr.io/r/stats/integrate.html" class="external-link">integrate</a></code>. Use <code>rel.tol=.Machine$double.eps</code> for
 maximal precision (however, this might be slow).</p></dd>
+
+
 <dt>logml_iter</dt>
 <dd><p>number of iterations (per chain) from the posterior
 distribution of <code>d</code> and <code>tau</code>. The samples are used for computing
@@ -126,12 +148,18 @@ the marginal likelihood of the random-effects model with bridge sampling
 <code>summarize="stan"</code>). Note that the argument <code>iter=2000</code> controls
 the number of iterations for estimation of the random-effect parameters per
 study in random-effects meta-analysis.</p></dd>
+
+
 <dt>iter</dt>
 <dd><p>number of MCMC iterations for the random-effects meta-analysis.
 Needs to be larger than usual to estimate the probability of all random
 effects being ordered (i.e., positive or negative).</p></dd>
+
+
 <dt>silent_stan</dt>
 <dd><p>whether to suppress the Stan progress bar.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>further arguments passed to <code><a href="https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html" class="external-link">rstan::sampling</a></code> (see
 <code>stanmodel-method-sampling</code>). Relevant MCMC settings
@@ -141,6 +169,7 @@ concern the number of warmup samples that are discarded
 multiple cores should be used (<code>cores=4</code>), and control arguments that
 make the sampling in Stan more robust, for instance:
 <code>control=list(adapt_delta=.97)</code>.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -175,18 +204,18 @@ approach, the default number of MCMC iterations for <code>meta_ordered</code> is
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="co">### Bayesian Meta-Analysis with Order Constraints (H1: d&gt;0)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">towels</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">mo</span> <span class="op">&lt;-</span> <span class="fu">meta_ordered</span><span class="op">(</span><span class="va">logOR</span>, <span class="va">SE</span>, <span class="va">study</span>, <span class="va">towels</span>,</span>
-<span class="r-in">  d <span class="op">=</span> <span class="fu"><a href="prior.html">prior</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span>, lower <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co">### Bayesian Meta-Analysis with Order Constraints (H1: d&gt;0)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">towels</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mo</span> <span class="op">&lt;-</span> <span class="fu">meta_ordered</span><span class="op">(</span><span class="va">logOR</span>, <span class="va">SE</span>, <span class="va">study</span>, <span class="va">towels</span>,</span></span>
+<span class="r-in"><span>  d <span class="op">=</span> <span class="fu"><a href="prior.html">prior</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span>, lower <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There were 37 divergent transitions after warmup. See</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> to find out why this is a problem and how to eliminate them.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Examine the pairs() plot to diagnose sampling problems</span>
-<span class="r-in"><span class="va">mo</span></span>
+<span class="r-in"><span><span class="va">mo</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ### Bayesian Meta-Analysis with Order Constraints ###</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    null:    d = 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    fixed:   d ~ 'norm' (mean=0, sd=0.3) truncated to the interval [0,Inf].</span>
@@ -217,9 +246,9 @@ approach, the default number of MCMC iterations for <code>meta_ordered</code> is
 <span class="r-out co"><span class="r-pr">#&gt;</span> fixed   0.214 0.076 0.070 0.214 0.363       0.067       0.360  3361.1    1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ordered 0.235 0.075 0.105 0.230 0.394       0.098       0.382      NA   NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> random  0.195 0.088 0.031 0.194 0.372       0.021       0.357 11359.9    1</span>
-<span class="r-in"><span class="fu"><a href="plot_posterior.html">plot_posterior</a></span><span class="op">(</span><span class="va">mo</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="plot_posterior.html">plot_posterior</a></span><span class="op">(</span><span class="va">mo</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="meta_ordered-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="co"># }</span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -234,7 +263,7 @@ approach, the default number of MCMC iterations for <code>meta_ordered</code> is
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

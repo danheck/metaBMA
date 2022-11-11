@@ -82,29 +82,29 @@
 <div class="section level1">
 <div class="page-header"><h1 id="metabma">metaBMA<a class="anchor" aria-label="anchor" href="#metabma"></a>
 </h1></div>
-<p>Fixed-effects meta-analyses assume that the effect size d is identical in all studies. In contrast, random-effects meta-analyses assume that effects vary according to a normal distribution with mean d and standard deviation tau. Both models can be compared in a Bayesian framework by assuming specific prior distribution for d and tau. Given the posterior model probabilities, the evidence for or against an effect (i.e., whether d = 0) and the evidence for or against random effects can be evaluated (i.e., whether tau = 0). By using Bayesian model averaging (i.e., inclusion Bayes factors), both types of tests can be performed by marginalizing over the other question. Most importantly, this allows to test whether an effect exists while accoungting for uncertainty whether study heterogeneity exists or not.</p>
+<p>Fixed-effects meta-analyses assume that the effect size <span class="math inline"><em>d</em></span> is identical in all studies. In contrast, random-effects meta-analyses assume that effects vary according to a normal distribution with mean <span class="math inline"><em>d</em></span> and standard deviation <span class="math inline"><em>τ</em></span>. When assuming prior distributions for <span class="math inline"><em>d</em></span> and <span class="math inline"><em>τ</em></span>, both models can be compared using Bayes factors. Alternatively, posterior model probabilities can be used to compare the evidence for or against an effect (i.e., whether <span class="math inline"><em>d</em> = 0</span>) and the evidence for or against random effects (i.e., whether <span class="math inline"><em>τ</em> = 0</span>). By using Bayesian model averaging (BMA), both types of tests can be performed by marginalizing over the other question. Most importantly, this allows to test whether an effect exists while accounting for uncertainty whether study heterogeneity exists or not.</p>
 <div class="section level2">
 <h2 id="installing-metabma">Installing metaBMA<a class="anchor" aria-label="anchor" href="#installing-metabma"></a>
 </h2>
 <p>To install the latest stable release of <code>metaBMA</code> from CRAN, run:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"metaBMA"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"metaBMA"</span><span class="op">)</span></span></code></pre></div>
 <p>The latest developer version of <code>metaBMA</code> can be installed from GitHub via:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">### install dependencies if necessary:</span>
-<span class="co"># install.packages(c("rstan", "rstantools", "bridgesampling",</span>
-<span class="co">#                    "LaplacesDemon", "logspline", "mvtnorm",</span>
-<span class="co">#                    "coda", "knitr", "methods"))</span>
-
-<span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://devtools.r-lib.org/" class="external-link">"devtools"</a></span><span class="op">)</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"danheck/metaBMA"</span>, ref <span class="op">=</span> <span class="st">"dev"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">### install dependencies if necessary:</span></span>
+<span><span class="co"># install.packages(c("rstan", "rstantools", "bridgesampling",</span></span>
+<span><span class="co">#                    "LaplacesDemon", "logspline", "mvtnorm",</span></span>
+<span><span class="co">#                    "coda", "knitr", "methods"))</span></span>
+<span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://devtools.r-lib.org/" class="external-link">"devtools"</a></span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"danheck/metaBMA"</span>, ref <span class="op">=</span> <span class="st">"dev"</span><span class="op">)</span></span></code></pre></div>
 <p>Note that <code>metaBMA</code> requires the software <a href="http://mc-stan.org/" class="external-link">Stan</a>. In case of issues with using Stan, information how to install the R package <code>rstan</code> is available here: <a href="https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started" class="external-link uri">https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started</a></p>
 </div>
 <div class="section level2">
 <h2 id="getting-started">Getting Started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
 </h2>
-<p>The most general functions in <code>metaBMA</code> are <code>meta_bma</code> and <code>meta_default</code>, which fit random- and fixed-effects models, compute the inclusion Bayes factor for the presence of an effect and the averaged posterior distribution of the mean effect d (which accounts for uncertainty regarding study heterogeneity).</p>
+<p>The most general functions in <code>metaBMA</code> are <code>meta_bma</code> and <code>meta_default</code>, which fit random- and fixed-effects models, compute the inclusion Bayes factor for the presence of an effect and the averaged posterior distribution of the mean effect <span class="math inline"><em>d</em></span> (which accounts for uncertainty regarding study heterogeneity).</p>
 <p>Moreover, <code><a href="reference/meta_fixed.html">meta_fixed()</a></code> and <code><a href="reference/meta_random.html">meta_random()</a></code> fit standard meta-analysis models with fixed-effects and random-effects, respectively. The model-specific posteriors for the parameter d can be averaged with <code><a href="reference/bma.html">bma()</a></code> and inclusion Bayes factors be computed with <code><a href="reference/inclusion.html">inclusion()</a></code>.</p>
 <p>The function <code><a href="reference/prior.html">prior()</a></code> facilitates the construction and visual inspection of prior distributions. Sensitivity analysis can be performed with the function <code><a href="reference/meta_sensitivity.html">meta_sensitivity()</a></code>.</p>
 <p>For an overview, see: <a href="https://danheck.github.io/metaBMA/" class="external-link uri">https://danheck.github.io/metaBMA/</a></p>
@@ -114,8 +114,8 @@
 </h2>
 <p>If you use <code>metaBMA</code>, please cite the software as follows:</p>
 <p>Heck, D. W., Gronau, Q. F., &amp; Wagenmakers, E.-J. (2019). metaBMA: Bayesian model averaging for random and fixed effects meta-analysis. <a href="https://CRAN.R-project.org/package=metaBMA" class="external-link uri">https://CRAN.R-project.org/package=metaBMA</a></p>
-<p>An introduction to Bayesian meta-analysis with model averaging is available at:</p>
-<p>Gronau, Q. F., Heck, D. W., Berkhout, S. W., Haaf, J. M., &amp; Wagenmakers, E.-J. (2020). A primer on Bayesian model-averaged meta-analysis. <a href="https://psyarxiv.com/97qup" class="external-link uri">https://psyarxiv.com/97qup</a></p>
+<p>An (open-access) introduction to Bayesian meta-analysis with model averaging is available at:</p>
+<p>Gronau, Q. F., Heck, D. W., Berkhout, S. W., Haaf, J. M., &amp; Wagenmakers, E.-J. (2021). A primer on Bayesian model-averaged meta-analysis. <em>Advances in Methods and Practices in Psychological Science, 4</em>, 1–19. <a href="https://doi.org/10.1177/25152459211031256" class="external-link uri">https://doi.org/10.1177/25152459211031256</a></p>
 </div>
 </div>
 
@@ -156,10 +156,11 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="http://cran.r-project.org/package=metaBMA" class="external-link"><img src="http://www.r-pkg.org/badges/version/metaBMA" alt="CRAN_Status_Badge"></a></li>
-<li><a href="https://travis-ci.org/danheck/metaBMA" class="external-link"><img src="https://travis-ci.org/danheck/metaBMA.svg?branch=master" alt="Build Status"></a></li>
+<li><a href="https://cran.r-project.org/package=metaBMA" class="external-link"><img src="https://www.r-pkg.org/badges/version/metaBMA" alt="CRAN_Status_Badge"></a></li>
+<li><a href="https://github.com/danheck/metaBMA/actions/workflows/check-full.yaml" class="external-link"><img src="https://github.com/danheck/metaBMA/actions/workflows/check-full.yaml/badge.svg" alt="Workflow"></a></li>
 <li><a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html" class="external-link"><img src="https://img.shields.io/badge/licence-GPL--2-green.svg" alt="Licence"></a></li>
-<li><a href="https://zenodo.org/badge/latestdoi/80750374" class="external-link"><img src="https://zenodo.org/badge/80750374.svg" alt="DOI"></a></li>
+<li><a href="https://cranlogs.r-pkg.org/badges/metaBMA" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/metaBMA" alt="monthly downloads"></a></li>
+<li><a href="https://cranlogs.r-pkg.org/badges/grand-total/metaBMA" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/metaBMA" alt="total downloads"></a></li>
 </ul>
 </div>
 
@@ -174,7 +175,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

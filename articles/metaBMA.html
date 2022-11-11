@@ -63,13 +63,15 @@
 
       
 
-      </header><script src="metaBMA_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>metaBMA: Bayesian Model Averaging for Random- and Fixed-Effects Meta-Analysis</h1>
-                        <h4 data-toc-skip class="author">Daniel W. Heck</h4>
+      <h1 data-toc-skip>metaBMA: Bayesian Model Averaging for Random-
+and Fixed-Effects Meta-Analysis</h1>
+                        <h4 data-toc-skip class="author">Daniel W.
+Heck</h4>
             
-            <h4 data-toc-skip class="date">2022-04-28</h4>
+            <h4 data-toc-skip class="date">2022-11-11</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/danheck/metaBMA/blob/HEAD/vignettes/metaBMA.Rmd" class="external-link"><code>vignettes/metaBMA.Rmd</code></a></small>
       <div class="hidden name"><code>metaBMA.Rmd</code></div>
@@ -81,156 +83,194 @@
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>Fixed-effects meta-analyses assume that the effect size <span class="math inline">\(d\)</span> is identical in all studies. In contrast, random-effects meta-analyses assume that effects vary according to a normal distribution with mean <span class="math inline">\(d\)</span> and standard deviation <span class="math inline">\(\tau\)</span>. Both models can be compared in a Bayesian framework by assuming specific prior distribution for <span class="math inline">\(d\)</span> and <span class="math inline">\(\tau\)</span>. Given the posterior model probabilities, the evidence for or against an effect (i.e., whether <span class="math inline">\(d = 0\)</span>) and the evidence for or against random effects can be evaluated (i.e., whether <span class="math inline">\(\tau = 0\)</span>). By using Bayesian model averaging (i.e., inclusion Bayes factors), both types of tests can be performed by marginalizing over the other question. Most importantly, this allows to test whether an effect exists while accounting for uncertainty whether study heterogeneity exists or not.</p>
+<p>Fixed-effects meta-analyses assume that the effect size <span class="math inline">\(d\)</span> is identical in all studies. In
+contrast, random-effects meta-analyses assume that effects vary
+according to a normal distribution with mean <span class="math inline">\(d\)</span> and standard deviation <span class="math inline">\(\tau\)</span>. Both models can be compared in a
+Bayesian framework by assuming specific prior distribution for <span class="math inline">\(d\)</span> and <span class="math inline">\(\tau\)</span>. Given the posterior model
+probabilities, the evidence for or against an effect (i.e., whether
+<span class="math inline">\(d = 0\)</span>) and the evidence for or
+against random effects can be evaluated (i.e., whether <span class="math inline">\(\tau = 0\)</span>). By using Bayesian model
+averaging (i.e., inclusion Bayes factors), both types of tests can be
+performed by marginalizing over the other question. Most importantly,
+this allows to test whether an effect exists while accounting for
+uncertainty whether study heterogeneity exists or not.</p>
 </div>
 <div class="section level2">
 <h2 id="defining-and-plotting-priors">Defining and Plotting Priors<a class="anchor" aria-label="anchor" href="#defining-and-plotting-priors"></a>
 </h2>
-<p>To fit a meta-analysis model, prior distributions on the average effect <span class="math inline">\(d\)</span> and the heterogeneity <span class="math inline">\(\tau\)</span> are required. The package <code>metaBMA</code> leaves the user the freedom to choose from several predefined distributions or even define an owen prior density function. The function <code>prior</code> facilitates the construction and visual inspection of prior distributions to check whether they meet the prior knowledge about the field of interest.</p>
+<p>To fit a meta-analysis model, prior distributions on the average
+effect <span class="math inline">\(d\)</span> and the heterogeneity
+<span class="math inline">\(\tau\)</span> are required. The package
+<code>metaBMA</code> leaves the user the freedom to choose from several
+predefined distributions or even define an owen prior density function.
+The function <code>prior</code> facilitates the construction and visual
+inspection of prior distributions to check whether they meet the prior
+knowledge about the field of interest.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># load package</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/danheck/metaBMA" class="external-link">"metaBMA"</a></span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Loading required package: Rcpp</span></code></pre>
-<pre><code><span class="co">## This is metaBMA version 0.6.8</span></code></pre>
-<pre><code><span class="co">## - Default priors were changed in version 0.6.6.</span></code></pre>
-<pre><code><span class="co">## - Since default priors may change again, it is safest to specify priors (even when using the defaults).</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># load package</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/danheck/metaBMA" class="external-link">"metaBMA"</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Loading required package: Rcpp</span></span></code></pre>
+<pre><code><span><span class="co">## This is metaBMA version 0.6.8</span></span></code></pre>
+<pre><code><span><span class="co">## - Default priors were changed in version 0.6.6.</span></span></code></pre>
+<pre><code><span><span class="co">## - Since default priors may change again, it is safest to specify priors (even when using the defaults).</span></span></code></pre>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># load data set</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">towels</span><span class="op">)</span>
-
-<span class="co"># Half-normal (truncated to &gt; 0)</span>
-<span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prior.html">prior</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>mean<span class="op">=</span><span class="fl">0</span>, sd<span class="op">=</span><span class="fl">.3</span><span class="op">)</span>, lower <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
-<span class="va">p1</span></code></pre></div>
-<pre><code><span class="co">## Prior density function (class='prior'): 'norm' (mean=0, sd=0.3) truncated to the interval [0,Inf].</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># load data set</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">towels</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Half-normal (truncated to &gt; 0)</span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prior.html">prior</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>mean<span class="op">=</span><span class="fl">0</span>, sd<span class="op">=</span><span class="fl">.3</span><span class="op">)</span>, lower <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span><span class="va">p1</span></span></code></pre></div>
+<pre><code><span><span class="co">## Prior density function (class='prior'): 'norm' (mean=0, sd=0.3) truncated to the interval [0,Inf].</span></span></code></pre>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">p1</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] 1.028186e-02 5.940600e-10 5.129732e-22</span></code></pre>
+<code class="sourceCode R"><span><span class="fu">p1</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 1.028186e-02 5.940600e-10 5.129732e-22</span></span></code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="metaBMA_files/figure-html/unnamed-chunk-1-1.png" width="480"></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># custom prior</span>
-<span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prior.html">prior</a></span><span class="op">(</span><span class="st">"custom"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">^</span><span class="fl">3</span><span class="op">-</span><span class="fl">2</span><span class="op">*</span><span class="va">x</span><span class="op">+</span><span class="fl">3</span>, lower <span class="op">=</span> <span class="fl">0</span>, upper <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p1</span>, <span class="op">-</span><span class="fl">.5</span>, <span class="fl">1.5</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># custom prior</span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prior.html">prior</a></span><span class="op">(</span><span class="st">"custom"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">^</span><span class="fl">3</span><span class="op">-</span><span class="fl">2</span><span class="op">*</span><span class="va">x</span><span class="op">+</span><span class="fl">3</span>, lower <span class="op">=</span> <span class="fl">0</span>, upper <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p1</span>, <span class="op">-</span><span class="fl">.5</span>, <span class="fl">1.5</span><span class="op">)</span></span></code></pre></div>
 <p><img src="metaBMA_files/figure-html/unnamed-chunk-1-2.png" width="480"></p>
 </div>
 <div class="section level2">
 <h2 id="bayesian-meta-analysis">Bayesian Meta-Analysis<a class="anchor" aria-label="anchor" href="#bayesian-meta-analysis"></a>
 </h2>
-<p>The functions <code><a href="../reference/meta_fixed.html">meta_fixed()</a></code> and <code><a href="../reference/meta_random.html">meta_random()</a></code> fit Bayesian meta-analysis models. The model-specific posteriors for <span class="math inline">\(d\)</span> can then be averaged by <code><a href="../reference/bma.html">bma()</a></code> and inclusion Bayes factors be computed by <code><a href="../reference/inclusion.html">inclusion()</a></code>.</p>
-<p>The fixed-effects meta-analysis assumes that the effect size is identical across studies. This model requires only one prior distribution for the overall effect <span class="math inline">\(d\)</span>:</p>
+<p>The functions <code><a href="../reference/meta_fixed.html">meta_fixed()</a></code> and
+<code><a href="../reference/meta_random.html">meta_random()</a></code> fit Bayesian meta-analysis models. The
+model-specific posteriors for <span class="math inline">\(d\)</span> can
+then be averaged by <code><a href="../reference/bma.html">bma()</a></code> and inclusion Bayes factors be
+computed by <code><a href="../reference/inclusion.html">inclusion()</a></code>.</p>
+<p>The fixed-effects meta-analysis assumes that the effect size is
+identical across studies. This model requires only one prior
+distribution for the overall effect <span class="math inline">\(d\)</span>:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Fixed-effects</span>
-<span class="va">progres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/capture.output.html" class="external-link">capture.output</a></span><span class="op">(</span>  <span class="co"># suppress Stan progress for vignette</span>
-  <span class="va">mf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/meta_fixed.html">meta_fixed</a></span><span class="op">(</span><span class="va">logOR</span>, <span class="va">SE</span>, <span class="va">study</span>, <span class="va">towels</span>, 
-                   d <span class="op">=</span> <span class="fu"><a href="../reference/prior.html">prior</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>mean<span class="op">=</span><span class="fl">0</span>, sd<span class="op">=</span><span class="fl">.3</span><span class="op">)</span>, lower<span class="op">=</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span>
-<span class="op">)</span>
-<span class="va">mf</span></code></pre></div>
-<pre><code><span class="co">## ### Bayesian Fixed-Effects Meta-Analysis ### </span>
-<span class="co">##    Prior on d:    'norm' (mean=0, sd=0.3) truncated to the interval [0,Inf]. </span>
-<span class="co">## </span>
-<span class="co">## # Bayes factors:</span>
-<span class="co">##            (denominator)</span>
-<span class="co">## (numerator) fixed_H0 fixed_H1</span>
-<span class="co">##    fixed_H0      1.0   0.0419</span>
-<span class="co">##    fixed_H1     23.9   1.0000</span>
-<span class="co">## </span>
-<span class="co">## # Posterior summary statistics of fixed-effects model:</span>
-<span class="co">##    mean    sd  2.5%   50% 97.5% hpd95_lower hpd95_upper n_eff Rhat</span>
-<span class="co">## d 0.212 0.075 0.066 0.212 0.361       0.062       0.358    NA   NA</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Fixed-effects</span></span>
+<span><span class="va">progres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/capture.output.html" class="external-link">capture.output</a></span><span class="op">(</span>  <span class="co"># suppress Stan progress for vignette</span></span>
+<span>  <span class="va">mf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/meta_fixed.html">meta_fixed</a></span><span class="op">(</span><span class="va">logOR</span>, <span class="va">SE</span>, <span class="va">study</span>, <span class="va">towels</span>, </span>
+<span>                   d <span class="op">=</span> <span class="fu"><a href="../reference/prior.html">prior</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>mean<span class="op">=</span><span class="fl">0</span>, sd<span class="op">=</span><span class="fl">.3</span><span class="op">)</span>, lower<span class="op">=</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">mf</span></span></code></pre></div>
+<pre><code><span><span class="co">## ### Bayesian Fixed-Effects Meta-Analysis ### </span></span>
+<span><span class="co">##    Prior on d:    'norm' (mean=0, sd=0.3) truncated to the interval [0,Inf]. </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## # Bayes factors:</span></span>
+<span><span class="co">##            (denominator)</span></span>
+<span><span class="co">## (numerator) fixed_H0 fixed_H1</span></span>
+<span><span class="co">##    fixed_H0      1.0   0.0419</span></span>
+<span><span class="co">##    fixed_H1     23.9   1.0000</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## # Posterior summary statistics of fixed-effects model:</span></span>
+<span><span class="co">##    mean    sd  2.5%   50% 97.5% hpd95_lower hpd95_upper n_eff Rhat</span></span>
+<span><span class="co">## d 0.212 0.075 0.066 0.212 0.361       0.062       0.358    NA   NA</span></span></code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># plot posterior distribution</span>
-<span class="fu"><a href="../reference/plot_posterior.html">plot_posterior</a></span><span class="op">(</span><span class="va">mf</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># plot posterior distribution</span></span>
+<span><span class="fu"><a href="../reference/plot_posterior.html">plot_posterior</a></span><span class="op">(</span><span class="va">mf</span><span class="op">)</span></span></code></pre></div>
 <p><img src="metaBMA_files/figure-html/unnamed-chunk-2-1.png" width="480"></p>
-<p>In contrast, the random-effects meta-analysis assumes that the effect size varies across studies. Specifically, it is assumed that study effect sizes follow a normal distribution with mean <span class="math inline">\(d\)</span> and standard deviation <span class="math inline">\(\tau\)</span>. This model requires two prior distributions for both parameters:</p>
+<p>In contrast, the random-effects meta-analysis assumes that the effect
+size varies across studies. Specifically, it is assumed that study
+effect sizes follow a normal distribution with mean <span class="math inline">\(d\)</span> and standard deviation <span class="math inline">\(\tau\)</span>. This model requires two prior
+distributions for both parameters:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Random-effects</span>
-<span class="va">progres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/capture.output.html" class="external-link">capture.output</a></span><span class="op">(</span>  <span class="co"># suppress Stan progress for vignette</span>
-  <span class="va">mr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/meta_random.html">meta_random</a></span><span class="op">(</span><span class="va">logOR</span>, <span class="va">SE</span>, <span class="va">study</span>, <span class="va">towels</span>,
-                    d <span class="op">=</span> <span class="fu"><a href="../reference/prior.html">prior</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>mean<span class="op">=</span><span class="fl">0</span>, sd<span class="op">=</span><span class="fl">.3</span><span class="op">)</span>, lower<span class="op">=</span><span class="fl">0</span><span class="op">)</span>,
-                    tau <span class="op">=</span> <span class="fu"><a href="../reference/prior.html">prior</a></span><span class="op">(</span><span class="st">"t"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>location<span class="op">=</span><span class="fl">0</span>, scale<span class="op">=</span><span class="fl">.3</span>, nu<span class="op">=</span><span class="fl">1</span><span class="op">)</span>, lower<span class="op">=</span><span class="fl">0</span><span class="op">)</span>,
-                    iter <span class="op">=</span> <span class="fl">1500</span>, logml_iter <span class="op">=</span> <span class="fl">2000</span>, rel.tol <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span>
-<span class="op">)</span>
-<span class="va">mr</span>  </code></pre></div>
-<pre><code><span class="co">## ### Bayesian Random-Effects Meta-Analysis ### </span>
-<span class="co">##    Prior on d:      'norm' (mean=0, sd=0.3) truncated to the interval [0,Inf]. </span>
-<span class="co">##    Prior on tau:    't' (location=0, scale=0.3, nu=1) truncated to the interval [0,Inf]. </span>
-<span class="co">## </span>
-<span class="co">## # Bayes factors:</span>
-<span class="co">##            (denominator)</span>
-<span class="co">## (numerator) random_H0 random_H1</span>
-<span class="co">##   random_H0      1.00     0.264</span>
-<span class="co">##   random_H1      3.78     1.000</span>
-<span class="co">## </span>
-<span class="co">## # Posterior summary statistics of random-effects model:</span>
-<span class="co">##      mean    sd  2.5%   50% 97.5% hpd95_lower hpd95_upper  n_eff  Rhat</span>
-<span class="co">## d   0.194 0.091 0.028 0.191 0.376       0.011       0.350 1857.5 1.002</span>
-<span class="co">## tau 0.123 0.107 0.004 0.096 0.402       0.000       0.327 1802.9 1.001</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Random-effects</span></span>
+<span><span class="va">progres</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/capture.output.html" class="external-link">capture.output</a></span><span class="op">(</span>  <span class="co"># suppress Stan progress for vignette</span></span>
+<span>  <span class="va">mr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/meta_random.html">meta_random</a></span><span class="op">(</span><span class="va">logOR</span>, <span class="va">SE</span>, <span class="va">study</span>, <span class="va">towels</span>,</span>
+<span>                    d <span class="op">=</span> <span class="fu"><a href="../reference/prior.html">prior</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>mean<span class="op">=</span><span class="fl">0</span>, sd<span class="op">=</span><span class="fl">.3</span><span class="op">)</span>, lower<span class="op">=</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>                    tau <span class="op">=</span> <span class="fu"><a href="../reference/prior.html">prior</a></span><span class="op">(</span><span class="st">"t"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>location<span class="op">=</span><span class="fl">0</span>, scale<span class="op">=</span><span class="fl">.3</span>, nu<span class="op">=</span><span class="fl">1</span><span class="op">)</span>, lower<span class="op">=</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>                    iter <span class="op">=</span> <span class="fl">1500</span>, logml_iter <span class="op">=</span> <span class="fl">2000</span>, rel.tol <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">mr</span>  </span></code></pre></div>
+<pre><code><span><span class="co">## ### Bayesian Random-Effects Meta-Analysis ### </span></span>
+<span><span class="co">##    Prior on d:      'norm' (mean=0, sd=0.3) truncated to the interval [0,Inf]. </span></span>
+<span><span class="co">##    Prior on tau:    't' (location=0, scale=0.3, nu=1) truncated to the interval [0,Inf]. </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## # Bayes factors:</span></span>
+<span><span class="co">##            (denominator)</span></span>
+<span><span class="co">## (numerator) random_H0 random_H1</span></span>
+<span><span class="co">##   random_H0      1.00     0.264</span></span>
+<span><span class="co">##   random_H1      3.78     1.000</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## # Posterior summary statistics of random-effects model:</span></span>
+<span><span class="co">##      mean    sd  2.5%   50% 97.5% hpd95_lower hpd95_upper  n_eff  Rhat</span></span>
+<span><span class="co">## d   0.197 0.089 0.032 0.196 0.375       0.013       0.349 2556.5 1.002</span></span>
+<span><span class="co">## tau 0.121 0.109 0.004 0.094 0.399       0.000       0.317 1917.7 1.000</span></span></code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># plot posterior distribution</span>
-<span class="fu"><a href="../reference/plot_posterior.html">plot_posterior</a></span><span class="op">(</span><span class="va">mr</span>, main <span class="op">=</span> <span class="st">"Average effect size d"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># plot posterior distribution</span></span>
+<span><span class="fu"><a href="../reference/plot_posterior.html">plot_posterior</a></span><span class="op">(</span><span class="va">mr</span>, main <span class="op">=</span> <span class="st">"Average effect size d"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="metaBMA_files/figure-html/unnamed-chunk-3-1.png" width="480"></p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plot_posterior.html">plot_posterior</a></span><span class="op">(</span><span class="va">mr</span>, <span class="st">"tau"</span>, main <span class="op">=</span> <span class="st">"Heterogeneity tau"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_posterior.html">plot_posterior</a></span><span class="op">(</span><span class="va">mr</span>, <span class="st">"tau"</span>, main <span class="op">=</span> <span class="st">"Heterogeneity tau"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="metaBMA_files/figure-html/unnamed-chunk-3-2.png" width="480"></p>
 </div>
 <div class="section level2">
 <h2 id="model-averaging-for-meta-analysis">Model-Averaging for Meta-Analysis<a class="anchor" aria-label="anchor" href="#model-averaging-for-meta-analysis"></a>
 </h2>
-<p>The most general functions in <code>metaBMA</code> are <code><a href="../reference/meta_bma.html">meta_bma()</a></code> and <code><a href="../reference/meta_default.html">meta_default()</a></code>, which fit random- and fixed-effects models, compute the inclusion Bayes factor for the presence of an effect and the averaged posterior distribution of the mean effect <span class="math inline">\(d\)</span> (which accounts for uncertainty regarding study heterogeneity).</p>
+<p>The most general functions in <code>metaBMA</code> are
+<code><a href="../reference/meta_bma.html">meta_bma()</a></code> and <code><a href="../reference/meta_default.html">meta_default()</a></code>, which fit
+random- and fixed-effects models, compute the inclusion Bayes factor for
+the presence of an effect and the averaged posterior distribution of the
+mean effect <span class="math inline">\(d\)</span> (which accounts for
+uncertainty regarding study heterogeneity).</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/meta_bma.html">meta_bma</a></span><span class="op">(</span><span class="va">logOR</span>, <span class="va">SE</span>, <span class="va">study</span>, <span class="va">towels</span>,
-               d <span class="op">=</span> <span class="fu"><a href="../reference/prior.html">prior</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>mean<span class="op">=</span><span class="fl">0</span>, sd<span class="op">=</span><span class="fl">.3</span><span class="op">)</span>, lower<span class="op">=</span><span class="fl">0</span><span class="op">)</span>,
-               tau <span class="op">=</span> <span class="fu"><a href="../reference/prior.html">prior</a></span><span class="op">(</span><span class="st">"t"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>location<span class="op">=</span><span class="fl">0</span>, scale<span class="op">=</span><span class="fl">.3</span>, nu<span class="op">=</span><span class="fl">1</span><span class="op">)</span>, lower<span class="op">=</span><span class="fl">0</span><span class="op">)</span>,
-                    iter <span class="op">=</span> <span class="fl">1500</span>, logml_iter <span class="op">=</span> <span class="fl">2000</span>, rel.tol <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span>
-<span class="va">mb</span></code></pre></div>
-<pre><code><span class="co">## ### Meta-Analysis with Bayesian Model Averaging ###</span>
-<span class="co">##    Fixed H0:  d = 0 </span>
-<span class="co">##    Fixed H1:  d ~ 'norm' (mean=0, sd=0.3) truncated to the interval [0,Inf]. </span>
-<span class="co">##    Random H0: d   = 0,   </span>
-<span class="co">##               tau ~  't' (location=0, scale=0.3, nu=1) truncated to the interval [0,Inf]. </span>
-<span class="co">##    Random H1: d   ~ 'norm' (mean=0, sd=0.3) truncated to the interval [0,Inf]. </span>
-<span class="co">##               tau ~ 't' (location=0, scale=0.3, nu=1) truncated to the interval [0,Inf]. </span>
-<span class="co">## </span>
-<span class="co">## # Bayes factors:</span>
-<span class="co">##            (denominator)</span>
-<span class="co">## (numerator) fixed_H0 fixed_H1 random_H0 random_H1</span>
-<span class="co">##   fixed_H0      1.00   0.0419     0.433     0.114</span>
-<span class="co">##   fixed_H1     23.87   1.0000    10.330     2.730</span>
-<span class="co">##   random_H0     2.31   0.0968     1.000     0.264</span>
-<span class="co">##   random_H1     8.74   0.3663     3.784     1.000</span>
-<span class="co">## </span>
-<span class="co">## # Bayesian Model Averaging</span>
-<span class="co">##   Comparison: (fixed_H1 &amp; random_H1) vs. (fixed_H0 &amp; random_H0)</span>
-<span class="co">##   Inclusion Bayes factor: 9.851 </span>
-<span class="co">##   Inclusion posterior probability: 0.908 </span>
-<span class="co">## </span>
-<span class="co">## # Model posterior probabilities:</span>
-<span class="co">##           prior posterior logml</span>
-<span class="co">## fixed_H0   0.25    0.0278 -5.58</span>
-<span class="co">## fixed_H1   0.25    0.6644 -2.40</span>
-<span class="co">## random_H0  0.25    0.0643 -4.74</span>
-<span class="co">## random_H1  0.25    0.2434 -3.41</span>
-<span class="co">## </span>
-<span class="co">## # Posterior summary statistics of average effect size:</span>
-<span class="co">##           mean    sd  2.5%   50% 97.5% hpd95_lower hpd95_upper  n_eff  Rhat</span>
-<span class="co">## averaged 0.207 0.080 0.047 0.208 0.363       0.044       0.359     NA    NA</span>
-<span class="co">## fixed    0.210 0.076 0.066 0.209 0.366       0.061       0.356  800.0 1.000</span>
-<span class="co">## random   0.193 0.090 0.020 0.193 0.373       0.002       0.339 1387.5 1.004</span></code></pre>
+<code class="sourceCode R"><span><span class="va">mb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/meta_bma.html">meta_bma</a></span><span class="op">(</span><span class="va">logOR</span>, <span class="va">SE</span>, <span class="va">study</span>, <span class="va">towels</span>,</span>
+<span>               d <span class="op">=</span> <span class="fu"><a href="../reference/prior.html">prior</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>mean<span class="op">=</span><span class="fl">0</span>, sd<span class="op">=</span><span class="fl">.3</span><span class="op">)</span>, lower<span class="op">=</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>               tau <span class="op">=</span> <span class="fu"><a href="../reference/prior.html">prior</a></span><span class="op">(</span><span class="st">"t"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>location<span class="op">=</span><span class="fl">0</span>, scale<span class="op">=</span><span class="fl">.3</span>, nu<span class="op">=</span><span class="fl">1</span><span class="op">)</span>, lower<span class="op">=</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>                    iter <span class="op">=</span> <span class="fl">1500</span>, logml_iter <span class="op">=</span> <span class="fl">2000</span>, rel.tol <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span>
+<span><span class="va">mb</span></span></code></pre></div>
+<pre><code><span><span class="co">## ### Meta-Analysis with Bayesian Model Averaging ###</span></span>
+<span><span class="co">##    Fixed H0:  d = 0 </span></span>
+<span><span class="co">##    Fixed H1:  d ~ 'norm' (mean=0, sd=0.3) truncated to the interval [0,Inf]. </span></span>
+<span><span class="co">##    Random H0: d   = 0,   </span></span>
+<span><span class="co">##               tau ~  't' (location=0, scale=0.3, nu=1) truncated to the interval [0,Inf]. </span></span>
+<span><span class="co">##    Random H1: d   ~ 'norm' (mean=0, sd=0.3) truncated to the interval [0,Inf]. </span></span>
+<span><span class="co">##               tau ~ 't' (location=0, scale=0.3, nu=1) truncated to the interval [0,Inf]. </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## # Bayes factors:</span></span>
+<span><span class="co">##            (denominator)</span></span>
+<span><span class="co">## (numerator) fixed_H0 fixed_H1 random_H0 random_H1</span></span>
+<span><span class="co">##   fixed_H0      1.00   0.0419     0.433     0.114</span></span>
+<span><span class="co">##   fixed_H1     23.87   1.0000    10.330     2.730</span></span>
+<span><span class="co">##   random_H0     2.31   0.0968     1.000     0.264</span></span>
+<span><span class="co">##   random_H1     8.74   0.3663     3.784     1.000</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## # Bayesian Model Averaging</span></span>
+<span><span class="co">##   Comparison: (fixed_H1 &amp; random_H1) vs. (fixed_H0 &amp; random_H0)</span></span>
+<span><span class="co">##   Inclusion Bayes factor: 9.851 </span></span>
+<span><span class="co">##   Inclusion posterior probability: 0.908 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## # Model posterior probabilities:</span></span>
+<span><span class="co">##           prior posterior logml</span></span>
+<span><span class="co">## fixed_H0   0.25    0.0278 -5.58</span></span>
+<span><span class="co">## fixed_H1   0.25    0.6644 -2.40</span></span>
+<span><span class="co">## random_H0  0.25    0.0643 -4.74</span></span>
+<span><span class="co">## random_H1  0.25    0.2434 -3.41</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## # Posterior summary statistics of average effect size:</span></span>
+<span><span class="co">##           mean    sd  2.5%   50% 97.5% hpd95_lower hpd95_upper  n_eff  Rhat</span></span>
+<span><span class="co">## averaged 0.208 0.079 0.052 0.207 0.364       0.048       0.360     NA    NA</span></span>
+<span><span class="co">## fixed    0.219 0.075 0.079 0.219 0.362       0.076       0.358  842.8 1.004</span></span>
+<span><span class="co">## random   0.195 0.088 0.032 0.193 0.374       0.026       0.362 1834.5 1.001</span></span></code></pre>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plot_posterior.html">plot_posterior</a></span><span class="op">(</span><span class="va">mb</span>, <span class="st">"d"</span>, <span class="op">-</span><span class="fl">.1</span>, <span class="fl">1.4</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_posterior.html">plot_posterior</a></span><span class="op">(</span><span class="va">mb</span>, <span class="st">"d"</span>, <span class="op">-</span><span class="fl">.1</span>, <span class="fl">1.4</span><span class="op">)</span></span></code></pre></div>
 <p><img src="metaBMA_files/figure-html/unnamed-chunk-4-1.png" width="576"></p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plot_forest.html">plot_forest</a></span><span class="op">(</span><span class="va">mb</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_forest.html">plot_forest</a></span><span class="op">(</span><span class="va">mb</span><span class="op">)</span></span></code></pre></div>
 <p><img src="metaBMA_files/figure-html/unnamed-chunk-4-2.png" width="576"></p>
 </div>
 <div class="section level2">
 <h2 id="predicted-bayes-factor-for-new-study">Predicted Bayes Factor for New Study<a class="anchor" aria-label="anchor" href="#predicted-bayes-factor-for-new-study"></a>
 </h2>
-<p>Often, it is of interest to judge how much additional evidence future studies can contribute to the present knowledge. Conditional on the outcome of the model averaging for meta-analysis, the function <code><a href="../reference/predicted_bf.html">predicted_bf()</a></code> samples new data sets from the posterior and performs model selection for each replication. Thereby, a distribution of predicted Bayes factors is obtain that represents the expected evidence one expects when running a new study. The following example is not executed since it requires time-intensive computations:</p>
+<p>Often, it is of interest to judge how much additional evidence future
+studies can contribute to the present knowledge. Conditional on the
+outcome of the model averaging for meta-analysis, the function
+<code><a href="../reference/predicted_bf.html">predicted_bf()</a></code> samples new data sets from the posterior and
+performs model selection for each replication. Thereby, a distribution
+of predicted Bayes factors is obtain that represents the expected
+evidence one expects when running a new study. The following example is
+not executed since it requires time-intensive computations:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predicted_bf.html">predicted_bf</a></span><span class="op">(</span><span class="va">mb</span>, SE <span class="op">=</span> <span class="fl">.2</span>, sample <span class="op">=</span> <span class="fl">30</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mp</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">mp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predicted_bf.html">predicted_bf</a></span><span class="op">(</span><span class="va">mb</span>, SE <span class="op">=</span> <span class="fl">.2</span>, sample <span class="op">=</span> <span class="fl">30</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mp</span><span class="op">)</span></span></code></pre></div>
 </div>
   </div>
 
@@ -251,7 +291,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

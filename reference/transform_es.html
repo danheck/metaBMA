@@ -55,16 +55,20 @@ ratio, Pearson correlation r, and Fisher's z).</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">transform_es</span><span class="op">(</span><span class="va">y</span>, <span class="va">SE</span>, <span class="va">from</span>, <span class="va">to</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">transform_es</span><span class="op">(</span><span class="va">y</span>, <span class="va">SE</span>, <span class="va">from</span>, <span class="va">to</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>y</dt>
 <dd><p>estimate of the effect size (can be vectorized).</p></dd>
+
+
 <dt>SE</dt>
 <dd><p>optional: standard error of the effect-size estimate. Must have the
 same length as <code>y</code>.</p></dd>
+
+
 <dt>from</dt>
 <dd><p>type of effect-size measure provided by the argument <code>y</code>.
 Supported effect sizes are
@@ -72,12 +76,17 @@ Cohen's d (<code>"d"</code>),
 Fisher's z-transformed correlation (<code>"z"</code>),
 Pearson's correlation (<code>"r"</code>),
 or the log odds ratio (<code>"logOR"</code>).</p></dd>
+
+
 <dt>to</dt>
 <dd><p>which type of effect size should be returned (see <code>from</code>).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>If <code>SE</code> is missing, a vector of transformed effect sizes. Otherwise,
+    
+
+<p>If <code>SE</code> is missing, a vector of transformed effect sizes. Otherwise,
 a matrix with two columns including effect sizes and standard errors.</p>
     </div>
     <div id="details">
@@ -98,13 +107,13 @@ The conversion from <code>"d"</code> to <code>"r"</code> assumes equal sample si
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># transform a single value of Cohen's</span></span>
-<span class="r-in"><span class="fu">transform_es</span><span class="op">(</span>y <span class="op">=</span> <span class="fl">0.50</span>, SE <span class="op">=</span> <span class="fl">0.20</span>, from <span class="op">=</span> <span class="st">"d"</span>, to <span class="op">=</span> <span class="st">"logOR"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># transform a single value of Cohen's</span></span></span>
+<span class="r-in"><span><span class="fu">transform_es</span><span class="op">(</span>y <span class="op">=</span> <span class="fl">0.50</span>, SE <span class="op">=</span> <span class="fl">0.20</span>, from <span class="op">=</span> <span class="st">"d"</span>, to <span class="op">=</span> <span class="st">"logOR"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          logOR        SE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.9068997 0.3627599</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># towels data set:</span></span>
-<span class="r-in"><span class="fu">transform_es</span><span class="op">(</span>y <span class="op">=</span> <span class="va">towels</span><span class="op">$</span><span class="va">logOR</span>, SE <span class="op">=</span> <span class="va">towels</span><span class="op">$</span><span class="va">SE</span>, from <span class="op">=</span> <span class="st">"logOR"</span>, to <span class="op">=</span> <span class="st">"d"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># towels data set:</span></span></span>
+<span class="r-in"><span><span class="fu">transform_es</span><span class="op">(</span>y <span class="op">=</span> <span class="va">towels</span><span class="op">$</span><span class="va">logOR</span>, SE <span class="op">=</span> <span class="va">towels</span><span class="op">$</span><span class="va">SE</span>, from <span class="op">=</span> <span class="st">"logOR"</span>, to <span class="op">=</span> <span class="st">"d"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                d         SE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  0.20983674 0.10899227</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  0.16812095 0.07504441</span>
@@ -113,7 +122,7 @@ The conversion from <code>"d"</code> to <code>"r"</code> assumes equal sample si
 <span class="r-out co"><span class="r-pr">#&gt;</span> [5,]  0.15860744 0.45415964</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [6,] -0.06700986 0.13675933</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [7,] -0.80379564 0.41910909</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -128,7 +137,7 @@ The conversion from <code>"d"</code> to <code>"r"</code> assumes equal sample si
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

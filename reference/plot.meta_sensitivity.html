@@ -55,37 +55,52 @@ meta_sensitivity()."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/a
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S3 method for meta_sensitivity</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>
-  <span class="va">x</span>,
-  parameter <span class="op">=</span> <span class="st">"d"</span>,
-  distribution <span class="op">=</span> <span class="st">"posterior"</span>,
-  <span class="va">from</span>,
-  <span class="va">to</span>,
-  n <span class="op">=</span> <span class="fl">101</span>,
-  legend <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for meta_sensitivity</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  parameter <span class="op">=</span> <span class="st">"d"</span>,</span>
+<span>  distribution <span class="op">=</span> <span class="st">"posterior"</span>,</span>
+<span>  <span class="va">from</span>,</span>
+<span>  <span class="va">to</span>,</span>
+<span>  n <span class="op">=</span> <span class="fl">101</span>,</span>
+<span>  legend <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>prior probability density function defined via <code><a href="prior.html">prior</a></code>.</p></dd>
+
+
 <dt>parameter</dt>
 <dd><p>which parameter should be plotted: <code>"d"</code> or <code>"tau"</code>.</p></dd>
+
+
 <dt>distribution</dt>
 <dd><p>which distribution should be plotted: <code>"prior"</code> or <code>"posterior"</code>.</p></dd>
+
+
 <dt>from</dt>
 <dd><p>lower boundary</p></dd>
+
+
 <dt>to</dt>
 <dd><p>upper boundary</p></dd>
+
+
 <dt>n</dt>
 <dd><p>integer; the number of x values at which to evaluate.</p></dd>
+
+
 <dt>legend</dt>
 <dd><p>whether to print all prior specifications and plot a corresponding legend.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>further arguments passed to <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></code></p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -110,7 +125,7 @@ distributions for the random effects models will be plotted.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

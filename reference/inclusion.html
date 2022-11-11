@@ -53,7 +53,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">inclusion</span><span class="op">(</span><span class="va">logml</span>, include <span class="op">=</span> <span class="fl">1</span>, prior <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">inclusion</span><span class="op">(</span><span class="va">logml</span>, include <span class="op">=</span> <span class="fl">1</span>, prior <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -61,6 +61,8 @@
     <dl><dt>logml</dt>
 <dd><p>a vector with log-marginal likelihoods. Alternatively, a list
 with meta-analysis models (fitted via <code><a href="meta_random.html">meta_random</a></code> or <code><a href="meta_fixed.html">meta_fixed</a></code>).</p></dd>
+
+
 <dt>include</dt>
 <dd><p>integer vector which models to include in inclusion Bayes
 factor/posterior probability. If only two marginal likelihoods/meta-analyses
@@ -69,33 +71,36 @@ BF_{M1,M2}. One can include models depending on the names of the models (such as
 <code>"random_H1"</code>) by providing a character value, for instance: <code>include="H1"</code>
 (all H1 vs. all H0 models) or <code>include="random"</code> (all random- vs. all
 fixed-effects models).</p></dd>
+
+
 <dt>prior</dt>
 <dd><p>prior probabilities over models (possibly unnormalized). For instance, if the first model is as likely as models 2, 3 and 4 together: <code>prior = c(3,1,1,1)</code>. The default is a discrete uniform distribution over models.</p></dd>
+
 </dl></div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co">#### Example with simple Normal-distribution models</span></span>
-<span class="r-in"><span class="co"># generate data:</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">50</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Model 1: x ~ Normal(0,1)</span></span>
-<span class="r-in"><span class="va">logm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">dnorm</a></span><span class="op">(</span><span class="va">x</span>, log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Model 2: x ~ Normal(.2, 1)</span></span>
-<span class="r-in"><span class="va">logm2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">dnorm</a></span><span class="op">(</span><span class="va">x</span>, mean <span class="op">=</span> <span class="fl">.2</span>, log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Model 3: x ~ Student-t(df=2)</span></span>
-<span class="r-in"><span class="va">logm3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/TDist.html" class="external-link">dt</a></span><span class="op">(</span><span class="va">x</span>, df <span class="op">=</span> <span class="fl">2</span>, log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># BF: Correct (Model 1) vs. misspecified (2 &amp; 3)</span></span>
-<span class="r-in"><span class="fu">inclusion</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">logm1</span>, <span class="va">logm2</span>, <span class="va">logm3</span><span class="op">)</span>, include <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">#### Example with simple Normal-distribution models</span></span></span>
+<span class="r-in"><span><span class="co"># generate data:</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">50</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Model 1: x ~ Normal(0,1)</span></span></span>
+<span class="r-in"><span><span class="va">logm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">dnorm</a></span><span class="op">(</span><span class="va">x</span>, log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Model 2: x ~ Normal(.2, 1)</span></span></span>
+<span class="r-in"><span><span class="va">logm2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">dnorm</a></span><span class="op">(</span><span class="va">x</span>, mean <span class="op">=</span> <span class="fl">.2</span>, log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Model 3: x ~ Student-t(df=2)</span></span></span>
+<span class="r-in"><span><span class="va">logm3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/TDist.html" class="external-link">dt</a></span><span class="op">(</span><span class="va">x</span>, df <span class="op">=</span> <span class="fl">2</span>, log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># BF: Correct (Model 1) vs. misspecified (2 &amp; 3)</span></span></span>
+<span class="r-in"><span><span class="fu">inclusion</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">logm1</span>, <span class="va">logm2</span>, <span class="va">logm3</span><span class="op">)</span>, include <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ### Inclusion Bayes factor ###</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Model Prior Posterior included</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Model 1 0.333  0.691663        x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Model 2 0.333  0.308085         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Model 3 0.333  0.000251         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Model 1 0.333  0.855661        x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Model 2 0.333  0.144048         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Model 3 0.333  0.000291         </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Inclusion posterior probability: 0.692 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Inclusion Bayes factor: 4.486</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Inclusion posterior probability: 0.856 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Inclusion Bayes factor: 11.856</span>
 </code></pre></div>
     </div>
   </div>
@@ -110,7 +115,7 @@ fixed-effects models).</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

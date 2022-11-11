@@ -59,7 +59,7 @@ Moreover, scale adjustments were implemented when using Fisher's z or log odds-r
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">meta_default</span><span class="op">(</span><span class="va">y</span>, <span class="va">SE</span>, <span class="va">labels</span>, <span class="va">data</span>, field <span class="op">=</span> <span class="st">"psychology"</span>, effect <span class="op">=</span> <span class="st">"d"</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">meta_default</span><span class="op">(</span><span class="va">y</span>, <span class="va">SE</span>, <span class="va">labels</span>, <span class="va">data</span>, field <span class="op">=</span> <span class="st">"psychology"</span>, effect <span class="op">=</span> <span class="st">"d"</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -69,25 +69,38 @@ Moreover, scale adjustments were implemented when using Fisher's z or log odds-r
 the quoted or unquoted name of the variable in <code>data</code>, or (3) a
 <code><a href="https://rdrr.io/r/stats/formula.html" class="external-link">formula</a></code> to include discrete or continuous moderator
 variables.</p></dd>
+
+
 <dt>SE</dt>
 <dd><p>standard error of effect size for each study. Can be a numeric
 vector or the quoted or unquoted name of the variable in <code>data</code></p></dd>
+
+
 <dt>labels</dt>
 <dd><p>optional: character values with study labels. Can be a
 character vector or the quoted or unquoted name of the variable in
 <code>data</code></p></dd>
+
+
 <dt>data</dt>
 <dd><p>data frame containing the variables for effect size <code>y</code>,
 standard error <code>SE</code>, <code>labels</code>, and moderators per study.</p></dd>
+
+
 <dt>field</dt>
 <dd><p>either<code>"psychology"</code> or <code>"medicine"</code></p></dd>
+
+
 <dt>effect</dt>
 <dd><p>the type of effect size used in the meta-analysis: either
 Cohen's d (<code>"d"</code>),
 Fisher's z-transformed correlation (<code>"z"</code>),
 or log odds ratios (<code>"logOR"</code>).</p></dd>
+
+
 <dt>...</dt>
 <dd><p>further arguments passed to <code><a href="meta_bma.html">meta_bma</a></code></p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -125,17 +138,17 @@ inverse gamma with shape=1 and scale=0.272 on tau.</p></li>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">towels</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">md</span> <span class="op">&lt;-</span> <span class="fu">meta_default</span><span class="op">(</span><span class="va">logOR</span>, <span class="va">SE</span>, <span class="va">study</span>, <span class="va">towels</span>,</span>
-<span class="r-in">  field <span class="op">=</span> <span class="st">"psychology"</span>, effect <span class="op">=</span> <span class="st">"logOR"</span></span>
-<span class="r-in"><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">towels</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">md</span> <span class="op">&lt;-</span> <span class="fu">meta_default</span><span class="op">(</span><span class="va">logOR</span>, <span class="va">SE</span>, <span class="va">study</span>, <span class="va">towels</span>,</span></span>
+<span class="r-in"><span>  field <span class="op">=</span> <span class="st">"psychology"</span>, effect <span class="op">=</span> <span class="st">"logOR"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There were 1 divergent transitions after warmup. See</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> to find out why this is a problem and how to eliminate them.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Examine the pairs() plot to diagnose sampling problems</span>
-<span class="r-in"><span class="va">md</span></span>
+<span class="r-in"><span><span class="va">md</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ### Meta-Analysis with Bayesian Model Averaging ###</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Fixed H0:  d = 0 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Fixed H1:  d ~ 't' (location=0, scale=1.283, nu=1) with support on the interval [-Inf,Inf]. </span>
@@ -169,10 +182,10 @@ inverse gamma with shape=1 and scale=0.272 on tau.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> averaged 0.218 0.092  0.030 0.220 0.388       0.038       0.393     NA    NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> fixed    0.227 0.078  0.074 0.227 0.378       0.076       0.379 3159.9 1.000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> random   0.191 0.128 -0.084 0.197 0.429      -0.079       0.434 4091.1 1.001</span>
-<span class="r-in"><span class="fu"><a href="plot_forest.html">plot_forest</a></span><span class="op">(</span><span class="va">md</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="plot_forest.html">plot_forest</a></span><span class="op">(</span><span class="va">md</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="meta_default-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -187,7 +200,7 @@ inverse gamma with shape=1 and scale=0.272 on tau.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

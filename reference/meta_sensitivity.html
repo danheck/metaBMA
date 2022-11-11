@@ -57,17 +57,17 @@ heterogeneity of effect sizes across studies).</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">meta_sensitivity</span><span class="op">(</span>
-  <span class="va">y</span>,
-  <span class="va">SE</span>,
-  <span class="va">labels</span>,
-  <span class="va">data</span>,
-  <span class="va">d_list</span>,
-  <span class="va">tau_list</span>,
-  analysis <span class="op">=</span> <span class="st">"bma"</span>,
-  combine_priors <span class="op">=</span> <span class="st">"crossed"</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">meta_sensitivity</span><span class="op">(</span></span>
+<span>  <span class="va">y</span>,</span>
+<span>  <span class="va">SE</span>,</span>
+<span>  <span class="va">labels</span>,</span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">d_list</span>,</span>
+<span>  <span class="va">tau_list</span>,</span>
+<span>  analysis <span class="op">=</span> <span class="st">"bma"</span>,</span>
+<span>  combine_priors <span class="op">=</span> <span class="st">"crossed"</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -77,39 +77,58 @@ heterogeneity of effect sizes across studies).</p>
 the quoted or unquoted name of the variable in <code>data</code>, or (3) a
 <code><a href="https://rdrr.io/r/stats/formula.html" class="external-link">formula</a></code> to include discrete or continuous moderator
 variables.</p></dd>
+
+
 <dt>SE</dt>
 <dd><p>standard error of effect size for each study. Can be a numeric
 vector or the quoted or unquoted name of the variable in <code>data</code></p></dd>
+
+
 <dt>labels</dt>
 <dd><p>optional: character values with study labels. Can be a
 character vector or the quoted or unquoted name of the variable in
 <code>data</code></p></dd>
+
+
 <dt>data</dt>
 <dd><p>data frame containing the variables for effect size <code>y</code>,
 standard error <code>SE</code>, <code>labels</code>, and moderators per study.</p></dd>
+
+
 <dt>d_list</dt>
 <dd><p>a <code>list</code> of prior distributions specified via <code><a href="prior.html">prior()</a></code>
 for the overall effect size (mean) across studies</p></dd>
+
+
 <dt>tau_list</dt>
 <dd><p>a <code>list</code> of prior distributions specified via <code><a href="prior.html">prior()</a></code>
 for the heterogeneity (SD) of effect sizes across studies</p></dd>
+
+
 <dt>analysis</dt>
 <dd><p>which type of meta-analysis should be performed for analysis?
 Can be one of the following:</p><ul><li><p><code>"fixed"</code> for fixed-effects model, see <code><a href="meta_fixed.html">meta_fixed()</a></code></p></li>
 <li><p><code>"random"</code> for random-effects model, see <code><a href="meta_random.html">meta_random()</a></code></p></li>
 <li><p><code>"bma"</code> for model averaging, see <code><a href="meta_bma.html">meta_bma()</a></code></p></li>
 </ul></dd>
+
+
 <dt>combine_priors</dt>
 <dd><p>either <code>"matched"</code>, in which case the analysis
 includes the <em>matched</em> pairwise combinations of the prior distributions
 specified in <code>d_list</code> and <code>tau_list</code>, or <code>crossed</code>, in
 which case the analysis uses <em>all possible</em> pairwise combinations of priors.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>further arguments passed to the function specified in <code>analysis</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>an object of the S3 class <code>meta_sensitivity</code>, that is, a list of fitted
+    
+
+<p>an object of the S3 class <code>meta_sensitivity</code>, that is, a list of fitted
 meta-analysis models. Results can be printed or plotted using
 <code><a href="plot.meta_sensitivity.html">plot.meta_sensitivity()</a></code>.</p>
     </div>
@@ -120,17 +139,17 @@ meta-analysis models. Results can be printed or plotted using
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">towels</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">sensitivity</span> <span class="op">&lt;-</span> <span class="fu">meta_sensitivity</span><span class="op">(</span></span>
-<span class="r-in">  y <span class="op">=</span> <span class="va">logOR</span>, SE <span class="op">=</span> <span class="va">SE</span>, labels <span class="op">=</span> <span class="va">study</span>, data <span class="op">=</span> <span class="va">towels</span>,</span>
-<span class="r-in">  d_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="prior.html">prior</a></span><span class="op">(</span><span class="st">"cauchy"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">.707</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">                <span class="fu"><a href="prior.html">prior</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">.5</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">                <span class="fu"><a href="prior.html">prior</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">.3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">  tau_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="prior.html">prior</a></span><span class="op">(</span><span class="st">"invgamma"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.15</span><span class="op">)</span>, label <span class="op">=</span> <span class="st">"tau"</span><span class="op">)</span>,</span>
-<span class="r-in">                  <span class="fu"><a href="prior.html">prior</a></span><span class="op">(</span><span class="st">"gamma"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">3</span><span class="op">)</span>, label <span class="op">=</span> <span class="st">"tau"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">  analysis <span class="op">=</span> <span class="st">"random"</span>,</span>
-<span class="r-in">  combine_priors <span class="op">=</span> <span class="st">"crossed"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">towels</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sensitivity</span> <span class="op">&lt;-</span> <span class="fu">meta_sensitivity</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  y <span class="op">=</span> <span class="va">logOR</span>, SE <span class="op">=</span> <span class="va">SE</span>, labels <span class="op">=</span> <span class="va">study</span>, data <span class="op">=</span> <span class="va">towels</span>,</span></span>
+<span class="r-in"><span>  d_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="prior.html">prior</a></span><span class="op">(</span><span class="st">"cauchy"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">.707</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                <span class="fu"><a href="prior.html">prior</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">.5</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                <span class="fu"><a href="prior.html">prior</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">.3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  tau_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="prior.html">prior</a></span><span class="op">(</span><span class="st">"invgamma"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.15</span><span class="op">)</span>, label <span class="op">=</span> <span class="st">"tau"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  <span class="fu"><a href="prior.html">prior</a></span><span class="op">(</span><span class="st">"gamma"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">3</span><span class="op">)</span>, label <span class="op">=</span> <span class="st">"tau"</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  analysis <span class="op">=</span> <span class="st">"random"</span>,</span></span>
+<span class="r-in"><span>  combine_priors <span class="op">=</span> <span class="st">"crossed"</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There were 1 divergent transitions after warmup. See</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> to find out why this is a problem and how to eliminate them.</span>
@@ -147,8 +166,8 @@ meta-analysis models. Results can be printed or plotted using
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> to find out why this is a problem and how to eliminate them.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Examine the pairs() plot to diagnose sampling problems</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">sensitivity</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">sensitivity</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ### Sensitivity analysis for Bayesian meta-analysis ###</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Prior distributions on d (= overall effect size):</span>
@@ -194,9 +213,9 @@ meta-analysis models. Results can be printed or plotted using
 <span class="r-out co"><span class="r-pr">#&gt;</span> prior4      0.50      0.50</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> prior5      0.38      0.62</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> prior6      0.47      0.53</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sensitivity</span>, <span class="st">"d"</span>, <span class="st">"prior"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sensitivity</span>, <span class="st">"d"</span>, <span class="st">"prior"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Prior distributions on d (= overall effect size):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "'t' (location=0, scale=0.707, nu=1) with support on the interval [-Inf,Inf]."</span>
@@ -214,7 +233,7 @@ meta-analysis models. Results can be printed or plotted using
 <span class="r-out co"><span class="r-pr">#&gt;</span> [4] "'gamma' (shape=1.5, rate=3) with support on the interval [0,Inf]."     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [5] "'invgamma' (shape=1, scale=0.15) with support on the interval [0,Inf]."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [6] "'gamma' (shape=1.5, rate=3) with support on the interval [0,Inf]."     </span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sensitivity</span>, <span class="st">"d"</span>, <span class="st">"posterior"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sensitivity</span>, <span class="st">"d"</span>, <span class="st">"posterior"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="meta_sensitivity-1.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Prior distributions on d (= overall effect size):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -233,8 +252,8 @@ meta-analysis models. Results can be printed or plotted using
 <span class="r-out co"><span class="r-pr">#&gt;</span> [4] "'gamma' (shape=1.5, rate=3) with support on the interval [0,Inf]."     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [5] "'invgamma' (shape=1, scale=0.15) with support on the interval [0,Inf]."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [6] "'gamma' (shape=1.5, rate=3) with support on the interval [0,Inf]."     </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sensitivity</span>, <span class="st">"tau"</span>, <span class="st">"prior"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sensitivity</span>, <span class="st">"tau"</span>, <span class="st">"prior"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Prior distributions on d (= overall effect size):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "'t' (location=0, scale=0.707, nu=1) with support on the interval [-Inf,Inf]."</span>
@@ -252,7 +271,7 @@ meta-analysis models. Results can be printed or plotted using
 <span class="r-out co"><span class="r-pr">#&gt;</span> [4] "'gamma' (shape=1.5, rate=3) with support on the interval [0,Inf]."     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [5] "'invgamma' (shape=1, scale=0.15) with support on the interval [0,Inf]."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [6] "'gamma' (shape=1.5, rate=3) with support on the interval [0,Inf]."     </span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sensitivity</span>, <span class="st">"tau"</span>, <span class="st">"posterior"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sensitivity</span>, <span class="st">"tau"</span>, <span class="st">"posterior"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="meta_sensitivity-2.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Prior distributions on d (= overall effect size):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -271,8 +290,8 @@ meta-analysis models. Results can be printed or plotted using
 <span class="r-out co"><span class="r-pr">#&gt;</span> [4] "'gamma' (shape=1.5, rate=3) with support on the interval [0,Inf]."     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [5] "'invgamma' (shape=1, scale=0.15) with support on the interval [0,Inf]."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [6] "'gamma' (shape=1.5, rate=3) with support on the interval [0,Inf]."     </span>
-<span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -287,7 +306,7 @@ meta-analysis models. Results can be printed or plotted using
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
