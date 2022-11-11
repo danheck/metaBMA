@@ -1,9 +1,8 @@
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/metaBMA)](http://cran.r-project.org/package=metaBMA)
-[![Build Status](https://travis-ci.org/danheck/metaBMA.svg?branch=master)](https://travis-ci.org/danheck/metaBMA)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/metaBMA)](https://cran.r-project.org/package=metaBMA)
+[![Workflow](https://github.com/danheck/metaBMA/actions/workflows/check-full.yaml/badge.svg)](https://github.com/danheck/metaBMA/actions/workflows/check-full.yaml)
 [![Licence](https://img.shields.io/badge/licence-GPL--2-green.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
-[![DOI](https://zenodo.org/badge/80750374.svg)](https://zenodo.org/badge/latestdoi/80750374)
-[![monthly downloads](http://cranlogs.r-pkg.org/badges/metaBMA)](http://cranlogs.r-pkg.org/badges/metaBMA)
-[![total downloads](http://cranlogs.r-pkg.org/badges/grand-total/metaBMA)](http://cranlogs.r-pkg.org/badges/grand-total/metaBMA)
+[![monthly downloads](https://cranlogs.r-pkg.org/badges/metaBMA)](https://cranlogs.r-pkg.org/badges/metaBMA)
+[![total downloads](https://cranlogs.r-pkg.org/badges/grand-total/metaBMA)](https://cranlogs.r-pkg.org/badges/grand-total/metaBMA)
 
 
 # metaBMA
