@@ -54,7 +54,7 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for meta_pred</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, which <span class="op">=</span> <span class="st">"d_10_averaged"</span>, scale <span class="op">=</span> <span class="st">"BF"</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, which <span class="op">=</span> <span class="st">"BF.inclusion"</span>, scale <span class="op">=</span> <span class="st">"BF"</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -65,13 +65,15 @@ and predicted Bayes factors</p></dd>
 
 
 <dt>which</dt>
-<dd><p>a character value defining which Bayes factor to plot
-(one of "d_10_fixed", "d_10_random", "d_10_averaged",
-"H1_fixed_vs_random")</p></dd>
+<dd><p>a character value defining which Bayes factor to plot.
+Some options are:</p><ul><li><p><code>"BF.inclusion"</code> = model averaging across fixed- and random-effects models</p></li>
+<li><p><code>"BF.fixed_H1.fixed_H0"</code> = consider only fixed-effects model</p></li>
+<li><p><code>"BF.random_H1.random_H0"</code> = consider only fixed-effects model</p></li>
+</ul></dd>
 
 
 <dt>scale</dt>
-<dd><p>either plots Bayes factors (<code>"BF"</code>), inverse Bayes factors
+<dd><p>either plot Bayes factors (<code>"BF"</code>), inverse Bayes factors
 (<code>"1/BF"</code>), log Bayes factors (<code>"log"</code>), or the log-inverse
 Bayes factor (<code>"1/log"</code>)</p></dd>
 
@@ -93,7 +95,7 @@ Bayes factor (<code>"1/log"</code>)</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>
