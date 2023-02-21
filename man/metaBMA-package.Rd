@@ -62,6 +62,7 @@ metaBMA: Bayesian model averaging for random and fixed effects meta-analysis.
 Useful links:
 \itemize{
   \item \url{https://github.com/danheck/metaBMA}
+  \item \url{https://danheck.github.io/metaBMA/}
 }
 
 }
