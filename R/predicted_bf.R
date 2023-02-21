@@ -66,7 +66,7 @@ predicted_bf <- function(meta, SE, sample = 100, ...) {
     param.rH1 <- mcmc[idx, c("d", "tau")]
   }
 
-  #--------------  sample data sets
+  #--------------  generate random data sets based on posterior
   d.pred <- c(
     rstudy(nn["fixed_H0"], "fixed", param.fH0, SE),
     rstudy(nn["fixed_H1"], "fixed", param.fH1, SE),
@@ -83,19 +83,30 @@ predicted_bf <- function(meta, SE, sample = 100, ...) {
         prior = meta$prior_models, ...
       )
   }
-  BF.predicted <- t(sapply(meta_list, function(x) unlist(x$BF)))
+  BF.predicted <- t(sapply(meta_list, function(x){
+    c(x$inclusion$incl.BF, unlist(x$BF))
+  }))
   BF.predicted <- cbind(d.pred = d.pred, BF.predicted)
 
+  # get BF names
+  bf_names <- outer(X = paste0("BF.", rownames(meta$BF)),
+                    Y = colnames(meta$BF),
+                    FUN = paste, sep = ".")
+  colnames(BF.predicted) <- c("d.simulated", "BF.inclusion", c(bf_names))
+
   #--------------  compute observed Bayes factors
-  BF.observed <- matrix(y[2:nstudies], nstudies - 1, ncol(BF.predicted),
-    dimnames = list(labels[2:nstudies], colnames(BF.predicted))
+  BF.observed <- matrix(y[2:nstudies],
+                        nrow = nstudies - 1,
+                        ncol = ncol(BF.predicted),
+                        dimnames = list(labels[2:nstudies],
+                                        c("d.observed", colnames(BF.predicted)[-1]))
   )
   for (i in 2:nstudies) {
     tmp <- meta_bma(y[1:i], SEs[1:i], labels[1:i],
       d = d, tau = tau,
       prior = meta$prior_models, ...
     )
-    BF.observed[i - 1, 2:ncol(BF.observed)] <- unlist(tmp$BF)
+    BF.observed[i - 1, 2:ncol(BF.observed)] <- c(tmp$inclusion$incl.BF, c(tmp$BF))
   }
 
   meta_pred <- list(
