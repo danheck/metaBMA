@@ -72,4 +72,5 @@ plot(p2, -.5, 3)
 ### Custom Prior Distribution
 p3 <- prior("custom", function(x) x^2, 0, 1)
 plot(p3, -.1, 1.2)
+
 }

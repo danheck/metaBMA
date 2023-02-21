@@ -19,14 +19,16 @@
 plot.prior <- function(x, from, to, ...) {
   prior <- x
 
-  if (missing(from)) from <- -Inf
-  if (missing(to)) to <- Inf
-  from <- max(from, attr(prior, "lower"))
-  to <- min(to, attr(prior, "upper"))
-  if (from == -Inf) from <- -1
-  if (to == Inf) to <- 1
+  if (missing(from))
+    from <- attr(prior, "lower")
+  if (missing(to))
+    to <- attr(prior, "upper")
+  # from <- max(from, attr(prior, "lower"))
+  # to <- min(to, attr(prior, "upper"))
+  if (is.infinite(from)) from <- - 1.5
+  if (is.infinite(to)) to <- 1.5
 
-  xx <- seq(from, to, length.out = 401)
+  xx <- sort(c(0, seq(from, to, length.out = 401)))
   dpr <- prior(xx)
 
   yticks <- pretty(c(0, dpr))
@@ -38,7 +40,7 @@ plot.prior <- function(x, from, to, ...) {
     ylim = range(yticks), xlim = range(xticks), xaxs = "i",
     las = 1, bty = "n", ...
   )
-  polygon(c(xx, rev(xx)), c(dpr, rep(0, 401)),
+  polygon(c(xx, rev(xx)), c(dpr, rep(0, length(xx))),
     border = NA, col = adjustcolor("darkgray", alpha.f = .2)
   )
   lines(xx, dpr, col = "darkgray", lty = 1, lwd = 2)

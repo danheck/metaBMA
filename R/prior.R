@@ -51,11 +51,19 @@
 #' ### Custom Prior Distribution
 #' p3 <- prior("custom", function(x) x^2, 0, 1)
 #' plot(p3, -.1, 1.2)
+#'
 #' @importFrom LaplacesDemon rinvgamma dst pst rst
 #' @importFrom stats dbeta pbeta rbeta dgamma pgamma rgamma
 #' @export
-prior <- function(family, param, lower, upper, label = "d",
-                  rel.tol = .Machine$double.eps^.5) {
+prior <- function(
+    family,
+    param,
+    lower,
+    upper,
+    label = "d",
+    rel.tol = .Machine$double.eps^.5
+) {
+
   if (inherits(family, "prior")) {
     attr(family, "label") <- label
     return(check_prior(family))
@@ -155,12 +163,17 @@ prior <- function(family, param, lower, upper, label = "d",
         "gamma" = function(x, log = FALSE) {
           dgamma(x, shape = param[1], rate = param[2], log = log)
         },
-        "0" = function(x) {
+        "0" = function(x, log = FALSE) {
           dx <- ifelse(x == 0, 1, 0)
-          ifelse(log, log(dx), dx)
+          if (log) {
+            return(log(dx))
+          } else {
+            dx
+          }
         },
         stop("Prior distribution 'family' not supported.")
       )
+
     } else {
       if (missing(lower)) lower <- default_lower(family)
       if (missing(upper)) upper <- default_upper(family)
