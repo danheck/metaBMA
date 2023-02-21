@@ -19,5 +19,3 @@ document-build-roxygen2-error.R
 tests/testthat/Rplots.pdf
 
 
-
-Rebuild - unload dyn libraries.R

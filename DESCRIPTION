@@ -65,7 +65,9 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 NeedsCompilation: yes
-SystemRequirements: C++17
+SystemRequirements: 
+    GNU make,
+    C++17
 Biarch: true
 Language: en-US
 RoxygenNote: 7.2.3
