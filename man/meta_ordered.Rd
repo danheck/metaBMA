@@ -4,65 +4,7 @@
 \alias{meta_ordered}
 \title{Meta-Analysis with Order-Constrained Study Effects}
 \usage{
-meta_ordered(
-  y,
-  SE,
-  labels,
-  data,
-  d = prior("norm", c(mean = 0, sd = 0.3), lower = 0),
-  tau = prior("invgamma", c(shape = 1, scale = 0.15)),
-  prior = c(1, 1, 1, 1),
-  logml = "integrate",
-  summarize = "stan",
-  ci = 0.95,
-  rel.tol = .Machine$double.eps^0.3,
-  logml_iter = 5000,
-  iter = 5000,
-  silent_stan = TRUE,
-  ...
-)
-}
-\arguments{
-\item{y}{effect size per study. Can be provided as (1) a numeric vector, (2)
-the quoted or unquoted name of the variable in \code{data}, or (3) a
-\code{\link[stats]{formula}} to include discrete or continuous moderator
-variables.}
 
-\item{SE}{standard error of effect size for each study. Can be a numeric
-vector or the quoted or unquoted name of the variable in \code{data}}
-
-\item{labels}{optional: character values with study labels. Can be a
-character vector or the quoted or unquoted name of the variable in
-\code{data}}
-
-\item{data}{data frame containing the variables for effect size \code{y},
-standard error \code{SE}, \code{labels}, and moderators per study.}
-
-\item{d}{\code{prior} distribution on the average effect size \code{d}. The
-prior probability density function is defined via \code{\link{prior}}.}
-
-\item{tau}{\code{prior} distribution on the between-study heterogeneity
-\code{tau} (i.e., the standard deviation of the study effect sizes
-\code{dstudy} in a random-effects meta-analysis. A (nonnegative) prior
-probability density function is defined via \code{\link{prior}}.}
-
-\item{prior}{prior probabilities over models (possibly unnormalized) in the
-order \code{c(fixed_H0, fixed_H1, ordered_H1, random_H1)}. Note that the
-model \code{random_H0} is not included in the comparison.}
-
-\item{logml}{how to estimate the log-marginal likelihood: either by numerical
-integration (\code{"integrate"}) or by bridge sampling using MCMC/Stan
-samples (\code{"stan"}). To obtain high precision with \code{logml="stan"},
-many MCMC samples are required (e.g., \code{logml_iter=10000, warmup=1000}).}
-
-\item{summarize}{how to estimate parameter summaries (mean, median, SD,
-etc.): Either by numerical integration (\code{summarize = "integrate"}) or
-based on MCMC/Stan samples (\code{summarize = "stan"}).}
-
-\item{ci}{probability for the credibility/highest-density intervals.}
-
-\item{rel.tol}{relative tolerance used for numerical integration using
-\code{\link[stats]{integrate}}. Use \code{rel.tol=.Machine$double.eps} for
 maximal precision (however, this might be slow).}
 
 \item{logml_iter}{number of iterations (per chain) from the posterior
