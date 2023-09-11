@@ -211,7 +211,7 @@ approach, the default number of MCMC iterations for <code>meta_ordered</code> is
 <span class="r-in"><span><span class="va">mo</span> <span class="op">&lt;-</span> <span class="fu">meta_ordered</span><span class="op">(</span><span class="va">logOR</span>, <span class="va">SE</span>, <span class="va">study</span>, <span class="va">towels</span>,</span></span>
 <span class="r-in"><span>  d <span class="op">=</span> <span class="fu"><a href="prior.html">prior</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span>, lower <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There were 37 divergent transitions after warmup. See</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There were 6 divergent transitions after warmup. See</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> to find out why this is a problem and how to eliminate them.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Examine the pairs() plot to diagnose sampling problems</span>
@@ -229,23 +229,23 @@ approach, the default number of MCMC iterations for <code>meta_ordered</code> is
 <span class="r-out co"><span class="r-pr">#&gt;</span> # Bayes factors:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            (denominator)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (numerator) null  fixed ordered random</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     null     1.0 0.0419   0.056 0.0975</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     fixed   23.9 1.0000   1.337 2.3259</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ordered 17.9 0.7479   1.000 1.7396</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     random  10.3 0.4299   0.575 1.0000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     null     1.0 0.0419  0.0566 0.0975</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     fixed   23.9 1.0000  1.3506 2.3259</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ordered 17.7 0.7404  1.0000 1.7222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     random  10.3 0.4299  0.5807 1.0000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> # Model posterior probabilities:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         prior posterior logml</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> null     0.25    0.0189 -5.58</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> fixed    0.25    0.4505 -2.40</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ordered  0.25    0.3369 -2.70</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> random   0.25    0.1937 -3.25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> fixed    0.25    0.4520 -2.40</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ordered  0.25    0.3347 -2.71</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> random   0.25    0.1943 -3.25</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> # Posterior summary statistics of average effect size:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          mean    sd  2.5%   50% 97.5% hpd95_lower hpd95_upper   n_eff Rhat</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> fixed   0.214 0.076 0.070 0.214 0.363       0.067       0.360  3361.1    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ordered 0.235 0.075 0.105 0.230 0.394       0.098       0.382      NA   NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> random  0.195 0.088 0.031 0.194 0.372       0.021       0.357 11359.9    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> fixed   0.214 0.076 0.070 0.214 0.363       0.067       0.360  3353.6    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ordered 0.232 0.074 0.104 0.227 0.390       0.092       0.373      NA   NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> random  0.194 0.089 0.029 0.192 0.374       0.017       0.357 10744.2    1</span>
 <span class="r-in"><span><span class="fu"><a href="plot_posterior.html">plot_posterior</a></span><span class="op">(</span><span class="va">mo</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="meta_ordered-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
