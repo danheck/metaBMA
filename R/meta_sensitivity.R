@@ -50,12 +50,17 @@
 #'
 #' @seealso [plot.meta_sensitivity()]
 #' @export
-meta_sensitivity <- function(y, SE, labels, data,
-                             d_list,
-                             tau_list,
-                             analysis = "bma",
-                             combine_priors = "crossed",
-                             ...) {
+meta_sensitivity <- function(
+    y,
+    SE,
+    labels,
+    data,
+    d_list,
+    tau_list,
+    analysis = "bma",
+    combine_priors = "crossed",
+    ...
+) {
 
   analysis <- match.arg(analysis, c("fixed", "random", "bma"))
 
@@ -121,7 +126,10 @@ meta_sensitivity <- function(y, SE, labels, data,
 }
 
 
-print_priors <- function(prior_list, digits = 3) {
+print_priors <- function(
+    prior_list,
+    digits = 3
+) {
 
   if (inherits(prior_list[[1]], "meta_bma")) {
     prior_d   <- sapply(prior_list, function(x) describe_prior(x$meta$random$prior_d))
@@ -146,7 +154,11 @@ print_priors <- function(prior_list, digits = 3) {
 }
 
 #' @export
-print.meta_sensitivity <- function(x, digits = 3, ...) {
+print.meta_sensitivity <- function(
+    x,
+    digits = 3,
+    ...
+) {
 
 
   cat("### Sensitivity analysis for Bayesian meta-analysis ###\n\n")
@@ -197,14 +209,16 @@ print.meta_sensitivity <- function(x, digits = 3, ...) {
 #' @seealso [meta_sensitivity()]
 #' @method plot meta_sensitivity
 #' @export
-plot.meta_sensitivity <- function(x,
-                                  parameter = "d",
-                                  distribution = "posterior",
-                                  from,
-                                  to,
-                                  n = 101,
-                                  legend = TRUE,
-                                  ...) {
+plot.meta_sensitivity <- function(
+    x,
+    parameter = "d",
+    distribution = "posterior",
+    from,
+    to,
+    n = 101,
+    legend = TRUE,
+    ...
+) {
 
   parameter <- match.arg(parameter, c("d", "tau"))
   distribution <- match.arg(distribution, c("prior", "posterior"))

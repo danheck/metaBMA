@@ -1,6 +1,10 @@
-integrate_wrapper <- function(data, d, tau,
-                              rel.tol = .Machine$double.eps^0.5,
-                              ratio.tol = .0001) {
+integrate_wrapper <- function(
+    data,
+    d,
+    tau,
+    rel.tol = .Machine$double.eps^0.5,
+    ratio.tol = .0001
+) {
 
   # shifting the posterior to have the mode (approximately) at zero
   weights <- 1 / data$SE^2

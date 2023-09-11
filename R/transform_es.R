@@ -19,7 +19,11 @@
 #' \code{logOR <--> d <--> r <--> z}.
 #' The conversion from \code{"d"} to \code{"r"} assumes equal sample sizes per condition (n1=n2).
 #'
-#' Note that in in a Bayesian meta-analysis, the prior distributions need to be adapted to the type of effect size. The function \code{\link{meta_default}} provides modified default prior distributions for different effect size measures which are approximately transformation-invariant (but results may still differ depending on which type of effect size is used for analysis).
+#' Note that in in a Bayesian meta-analysis, the prior distributions need to be
+#' adapted to the type of effect size. The function \code{\link{meta_default}}
+#' provides modified default prior distributions for different effect size
+#' measures which are approximately transformation-invariant (but results may
+#' still differ depending on which type of effect size is used for analysis).
 #'
 #' @return
 #' If \code{SE} is missing, a vector of transformed effect sizes. Otherwise,
@@ -36,7 +40,12 @@
 #'
 #' @seealso \code{\link{meta_default}}
 #' @export
-transform_es <- function(y, SE, from, to) {
+transform_es <- function(
+    y,
+    SE,
+    from,
+    to
+) {
 
   from <- match.arg(from, c("d", "logOR", "z", "r"))
   to <- match.arg(to, c("d", "logOR", "z", "r"))

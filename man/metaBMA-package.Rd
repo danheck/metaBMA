@@ -52,7 +52,7 @@ Research Foundation (grant GRK-2277: Statistical Modeling in Psychology).
 \references{
 Gronau, Q. F., Erp, S. V., Heck, D. W., Cesario, J., Jonas, K. J., & Wagenmakers, E.-J. (2017). A Bayesian model-averaged meta-analysis of the power pose effect with informed and default priors: the case of felt power. Comprehensive Results in Social Psychology, 2(1), 123-138. \doi{10.1080/23743603.2017.1326760}
 
-Gronau, Q. F., Heck, D. W., Berkhout, S. W., Haaf, J. M., & Wagenmakers, E.-J. (2020). A primer on Bayesian model-averaged meta-analysis. \doi{10.31234/osf.io/97qup}
+Gronau, Q. F., Heck, D. W., Berkhout, S. W., Haaf, J. M., & Wagenmakers, E.-J. (2021). A primer on Bayesian model-averaged meta-analysis. Advances in Methods and Practices in Psychological Science, 4(3), 1–19. \doi{10.1177/25152459211031256}
 
 Heck, D. W., Gronau, Q. F., & Wagenmakers, E.-J. (2019).
 metaBMA: Bayesian model averaging for random and fixed effects meta-analysis.

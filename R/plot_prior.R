@@ -16,7 +16,12 @@
 #' plot(p2)
 #' @method plot prior
 #' @export
-plot.prior <- function(x, from, to, ...) {
+plot.prior <- function(
+    x,
+    from,
+    to,
+    ...
+) {
   prior <- x
 
   if (missing(from))

@@ -19,13 +19,23 @@
 #' plot_posterior(mr)
 #' }
 #' @export
-meta_random <- function(y, SE, labels, data,
-                        d = prior("cauchy", c(location = 0, scale = 0.707)),
-                        tau = prior("invgamma", c(shape = 1, scale = 0.15)),
-                        rscale_contin = 0.5, rscale_discrete = 0.707, centering = TRUE,
-                        logml = "integrate", summarize = "stan", ci = .95,
-                        rel.tol = .Machine$double.eps^.3,
-                        logml_iter = 5000, silent_stan = TRUE, ...) {
+meta_random <- function(
+    y,
+    SE,
+    labels,
+    data,
+    d = prior("cauchy", c(location = 0, scale = 0.707)),
+    tau = prior("invgamma", c(shape = 1, scale = 0.15)),
+    rscale_contin = 0.5,
+    rscale_discrete = 0.707,
+    centering = TRUE,
+    logml = "integrate",
+    summarize = "stan", ci = .95,
+    rel.tol = .Machine$double.eps^.3,
+    logml_iter = 5000,
+    silent_stan = TRUE,
+    ...
+) {
 
   check_deprecated(list(...)) # error: backwards compatibility
   logml <- match.arg(logml, c("integrate", "stan"))

@@ -34,7 +34,11 @@ The following chain of transformations is adopted from Borenstein et al. (2009):
 \code{logOR <--> d <--> r <--> z}.
 The conversion from \code{"d"} to \code{"r"} assumes equal sample sizes per condition (n1=n2).
 
-Note that in in a Bayesian meta-analysis, the prior distributions need to be adapted to the type of effect size. The function \code{\link{meta_default}} provides modified default prior distributions for different effect size measures which are approximately transformation-invariant (but results may still differ depending on which type of effect size is used for analysis).
+Note that in in a Bayesian meta-analysis, the prior distributions need to be
+adapted to the type of effect size. The function \code{\link{meta_default}}
+provides modified default prior distributions for different effect size
+measures which are approximately transformation-invariant (but results may
+still differ depending on which type of effect size is used for analysis).
 }
 \examples{
 # transform a single value of Cohen's

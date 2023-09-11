@@ -6,7 +6,15 @@
 # meta_random(y,SE)
 
 #' @importFrom LaplacesDemon rtrunc
-ml_estimates <- function(y, SE, model = "random", d, tau, normal_noise = 0) {
+ml_estimates <- function(
+    y,
+    SE,
+    model = "random",
+    d,
+    tau,
+    normal_noise = 0
+) {
+
   N <- length(y)
   est <- list("d" = sum(y * 1 / SE^2) / sum(1 / SE^2))
 

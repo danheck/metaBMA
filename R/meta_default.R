@@ -61,8 +61,16 @@
 #' @seealso \code{\link{meta_bma}}, \code{\link{plot_default}}, \code{\link{transform_es}}
 #' @template ref_gronau2017
 #' @export
-meta_default <- function(y, SE, labels, data,
-                         field = "psychology", effect = "d", ...) {
+meta_default <- function(
+    y,
+    SE,
+    labels,
+    data,
+    field = "psychology",
+    effect = "d",
+    ...
+) {
+
   def <- get_default(field, effect)
   dl <- data_list("random",
                   y = y, SE = SE, labels = labels, data = data,
@@ -78,7 +86,11 @@ meta_default <- function(y, SE, labels, data,
 }
 
 
-get_default <- function(field, effect) {
+get_default <- function(
+    field,
+    effect
+) {
+
   field <- match.arg(field, c("psychology", "medicine"))
   effect <- match.arg(effect, c("d", "z", "logOR", "ttest", "corr"))
 
@@ -147,7 +159,12 @@ get_default <- function(field, effect) {
 #' plot_default(field = "psychology", effect = "d")
 #' @seealso \code{\link{meta_default}} for details on standard priors.
 #' @export
-plot_default <- function(field = "psychology", effect = "d", ...) {
+plot_default <- function(
+    field = "psychology",
+    effect = "d",
+    ...
+) {
+
   mfrow <- par()$mfrow
   par(mfrow = c(1, 2))
   def <- get_default(field, effect)

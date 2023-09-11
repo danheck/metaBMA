@@ -1,7 +1,14 @@
 
 ### random-effects: marginal posterior of both
-post_random <- function(tau, d = 0, data, prior_d, prior_tau, log = FALSE,
-                        rel.tol = .Machine$double.eps^0.5) {
+post_random <- function(
+    tau,
+    d = 0,
+    data,
+    prior_d,
+    prior_tau,
+    log = FALSE,
+    rel.tol = .Machine$double.eps^0.5
+) {
 
   ### priors
   prior <- prior_tau(tau, log = TRUE)
@@ -29,8 +36,15 @@ post_random <- function(tau, d = 0, data, prior_d, prior_tau, log = FALSE,
 
 ################################## integration over 1 parameter ######
 
-post_random_d <- function(d, data, prior_d, prior_tau, log = FALSE,
-                          rel.tol = .Machine$double.eps^0.5) {
+post_random_d <- function(
+    d,
+    data,
+    prior_d,
+    prior_tau,
+    log = FALSE,
+    rel.tol = .Machine$double.eps^0.5
+) {
+
   bounds <- bounds_prior(prior_tau)
   # scale <- integrate(post_random, d = d[1], data = data, bounds[1], bounds[2],
   #                    rel.tol = rel.tol)$value
@@ -45,8 +59,15 @@ post_random_d <- function(d, data, prior_d, prior_tau, log = FALSE,
 }
 
 
-post_random_tau <- function(tau, data, prior_d, prior_tau, log = FALSE,
-                            rel.tol = .Machine$double.eps^0.5) {
+post_random_tau <- function(
+    tau,
+    data,
+    prior_d,
+    prior_tau,
+    log = FALSE,
+    rel.tol = .Machine$double.eps^0.5
+) {
+
   if (attr(prior_d, "family") != "0") {
     bounds <- bounds_prior(prior_d)
     # scale <- integrate( function(x) post_random(tau = tau[1], d = x, data = data),
@@ -68,8 +89,16 @@ post_random_tau <- function(tau, data, prior_d, prior_tau, log = FALSE,
 }
 
 
-post_random_theta <- function(theta, idx, data, prior_d, prior_tau, log = FALSE,
-                              rel.tol = .Machine$double.eps^0.5) {
+post_random_theta <- function(
+    theta,
+    idx,
+    data,
+    prior_d,
+    prior_tau,
+    log = FALSE,
+    rel.tol = .Machine$double.eps^0.5
+) {
+
   bd <- bounds_prior(prior_d)
   bt <- bounds_prior(prior_tau)
 

@@ -22,18 +22,32 @@
 #' mf <- meta_fixed(logOR, SE, study, towels)
 #' plot_forest(mf, mar = c(4.5, 20, 4, .2), xlab = "Log Odds Ratio")
 #' @export
-plot_forest <- function(meta, from, to, shrinked = "random",
-                        summary = c("mean", "hpd"), mar = c(4.5, 12, 4, .3),
-                        cex.axis = 1, ...) {
+plot_forest <- function(
+    meta,
+    from,
+    to,
+    shrinked = "random",
+    summary = c("mean", "hpd"),
+    mar = c(4.5, 12, 4, .3),
+    cex.axis = 1,
+    ...
+) {
   par(mar = mar)
   UseMethod("plot_forest", meta)
 }
 
+
 #' @export
-plot_forest.meta_fixed <- function(meta, from, to, shrinked = "random",
-                                   summary = c("mean", "hpd"),
-                                   mar = c(4.5, 12, 4, .3),
-                                   cex.axis = 1, ...) {
+plot_forest.meta_fixed <- function(
+    meta,
+    from,
+    to,
+    shrinked = "random",
+    summary = c("mean", "hpd"),
+    mar = c(4.5, 12, 4, .3),
+    cex.axis = 1,
+    ...
+) {
   plot_forest.default(meta, from, to,
     summary = summary,
     shrinked = "", main = "Fixed-Effects Meta-Analysis",
@@ -43,11 +57,18 @@ plot_forest.meta_fixed <- function(meta, from, to, shrinked = "random",
   par(mar = c(5.1, 4.1, 4.1, 2.1))
 }
 
+
 #' @export
-plot_forest.meta_random <- function(meta, from, to, shrinked = "random",
-                                    summary = c("mean", "hpd"),
-                                    mar = c(4.5, 12, 4, .3),
-                                    cex.axis = 1, ...) {
+plot_forest.meta_random <- function(
+    meta,
+    from,
+    to,
+    shrinked = "random",
+    summary = c("mean", "hpd"),
+    mar = c(4.5, 12, 4, .3),
+    cex.axis = 1,
+    ...
+) {
   plot_forest.default(meta,
     from = from, to = to, summary = summary,
     shrinked = shrinked, cex.axis = cex.axis,
@@ -57,11 +78,18 @@ plot_forest.meta_random <- function(meta, from, to, shrinked = "random",
   par(mar = c(5.1, 4.1, 4.1, 2.1))
 }
 
+
 #' @export
-plot_forest.meta_bma <- function(meta, from, to, shrinked = "random",
-                                 summary = c("mean", "hpd"),
-                                 mar = c(4.5, 12, 4, .3),
-                                 cex.axis = 1, ...) {
+plot_forest.meta_bma <- function(
+    meta,
+    from,
+    to,
+    shrinked = "random",
+    summary = c("mean", "hpd"),
+    mar = c(4.5, 12, 4, .3),
+    cex.axis = 1,
+    ...
+) {
   meta$data <- meta$meta[[1]]$data
   plot_forest.default(meta,
     from = from, to = to, summary = summary,
@@ -76,10 +104,16 @@ plot_forest.meta_bma <- function(meta, from, to, shrinked = "random",
 
 # ' @rdname plot_posterior
 #' @export
-plot_forest.default <- function(meta, from, to, shrinked = "random",
-                                summary = c("mean", "hpd"),
-                                mar = c(4.5, 12, 4, .3),
-                                cex.axis = 1, ...) {
+plot_forest.default <- function(
+    meta,
+    from,
+    to,
+    shrinked = "random",
+    summary = c("mean", "hpd"),
+    mar = c(4.5, 12, 4, .3),
+    cex.axis = 1,
+    ...
+) {
   ci <- .95
 
   n.studies <- length(meta$data$y)

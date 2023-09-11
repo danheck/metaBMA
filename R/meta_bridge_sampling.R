@@ -1,8 +1,13 @@
 
 #' @importFrom bridgesampling bridge_sampler
-meta_bridge_sampling <- function(meta, logml = "integrate",
-                                 min_samples = 5000,
-                                 rel.error = .01, ...) {
+meta_bridge_sampling <- function(
+    meta,
+    logml = "integrate",
+    min_samples = 5000,
+    rel.error = .01,
+    ...
+) {
+
   if (logml == "integrate" && is.na(meta$logml)) {
     warning(
       "Marginal likelihood could not be computed with numerical integration (logml='integrate)'.\n",

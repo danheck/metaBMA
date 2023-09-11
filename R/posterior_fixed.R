@@ -1,6 +1,12 @@
 ### fixed-effects
-post_fixed <- function(d = 0, data, prior, log = FALSE,
-                       rel.tol = .Machine$double.eps^0.5) {
+post_fixed <- function(
+    d = 0,
+    data,
+    prior,
+    log = FALSE,
+    rel.tol = .Machine$double.eps^0.5
+) {
+
   if (attr(prior, "family") == "0") {
     logprior <- 0
     d <- rep(0, length(d))
@@ -23,8 +29,15 @@ loglik_fixed_H0 <- function(data) {
   sum(dnorm(data$y, mean = 0, sd = data$SE, log = TRUE))
 }
 
-post_fixed_norm <- function(d, data, prior, log = FALSE,
-                            rel.tol = .Machine$double.eps^0.5) {
+
+post_fixed_norm <- function(
+    d,
+    data,
+    prior,
+    log = FALSE,
+    rel.tol = .Machine$double.eps^0.5
+) {
+
   bounds <- bounds_prior(prior)
   if (diff(bounds) != 0) {
     const <- integrate(post_fixed,

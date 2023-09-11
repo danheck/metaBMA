@@ -1,5 +1,10 @@
-summary_meta <- function(meta, summarize = "integrate", ci = .95,
-                         rel.tol = .Machine$double.eps^.3) {
+
+summary_meta <- function(
+    meta, summarize = "integrate",
+    ci = .95,
+    rel.tol = .Machine$double.eps^.3
+) {
+
   summarize <- match.arg(summarize, c("integrate", "stan"))
   estimates <- NULL
   if (summarize == "integrate") {
@@ -44,8 +49,13 @@ summary_meta <- function(meta, summarize = "integrate", ci = .95,
   estimates
 }
 
+
 # x: vector
-summary_samples <- function(x, ci = .95) {
+summary_samples <- function(
+    x,
+    ci = .95
+) {
+
   probs <- c((1 - ci) / 2, .5, 1 - (1 - ci) / 2)
   s <- c(mean(x), sd(x), quantile(x, probs))
   names(s) <- c("mean", "sd", paste0(round(probs * 100, digits = 1), "%"))
@@ -63,7 +73,11 @@ summary_samples <- function(x, ci = .95) {
 
 #' @importFrom coda varnames
 #' @importFrom rstan As.mcmc.list
-summary_stanfit <- function(stanfit, ci = .95) {
+summary_stanfit <- function(
+    stanfit,
+    ci = .95
+) {
+
   # stan summary: cbind(summ[,- c(2,7,8),drop = FALSE], hpd)[sel,,drop = FALSE]
   samples <- As.mcmc.list(stanfit)
   mcmc <- do.call("rbind", samples)
@@ -76,8 +90,13 @@ summary_stanfit <- function(stanfit, ci = .95) {
   summ[sel, , drop = FALSE]
 }
 
-summary_integrate <- function(density, lb = NULL, ub = NULL, ci = .95,
-                              rel.tol = .Machine$double.eps^0.8) {
+summary_integrate <- function(
+    density,
+    lb = NULL,
+    ub = NULL,
+    ci = .95,
+    rel.tol = .Machine$double.eps^0.8
+) {
   if (inherits(density, c("prior", "posterior"))) {
     lb <- attr(density, "lower")
     ub <- attr(density, "upper")

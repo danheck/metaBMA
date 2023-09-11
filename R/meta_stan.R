@@ -8,17 +8,16 @@
 # '     Note that the regression parameters are not meaningfully labeled.
 #' @import rstan
 #' @importFrom utils capture.output
-meta_stan <- function(data_list,
-                      d = prior("cauchy", c(location = 0, scale = 0.707)),
-                      tau = prior("invgamma", c(shape = 1, scale = .15)),
-                      jzs = list(
-                        rscale_contin = 0.5,
-                        rscale_discrete = 0.707,
-                        centering = TRUE
-                      ),
-                      ml_init = TRUE,
-                      silent_stan = TRUE,
-                      ...) {
+meta_stan <- function(
+    data_list,
+    d = prior("cauchy", c(location = 0, scale = 0.707)),
+    tau = prior("invgamma", c(shape = 1, scale = .15)),
+    jzs = list(rscale_contin = 0.5, rscale_discrete = 0.707, centering = TRUE),
+    ml_init = TRUE,
+    silent_stan = TRUE,
+    ...
+) {
+
   data_list <- c(data_list, prior_as_list(d))
   if (grepl("random", data_list$model)) {
     attr(tau, "label") <- "tau"
@@ -74,7 +73,10 @@ meta_stan <- function(data_list,
 }
 
 
-prior_as_list <- function(prior) {
+prior_as_list <- function(
+    prior
+) {
+
   par <- attr(prior, "label")
   prior <- check_prior(prior, lower = ifelse(par == "tau", 0, -Inf))
   param <- attr(prior, "param")
@@ -97,7 +99,11 @@ prior_as_list <- function(prior) {
 
 
 # translate formula into data objects
-add_jzs <- function(data_list, jzs) {
+add_jzs <- function(
+    data_list,
+    jzs
+) {
+
   mf <- data_list$model.frame
   if (is.null(mf)) {
     return(data_list)
@@ -166,7 +172,11 @@ add_jzs <- function(data_list, jzs) {
 #
 # mf: a model.frame/data.frame/list
 # discr: the name of the discrete factor variable
-design_matrix <- function(model.frame, discr) {
+design_matrix <- function(
+    model.frame,
+    discr
+) {
+
   model.frame[[discr]] <- as.factor(model.frame[[discr]])
   levels <- sort(unique(levels(model.frame[[discr]])))
   number_levels <- length(levels)

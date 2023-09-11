@@ -10,7 +10,13 @@
 #' @param sample number of simulated Bayes factors
 #' @param ... further arguments passed to rstan::sampling to draw posterior samples for d and tau.
 #' @export
-predicted_bf <- function(meta, SE, sample = 100, ...) {
+predicted_bf <- function(
+    meta,
+    SE,
+    sample = 100,
+    ...
+) {
+
   if (!inherits(meta, "meta_bma")) {
     stop("Prediction only supported for models fitted via ?meta_bma")
   }

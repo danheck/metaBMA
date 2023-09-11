@@ -1,6 +1,12 @@
 
-check_posterior <- function(dpost, meta, parameter = "d",
-                            rel.tol = .Machine$double.eps^0.3, abs.tol = .001) {
+check_posterior <- function(
+    dpost,
+    meta,
+    parameter = "d",
+    rel.tol = .Machine$double.eps^0.3,
+    abs.tol = .001
+) {
+
   bnd <- bounds_prior(dpost)
   mini <- max(-3, bnd[1])
   maxi <- min(3, bnd[2])

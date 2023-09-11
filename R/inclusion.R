@@ -28,7 +28,12 @@
 #' # BF: Correct (Model 1) vs. misspecified (2 & 3)
 #' inclusion(c(logm1, logm2, logm3), include = 1)
 #' @export
-inclusion <- function(logml, include = 1, prior = 1) {
+inclusion <- function(
+    logml,
+    include = 1,
+    prior = 1
+) {
+
   if (is.list(logml)) {
     logml <- unlist(lapply(logml, "[[", "logml"))
   }
@@ -79,7 +84,12 @@ make_BF <- function(logml) {
 }
 
 #' @export
-print.inclusion <- function(x, digits = 3, ...) {
+print.inclusion <- function(
+    x,
+    digits = 3,
+    ...
+) {
+
   nn <- names(x$prior)
   if (!is.null(attr(x$posterior, "names"))) {
     nn <- attr(x$posterior, "names")

@@ -1,4 +1,5 @@
 prior_pars <- function(prior) {
+
   par_labels <- switch(attr(prior, "family"),
     "norm" = c("mean", "sd"),
     "t" = c("location", "scale", "nu"),
@@ -11,7 +12,12 @@ prior_pars <- function(prior) {
   par_labels
 }
 
-check_prior <- function(prior, lower = -Inf, upper = Inf) {
+check_prior <- function(
+    prior,
+    lower = -Inf,
+    upper = Inf
+) {
+
   attr(prior, "family") <- match.arg(attr(prior, "family"), priors())
 
   stopifnot(inherits(prior, "prior"))
@@ -50,7 +56,13 @@ check_prior <- function(prior, lower = -Inf, upper = Inf) {
   prior
 }
 
-check_y_se <- function(y, SE, labels) {
+
+check_y_se <- function(
+    y,
+    SE,
+    labels
+) {
+
   stopifnot(is.numeric(y))
   stopifnot(is.numeric(SE))
   stopifnot(all(SE > 0))

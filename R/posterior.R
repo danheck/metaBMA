@@ -1,7 +1,12 @@
 
 # construct posterior density function
-posterior <- function(meta, parameter = "d", summarize = "integrate",
-                      rel.tol = .Machine$double.eps^0.5) {
+posterior <- function(
+    meta,
+    parameter = "d",
+    summarize = "integrate",
+    rel.tol = .Machine$double.eps^0.5
+) {
+
   if (inherits(meta, "meta_bma")) {
     if (parameter != "d") {
       stop("bma currently. only working for parameter='d' ")

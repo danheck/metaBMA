@@ -48,13 +48,24 @@
 #' @seealso \link{meta_bma}, \link{meta_random}
 #' @template ref_haaf2019
 #' @export
-meta_ordered <- function(y, SE, labels, data,
-                         d = prior("norm", c(mean = 0, sd = .3), lower = 0),
-                         tau = prior("invgamma", c(shape = 1, scale = 0.15)),
-                         prior = c(1, 1, 1, 1),
-                         logml = "integrate", summarize = "stan", ci = .95,
-                         rel.tol = .Machine$double.eps^.3,
-                         logml_iter = 5000, iter = 5000, silent_stan = TRUE, ...) {
+meta_ordered <- function(
+    y,
+    SE,
+    labels,
+    data,
+    d = prior("norm", c(mean = 0, sd = .3), lower = 0),
+    tau = prior("invgamma", c(shape = 1, scale = 0.15)),
+    prior = c(1, 1, 1, 1),
+    logml = "integrate",
+    summarize = "stan",
+    ci = .95,
+    rel.tol = .Machine$double.eps^.3,
+    logml_iter = 5000,
+    iter = 5000,
+    silent_stan = TRUE,
+    ...
+) {
+
   check_deprecated(list(...)) # error: backwards compatibility
   if (attr(d, "lower") == -Inf && attr(d, "upper") == Inf) {
     stop(
@@ -182,7 +193,11 @@ meta_ordered <- function(y, SE, labels, data,
 
 
 # count how many prior/posterior samples are inside constraints
-count_dstudy <- function(stanfit, prior) {
+count_dstudy <- function(
+    stanfit,
+    prior
+) {
+
   samples <- extract(stanfit, "dstudy")[["dstudy"]]
   check_post <- apply(samples >= attr(prior, "lower") &
     samples <= attr(prior, "upper"), 1, all)

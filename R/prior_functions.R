@@ -1,4 +1,8 @@
-describe_prior <- function(prior, digits = 3) {
+describe_prior <- function(
+    prior,
+    digits = 3
+) {
+
   if (is.null(prior) || !inherits(prior, "prior")) {
     return(NULL)
   }
@@ -42,14 +46,22 @@ describe_prior <- function(prior, digits = 3) {
 
 
 #' @export
-print.prior <- function(x, digits = 3, ...) {
+print.prior <- function(
+    x,
+    digits = 3,
+    ...
+) {
   cat("Prior density function (class='prior'):",
       describe_prior(x, digits = digits), "\n")
 }
 
 
 #' @importFrom LaplacesDemon rinvgamma rst dst pst qst
-rprior <- function(n, prior) {
+rprior <- function(
+    n,
+    prior
+) {
+
   if (is.null(prior)) {
     return(NULL)
   }
@@ -102,7 +114,12 @@ rprior <- function(n, prior) {
 }
 
 
-truncnorm_mean <- function(mean, sd, lower, upper) {
+truncnorm_mean <- function(
+    mean,
+    sd,
+    lower,
+    upper
+) {
   alpha <- (lower - mean) / sd
   beta <- (upper - mean) / sd
   diff_cdf <- pnorm(beta) - pnorm(alpha)
@@ -110,7 +127,10 @@ truncnorm_mean <- function(mean, sd, lower, upper) {
   mean + sd * diff_pdf / diff_cdf
 }
 
-log_diff_exp <- function(logx1, logx2) {
+log_diff_exp <- function(
+    logx1,
+    logx2
+) {
   c <- logx1
   log(exp(logx1 - c) - exp(logx2 - c)) + c
 }

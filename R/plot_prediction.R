@@ -15,10 +15,13 @@
 #' @param ... arguments passed to \code{\link[graphics]{plot}}
 #' @method plot meta_pred
 #' @export
-plot.meta_pred <- function(x,
-                           which = "BF.inclusion",
-                           scale = "BF",
-                           ...) {
+plot.meta_pred <- function(
+    x,
+    which = "BF.inclusion",
+    scale = "BF",
+    ...
+) {
+
   nstudies <- nrow(x$BF.observed) + 1
   BFo <- x$BF.observed[, which]
   BFp <- unlist(x$BF.predicted[, which])

@@ -1,4 +1,9 @@
-print.est <- function(estimates = NULL, what = "", digits = 3) {
+print.est <- function(
+    estimates = NULL,
+    what = "",
+    digits = 3
+) {
+
   if (is.null(estimates)) {
     cat("\n  (no summary statistics for parameters computed)\n")
   } else {
@@ -12,7 +17,12 @@ print.est <- function(estimates = NULL, what = "", digits = 3) {
 # ' @param x a fitted meta-analysis object
 # ' @param ... ignored
 #' @export
-print.meta_fixed <- function(x, digits = 3, ...) {
+print.meta_fixed <- function(
+    x,
+    digits = 3,
+    ...
+) {
+
   cat(
     "### Bayesian Fixed-Effects Meta-Analysis ###",
     "\n   Prior on d:   ", describe_prior(x$prior_d, digits),
@@ -33,7 +43,12 @@ print.meta_fixed <- function(x, digits = 3, ...) {
 
 
 #' @export
-print.meta_random <- function(x, digits = 3, ...) {
+print.meta_random <- function(
+    x,
+    digits = 3,
+    ...
+) {
+
   cat(
     "### Bayesian Random-Effects Meta-Analysis ###",
     "\n   Prior on d:     ", describe_prior(x$prior_d, digits),
@@ -57,7 +72,12 @@ print.meta_random <- function(x, digits = 3, ...) {
 
 
 #' @export
-print.meta_bma <- function(x, digits = 3, ...) {
+print.meta_bma <- function(
+    x,
+    digits = 3,
+    ...
+) {
+
   if (length(x$meta) == 2 && all(names(x$meta) %in% c("fixed", "random"))) {
     cat("### Meta-Analysis with Bayesian Model Averaging ###")
     cat(

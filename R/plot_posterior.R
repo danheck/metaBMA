@@ -7,28 +7,53 @@
 #'
 #' @seealso \link{meta_bma}, \link{meta_fixed}, \link{meta_random}
 #' @export
-plot_posterior <- function(meta, parameter = "d", from, to,
-                           summary = c("mean", "hpd"), ...) {
+plot_posterior <- function(
+    meta,
+    parameter = "d",
+    from,
+    to,
+    summary = c("mean", "hpd"),
+    ...
+) {
   UseMethod("plot_posterior", meta)
 }
 
 
 #' @export
-plot_posterior.meta_fixed <- function(meta, parameter = "d", from, to,
-                                      summary = c("mean", "hpd"), ...) {
+plot_posterior.meta_fixed <- function(
+    meta,
+    parameter = "d",
+    from,
+    to,
+    summary = c("mean", "hpd"),
+    ...
+) {
   NextMethod("plot_posterior", meta)
 }
 
+
 #' @export
-plot_posterior.meta_random <- function(meta, parameter = "d", from, to,
-                                       summary = c("mean", "hpd"), ...) {
+plot_posterior.meta_random <- function(
+    meta,
+    parameter = "d",
+    from,
+    to,
+    summary = c("mean", "hpd"),
+    ...
+) {
   NextMethod("plot_posterior", meta)
 }
 
 
 #' @export
-plot_posterior.default <- function(meta, parameter = "d", from, to,
-                                   summary = c("mean", "hpd"), ...) {
+plot_posterior.default <- function(
+    meta, parameter = "d",
+    from,
+    to,
+    summary = c("mean", "hpd"),
+    ...
+) {
+
   if (attr(meta$prior_d, "family") == "0" && parameter == "d") {
     stop("H0: d = 0 can't be plotted.")
   }
@@ -51,8 +76,15 @@ plot_posterior.default <- function(meta, parameter = "d", from, to,
 
 
 #' @export
-plot_posterior.meta_bma <- function(meta, parameter = "d", from, to,
-                                    summary = c("mean", "hpd"), ...) {
+plot_posterior.meta_bma <- function(
+    meta,
+    parameter = "d",
+    from,
+    to,
+    summary = c("mean", "hpd"),
+    ...
+) {
+
   summary[1] <- match.arg(summary[1], c("mean", "50%"))
   summary[2] <- match.arg(summary[2], c("hpd", "bci"))
   if (parameter != "d") {
@@ -84,9 +116,17 @@ plot_posterior.meta_bma <- function(meta, parameter = "d", from, to,
 }
 
 
-plot_density <- function(dprior, dpost, stats = NULL, others = NULL,
-                         from, to, summary = c("mean", "hpd"),
-                         label_main = "Posterior (averaged)", ...) {
+plot_density <- function(
+    dprior,
+    dpost,
+    stats = NULL,
+    others = NULL,
+    from,
+    to,
+    summary = c("mean", "hpd"),
+    label_main = "Posterior (averaged)",
+    ...
+) {
 
   # get x and y values
   if (missing(from)) from <- -Inf
@@ -150,7 +190,14 @@ plot_density <- function(dprior, dpost, stats = NULL, others = NULL,
 }
 
 
-draw_dens <- function(xx, dx, col, lty, stats = NULL) {
+draw_dens <- function(
+    xx,
+    dx,
+    col,
+    lty,
+    stats = NULL
+) {
+
   if (lty == 5 && all(dx >= 0)) {
     polygon(c(xx, rev(xx)), c(dx, rep(0, 501)),
       border = NA, col = adjustcolor(col, alpha.f = .2)

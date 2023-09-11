@@ -1,4 +1,10 @@
-rstudy <- function(n, model, param, SE) {
+rstudy <- function(
+    n,
+    model,
+    param,
+    SE
+) {
+
   stopifnot(SE >= 0)
   if (n == 0) {
     return(NULL)
@@ -17,5 +23,6 @@ rstudy <- function(n, model, param, SE) {
     }
     rr <- rnorm(n, delta, SE)
   }
+
   rr
 }
