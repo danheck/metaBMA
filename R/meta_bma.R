@@ -79,6 +79,11 @@
 #' the marginal likelihood and posterior summary statistics can only be computed
 #' using Stan.
 #'
+#' @seealso \link{meta_fixed}, \link{meta_random}
+#' @template ref_gronau2017
+#' @template ref_gronau2021
+#' @template ref_berkhout2023
+#'
 #' @examples
 #' \donttest{
 #' ### Bayesian Model-Averaged Meta-Analysis (H1: d>0)
@@ -91,18 +96,24 @@
 #' mb
 #' plot_posterior(mb, "d")
 #' }
-#' @seealso \link{meta_fixed}, \link{meta_random}
-#' @template ref_gronau2017
-#' @template ref_gronau2020
 #' @export
-meta_bma <- function(y, SE, labels, data,
-                     d = prior("cauchy", c(location = 0, scale = 0.707)),
-                     tau = prior("invgamma", c(shape = 1, scale = 0.15)),
-                     rscale_contin = 0.5, rscale_discrete = 0.707,
-                     centering = TRUE, prior = c(1, 1, 1, 1),
-                     logml = "integrate", summarize = "stan", ci = .95,
-                     rel.tol = .Machine$double.eps^.3,
-                     logml_iter = 5000, silent_stan = TRUE, ...) {
+meta_bma <- function(
+    y, SE, labels, data,
+    d = prior("cauchy", c(location = 0, scale = 0.707)),
+    tau = prior("invgamma", c(shape = 1, scale = 0.15)),
+    rscale_contin = 0.5,
+    rscale_discrete = 0.707,
+    centering = TRUE,
+    prior = c(1, 1, 1, 1),
+    logml = "integrate",
+    summarize = "stan",
+    ci = .95,
+    rel.tol = .Machine$double.eps^.3,
+    logml_iter = 5000,
+    silent_stan = TRUE,
+    ...
+) {
+
   check_deprecated(list(...)) # error: backwards compatibility
 
   dl <- data_list(

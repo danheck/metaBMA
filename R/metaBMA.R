@@ -61,6 +61,6 @@
 #' @importFrom grDevices adjustcolor colors
 #'
 #' @template ref_gronau2017
-#' @template ref_gronau2020
+#' @template ref_gronau2021
 #' @template ref_heck2017
 "_PACKAGE"

@@ -1,8 +1,8 @@
 Package: metaBMA
 Type: Package
-Date: 2022-04-25
+Date: 2023-09-11
 Title: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis
-Version: 0.6.8
+Version: 0.6.9
 Authors@R: c(person(given = "Daniel W.",  
                     family = "Heck", 
                     email="dheck@uni-marburg.de", 
@@ -33,7 +33,7 @@ Description: Computes the posterior model probabilities for standard meta-analys
     priors can be fitted and tested. This allows to compute Bayes factors and 
     perform Bayesian model averaging across random- and fixed-effects meta-analysis 
     with and without moderators. For a primer on Bayesian model-averaged meta-analysis, 
-    see Gronau, Heck, Berkhout, Haaf, & Wagenmakers (2020, <doi:10.31234/osf.io/97qup>).
+    see Gronau, Heck, Berkhout, Haaf, & Wagenmakers (2021, <doi:10.1177/25152459211031256>).
 Depends:
     R (>= 4.0.0),
     Rcpp (>= 1.0.0),
