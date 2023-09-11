@@ -46,11 +46,13 @@ plot_forest.meta_fixed <- function(
     summary = c("mean", "hpd"),
     mar = c(4.5, 12, 4, .3),
     cex.axis = 1,
+    main = "Fixed-Effects Meta-Analysis",
     ...
 ) {
   plot_forest.default(meta, from, to,
     summary = summary,
-    shrinked = "", main = "Fixed-Effects Meta-Analysis",
+    shrinked = "",
+    main = main,
     cex.axis = cex.axis, ...
   )
   axis(2, -1, "Total", las = 1, tick = FALSE, cex.axis = cex.axis)
@@ -67,12 +69,13 @@ plot_forest.meta_random <- function(
     summary = c("mean", "hpd"),
     mar = c(4.5, 12, 4, .3),
     cex.axis = 1,
+    main = "Random-Effects Meta-Analysis",
     ...
 ) {
   plot_forest.default(meta,
     from = from, to = to, summary = summary,
     shrinked = shrinked, cex.axis = cex.axis,
-    main = "Random-Effects Meta-Analysis", ...
+    main = main, ...
   )
   axis(2, -1, "Total", las = 1, tick = FALSE, cex.axis = cex.axis)
   par(mar = c(5.1, 4.1, 4.1, 2.1))
@@ -88,13 +91,14 @@ plot_forest.meta_bma <- function(
     summary = c("mean", "hpd"),
     mar = c(4.5, 12, 4, .3),
     cex.axis = 1,
+    main = "Meta-Analysis with Model-Averaging",
     ...
 ) {
   meta$data <- meta$meta[[1]]$data
   plot_forest.default(meta,
     from = from, to = to, summary = summary,
     shrinked = shrinked, cex.axis = cex.axis,
-    main = "Meta-Analysis with Model-Averaging", ...
+    main = main, ...
   )
   labels <- rownames(meta$estimates)
   axis(2, -seq_along(labels), labels, las = 1, tick = TRUE, cex.axis = cex.axis)
@@ -112,6 +116,7 @@ plot_forest.default <- function(
     summary = c("mean", "hpd"),
     mar = c(4.5, 12, 4, .3),
     cex.axis = 1,
+    main = "Meta-Analysis",
     ...
 ) {
   ci <- .95
@@ -158,10 +163,16 @@ plot_forest.default <- function(
 
   Effect <- -1000
   plot(
-    x = Effect, y = -100, xlim = range(xxx),
-    yaxt = "n", ylab = "", las = 1,
+    x = Effect,
+    y = -100,
+    xlim = range(xxx),
+    yaxt = "n",
+    ylab = "",
+    las = 1,
     ylim = c(-n.ests, n.studies),
-    bty = "n", ...
+    bty = "n",
+    main = main,
+    ...
   )
   abline(v = 0, col = "darkgray", lty = "dashed")
   axis(2, n.studies:1, meta$data$labels, las = 1, cex.axis = cex.axis)
