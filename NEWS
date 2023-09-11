@@ -1,3 +1,10 @@
+metaBMA 0.6.9
+===========
+
+* Updated syntax for Stan arrays (thanks to @andrjohns)
+* Updated references for tutorials on meta-analysis with model averaging
+
+
 metaBMA 0.6.7
 ===========
 
