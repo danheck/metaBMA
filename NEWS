@@ -3,6 +3,7 @@ metaBMA 0.6.9
 
 * Updated syntax for Stan arrays (thanks to @andrjohns)
 * Updated references for tutorials on meta-analysis with model averaging
+* Bug fixes for passing of arguments in plot_forest() (#23 and #24)
 
 
 metaBMA 0.6.7
