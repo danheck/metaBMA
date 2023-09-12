@@ -66,8 +66,7 @@ Encoding: UTF-8
 LazyData: true
 NeedsCompilation: yes
 SystemRequirements: 
-    GNU make,
-    C++17
+    GNU make
 Biarch: true
 Language: en-US
 RoxygenNote: 7.2.3
