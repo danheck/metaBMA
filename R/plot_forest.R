@@ -49,11 +49,15 @@ plot_forest.meta_fixed <- function(
     main = "Fixed-Effects Meta-Analysis",
     ...
 ) {
-  plot_forest.default(meta, from, to,
+  plot_forest.default(
+    meta,
+    from,
+    to,
     summary = summary,
     shrinked = "",
     main = main,
-    cex.axis = cex.axis, ...
+    cex.axis = cex.axis,
+    ...
   )
   axis(2, -1, "Total", las = 1, tick = FALSE, cex.axis = cex.axis)
   par(mar = c(5.1, 4.1, 4.1, 2.1))
@@ -171,6 +175,7 @@ plot_forest.default <- function(
     las = 1,
     ylim = c(-n.ests, n.studies),
     bty = "n",
+    cex.axis = cex.axis,
     main = main,
     ...
   )
