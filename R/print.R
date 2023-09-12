@@ -1,4 +1,4 @@
-print.est <- function(
+print_estimates <- function(
     estimates = NULL,
     what = "",
     digits = 3
@@ -31,7 +31,7 @@ print.meta_fixed <- function(
   )
   cat("\n# Bayes factors:\n")
   print(x$BF, digits = digits)
-  print.est(x$estimates, what = " of fixed-effects model", digits = digits)
+  print_estimates(x$estimates, what = " of fixed-effects model", digits = digits)
 
   if (any(grepl("beta", rownames(x$estimates)))) {
     cat("  (Note: moderators in meta-regression are ",
@@ -60,7 +60,7 @@ print.meta_random <- function(
 
   cat("\n# Bayes factors:\n")
   print(x$BF, digits = digits)
-  print.est(x$estimates, what = " of random-effects model", digits = digits)
+  print_estimates(x$estimates, what = " of random-effects model", digits = digits)
 
   if (any(grepl("beta", rownames(x$estimates)))) {
     cat("  (Note: moderators in meta-regression are ",
@@ -130,5 +130,5 @@ print.meta_bma <- function(
   )
   print(tab, digits = digits)
 
-  print.est(x$estimates, what = " of average effect size", digits = digits)
+  print_estimates(x$estimates, what = " of average effect size", digits = digits)
 }
