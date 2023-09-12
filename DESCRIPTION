@@ -5,7 +5,7 @@ Title: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis
 Version: 0.6.9
 Authors@R: c(person(given = "Daniel W.",  
                     family = "Heck", 
-                    email="dheck@uni-marburg.de", 
+                    email="daniel.heck@uni-marburg.de", 
                     role=c("aut","cre"),
                     comment = c(ORCID = "0000-0002-6302-9252")),
              person(given = "Quentin F.",  
