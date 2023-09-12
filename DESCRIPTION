@@ -1,6 +1,6 @@
 Package: metaBMA
 Type: Package
-Date: 2023-09-11
+Date: 2023-09-12
 Title: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis
 Version: 0.6.9
 Authors@R: c(person(given = "Daniel W.",  
@@ -46,16 +46,16 @@ Imports:
     mvtnorm,
     RcppParallel (>= 5.0.1),
     rstan (>= 2.26.0),
-    rstantools (>= 2.1.1)
+    rstantools (>= 2.3.0)
 Suggests: 
     testthat,
     knitr,
     rmarkdown,
     spelling
 LinkingTo: 
-    BH (>= 1.66.0),
+    BH (>= 1.78.0),
     Rcpp (>= 1.0.0),
-    RcppEigen (>= 0.3.3.3.0),
+    RcppEigen (>= 0.3.3.9.1),
     RcppParallel (>= 5.0.1),
     rstan (>= 2.26.0),
     StanHeaders (>= 2.26.0)
