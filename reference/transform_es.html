@@ -18,7 +18,7 @@ ratio, Pearson correlation r, and Fisher's z)."><!-- mathjax --><script src="htt
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">metaBMA</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.9</span>
       </span>
     </div>
 
@@ -94,7 +94,11 @@ a matrix with two columns including effect sizes and standard errors.</p>
     <p>The following chain of transformations is adopted from Borenstein et al. (2009):
 <code>logOR &lt;--&gt; d &lt;--&gt; r &lt;--&gt; z</code>.
 The conversion from <code>"d"</code> to <code>"r"</code> assumes equal sample sizes per condition (n1=n2).</p>
-<p>Note that in in a Bayesian meta-analysis, the prior distributions need to be adapted to the type of effect size. The function <code><a href="meta_default.html">meta_default</a></code> provides modified default prior distributions for different effect size measures which are approximately transformation-invariant (but results may still differ depending on which type of effect size is used for analysis).</p>
+<p>Note that in in a Bayesian meta-analysis, the prior distributions need to be
+adapted to the type of effect size. The function <code><a href="meta_default.html">meta_default</a></code>
+provides modified default prior distributions for different effect size
+measures which are approximately transformation-invariant (but results may
+still differ depending on which type of effect size is used for analysis).</p>
     </div>
     <div id="references">
     <h2>References</h2>
