@@ -28,7 +28,7 @@ The latest developer version of `metaBMA` can be installed from GitHub via:
 
 if (!require("devtools"))
   install.packages("devtools")
-devtools::install_github("danheck/metaBMA", ref = "dev")
+devtools::install_github("danheck/metaBMA")
 ```
 
 Note that `metaBMA` requires the software [Stan](http://mc-stan.org/). 
