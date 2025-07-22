@@ -7,7 +7,7 @@
 
 # metaBMA
 
-<img src="man/figures/metaBMA.png" width="200" align="right">
+<img src="man/figures/metaBMA.png" width="250" align="right">
 Fixed-effects meta-analyses assume that the effect size $d$ is identical in all studies. In contrast, random-effects meta-analyses assume that effects vary according to a normal distribution with mean $d$ and standard deviation $\tau$. When assuming prior distributions for $d$ and $\tau$, both models can be compared using Bayes factors. Alternatively, posterior model probabilities can be used to compare the evidence for or against an effect (i.e., whether $d = 0$) and the evidence for or against random effects (i.e., whether $\tau = 0$). By using Bayesian model averaging (BMA), both types of tests can be performed by marginalizing over the other question. Most importantly, this allows to test whether an effect exists while accounting for uncertainty whether study heterogeneity exists or not.
 
 
