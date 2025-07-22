@@ -7,6 +7,7 @@
 
 # metaBMA
 
+<img src="man/figures/metaBMA.png" width="200" align="right">
 Fixed-effects meta-analyses assume that the effect size $d$ is identical in all studies. In contrast, random-effects meta-analyses assume that effects vary according to a normal distribution with mean $d$ and standard deviation $\tau$. When assuming prior distributions for $d$ and $\tau$, both models can be compared using Bayes factors. Alternatively, posterior model probabilities can be used to compare the evidence for or against an effect (i.e., whether $d = 0$) and the evidence for or against random effects (i.e., whether $\tau = 0$). By using Bayesian model averaging (BMA), both types of tests can be performed by marginalizing over the other question. Most importantly, this allows to test whether an effect exists while accounting for uncertainty whether study heterogeneity exists or not.
 
 
@@ -60,4 +61,8 @@ Gronau, Q. F., Heck, D. W., Berkhout, S. W., Haaf, J. M., & Wagenmakers, E.-J. (
 A primer on Bayesian model-averaged meta-analysis. 
 *Advances in Methods and Practices in Psychological Science, 4*, 1–19. 
 https://doi.org/10.1177/25152459211031256
+
+The R package’s functionality has also been implemented in the software [JASP](https://www.jasp-stats.org):
+
+Berkhout, S. W., Haaf, J. M., Gronau, Q. F., Heck, D. W., & Wagenmakers, E. (2024). A tutorial on Bayesian model-averaged meta-analysis in JASP. *Behavior Research Methods, 56*, 1260–1282. https://doi.org/10.3758/s13428-023-02093-6
 

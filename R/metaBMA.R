@@ -1,5 +1,8 @@
 #' metaBMA: Bayesian Model Averaging for Random and Fixed Effects Meta-Analysis
 #'
+#' @description{
+#' \if{html}{\figure{metaBMA.png}{options: width=150 alt ="metaBMA logo" style='float: right'}}
+#' \if{latex}{\figure{metaBMA.png}{options: width=0.5in}}
 #' Fixed-effects meta-analyses assume that the effect size \eqn{d} is identical
 #' in all studies. In contrast, random-effects meta-analyses assume that effects
 #' vary according to a normal distribution with mean \eqn{d} and standard
@@ -39,6 +42,8 @@
 #' Transparency in the Social Sciences, a program of the Center for Effective
 #' Global Action (CEGA), Laura and John Arnold Foundation, and by the German
 #' Research Foundation (grant GRK-2277: Statistical Modeling in Psychology).
+#'
+#' }
 #'
 #' @author Heck, D. W. & Gronau, Q. F.
 #' @docType package
